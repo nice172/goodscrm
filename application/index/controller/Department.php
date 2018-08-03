@@ -10,7 +10,7 @@ use think\Request;
 use think\Session;
 use think\Url;
 
-class Department extends Common_base
+class Department extends Base
 {
     public function index() {
         //$authGroupM = new AuthGroup();

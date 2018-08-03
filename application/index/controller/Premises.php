@@ -6,7 +6,7 @@ use app\index\model\CustomersPremises;
 use think\Db;
 use think\Request;
 
-class Premises extends Common_base
+class Premises extends Base
 {
     public function _initialize()
     {

@@ -13,7 +13,7 @@ use think\Db;
 use think\Session;
 use think\Url;
 
-class Product extends Common_base
+class Product extends Base
 {
     public function _initialize()
     {

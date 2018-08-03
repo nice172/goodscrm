@@ -8,7 +8,7 @@ use app\index\model\PurchaseOrders;
 use think\Db;
 use think\Request;
 
-class Finance extends Common_base
+class Finance extends Base
 {
     public function _initialize()
     {

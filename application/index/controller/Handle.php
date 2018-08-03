@@ -10,7 +10,7 @@ use think\Session;
 use think\Db;
 use think\Url;
 
-class Handle extends Common_base
+class Handle extends Base
 {
     protected $handle;  //操作方式
     protected $name;    //操作对象

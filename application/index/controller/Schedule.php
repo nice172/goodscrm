@@ -13,7 +13,7 @@ use app\index\model\StockpileLock;
 use think\Request;
 use think\Db;
 
-class Schedule extends Common_base
+class Schedule extends Base
 {
     //生产订单
     public function index() {

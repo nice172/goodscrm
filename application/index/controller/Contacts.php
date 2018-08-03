@@ -9,7 +9,7 @@ use think\Session;
 use think\Url;
 use think\Db;
 
-class Contacts extends Common_base
+class Contacts extends Base
 {
     public function _initialize()
     {

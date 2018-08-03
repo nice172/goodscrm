@@ -10,7 +10,7 @@ use think\Session;
 use think\Url;
 use think\Loader;
 
-class Users extends Common_base
+class Users extends Base
 {
     public function index() {
         $Request = Request::instance();

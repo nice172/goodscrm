@@ -11,15 +11,26 @@
  use think\Session;
  use think\Url;
 
- class Login extends Controller
- {
-     public function index() {
-         header("Content-Type: text/html; charset=utf-8");
+ class Login extends Controller{
+     
+     public function _initialize(){
+         parent::_initialize();
          if (Session::has("user_name") && Session::has("user_id")) {
              $this->redirect("index/index");
-         } else {
-             return $this->fetch();
          }
+     }
+     
+     public function index() {
+         $this->assign('user',['user_name' => '','pwd' => '']);
+         $remember_token = json_decode(cookie('remember_token'),TRUE);
+         if (!empty($remember_token)){
+             $current_token = md5($this->request->ip().$remember_token['user_name'].$_SERVER['HTTP_USER_AGENT']);
+             if ($remember_token['token'] == $current_token){
+                 $userDb = Db::name('users')->where('user_name', $remember_token['user_name'])->find();
+                 $this->assign('user',['user_name' => $userDb['user_name'],'pwd' => '']);
+             }
+         }
+         return $this->fetch();
      }
 
      /* 提交登录信息 */
@@ -33,7 +44,8 @@
              $password = $request->param("password");
              //$verify   = $request->param("verify");
              $token    = $request->param("token");
-
+             $remember = intval($request->post('remember'));
+             
              // 验证数组
              $data = [
                  'username'  => $username,
@@ -67,6 +79,13 @@
                      Session::set('user_name', $userDb['user_name']); // 登录名
                      Session::set('user_nick', $userDb['user_nick']); // 用户名
                      Session::set('user_auth', $userDb['user_auth']); // 1为超级管理员
+                     $remember_token = md5($request->ip().$username.$_SERVER['HTTP_USER_AGENT']);
+                     if ($remember == 1){
+                         cookie('remember_token',json_encode([
+                             'user_name' => $username,
+                             'token' => $remember_token
+                         ]),time()+3600*24*30);
+                     }
                      return $this->success('登录成功', Url::build("index/index"));
                  } else {
                      return $this->error("账户或密码错误");
@@ -80,9 +99,14 @@
      /* 退出登录 */
      public function logout() {
          Session::clear(); // 清除session值
-         return $this->success("成功退出", Url::build("index/index"));
+         //cookie('remember_token',null,-1);
+         $this->redirect(url('Login/index'));
      }
 
+     public function clear(){
+         cookie('remember_token',null,-1);
+     }
+     
      /* 验证码 */
      public function verify() {
          $config = array(

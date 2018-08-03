@@ -2,7 +2,7 @@
 
 namespace app\index\controller;
 
-class Statistics extends Common_base
+class Statistics extends Base
 {
 
 }

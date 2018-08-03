@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <title>控制台登陆-{:Config('syc_webname')}</title>
-    <meta name="keywords" content=""/>
-    <meta name="description" content=""/>
-    <meta name="author" content="www.sycit.cn, hyzwd@outlook.com"/>
-    <link href="/favicon.ico" type="image/x-icon" rel="icon"/>
-    <link rel="stylesheet" href="/assets/plugins/bootstrap/css/bootstrap.css">
-    <link rel="stylesheet" href="/assets/admin/style/login2017.css">
-    <link rel="stylesheet" href="/assets/admin/css/components.css">
+<meta charset="UTF-8">
+<title>控制台登陆-{:Config('syc_webname')}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<meta content="telephone=no" name="format-detection">
+<meta content="email=no" name="format-detection">
+<link href="/favicon.ico" type="image/x-icon" rel="icon"/>
+<link rel="stylesheet" href="/assets/plugins/bootstrap/css/bootstrap.css">
+<link rel="stylesheet" href="/assets/admin/style/login2017.css">
+<link rel="stylesheet" href="/assets/admin/css/components.css">
 </head>
 <body>
 <div class="login-2017">
@@ -27,28 +29,17 @@
     <!--顶部 结束-->
     <div class="login-2017-body">
         <div class="login-2017-body-box">
-            <div class="login-banner-2017 J_Module">
-                <div class="module-wrap J_tb_lazyload dbl_tms_module_wrap">
-                    <a class="login-2017-body-txt-box" target="_blank" style=" text-decoration: none !important;">
-                        <h1><img src="/assets/admin/img/login-bj.png"></h1>
-                        <ul>
-                            <li>{:Config('syc_webname')}</li>
-                            <li>三叶草网络技术支持</li>
-                        </ul>
-                    </a>
-                </div>
-            </div>
+            
             <!--登录框-->
             <div class="login-do">
                 <form id="login-form" class="form clr style-type-vertical" method="post">
-                    <div class="title">控制台登录</div>
+                    <div class="title" style="width:100%;">{:Config('syc_webname')}</div>
                     <div id="success"></div>
                     <div id="login-content" class="form clr">
                         <dl>
                             <dd id="fm-login-id-wrap" class="fm-field">
                                 <div class="fm-field-wrap ">
-                                    <input id="fm-login-id" class="fm-text" name="username" tabindex="1" placeholder="登录账户">
-
+                                    <input id="fm-login-id" class="fm-text" value="<?php echo $user['user_name'];?>" name="username" tabindex="1" placeholder="登录账户">
                                 </div>
                             </dd>
                         </dl>
@@ -59,10 +50,19 @@
                                 </div>
                             </dd>
                         </dl>
+                         <dl>
+                            <dd id="fm-login-remember-wrap" style="text-align: left;" class="fm-field">
+                                <div class="fm-field-wrap" style="text-align: left;">
+                                    <label for="remember" style="text-align: left;"><input type="checkbox" name="remember" value="1" id="remember"/> 记住登录账号!</label>
+                                </div>
+                            </dd>
+                        </dl>
                     </div>
                     <div id="login-submit">
-                        <input id="fm-login-submit" value="登 录" class="fm-button fm-submit" type="submit">
+                        <input id="fm-login-submit" value="登录" class="fm-button fm-button1 fm-submit" type="submit">
+                        <input id="fm-login-submit" value="重置" class="fm-button fm-button2" type="reset">
                     </div>
+                    <p style="margin-top:10px;">Power by 众山系统  服务热线：400-123-9999</p>
                     <input type="hidden" name="token" value="{$Request.token}" />
                 </form>
             </div>
@@ -84,6 +84,12 @@
             }else{
                 $(".verifyimg").attr("src", verifyimg.replace(/\?.*$/,'')+'?'+Math.random());
             }
+        });
+        $('.fm-button2').click(function(){
+			$.ajax({
+			url: '<?php echo url('Login/clear');?>',
+			success:function(res){}
+				});
         });
     });
 </script>

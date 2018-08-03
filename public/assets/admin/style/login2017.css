@@ -162,12 +162,14 @@ ul {
 }
 
 .login-2017 .login-2017-body {
-    padding: 74px 0 118px;
+    /*padding: 74px 0 118px;*/
     text-align: center;
+    margin-top:10%;
 }
 
 .login-2017 .login-2017-body .login-2017-body-box {
-    width: 990px;
+    /*width: 990px;*/
+    width: 100%;
     margin: auto;
     position: relative;
     height: 388px;
@@ -177,10 +179,13 @@ ul {
     width: 380px;
     padding-top: 0;
     border: none;
-    position: absolute;
-    right: 0;
+    /*position: absolute;
+    right: 0;*/
+    margin:0 auto;
 }
-
+.login-do {
+	
+}
 .login-2017 .login-2017-body .login-2017-body-box .login-2017-body-txt-box {
     position: absolute;
     left: 0;
@@ -217,9 +222,9 @@ ul {
     width: 100%;
 }
 #login-form {
-    margin-top: 30px;
+    padding-top: 30px;
     position: static;
-    margin-bottom: 40px;
+    padding-bottom: 20px;
 }
 .style-type-vertical {
      width: 330px;
@@ -333,6 +338,14 @@ a:link, a:visited {
     text-align: center;
     color: #fff;
     cursor: pointer;
+    width:130px !important;
+}
+.fm-button1{
+	margin-right:20px;
+}
+.fm-button2{
+	background: #999 !important;
+	border: 1px solid #999 !important;
 }
 .verifyimg {
     cursor: pointer;

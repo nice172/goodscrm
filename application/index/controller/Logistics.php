@@ -8,7 +8,7 @@ use think\Url;
 use think\Request;
 use think\Session;
 
-class Logistics extends Common_base
+class Logistics extends Base
 {
 
     public function _initialize()

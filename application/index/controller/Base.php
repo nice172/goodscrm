@@ -7,7 +7,7 @@
  use think\Session;
  use think\Request;
 
- class Common_base extends Controller
+ class Base extends Controller
  {
      public function _initialize()
      {

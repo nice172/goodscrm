@@ -10,7 +10,7 @@ use think\Request;
 use think\Session;
 use think\Url;
 
-class Config extends Common_base
+class Config extends Base
 {
     public function index() {
         $data = Db::name('config')->select();

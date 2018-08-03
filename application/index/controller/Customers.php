@@ -13,7 +13,7 @@ use app\index\model\Logistics;
 use app\index\model\Finance AS FinanceModel;
 use think\Url;
 
-class Customers extends Common_base
+class Customers extends Base
 {
     public function _initialize()
     {

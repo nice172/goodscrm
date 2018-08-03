@@ -4,7 +4,7 @@ namespace app\index\controller;
 use think\Db;
 use think\Session;
 
-class Index extends Common_base
+class Index extends Base
 {
     public function index()
     {

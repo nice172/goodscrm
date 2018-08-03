@@ -13,7 +13,7 @@ use think\Session;
 use think\Url;
 use think\Request;
 
-class Storage extends Common_base
+class Storage extends Base
 {
     public function _initialize()
     {

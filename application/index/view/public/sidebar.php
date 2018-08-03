@@ -10,7 +10,7 @@
                         <div class="sidebar-title sidebar-trans">
                             <div class="sidebar-title-inner">
                                 <span class="sidebar-title-icon icon-arrow-right"></span>
-                                <span class="sidebar-title-text">系统配置</span>
+                                <span class="sidebar-title-text">系统管理</span>
                             </div>
                         </div>
                         <ul class="sidebar-trans submenu">
@@ -29,7 +29,37 @@
                             <li class="nav-item" id="config-users">
                                 <a href="{:Url('users/index')}" class="sidebar-trans">
                                     <div class="nav-icon sidebar-trans"><span class="icon-topbar-certify"></span></div>
-                                    <span class="nav-title">账户管理</span>
+                                    <span class="nav-title">用户管理</span>
+                                </a>
+                            </li>
+                            <li class="nav-item" id="config-users">
+                                <a href="{:Url('Role/index')}" class="sidebar-trans">
+                                    <div class="nav-icon sidebar-trans"><span class="icon-topbar-certify"></span></div>
+                                    <span class="nav-title">角色管理</span>
+                                </a>
+                            </li>
+                            <li class="nav-item" id="config-users">
+                                <a href="{:Url('Auth/index')}" class="sidebar-trans">
+                                    <div class="nav-icon sidebar-trans"><span class="icon-topbar-certify"></span></div>
+                                    <span class="nav-title">权限管理</span>
+                                </a>
+                            </li>
+                            <li class="nav-item" id="config-users">
+                                <a href="{:Url('GoodsType/index')}" class="sidebar-trans">
+                                    <div class="nav-icon sidebar-trans"><span class="icon-topbar-certify"></span></div>
+                                    <span class="nav-title">商品类型管理</span>
+                                </a>
+                            </li>
+                            <li class="nav-item" id="config-users">
+                                <a href="{:Url('GoodsAttr/index')}" class="sidebar-trans">
+                                    <div class="nav-icon sidebar-trans"><span class="icon-topbar-certify"></span></div>
+                                    <span class="nav-title">商品属性管理</span>
+                                </a>
+                            </li>
+                            <li class="nav-item" id="config-users">
+                                <a href="{:Url('Params/index')}" class="sidebar-trans">
+                                    <div class="nav-icon sidebar-trans"><span class="icon-topbar-certify"></span></div>
+                                    <span class="nav-title">系统参数管理</span>
                                 </a>
                             </li>
                             <li class="nav-item" id="config-shengchan">
@@ -40,12 +70,44 @@
                             </li>
                         </ul>
                     </li>
+                    
+                    <!-- 供应商管理 -->
+                    
+                    <li class="sidebar-nav" id="sidebar-storage">
+                        <div class="sidebar-title sidebar-trans">
+                            <div class="sidebar-title-inner">
+                                <span class="sidebar-title-icon icon-arrow-right"></span>
+                                <span class="sidebar-title-text">供应商管理</span>
+                            </div>
+                        </div>
+                        <ul class="sidebar-trans submenu">
+                            <li class="nav-item" id="storage-index">
+                                <a href="{:Url('storage/index')}" class="sidebar-trans">
+                                    <div class="nav-icon sidebar-trans"><span class="icon-ecs"></span></div>
+                                    <span class="nav-title">原料仓库</span>
+                                </a>
+                            </li>
+                            <li class="nav-item" id="storage-xingcai">
+                                <a href="{:Url('storage/charge')}" class="sidebar-trans">
+                                    <div class="nav-icon sidebar-trans"><span class="icon-ecs"></span></div>
+                                    <span class="nav-title">型材管理</span>
+                                </a>
+                            </li>
+                            <li class="nav-item" id="storage-jinliao">
+                                <a href="{:Url('storage/numlc')}" class="sidebar-trans">
+                                    <div class="nav-icon sidebar-trans"><span class="icon-ecs"></span></div>
+                                    <span class="nav-title">新增进料</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    
                     <!-- 仓库管理 -->
                     <li class="sidebar-nav" id="sidebar-storage">
                         <div class="sidebar-title sidebar-trans">
                             <div class="sidebar-title-inner">
                                 <span class="sidebar-title-icon icon-arrow-right"></span>
-                                <span class="sidebar-title-text">仓储管理</span>
+                                <span class="sidebar-title-text">库存管理</span>
                             </div>
                         </div>
                         <ul class="sidebar-trans submenu">
@@ -74,7 +136,7 @@
                         <div class="sidebar-title sidebar-trans">
                             <div class="sidebar-title-inner">
                                 <span class="sidebar-title-icon icon-arrow-right"></span>
-                                <span class="sidebar-title-text">销售管理</span>
+                                <span class="sidebar-title-text">客户管理</span>
                             </div>
                         </div>
                         <ul class="sidebar-trans submenu">

@@ -11,7 +11,7 @@ use think\Request;
 use think\Session;
 use think\Url;
 
-class Orders extends Common_base
+class Orders extends Base
 {
     public function index() {
         // 是否有权限
