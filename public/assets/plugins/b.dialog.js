@@ -374,7 +374,7 @@
         //自定义样式
         if(p.customClass) $(dialog).addClass(p.customClass);
 
-        $(topBody).append(dialog);
+        $(topBody).append(dialog);        
         this.dialog = dialog;
     };
     /**
@@ -719,9 +719,12 @@
             param.dialogMaxButton = false;
             param.scroll = false;
             param.type = 'alert';
-            param.width = message.length > 70 ? 700 : 450;
-            param.height = message.length > 70 ? 400 :  $.type(param.title)=='undefined'||$.type(param.title)=='string' ? 210 : 180;
-            return new bDialog(param);;
+            if(typeof param.width == 'undefined' || typeof param.height == 'undefined'){
+                param.width = message.length > 70 ? 700 : 320;
+                param.height = message.length > 70 ? 400 :  $.type(param.title)=='undefined'||$.type(param.title)=='string' ? 150 : 150;
+            }
+            
+            return new bDialog(param);
         },
         /**
          * 遮罩功能

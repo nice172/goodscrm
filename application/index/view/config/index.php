@@ -1,20 +1,8 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-{include file="public/header"}
-</head>
-<body>
-{// 引入顶部导航文件}
-{include file="public/topbar"}
+{extend name="public/base"}
+{block name="header"}
 
-<div class="viewFramework-body viewFramework-sidebar-full">
-    {// 引入左侧导航文件}
-    {include file="public/sidebar"}
-    <!-- 主体内容 开始 -->
-    <div class="viewFramework-product">
-        <!-- 中间导航 开始 viewFramework-product-col-1-->
-        <!-- 中间导航 结束 -->
-        <div class="viewFramework-product-body">
+{/block}
+{block name="main"}
             <div class="console-container">
                 <div class="row syc-bg-fff">
                     <div class="col-md-12 syc-border-bs">
@@ -72,12 +60,8 @@
                 </div>
 
             </div>
-        </div>
-    </div>
-</div>
-
-{// 引入底部公共JS文件}
-{include file="public/footer"}
+{/block}
+{block name="footer"}
 <script type="text/javascript">
     $(document).ready(function() {
         // 当前页面分类高亮
@@ -94,6 +78,4 @@
         })
     })
 </script>
-
-</body>
-</html>
+{/block}

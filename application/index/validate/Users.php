@@ -11,7 +11,7 @@
          'password|登录密码' => 'require|alphaDash|length:6,30',
          'verify|验证码'     => 'require|check_verify:sycitcn',
          'nickname|员工姓名' => 'require|chs',
-         'bumen|部门'        => 'require',
+         'group_id|角色'        => 'require',
          '__token__|数据'    =>  'require|token'
      ];
      protected $message = [
@@ -23,7 +23,7 @@
          'password.length'    => ':attribute长度范围6-30',
          'verify.require'     => ':attribute不能为空',
          'verify.check_verify:sycitcn' => ':attribute 错误',
-         'bumen.require'      => ':attribute不能为空',
+         'group_id.require'      => ':attribute不能为空',
          'nickname.require'   => ':attribute不能为空',
          'nickname.chs'       => ':attribute只能中文',
          '__token__.require'  => ':attribute不能为空',
@@ -31,7 +31,7 @@
      protected $scene = [
          'register' => ['username', 'password', '__token__'],
          'login'    => ['username', 'password', '__token__'],
-         'add'      => ['username', 'nickname', 'password', 'bumen', '__token__'],
+         'add'      => ['username', 'nickname', 'password', 'group_id', '__token__'],
          'edit'     => ['username', 'nickname', 'bumen', '__token__'],
          'update'   => ['password']
      ];

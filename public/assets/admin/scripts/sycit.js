@@ -1,8 +1,4 @@
-/**
- * 三叶草IT QQ-316262448
- * www.sycit.cn, hyzwd@outlook.com
- * Created by Peter on 2017/8/28.
- */
+
 $(function () {
     //单页面的返回顶部
     //隐藏或显示“回到顶部”链接

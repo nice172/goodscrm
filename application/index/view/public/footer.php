@@ -4,6 +4,7 @@
 <script type="text/javascript" src="/assets/plugins/bootstrap/js/bootstrap.min.js" ></script>
 <!--AJAX插件-->
 <script type="text/javascript" src="/assets/plugins/jquery.form.js" ></script>
+<script type="text/javascript" src="/assets/plugins/jquery-validation/js/jquery.validate.js"></script>
 <!-- bootstrap3-dialog -->
 <script type="text/javascript" src="/assets/plugins/b.dialog.js" ></script>
 <!--弹窗插件-->

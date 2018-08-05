@@ -1,21 +1,8 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-{include file="public/header"}
-    <link href="/assets/admin/css/home.console.css" rel="stylesheet" type="text/css" />
-</head>
-<body>
-{// 引入顶部导航文件}
-{include file="public/topbar"}
-
-<div class="viewFramework-body viewFramework-sidebar-full">
-    {// 引入左侧导航文件}
-    {include file="public/sidebar"}
-    <!-- 主体内容 开始 -->
-    <div class="viewFramework-product">
-        <!-- 中间导航 开始 viewFramework-product-col-1-->
-        <!-- 中间导航 结束 -->
-        <div class="viewFramework-product-body">
+{extend name="public/base"}
+{block name="header"}
+<link href="/assets/admin/css/home.console.css" rel="stylesheet" type="text/css" />
+{/block}
+{block name="main"}
             <div class="home-v2">
                 <div class="home-section-main clearfix">
                     <!--内容开始-->
@@ -145,12 +132,8 @@
                     <!--内容结束-->
                 </div>
             </div>
-        </div>
-    </div>
-</div>
-
-{// 引入底部公共JS文件}
-{include file="public/footer"}
+{/block}
+{block name="footer"}
 <script src="/assets/plugins/highcharts/code/highcharts.js"></script>
 <script src="/assets/plugins/highcharts/code/highcharts-more.js"></script>
 <script src="/assets/plugins/highcharts/code/modules/exporting.js"></script>
@@ -251,5 +234,4 @@
     });
 
 </script>
-</body>
-</html>
+{/block}

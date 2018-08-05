@@ -11,15 +11,6 @@
 
 // 应用公共文件
 
-/*
- * 格式化的dump
- **/
-function p($var) {
-    echo '<pre>';
-    print_r($var);
-    echo '</pre>';
-}
-
 // 定义 hash 各常量
 define("PBKDF2_HASH_ALGORITHM", "sha256"); // 哈希算法名称:例如 md5，sha256 等
 define("PBKDF2_ITERATIONS", 1000); // 进行导出时的迭代次数。
@@ -31,6 +22,47 @@ define("HASH_ALGORITHM_INDEX", 0);
 define("HASH_ITERATION_INDEX", 1);
 define("HASH_SALT_INDEX", 2);
 define("HASH_PBKDF2_INDEX", 3);
+define('ENCODE_KEY', '|}+——--JFIEOAJFP()#*@&&!&@^$%":?>,,');
+
+/*加密解密 ENCODE 加密   DECODE 解密*/
+function _encrypt($string, $operation = 'ENCODE', $key = '', $expiry = 0){
+	if($operation == 'DECODE') {
+		$string =  str_replace('_', '/', $string);
+	}
+	$key_length = 4;
+	$key = md5($key != '' ? $key : ENCODE_KEY);
+	$fixedkey = md5($key);
+	$egiskeys = md5(substr($fixedkey, 16, 16));
+	$runtokey = $key_length ? ($operation == 'ENCODE' ? substr(md5(microtime(true)), -$key_length) : substr($string, 0, $key_length)) : '';
+	$keys = md5(substr($runtokey, 0, 16) . substr($fixedkey, 0, 16) . substr($runtokey, 16) . substr($fixedkey, 16));
+	$string = $operation == 'ENCODE' ? sprintf('%010d', $expiry ? $expiry + time() : 0).substr(md5($string.$egiskeys), 0, 16) . $string : base64_decode(substr($string, $key_length));
+	
+	$i = 0; $result = '';
+	$string_length = strlen($string);
+	for ($i = 0; $i < $string_length; $i++){
+		$result .= chr(ord($string{$i}) ^ ord($keys{$i % 32}));
+	}
+	if($operation == 'ENCODE') {
+		$retstrs =  str_replace('=', '', base64_encode($result));
+		$retstrs =  str_replace('/', '_', $retstrs);
+		return $runtokey.$retstrs;
+	} else {
+		if((substr($result, 0, 10) == 0 || substr($result, 0, 10) - time() > 0) && substr($result, 10, 16) == substr(md5(substr($result, 26).$egiskeys), 0, 16)) {
+			return substr($result, 26);
+		} else {
+			return '';
+		}
+	}
+}
+
+/*
+ * 格式化的dump
+ **/
+function p($var) {
+    echo '<pre>';
+    print_r($var);
+    echo '</pre>';
+}
 
 /**
  * 生产hash值
@@ -145,10 +177,67 @@ function pbkdf2($algorithm, $password, $salt, $count, $key_length, $raw_output =
 }
 
 
+/**
+ * 递归子节点
+ * @param array $data
+ * @param number $parentid
+ * @return array
+ */
+function getChild($data = array(),$parentid = 0){
+	$array = array();
+	foreach ($data as $key => $value){
+		if ($value['parentid'] == $parentid){
+			$value['child'] = getChild($data,$value['id']);
+			$array[] = $value;
+		}
+	}
+	return $array;
+}
+
+/**
+ * 递归到最顶级
+ * @param array $data
+ * @param unknown $parentid
+ * @return unknown
+ */
+function getParent($data = array(),$parentid){
+	foreach ($data as $key => $value){
+		if ($value['id'] == $parentid){
+			if ($value['parentid']){
+				return getParent($data,$value['parentid']);
+			}else{
+				return $value;
+			}
+		}
+	}
+}
+
+/**
+ * https请求（支持GET和POST）
+ * @param $url
+ * @param string $data
+ * @return mixed
+ */
+function https_request($url, $data = null){
+	$curl = curl_init();
+	curl_setopt($curl, CURLOPT_URL, $url);
+	curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+	curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+	//如果$data不是空使用POST
+	if (!empty($data)){
+		curl_setopt($curl, CURLOPT_POST, 1);
+		curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+	}
+	curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+	$output = curl_exec($curl);
+	curl_close($curl);
+	return $output;
+}
+
+
 /*
  * 订单号生成系统
  * 生成唯一标识符
- * 隐士 hyzwd@outlook.com
  * 如：103 6 2 30 8492，103为2015算起的第三年，6为下半年，2为下半年第二个月也就是8月份，30为号，后面四位是随机数
  * */
 if (!function_exists('StrOrderOne'))

@@ -20,10 +20,10 @@
                                     <span class="nav-title">基本配置</span>
                                 </a>
                             </li>
-                            <li class="nav-item" id="config-department">
-                                <a href="{:Url('department/index')}" class="sidebar-trans">
+                            <li class="nav-item" id="config-role">
+                                <a href="{:Url('Role/index')}" class="sidebar-trans">
                                     <div class="nav-icon sidebar-trans"><span class="icon-ecs"></span></div>
-                                    <span class="nav-title">部门管理</span>
+                                    <span class="nav-title">角色管理</span>
                                 </a>
                             </li>
                             <li class="nav-item" id="config-users">
@@ -32,13 +32,7 @@
                                     <span class="nav-title">用户管理</span>
                                 </a>
                             </li>
-                            <li class="nav-item" id="config-users">
-                                <a href="{:Url('Role/index')}" class="sidebar-trans">
-                                    <div class="nav-icon sidebar-trans"><span class="icon-topbar-certify"></span></div>
-                                    <span class="nav-title">角色管理</span>
-                                </a>
-                            </li>
-                            <li class="nav-item" id="config-users">
+                            <li class="nav-item" id="config-auth">
                                 <a href="{:Url('Auth/index')}" class="sidebar-trans">
                                     <div class="nav-icon sidebar-trans"><span class="icon-topbar-certify"></span></div>
                                     <span class="nav-title">权限管理</span>

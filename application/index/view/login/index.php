@@ -46,14 +46,18 @@
                         <dl>
                             <dd id="fm-login-password-wrap" class="fm-field">
                                 <div class="fm-field-wrap">
-                                    <input id="fm-login-password" class="fm-text" type="password" name="password" placeholder="登录密码">
+                                    <input id="fm-login-password" class="fm-text" type="password" value="<?php echo $user['user_pwd'];?>" name="password" placeholder="登录密码">
                                 </div>
                             </dd>
                         </dl>
                          <dl>
                             <dd id="fm-login-remember-wrap" style="text-align: left;" class="fm-field">
                                 <div class="fm-field-wrap" style="text-align: left;">
+                                <?php if (empty($user['user_name']) && empty($user['user_name'])){?>
                                     <label for="remember" style="text-align: left;"><input type="checkbox" name="remember" value="1" id="remember"/> 记住登录账号!</label>
+                                <?php }else{?>
+                                <label for="remember" style="text-align: left;"><input type="checkbox" checked="checked" name="remember" value="1" id="remember"/> 记住登录账号!</label>
+                                <?php }?>
                                 </div>
                             </dd>
                         </dl>

@@ -1,23 +1,27 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    {include file="public/header-model"}
-</head>
-<body>
+{extend name="public/base"}
+{block name="header"}
+<style type="text/css">
+
+</style>
+{/block}
+{block name="main"}
+<div class="container-fluid">
+<?php $current_title = '新增账号';?>
+{include file="public/current"}
 <div class="col-md-12">
     <form class="form-horizontal" method="post" id="addUserForm">
         <input type="hidden" name="__token__" value="{$Request.token}" />
         <div class="alert alert-warning success"></div>
         <div class="form-group">
-            <label for="inputusername" class="col-sm-2 control-label"><span class="text-danger">*</span>登陆名称</label>
+            <label for="inputusername" class="col-sm-2 control-label"><span class="text-danger">*</span>登录账号</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control w300 fleft" name="username" id="inputusername" placeholder="登陆名称">
+                <input type="text" class="form-control w300 fleft" name="username" id="inputusername" placeholder="登录账号">
             </div>
         </div>
         <div class="form-group">
-            <label for="inputPassword" class="col-sm-2 control-label"><span class="text-danger">*</span>登陆密码</label>
+            <label for="inputPassword" class="col-sm-2 control-label"><span class="text-danger">*</span>登录密码</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control w300 fleft" name="password" id="inputPassword" placeholder="登陆密码">
+                <input type="text" class="form-control w300 fleft" name="password" id="inputPassword" placeholder="登录密码">
             </div>
         </div>
         <div class="form-group">
@@ -27,10 +31,10 @@
             </div>
         </div>
         <div class="form-group">
-            <label for="inputemail" class="col-sm-2 control-label"><span class="text-danger">*</span>公司部门</label>
+            <label for="inputemail" class="col-sm-2 control-label"><span class="text-danger">*</span>所属角色</label>
             <div class="col-sm-3">
-                <select class="form-control w150" name="bumen">
-                    <option value="">选择部门</option>
+                <select class="form-control w150" name="group_id">
+                    <option value="0">选择角色</option>
                     {volist name="group" id="vo"}
                     <option value="{$vo.id}">{$vo.title}</option>
                     {/volist}
@@ -64,6 +68,9 @@
         </div>
     </form>
 </div>
+</div>
+{/block}
+{block name="footer"}
 <script type="text/javascript">
     $(document).ready(function() {
         // 当前页面分类高亮
@@ -85,7 +92,7 @@
             rules: {
                 username: {
                     required: true,
-                    minlength: 6,
+                    minlength: 2,
                     maxlength: 16,
                     remote:{
                         url:"check_name",
@@ -117,7 +124,7 @@
                         }
                     }
                 },
-                bumen: {
+                group_id: {
                     required: true
                 }
             },
@@ -135,8 +142,8 @@
                     required: "员工姓名不能为空",
                     remote: "已存在姓名"
                 },
-                bumen: {
-                    required: '公司部门必须选择'
+                group_id: {
+                    required: '所属角色必须选择'
                 }
             },
 
@@ -195,5 +202,4 @@
     });
 
 </script>
-</body>
-</html>
+{/block}

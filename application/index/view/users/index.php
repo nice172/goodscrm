@@ -1,23 +1,10 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-{include file="public/header"}
+{extend name="public/base"}
+{block name="header"}
     <style>
         body {margin-left: 0px;margin-top: 0px;margin-right: 0px;margin-bottom: 0px;overflow: hidden;}
     </style>
-</head>
-<body>
-{// 引入顶部导航文件}
-{include file="public/topbar"}
-
-<div class="viewFramework-body viewFramework-sidebar-full">
-    {// 引入左侧导航文件}
-    {include file="public/sidebar"}
-    <!-- 主体内容 开始 -->
-    <div class="viewFramework-product">
-        <!-- 中间导航 开始 viewFramework-product-col-1-->
-        <!-- 中间导航 结束 -->
-        <div class="viewFramework-product-body">
+{/block}
+{block name="main"}
             <div class="console-container">
                 <!--内容开始-->
                 <div class="row">
@@ -27,8 +14,8 @@
                                 <h5><span>{$title}</span></h5>
                             </div>
                             <div class="pull-right">
-                                <a class="btn btn-primary" id="AddUserModal">新增账户</a>
-                                <a href="{:Url('users/index')}" class="btn btn-default">
+                                <a class="btn btn-primary" href="{:url('add')}">新增账户</a>
+                                <a href="{:url('users/index')}" class="btn btn-default">
                                     <span class="glyphicon glyphicon-refresh"></span>
                                     <span>刷新</span></a>
                             </div>
@@ -57,7 +44,7 @@
                                 <th>编号</th>
                                 <th>姓名</th>
                                 <th>性别</th>
-                                <th>部门<span class="caret"></span></th>
+                                <th>所属角色</th>
                                 <th>入职时间</th>
                                 <th>登录次数</th>
                                 <th>
@@ -95,14 +82,18 @@
                                 <td>{$vo.id}</td>
                                 <td>{$vo.user_nick}</td>
                                 <td>{switch $vo.user_sex}{case 1}男{/case}{case 2}女{/case}{default}未知{/switch}</td>
-                                <td>{$vo.user_auth.title}</td>
+                                <td>{$vo.group.title}</td>
                                 <td>{$vo.entry_time}</td>
                                 <td><span class="label label-sm label-warning">{$vo.user_count} 次</span></td>
                                 <td>{$vo.status}</td>
                                 <td class="text-right">
                                     <a href="{:Url('users/edit',['uid'=>$vo.id])}">修改</a>
                                     <span class="text-explode">|</span>
+                                    {if condition="$vo['id']!=1"}
                                     <a href="javascript:void(0);" onclick="deleteUserOne({$vo.id});">删除</a>
+                                    {else}
+                                    <a href="javascript:void(0);">删除</a>
+                                    {/if}
                                 </td>
                             </tr>
                             {/volist}
@@ -115,8 +106,7 @@
                                 <td colspan="9">
                                     <div class="pull-left">
                                         <button id="DelAllAttr" type="button" class="btn btn-default">选中删除</button>
-                                        <button id="transferID" type="button" class="btn btn-default">转至其他账号
-                                        </button>
+                                        
                                     </div>
                                     <div class="pull-right page-box">
                                         {$page}
@@ -139,12 +129,9 @@
                 </div>
                 <!--内容结束-->
             </div>
-        </div>
-    </div>
-</div>
+{/block}
 
-{// 引入底部公共JS文件}
-{include file="public/footer"}
+{block name="footer"}
 <script type="text/javascript">
     $(document).ready(function() {
         // 当前页面分类高亮
@@ -217,6 +204,4 @@
         return false;
     }
 </script>
-</div>
-</body>
-</html>
+{/block}

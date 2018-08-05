@@ -1,21 +1,8 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    {include file="public/header"}
-    <link href="/assets/plugins/jquery-nestable/jquery.nestable.css" rel="stylesheet" type="text/css">
-</head>
-<body>
-{// 引入顶部导航文件}
-{include file="public/topbar"}
-
-<div class="viewFramework-body viewFramework-sidebar-full">
-    {// 引入左侧导航文件}
-    {include file="public/sidebar"}
-    <!-- 主体内容 开始 -->
-    <div class="viewFramework-product">
-        <!-- 中间导航 开始 viewFramework-product-col-1-->
-        <!-- 中间导航 结束 -->
-        <div class="viewFramework-product-body">
+{extend name="public/base"}
+{block name="header"}
+<link href="/assets/plugins/jquery-nestable/jquery.nestable.css" rel="stylesheet" type="text/css">
+{/block}
+{block name="main"}
             <div class="console-container">
                 <!--内容开始-->
                 <div class="row syc-bg-fff">
@@ -25,7 +12,8 @@
                                 <h5><span>{$title}</span></h5>
                             </div>
                             <div class="pull-right">
-                                <a class="btn btn-primary" id="AddDepartmentModal">新增部门</a>
+<!--                                 <a class="btn btn-primary" id="AddDepartmentModal">新增角色</a> -->
+<a class="btn btn-primary" href="{:url('add')}">新增角色</a>
                                 <a href="javascript:window.location.reload();" class="btn btn-default">
                                     <span class="glyphicon glyphicon-refresh"></span>
                                     <span>刷新</span></a>
@@ -49,14 +37,14 @@
                                     <div class="col-md-8 col-md-offset-2">
                                         <div class="dd" id="nestable_list_3">
                                             <ol class="dd-list">
-                                                {volist name="group" id="vo"}
-                                                <li class="dd-item dd3-item" data-id="1">
+                                                {volist name="group" key="key" id="vo"}
+                                                <li class="dd-item dd3-item node{$vo.id}" data-id="{$key}">
                                                     <div class="dd-handle dd3-handle"><i class="fa fa-bars"></i></div>
-                                                    <div class="dd3-content"> {$vo.title} <span class="label label-sm label-primary" style="margin:0px 0px 0px 50px;">{$vo.count} 职员</span><!--span class="cat-text"><a href="">修改</a>&nbsp;&nbsp;<a href="javascript:void(0);" onclick="deleteCategory(this)" categoryid="1">删除</a></span--></div>
+                                                    <div class="dd3-content"> {$vo.title} <span class="label label-sm label-primary" style="margin:0px 0px 0px 50px;">{$vo.count} 人</span><span class="cat-text">{if condition="$vo['status']"}<a href="javascript:;" class="rolestatus" role-id="{$vo.id}">开启</a>{else}<a href="javascript:;" class="rolestatus" role-id="{$vo.id}">禁用</a>{/if}&nbsp;&nbsp;<a href="<?php echo url('edit',['id' => $vo['id']]);?>">修改</a>&nbsp;&nbsp;<a href="javascript:void(0);" class="deleteRole" role-id="{$vo.id}">删除</a></span></div>
                                                     {notempty name="$vo.son"}
                                                     <ol class="dd-list">
                                                         {foreach $vo.son as $son1}
-                                                        <li class="dd-item dd3-item" data-id="1">
+                                                        <li class="dd-item dd3-item" data-id="{$key}">
                                                             <div class="dd-handle dd3-handle"><i class="fa fa-bars"></i></div>
                                                             <div class="dd3-content"> {$son1.user_nick} </div>
                                                         </li>
@@ -75,18 +63,14 @@
                 </div>
                 <!--内容结束-->
             </div>
-        </div>
-    </div>
-</div>
-
-{// 引入底部公共JS文件}
-{include file="public/footer"}
+{/block}
+{block name="footer"}
 <script type="text/javascript" src="/assets/plugins/jquery-nestable/jquery.nestable.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
         // 当前页面分类高亮
         $("#sidebar-config").addClass("sidebar-nav-active"); // 大分类
-        $("#config-department").addClass("active"); // 小分类
+        $("#config-role").addClass("active"); // 小分类
 
         //
         $("#AddDepartmentModal").on('click', function () {
@@ -121,6 +105,49 @@
         });
         //$('.dd').nestable('collapseAll');// 开启默认折叠所有节点 需要放在后面
     });
+
+    $('.rolestatus').click(function(){
+    	 var nodeid = $(this).attr('role-id');
+         var _this = this;
+			$.ajax({
+				url: '<?php echo url('rolestatus');?>',
+				method: 'get',
+				data: {
+					id:nodeid},
+				success: function(res){
+					if(res.code == 1){
+						toastr.success(res.msg);
+						setTimeout(function(){
+							window.location.reload();
+							},2000);
+					}else{
+						toastr.error(res.msg);
+					}
+				}
+			});
+     });
+    
+    $('.deleteRole').click(function(){
+        if(confirm('确认要删除吗？')){
+            var nodeid = $(this).attr('role-id');
+            var _this = this;
+			$.ajax({
+				url: '<?php echo url('deleterole');?>',
+				method: 'get',
+				data: {
+					id:nodeid},
+				success: function(res){
+					if(res.code == 1){
+						$(_this).parents('li.node'+nodeid).remove();
+						toastr.success(res.msg);
+					}else{
+						toastr.error(res.msg);
+						}
+				}
+			});
+        }
+     });
+    
     function deleteCategory(obj) {
         var categoryId=$(obj).attr("categoryId");
         //alert(categoryId);
@@ -193,5 +220,4 @@
         });
     }
 </script>
-</body>
-</html>
+{/block}

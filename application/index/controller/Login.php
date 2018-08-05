@@ -21,15 +21,17 @@
      }
      
      public function index() {
-         $this->assign('user',['user_name' => '','pwd' => '']);
-         $remember_token = json_decode(cookie('remember_token'),TRUE);
-         if (!empty($remember_token)){
-             $current_token = md5($this->request->ip().$remember_token['user_name'].$_SERVER['HTTP_USER_AGENT']);
-             if ($remember_token['token'] == $current_token){
-                 $userDb = Db::name('users')->where('user_name', $remember_token['user_name'])->find();
-                 $this->assign('user',['user_name' => $userDb['user_name'],'pwd' => '']);
+         $user = ['user_name' => '','user_pwd' => ''];
+         $remember = json_decode(cookie('remember_token'),TRUE);
+         if (!empty($remember)){
+         	$remember['user_name'] = _encrypt($remember['user_name'],'DECODE');
+         	$remember['user_pwd'] = _encrypt($remember['user_pwd'],'DECODE');
+         	$current_token = md5($this->request->ip().$remember['user_name'].$_SERVER['HTTP_USER_AGENT']);
+         	if ($remember['token'] == $current_token){
+         		$user = ['user_name' => $remember['user_name'],'user_pwd' => $remember['user_pwd']];
              }
          }
+         $this->assign('user',$user);
          return $this->fetch();
      }
 
@@ -82,7 +84,8 @@
                      $remember_token = md5($request->ip().$username.$_SERVER['HTTP_USER_AGENT']);
                      if ($remember == 1){
                          cookie('remember_token',json_encode([
-                             'user_name' => $username,
+                             'user_name' => _encrypt($username),
+                         	 'user_pwd' => _encrypt($password),
                              'token' => $remember_token
                          ]),time()+3600*24*30);
                      }

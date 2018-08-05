@@ -1,34 +1,15 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    {include file="public/header"}
-</head>
-<body>
-{// 引入顶部导航文件}
-{include file="public/topbar"}
+{extend name="public/base"}
+{block name="header"}
+<style type="text/css">
 
-<div class="viewFramework-body viewFramework-sidebar-full">
-    {// 引入左侧导航文件}
-    {include file="public/sidebar"}
-    <!-- 主体内容 开始 -->
-    <div class="viewFramework-product">
-        <!-- 中间导航 开始 viewFramework-product-col-1-->
-        <!-- 中间导航 结束 -->
-        <div class="viewFramework-product-body">
+</style>
+{/block}
+{block name="main"}
+<div class="container-fluid">
             <div class="console-container">
                 <!--内容开始-->
-                <div class="row syc-bg-fff">
-                    <div class="col-lg-12 syc-border-bs">
-                        <div class="console-title">
-                            <div class="pull-left">
-                                <h5><span>{$title}</span></h5>
-                                <a href="javascript:history.go(-1);" class="btn btn-default">
-                                    <span class="icon-goback"></span><span>返回</span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+<?php $current_title = '修改账号';?>
+{include file="public/current"}
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="portlet light margin-top-3">
@@ -63,25 +44,24 @@
                                         <input type="text" class="form-control w300 fleft" name="nickname" id="inputusernick" value="{$user.user_nick}">
                                     </div>
                                 </div>
-                                {eq name="$Think.session.user_auth.id" value="1"}
                                 <div class="form-group">
-                                    <label for="inputemail" class="col-sm-2 control-label">公司部门</label>
+                                    <label for="inputemail" class="col-sm-2 control-label">所属角色</label>
                                     <div class="col-sm-2">
-                                        <select class="form-control" name="bumen">
-                                            <option value="">选择部门</option>
+                                        <select class="form-control" {if condition="$user['id']==1"}disabled="disabled"{/if} name="group_id">
+                                            <option value="0">选择角色</option>
                                             {volist name="group" id="vo"}
-                                            <option value="{$vo.id}" {eq name="$vo.id" value="$user.user_auth"}selected{/eq}>{$vo.title}</option>
+                                            <option value="{$vo.id}" {if condition="$user['group_id']==$vo['id']"}selected="selected"{/if}>{$vo.title}</option>
                                             {/volist}
                                         </select>
                                     </div>
                                 </div>
-                                <div class="form-group">
+                               
+                                   <div class="form-group">
                                     <label for="ruzhishijian" class="col-sm-2 control-label">入职时间</label>
                                     <div class="col-sm-2">
                                         <input type="text" class="form-control w150 fleft" name="ruzhishijian" id="ruzhishijian" value="{$user.entry_time}">
                                     </div>
                                 </div>
-                                {/eq}
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">性别</label>
                                     <div class="col-sm-10">
@@ -103,7 +83,7 @@
                                     <label for="inputemail" class="col-sm-2 control-label">账户状态</label>
                                     <div class="col-sm-2">
                                         <select class="form-control" name="status">
-                                            <option value="">选择部门</option>
+                                            <option value="">选择状态</option>
                                             <option value="-1" {eq name="$user.status" value="-1"}selected{/eq}>删除</option>
                                             <option value="0" {eq name="$user.status" value="0"}selected{/eq}>禁用</option>
                                             <option value="1" {eq name="$user.status" value="1"}selected{/eq}>正常</option>
@@ -122,12 +102,9 @@
                 <!--内容结束-->
             </div>
         </div>
-    </div>
-</div>
 
-{// 引入底部公共JS文件}
-{include file="public/footer"}
-
+{/block}
+{block name="footer"}
 <script type="text/javascript" src="/assets/plugins/jquery-validation/js/jquery.validate.js"></script>
 <!-- layui -->
 <link rel="stylesheet" type="text/css" href="/assets/plugins/layui/css/layui.css">
@@ -152,13 +129,13 @@
         $("#updateUserForm").validate({
             rules: {
                 password: {
-                    minlength: 6,
+                    minlength: 2,
                     maxlength: 16
                 },
                 nickname: {
                     required: true,
                 },
-                bumen: {
+                group_id: {
                     required: true
                 }
             },
@@ -207,5 +184,4 @@
         });
     })
 </script>
-</body>
-</html>
+{/block}
