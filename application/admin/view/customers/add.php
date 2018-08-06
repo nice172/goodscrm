@@ -1,21 +1,9 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    {include file="public/header"}
-</head>
-<body>
-{// 引入顶部导航文件}
-{include file="public/topbar"}
+{extend name="public/base"}
+{block name="header"}
 
-<div class="viewFramework-body viewFramework-sidebar-full">
-    {// 引入左侧导航文件}
-    {include file="public/sidebar"}
-    <!-- 主体内容 开始 -->
-    <div class="viewFramework-product">
-        <!-- 中间导航 开始 viewFramework-product-col-1-->
-        <!-- 中间导航 结束 -->
-        <div class="viewFramework-product-body">
-            <div class="console-container">
+{/block}
+{block name="main"}
+<div class="container-fluid">
                 <!--内容开始-->
                 <div class="row">
                     <div class="col-md-12">
@@ -83,24 +71,7 @@
                                         <input type="text" class="form-control" style="margin-top: 10px;width: 50%;" name="street" placeholder="街道信息">
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td colspan="4">
-                                        <div class="bs-callout bs-callout-warning">
-                                            <span>物流信息</span>
-                                            <span class="pull-right"><a class="btn btn-primary" onclick="setHandle.addLogistics()">新增物流信息</a></span>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="text-right">发货物流：</td>
-                                    <td colspan="3">
-                                        <div class="pull-left">
-                                            <input type="text" class="form-control w300" name="precusid" id="precusid" value="" readonly/>
-                                            <input type="hidden" name="cus_log_id" id="cus_log_id" value=""/>
-                                        </div>
-                                        <label style="margin-left: 6px;"><a class="btn btn-primary" onclick="setHandle.selectLog()">选择物流</a></label>
-                                    </td>
-                                </tr>
+
                                 <!--备注信息-->
                                 <tr>
                                     <td colspan="4">
@@ -132,8 +103,8 @@
         </div>
     </div>
 </div>
-{// 引入底部公共JS文件}
-{include file="public/footer"}
+{/block}
+{block name="footer"}
 <script type="text/javascript" src="/assets/plugins/jquery-validation/js/jquery.validate.js"></script>
 <script type="text/javascript" src="/assets/plugins/city/jquery.cityselect.js"></script>
 <script type="text/javascript">
@@ -242,5 +213,4 @@
         }
     };
 </script>
-</body>
-</html>
+{/block}

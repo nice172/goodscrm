@@ -1,21 +1,9 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    {include file="public/header"}
-</head>
-<body>
-{// 引入顶部导航文件}
-{include file="public/topbar"}
+{extend name="public/base"}
+{block name="header"}
 
-<div class="viewFramework-body viewFramework-sidebar-full">
-    {// 引入左侧导航文件}
-    {include file="public/sidebar"}
-    <!-- 主体内容 开始 -->
-    <div class="viewFramework-product">
-        <!-- 中间导航 开始 viewFramework-product-col-1-->
-        <!-- 中间导航 结束 -->
-        <div class="viewFramework-product-body">
-            <div class="console-container">
+{/block}
+{block name="main"}
+<div class="container-fluid">
                 <!--内容开始-->
                 <div class="row syc-bg-fff">
                     <div class="col-lg-12 syc-border-bs">
@@ -47,7 +35,7 @@
                                         <td width="35%">
                                             <span>{$data.cus_name}</span>
                                         </td>
-                                        <td width="15%" class="right-color"><span>客户名称:</span></td>
+                                        <td width="15%" class="right-color"><span>简称:</span></td>
                                         <td width="35%"><span>{$data.cus_duty}</span></td>
                                     </tr>
                                     <tr>
@@ -73,9 +61,6 @@
                                         <td width="15%" class="right-color"><span>详细地址:</span></td>
                                         <td width="35%" colspan="3" id="city_4">{$data.cus_prov} {$data.cus_city} {$data.cus_dist} {$data.cus_street}</td>
                                     </tr>
-                                    <tr>
-                                        <td width="15%" class="right-color"><span>物流信息:</span></td>
-                                        <td width="35%" colspan="3" id="city_6">{$data.cus_log_id.log_name}, {$data.cus_log_id.log_phone}, {$data.cus_log_id.log_address}</td>
                                     <tr>
                                         <td width="15%" class="right-color"><span>备注信息:</span></td>
                                         <td width="35%" colspan="3">{$msg.msg_content}</td>
@@ -208,8 +193,8 @@
     </div>
 </div>
 
-{// 引入底部公共JS文件}
-{include file="public/footer"}
+{/block}
+{block name="footer"}
 <script type="text/javascript" src="/assets/plugins/jquery-validation/js/jquery.validate.js"></script>
 <script type="text/javascript" src="/assets/plugins/city/jquery.cityselect.js"></script>
 <script type="text/javascript">
@@ -356,5 +341,4 @@
         }).form();
     };
 </script>
-</body>
-</html>
+{/block}

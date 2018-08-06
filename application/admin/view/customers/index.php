@@ -27,14 +27,23 @@
                         <div class="sub-button-line marginTop10 form-inline">
                             <form class="pull-left">
                                 <div class="form-group">
-                                    <label class="control-label" for="projectNameInput">搜索名称 :</label>
-                                    <input name="projectNameInput" id="projectNameInput" class="ipt form-control" data-toggle="tooltip" data-placement="top" title="可搜索 公司名称 / 客户名称">
-                                    <button type="button" class="btn btn-primary" id="searchprojectName">搜索</button>
+                                    <label class="control-label" for="projectNameInput">客户简称 :</label>
+                                    <input name="projectNameInput" id="projectNameInput" class="ipt form-control" data-toggle="tooltip" data-placement="top" title="可搜索 客户简称">
+                                    </div>
+                                <div class="form-group">
+                                    <label class="control-label" for="projectNameInput">创建时间 :</label>
+                                    <input name="start_time" id="start_time" class="ipt form-control">
+                                    <span>到</span>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <input name="end_time" id="end_time" class="ipt form-control">
+                                    <button type="button" class="btn btn-primary" id="searchprojectName">查找</button>
                                 </div>
                             </form>
-                            <div class="pull-right">
-                                <a class="btn btn-primary" href="{:Url('customers/excel')}" target="_blank">导出Excel</a>
-                            </div>
+<!--                             <div class="pull-right"> -->
+<!--                                 <a class="btn btn-primary" href="{:Url('customers/excel')}" target="_blank">导出Excel</a> -->
+<!--                             </div> -->
                         </div>
                     </div>
                 </div>
@@ -46,13 +55,12 @@
                                 <tr>
                                     <th>&nbsp;</th>
                                     <th>编号</th>
+                                    <th>简称</th>
                                     <th>公司名称</th>
-                                    <th>客户名称</th>
                                     <th>手机</th>
                                     <th>固话</th>
                                     <th>传真</th>
                                     <th>详细地址</th>
-                                    <th>发货物流</th>
                                     <th class="text-right">操作</th>
                                 </tr>
                             </thead>
@@ -61,13 +69,12 @@
                                 <tr>
                                     <td><input type="checkbox" name="ckbox[]" value="{$vo.cus_id}"></td>
                                     <td>{$vo.cus_id}</td>
-                                    <td><a href="{:Url('customers/view',['id'=>$vo.cus_id])}">{$vo.cus_name}</a></td>
                                     <td>{$vo.cus_duty}</td>
+                                    <td><a href="{:Url('customers/view',['id'=>$vo.cus_id])}">{$vo.cus_name}</a></td>
                                     <td>{$vo.cus_moble}</td>
                                     <td>{$vo.cus_phome}</td>
                                     <td>{$vo.cus_fax}</td>
                                     <td>{$vo.cus_prov} {$vo.cus_city} {$vo.cus_dist} {$vo.cus_street}</td>
-                                    <td>{$vo.cus_log_id.log_name}</td>
                                     <td class="text-right">
                                         <a href="{:Url('customers/view',['id'=>$vo.cus_id])}">查看</a>
                                         <span class="text-explode">|</span>
@@ -109,6 +116,20 @@
 
         $('[data-toggle="tooltip"]').tooltip(); //工具提示
 
+        layui.use('laydate', function() {
+            var laydate = layui.laydate;
+            //日期选择器
+            laydate.render({
+                elem: '#start_time'
+                //,type: 'date' //默认，可不填
+            });
+            laydate.render({
+                elem: '#end_time'
+                //,type: 'date' //默认，可不填
+            });
+        });
+
+        
         // 名称搜索
         $("#searchprojectName").on('click', function () {
             var NameInput = $("input[name='projectNameInput']").val();
