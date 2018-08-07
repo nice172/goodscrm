@@ -1,21 +1,9 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    {include file="public/header"}
-</head>
-<body>
-{// 引入顶部导航文件}
-{include file="public/topbar"}
+{extend name="public/base"}
+{block name="header"}
 
-<div class="viewFramework-body viewFramework-sidebar-full">
-    {// 引入左侧导航文件}
-    {include file="public/sidebar"}
-    <!-- 主体内容 开始 -->
-    <div class="viewFramework-product">
-        <!-- 中间导航 开始 viewFramework-product-col-1-->
-        <!-- 中间导航 结束 -->
-        <div class="viewFramework-product-body">
-            <div class="console-container">
+{/block}
+{block name="main"}
+<div class="container-fluid">
                 <!--内容开始-->
                 <div class="row syc-bg-fff">
                     <div class="col-lg-12 syc-border-bs">
@@ -51,60 +39,74 @@
                                 <tr>
                                     <td width="15%" class="right-color"><span>公司名称:</span></td>
                                     <td width="35%">
-                                        <input type="text" class="form-control w300" name="name"  value="{$data.cus_name}">
+                                        <input type="text" class="form-control w300" name="cus_name"  value="{$data.cus_name}">
                                     </td>
-                                    <td width="15%" class="right-color"><span>客户名称:</span></td>
-                                    <td width="35%"><input type="text" class="form-control w300" name="duty" value="{$data.cus_duty}"></td>
+                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>简称:</span></td>
+                                    <td width="35%"><input type="text" class="form-control w300" name="cus_short" value="{$data.cus_short}"></td>
                                 </tr>
                                 <tr>
-                                    <td width="15%" class="right-color"><span>固话:</span></td>
-                                    <td width="35%"><input type="text" class="form-control w300" name="phome" id="phome" value="{$data.cus_phome}"></td>
+                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>电话号码:</span></td>
+                                    <td width="35%"><input type="text" class="form-control w300" name="cus_phome" id="phome" value="{$data.cus_phome}"></td>
                                     <td width="15%" class="right-color"><span>传真:</span></td>
-                                    <td width="35%"><input type="text" class="form-control w300" name="fax" id="fax" value="{$data.cus_fax}"></td>
+                                    <td width="35%"><input type="text" class="form-control w300" name="cus_fax" id="fax" value="{$data.cus_fax}"></td>
                                 </tr>
                                 <tr>
-                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>手机:</span></td>
+                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>手机号码:</span></td>
                                     <td width="35%">
-                                        <input type="text" class="form-control w300" name="moble" id="moble" value="{$data.cus_moble}">
+                                        <input type="text" class="form-control w300" name="cus_mobile" id="cus_mobile" value="{$data.cus_mobile}">
                                     </td>
-                                    <td width="15%" class="right-color"><span>邮编:</span></td>
-                                    <td width="35%"><input type="text" class="form-control w300" name="code" id="code" value="{$data.cus_code}"></td>
+                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>联系人:</span></td>
+                                    <td width="35%"><input type="text" class="form-control w300" name="cus_duty" id="cus_duty" value="{$data.cus_duty}"></td>
                                 </tr>
                                 <tr>
-                                    <td width="15%" class="right-color"><span>邮箱:</span></td>
-                                    <td width="35%"><input type="text" class="form-control w300" name="email" id="email" value="{$data.cus_email}"></td>
-                                    <td width="15%" class="right-color"><span>网址:</span></td>
-                                    <td width="35%"><input type="text" class="form-control w300" name="http" value="{$data.cus_http}"></td>
+                                    <td width="15%" class="right-color"><span>E-Mail:</span></td>
+                                    <td width="35%"><input type="text" class="form-control w300" name="cus_email" id="cus_email" value="{$data.cus_email}"></td>
+                                    <td width="15%" class="right-color"><span>职务:</span></td>
+                                    <td width="35%"><input type="text" class="form-control w300" name="cus_post" value="{$data.cus_post}"></td>
+                                </tr>
+                                <tr>
+                                    <td width="15%" class="right-color"><span>性别:</span></td>
+                                    <td width="35%">
+                                    <select class="syc-select w300" name="cus_sex">
+                                            <option value="-1">--请选择性别--</option>
+                                            <option value="1" {if condition="$data['cus_sex']"}selected="selected"{/if}>男</option>
+                                            <option value="0" {if condition="!$data['cus_sex']"}selected="selected"{/if}>女</option>
+                                    </select>
+                                    </td>
+                                    <td width="15%" class="right-color"><span>QQ:</span></td>
+                                    <td width="35%"><input type="text" class="form-control w300" name="cus_qq" value="{$data.cus_qq}" id="con_qq" placeholder=""></td>
+                                </tr>
+                                <tr>
+                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>部门:</span></td>
+                                    <td width="35%">
+                                       <select class="syc-select w300" name="cus_section">
+                                            <option value="0">--请选择部门--</option>
+                                            <?php foreach ($section as $val){?>
+                                            <option value="<?php echo $val;?>" {if condition="$data['cus_section'] eq $val"}selected="selected"{/if}><?php echo $val;?></option>
+                                            <?php }?>
+                                            </select>
+                                    </td>
+                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>业务经理:</span></td>
+                                    <td width="35%">
+                                            <select class="syc-select w300" name="cus_business">
+                                            <option value="0">--请选择业务经理--</option>
+                                            <?php foreach ($business as $val){?>
+                                            <option value="<?php echo $val;?>" {if condition="$data['cus_business'] eq $val"}selected="selected"{/if}><?php echo $val;?></option>
+                                            <?php }?>
+                                            </select>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td width="15%" class="right-color"><span>详细地址:</span></td>
                                     <td width="35%" colspan="3" id="city_4">
-                                        <select class="syc-select w150 prov" name="prov" id="selectProvince">
+                                        <select class="syc-select w150 prov" name="cus_prov" id="selectProvince">
                                             <option>--请选择省份--</option>
                                         </select>
-                                        <select class="syc-select w150 city" name="city" id="selectCitp">
+                                        <select class="syc-select w150 city" name="cus_city" id="selectCitp">
                                         </select>
-                                        <select class="syc-select w150 dist" name="dist" id="selectCounty">
+                                        <select class="syc-select w150 dist" name="cus_dist" id="selectCounty">
                                         </select>
-                                        <input type="text" class="form-control" style="margin-top: 10px;width: 50%;" name="street" value="{$data.cus_street}">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="4">
-                                        <div class="bs-callout bs-callout-warning">
-                                            <span>物流信息</span>
-                                            <span class="pull-right"><a class="btn btn-primary" onclick="setHandle.addLogistics()">新增物流信息</a></span>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="text-right"><span class="text-danger">*</span>发货物流：</td>
-                                    <td colspan="3">
-                                        <div class="pull-left">
-                                            <input type="text" class="form-control w300" name="precusid" id="precusid" value="{$dataLog.log_name}" readonly/>
-                                            <input type="hidden" name="cus_log_id" id="cus_log_id" value="{$dataLog.log_id}"/>
-                                        </div>
-                                        <label style="margin-left: 6px;"><a class="btn btn-primary" onclick="setHandle.selectLog()">选择物流</a></label>
+                                        <input type="text" class="form-control" style="margin-top: 10px;width: 50%;" name="cus_street" value="{$data.cus_street}">
                                     </td>
                                 </tr>
                                 <!--备注信息-->
@@ -117,7 +119,7 @@
                                 </tr>
                                 <tr>
                                     <td width="15%" class="right"><span>备注内容:</span></td>
-                                    <td colspan="3"><textarea class="form-control" name="content" id="content" rows="6">{$msg.msg_content}</textarea> </td>
+                                    <td colspan="3"><textarea class="form-control" name="cus_content" id="content" rows="6">{$msg.msg_content}</textarea> </td>
                                 </tr>
 
                                 <tr class="table-submit">
@@ -135,12 +137,8 @@
                 </div>
                 <!--内容结束-->
             </div>
-        </div>
-    </div>
-</div>
-
-{// 引入底部公共JS文件}
-{include file="public/footer"}
+{/block}
+{block name="footer"}
 <script type="text/javascript" src="/assets/plugins/jquery-validation/js/jquery.validate.js"></script>
 <script type="text/javascript" src="/assets/plugins/city/jquery.cityselect.js"></script>
 <script type="text/javascript">
@@ -258,5 +256,4 @@
         }
     };
 </script>
-</body>
-</html>
+{/block}

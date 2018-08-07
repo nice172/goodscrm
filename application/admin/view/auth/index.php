@@ -61,12 +61,12 @@
 <table id="sample-table-1" class="table table-striped table-bordered table-hover">
 	<thead>
 		<tr>
-			<th class="center">
-				<label class="position-relative">
-					<input class="ace" type="checkbox">
-					<span class="lbl"></span>
-				</label>
-			</th>
+<!-- 			<th class="center"> -->
+<!-- 				<label class="position-relative"> -->
+<!-- 					<input class="ace" type="checkbox"> -->
+<!-- 					<span class="lbl"></span> -->
+<!-- 				</label> -->
+<!-- 			</th> -->
 			<th>ID</th>
 			<th>节点名称</th>
 			<th>权限URL</th>
@@ -78,12 +78,12 @@
 	</thead>
 		{foreach name="lists" item="v"}
 		<tr id="tr<?php echo $v['id'];?>">
-			<td class="center">
-				<label class="position-relative">
-					<input class="ace" value="{$v.id}" name="checkbox[]" type="checkbox">
-					<span class="lbl"></span>
-				</label>
-			</td>
+<!-- 			<td class="center"> -->
+<!-- 				<label class="position-relative"> -->
+<!-- 					<input class="ace" value="{$v.id}" name="checkbox[]" type="checkbox"> -->
+<!-- 					<span class="lbl"></span> -->
+<!-- 				</label> -->
+<!-- 			</td> -->
 			<td>
 				{$v.id}
 			</td>

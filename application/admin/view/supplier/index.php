@@ -13,7 +13,7 @@
                                 <h5><span>{$title}</span></h5>
                             </div>
                             <div class="pull-right">
-                                <a class="btn btn-primary" href="{:Url('customers/add')}">新增客户</a>
+                                <a class="btn btn-primary" href="{:Url('supplier/add')}">新增供应商</a>
                                 <a href="javascript:window.location.reload();" class="btn btn-default">
                                     <span class="glyphicon glyphicon-refresh"></span>
                                     <span>刷新</span></a>
@@ -27,8 +27,8 @@
                         <div class="sub-button-line marginTop10 form-inline">
                             <form class="pull-left">
                                 <div class="form-group">
-                                    <label class="control-label" for="projectNameInput">客户简称 :</label>
-                                    <input name="cus_short" id="projectNameInput" class="ipt form-control" data-toggle="tooltip" <?php if (isset($_GET['cus_short'])):?>value="<?php echo $_GET['cus_short'];?>"<?php endif;?> data-placement="top" title="可搜索 客户简称">
+                                    <label class="control-label" for="projectNameInput">供应商名称 :</label>
+                                    <input name="cus_short" id="projectNameInput" class="ipt form-control" data-toggle="tooltip" <?php if (isset($_GET['cus_short'])):?>value="<?php echo $_GET['cus_short'];?>"<?php endif;?> data-placement="top" title="可搜索 供应商名称">
                                     </div>
                                 <div class="form-group">
                                     <label class="control-label" for="projectNameInput">创建时间 :</label>
@@ -55,12 +55,13 @@
                                 <tr>
                                     
                                     <th>ID编号</th>
-                                    <th>简称</th>
-                                    <th>公司名称</th>
+                                    <th>供应商名称</th>
                                     <th>联系人</th>
                                     <th>手机号码</th>
-                                    <th>跟单员</th>
-                                    <th>创建时间</th>
+                                    <th>付款方式</th>
+                                    <th>备注</th>
+                                    <th>添加人</th>
+                                    <th>添加时间</th>
                                     <th>更新时间</th>
                                     <th>状态</th>
                                     <th class="text-right">操作</th>
@@ -69,21 +70,22 @@
                             <tbody>
                             {volist name="data" id="vo" empty="$empty"}
                                 <tr>
-                                    <td>{$vo.cus_id}</td>
-                                    <td>{$vo.cus_short}</td>
-                                    <td><a href="{:Url('customers/view',['id'=>$vo.cus_id])}">{$vo.cus_name}</a></td>
-                                    <td>{$vo.cus_duty}</td>
-                                    <td>{$vo.cus_mobile}</td>
-                                    <td>{$vo.cus_order_ren}</td>
+                                    <td>{$vo.id}</td>
+                                    <td>{$vo.supplier_name}</td>
+                                    <td>{$vo.supplier_contacts}</td>
+                                    <td>{$vo.supplier_mobile}</td>
+                                    <td>{$vo.supplier_payment}</td>
+                                    <td>{$vo.supplier_remark}</td>
+                                    <td>{$vo.add_user}</td>
                                     <td><?php echo $vo['create_time'];?></td>
                                     <td><?php echo $vo['update_time'];?></td>
-                                    <td><?php echo $vo['status']?'正常':'禁用';?></td>
+                                    <td><?php echo $vo['supplier_status']?'正常':'禁用';?></td>
                                     <td class="text-right">
-                                        <a href="{:Url('customers/view',['id'=>$vo.cus_id])}">查看</a>
+                                        <a href="{:Url('view',['id'=>$vo.id])}">详情</a>
                                         <span class="text-explode">|</span>
-                                        <a href="{:Url('customers/edit',['id'=>$vo.cus_id])}">修改</a>
+                                        <a href="{:Url('edit',['id'=>$vo.id])}">修改</a>
                                         <span class="text-explode">|</span>
-                                        <a href="javascript:void(0);" onclick="deleteLogisticsOne('{$vo.cus_id}');">删除</a>
+                                        <a href="javascript:void(0);" onclick="deleteLogisticsOne('{$vo.id}');">删除</a>
                                     </td>
                                 </tr>
                             {/volist}
@@ -114,8 +116,8 @@
 <script type="text/javascript">
     $(document).ready(function() {
         // 当前页面分类高亮
-        $("#sidebar-sales").addClass("sidebar-nav-active"); // 大分类
-        $("#sidebar-customers").addClass("active"); // 小分类
+        $("#sidebar-storage").addClass("sidebar-nav-active"); // 大分类
+        $("#supplier-index").addClass("active"); // 小分类
 
         $('[data-toggle="tooltip"]').tooltip(); //工具提示
 
@@ -157,7 +159,7 @@
                 });
                 if (valArr.length !== 0 && valArr !== null && valArr !== '') {
                     var data={name:'delallattr',uid:valArr.join(',')};
-                    $.sycToAjax("{:Url('customers/delete')}", data);
+                    $.sycToAjax("{:Url('delete')}", data);
                 };
             };
             return false;
@@ -167,8 +169,8 @@
     function deleteLogisticsOne(e) {
         if(confirm("是否删除？")){
             if (!isNaN(e) && e !== null && e !== '') {
-                var data={name:'delone',uid:e};
-                $.sycToAjax("{:Url('customers/delete')}", data);
+                var data={name:'delone',supplier_id:e};
+                $.sycToAjax("{:Url('delete')}", data);
             }
         };
         return false;

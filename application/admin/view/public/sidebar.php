@@ -75,6 +75,12 @@
                             </div>
                         </div>
                         <ul class="sidebar-trans submenu">
+                            <li class="nav-item" id="supplier-index">
+                                <a href="{:Url('supplier/index')}" class="sidebar-trans">
+                                    <div class="nav-icon sidebar-trans"><span class="icon-ecs"></span></div>
+                                    <span class="nav-title">供应商列表</span>
+                                </a>
+                            </li>
                             <li class="nav-item" id="storage-index">
                                 <a href="{:Url('storage/index')}" class="sidebar-trans">
                                     <div class="nav-icon sidebar-trans"><span class="icon-ecs"></span></div>

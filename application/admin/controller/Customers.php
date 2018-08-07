@@ -22,26 +22,36 @@ class Customers extends Base{
         $request = Request::instance();
         $query = $request->param(); // 分页查询传参数
         $status = $request->param('status'); // 状态查询
-        $q = $request->param('q'); // 企业名称查询
-
-        if ($q !== '') {
-            $data = $Customers->where('cus_name|cus_duty', 'like', '%'.$q.'%')->where('status','>=',0)->paginate('', false, ['query' => $query ]); // 企业名称查询
-        } else {
-            $data = $Customers->where('status','>=',0)->paginate(20); // 默认查询
+        $cus_short = $request->param('cus_short'); // 企业名称查询
+        $start_time = $request->param('start_time'); // 企业名称查询
+        $end_time = $request->param('end_time'); // 企业名称查询
+        
+        $where = "status=1";
+        if ($start_time != '' && $end_time != ''){
+            $start_time = strtotime($start_time);
+            $end_time = strtotime($end_time);
+            $where .= " and create_time >= '{$start_time}' and create_time <= '{$end_time}'";
         }
-
+        if ($cus_short != ''){
+            $where .= " and cus_short like '%{$cus_short}%'";
+        }
+        $data = $Customers->where($where)->paginate('', false, ['query' => $query ]);
+        foreach ($data as $key => $value){
+            $user = db('users')->where(['id' => $value['cus_order_ren']])->find();
+            $data[$key]['cus_order_ren'] = $user['user_nick'];
+        }
+  
         // 获取分页显示
         $page = $data->render();
         $this->assign('page',$page);
         $this->assign('data', $data);
-        $this->assign('empty', '<tr><td colspan="9" align="center">当前条件没有查到数据</td></tr>');
+        $this->assign('empty', '<tr><td colspan="19" align="center">当前条件没有查到数据</td></tr>');
         $this->assign('title', '客户信息');
         return $this->fetch();
     }
 
     //添加
-    public function add()
-    {
+    public function add(){
         // 职员
         //$user = Db::name('users')->field('id,user_nick')->order('id','desc')->select();
         // 企业类型
@@ -50,6 +60,17 @@ class Customers extends Base{
         $evaluate=Db::name('customers_evaluate')->order('eva_id', 'asc')->select();
         $this->assign('title', '新增客户');
         //$this->assign('user', $user);
+        
+        $section = getParams(7); //获取部门
+        if (!empty($section)){
+            $section = $section['params_value'];
+        }
+        $business = getParams(8); //获取业务经理
+        if (!empty($business)){
+            $business = $business['params_value'];
+        }
+        $this->assign('business',$business);
+        $this->assign('section',$section);
         $this->assign('property', $property);
         $this->assign('evaluate', $evaluate);
         return $this->fetch();
@@ -57,42 +78,61 @@ class Customers extends Base{
 
     //添加提交
     public function add_do(){
-        // 设定数据返回格式
-        //\think\Config::set("default_return_type","json");
         $request=Request::instance();
         if ($request->isPost()) {
-            $duty = cutstr_html($request->param('duty'));
-
+            $duty = cutstr_html($request->param('con_duty'));
             $Customers = new CustomersModel();
-
             $validate = Loader::validate('Customers');
-            if (!$validate->scene("add")->check($request->param())) {
-                //$this->error($validate->getError());
+            if (!$validate->scene('add')->check($request->param())) {
+                $this->error($validate->getError());
             }
-            $city = $request->param('city');
-            $dist = $request->param('dist');
-            $cus_city = isset($city) ? $city : '';
-            $cus_dist = isset($dist) ? $dist : '';
+            
+            $city = $request->param('con_city');
+            $dist = $request->param('con_dist');
+            $cus_city = !empty($city) ? $city : '';
+            $cus_dist = !empty($dist) ? $dist : '';
 
             $data = [
-                'cus_name' => $request->param('name'),
+                'cus_name' => $request->param('con_name'),
                 'cus_duty' => $duty,
-                'cus_phome' => $request->param('phome'),
-                'cus_fax' => $request->param('fax'),
-                'cus_moble' => $request->param('moble'),
-                'cus_email' => $request->param('email'),
-                'cus_http' => $request->param('http'),
-                'cus_code' => $request->param('code'),
-                'cus_prov' => $request->param('prov'),
+                'cus_phome' => $request->param('con_phome'),
+                'cus_fax' => $request->param('con_fax'),
+                'cus_order_ren' => $this->userinfo['id'],
+                'cus_mobile' => $request->param('con_mobile'),
+                'cus_email' => $request->param('con_email'),
+                'cus_business' => $request->param('con_business'),
+                'cus_prov' => $request->param('con_prov'),
                 'cus_city' => $cus_city,
                 'cus_dist' => $cus_dist,
-                'cus_street' => $request->param('street'),
+                'cus_sex' => $request->param('con_sex'),
+                'cus_qq' => $request->param('con_qq'),
+                'cus_section' => $request->param('con_section'),
+                'cus_post' => $request->post('con_post'),
+                'cus_short' => $request->param('con_short'),
+                'cus_street' => $request->param('con_street'),
                 'status' => 1
             ];
+            $content = cutstr_html($request->param('con_content'));
             $result = $Customers->data($data)->save();
             if ($result) {
-                Db::name('customers_message')->insert(['msg_cus_id'=>$Customers->cus_id, 'msg_content'=>cutstr_html($request->param('content'))]);
-                $this->success($duty.' 添加成功',Url::build('customers/index'));
+                $contact = [
+                    'con_cus_id' => $Customers->cus_id,
+                    'con_name' => $duty,
+                    'con_sex' => $request->param('con_sex'),
+                    'con_qq' => $request->param('con_qq'),
+                    'con_post' => $request->post('con_post'),
+                    'con_mobile' => $request->param('con_mobile'),
+                    'con_email' => $request->param('con_email'),
+                    'con_section' => $request->param('con_section'),
+                    'con_address' => $data['cus_prov'].$data['cus_city'].$data['cus_dist'].$data['cus_street'],
+                    'con_description' => $content,
+                    'create_time' => time(),
+                    'update_time' => time(),
+                    'status' => 1
+                ];
+                db('customers_contact')->insert($contact);
+                Db::name('customers_message')->insert(['msg_cus_id'=>$Customers->cus_id, 'msg_content'=>$content]);
+                $this->success($data['cus_name'].' 添加成功',Url::build('customers/index'));
             } else {
                 $this->error('数据操作有错误');
             }
@@ -115,8 +155,9 @@ class Customers extends Base{
         // 评估等级
         //$evaluate=Db::name('customers_evaluate')->order('eva_id', 'asc')->select();
         //物流信息
-        $Logistics = new Logistics();
-        $dataLog = $Logistics::get($data['cus_log_id']);
+//         $Logistics = new Logistics();
+//         $dataLog = $Logistics::get($data['cus_log_id']);
+        $dataLog = '';
         //备注信息
         $message = Db::name('customers_message')->where('msg_cus_id', $id)->find();
         $assign = array(
@@ -127,14 +168,24 @@ class Customers extends Base{
             'dataLog' => $dataLog,
             'msg' => $message,
         );
+        $section = getParams(7); //获取部门
+        if (!empty($section)){
+            $section = $section['params_value'];
+        }
+        $business = getParams(8); //获取业务经理
+        if (!empty($business)){
+            $business = $business['params_value'];
+        }
+        $this->assign('business',$business);
+        $this->assign('section',$section);
         $this->assign($assign);
         return $this->fetch();
     }
 
     //提交修改企业信息
     public function edit_do() {
-        $Request = Request::instance();
-        $id = $Request->param('cus_id');
+        $request = Request::instance();
+        $id = $request->param('cus_id');
         if (!is_numeric($id) || empty($id)) {
             $this->error('参数错误！');
         }
@@ -142,30 +193,32 @@ class Customers extends Base{
         if (empty($By)) {
             $this->error('参数错误！');
         }
-        $dist = $Request->param('dist');
-        $dist = isset($dist) ? $dist : '';
+        $city = $request->param('cus_city');
+        $dist = $request->param('cus_dist');
+        $cus_city = !empty($city) ? $city : '';
+        $cus_dist = !empty($dist) ? $dist : '';
+        $dist = $request->param('dist');
+        $dist = !empty($dist) ? $dist : '';
         $data = [
-            'cus_name' => $Request->param('name'),
-            'cus_duty' => $Request->param('duty'),
-            //'cus_property' => $Request->param('property'),
-            //'cus_ty_id' => $Request->param('type'),
-            //'cus_eva_id' => $Request->param('evaluate'),
-            //'cus_img' => $Request->param(''),
-            'cus_phome' => $Request->param('phome'),
-            'cus_fax' => $Request->param('fax'),
-            'cus_moble' => $Request->param('moble'),
-            'cus_email' => $Request->param('email'),
-            'cus_http' => $Request->param('http'),
-            'cus_code' => $Request->param('code'),
-            'cus_prov' => $Request->param('prov'),
-            'cus_city' => $Request->param('city'),
-            'cus_dist' => $dist,
-            'cus_log_id'=> $Request->param('cus_log_id'), //物流ID
-            'cus_street' => $Request->param('street'),
-            //'status' => ,
+            'cus_name' => $request->param('cus_name'),
+            'cus_duty' => $request->param('cus_duty'),
+            'cus_phome' => $request->param('cus_phome'),
+            'cus_fax' => $request->param('cus_fax'),
+            'cus_mobile' => $request->param('cus_mobile'),
+            'cus_email' => $request->param('cus_email'),
+            'cus_business' => $request->param('cus_business'),
+            'cus_prov' => $request->param('cus_prov'),
+            'cus_city' => $cus_city,
+            'cus_dist' => $cus_dist,
+            'cus_sex' => $request->param('cus_sex'),
+            'cus_qq' => $request->param('cus_qq'),
+            'cus_section' => $request->param('cus_section'),
+            'cus_post' => $request->post('cus_post'),
+            'cus_short' => $request->param('cus_short'),
+            'cus_street' => $request->param('cus_street')
         ];
         Db::name('customers')->where('cus_id', $id)->update($data);
-        Db::name('customers_message')->where('msg_cus_id', $id)->update(['msg_content'=>cutstr_html($Request->param('content'))]);
+        Db::name('customers_message')->where('msg_cus_id', $id)->update(['msg_content'=>cutstr_html($request->param('cus_content'))]);
         $this->success('修改成功', Url::build('customers/index'));
     }
 
@@ -236,8 +289,6 @@ class Customers extends Base{
 
     //删除操作
     public function delete() {
-        // 是否有权限
-        IS_ROOT([1])  ? true : $this->error('没有权限');
         $Request = Request::instance();
         if ($Request->isPost()) {
             $uid = $Request->param("uid");

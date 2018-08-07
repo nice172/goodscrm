@@ -4,44 +4,45 @@ namespace app\admin\validate;
 
 use think\Validate;
 
-class Customers extends Validate
-{
+class Customers extends Validate {
     protected $rule = [
-        'name|企业名称' => 'require',
-        'duty|责任人' => 'require',
-        'type|企业类型' => 'require',
-        'property|企业性质' => 'require',
-        'phome|座机' => 'require|alphaDash',
-        'fax|传真' => 'require|alphaDash',
-        'email|邮箱' => 'require|email',
-        'evaluate|评估等级' => 'require',
-        'prov|省份' => 'require',
-        'city|城市' => 'require',
-        '__token__|数据'    =>  'require|token'
+        'con_name' => 'require',
+        'con_short' => 'require',
+        'con_phome' => 'require',
+        'con_mobile' => 'require',
+        'con_duty' => 'require',
+        'con_email' => 'require',
+        'con_section' => 'require',
+        'con_business' => 'require',
+        'con_prov' => 'require',
+        'con_city' => 'require',
+        'con_street' => 'require'
     ];
 
     protected $message = [
-        'name.require' => ':attribute不能为空',
-        'duty.require' => ':attribute不能为空',
-        'type.require' => ':attribute不能为空',
-        'property.require' => ':attribute不能为空',
-        'phome.require' => ':attribute不能为空',
-        'phome.alphaDash' => ':attribute格式不对',
-        'fax.require' => ':attribute不能为空',
-        'fax.alphaDash' => ':attribute格式不对',
-        'email.require' => ':attribute不能为空',
-        'email.email' => ':attribute格式不对',
-        'evaluate|评估等级' => ':attribute不能为空',
-        'prov|省份' => 'require',
-        'city|城市' => 'require',
-        '__token__.require' => ':attribute不能为空',
-        '__token__.token' => ':attribute无效'
+        'con_name.require' => '公司名称不能为空',
+        'con_name.checkName' => '公司名称已存在',
+        'con_short.require' => '简称不能为空',
+        'con_phome.require' => '电话号码不能为空',
+        'con_mobile.require' => '手机号码不能为空',
+        'con_duty.require' => '联系人不能为空',
+        'con_email.require' => 'E-Mail不能为空',
+        'con_email.email' => 'E-Mail格式不对',
+        'con_section.require' => '部门不能为空',
+        'con_business.require' => '业务经理不能为空',
+        'con_street.require' => '详细地址不能为空',
+        'con_prov.require' => '省份不能为空',
+        'con_city.require' => '城市不能为空'
     ];
 
     protected $scene = [
-        //'add'      => ['name','duty','type','property','phome','fax','email','evaluate','prov','city','__token__'],
-        //'edit'     => ['type','property','phome','fax','email','evaluate','prov','city','__token__']
-        'add'      => [],
-        'edit'     => []
+        'add'      => ['con_name' => 'require|checkName:1'],
+        'edit'     => ['con_name' => 'require|iNcheckName:1']
     ];
+    
+    protected function checkName($value,$rule,$data){
+        $find = db('customers')->where(['cus_name' => $value])->find();
+        return empty($find) ? true : false;
+    }
+    
 }

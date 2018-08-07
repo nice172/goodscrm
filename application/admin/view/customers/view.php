@@ -36,26 +36,26 @@
                                             <span>{$data.cus_name}</span>
                                         </td>
                                         <td width="15%" class="right-color"><span>简称:</span></td>
-                                        <td width="35%"><span>{$data.cus_duty}</span></td>
+                                        <td width="35%"><span>{$data.cus_short}</span></td>
                                     </tr>
                                     <tr>
-                                        <td width="15%" class="right-color"><span>固话:</span></td>
+                                        <td width="15%" class="right-color"><span>电话号码:</span></td>
                                         <td width="35%"><span>{$data.cus_phome}</span></td>
                                         <td width="15%" class="right-color"><span>传真:</span></td>
                                         <td width="35%"><span>{$data.cus_fax}</span></td>
                                     </tr>
                                     <tr>
 
-                                        <td width="15%" class="right-color"><span>手机:</span></td>
-                                        <td width="35%"><span>{$data.cus_moble}</span></td>
-                                        <td width="15%" class="right-color"><span>邮编:</span></td>
-                                        <td width="35%"><span>{$data.cus_code}</span></td>
+                                        <td width="15%" class="right-color"><span>手机号码:</span></td>
+                                        <td width="35%"><span>{$data.cus_mobile}</span></td>
+                                        <td width="15%" class="right-color"><span>业务经理:</span></td>
+                                        <td width="35%"><span>{$data.cus_business}</span></td>
                                     </tr>
                                     <tr>
-                                        <td width="15%" class="right-color"><span>邮箱:</span></td>
+                                        <td width="15%" class="right-color"><span>E-MAIL:</span></td>
                                         <td width="35%"><span>{$data.cus_email}</span></td>
-                                        <td width="15%" class="right-color"><span>网址:</span></td>
-                                        <td width="35%"><span>{$data.cus_http}</span></td>
+                                        <td width="15%" class="right-color"><span>跟单员:</span></td>
+                                        <td width="35%"><span>{$data.cus_order_ren}</span></td>
                                     </tr>
                                     <tr>
                                         <td width="15%" class="right-color"><span>详细地址:</span></td>
@@ -99,7 +99,7 @@
                                         <td>{$vo.con_mobile}</td>
                                         <td>{$vo.con_post}</td>
                                         <td>{eq name="$vo.con_sex" value="1"}
-                                            男{else/}女{/eq}
+                                            		男{else/}女{/eq}
                                         </td>
                                         <td>{$vo.con_qq}</td>
                                         <td>{$vo.con_email}</td>
@@ -123,7 +123,7 @@
                                         <th colspan="9">
                                             <div class="pull-left">
                                                 <div class="bs-callout bs-callout-warning">
-                                                    <span>历史订单</span>
+                                                    <span>下单记录</span>
                                                 </div>
                                             </div>
                                         </th>
@@ -182,7 +182,7 @@
                                     <span class="spans1">{$data.cus_name}</span>
                                 </li>
                                 <li class="active"><a href="#jibenxinxi" data-toggle="tab">基本信息</a></li>
-                                <li class=""><a href="#lishidingdan" data-toggle="tab">历史订单</a></li>
+                                <li class=""><a href="#lishidingdan" data-toggle="tab">下单记录</a></li>
                             </ul>
                         </div>
                     </div>
@@ -245,7 +245,7 @@
             bDialog.open({
                 title : '新增联系人',
                 width: '800',
-                height: '450',
+                height: '520',
                 url : '{:Url(\'contacts/add\')}?id='+e,
                 callback:function(data){
                     if(data && data.results && data.results.length > 0 ) {
@@ -281,7 +281,7 @@
             bDialog.open({
                 title : '查看联系人',
                 width: '800',
-                height: '450',
+                height: '520',
                 url : '{:Url(\'contacts/edit\')}?id='+e,
                 callback:function(data){
                     if(data && data.results && data.results.length > 0 ) {

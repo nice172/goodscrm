@@ -1,16 +1,16 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : localhost3306
+Source Server         : localhost
 Source Server Version : 50714
-Source Host           : localhost:3306
+Source Host           : 127.0.0.1:3306
 Source Database       : goods_crm
 
 Target Server Type    : MYSQL
 Target Server Version : 50714
 File Encoding         : 65001
 
-Date: 2018-08-06 23:22:05
+Date: 2018-08-07 18:08:15
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -207,28 +207,33 @@ DROP TABLE IF EXISTS `syc_customers`;
 CREATE TABLE `syc_customers` (
   `cus_id` int(10) NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `cus_con_id` int(10) NOT NULL DEFAULT '0' COMMENT '默认联系人ID',
-  `cus_name` char(50) NOT NULL COMMENT '企业名称',
-  `cus_duty` char(20) NOT NULL COMMENT '责任人',
+  `cus_name` varchar(255) NOT NULL DEFAULT '' COMMENT '企业名称',
+  `cus_short` varchar(255) NOT NULL DEFAULT '' COMMENT '简称',
+  `cus_duty` char(20) NOT NULL DEFAULT '' COMMENT '责任人',
   `cus_phome` char(20) NOT NULL COMMENT '座机',
   `cus_fax` char(20) NOT NULL COMMENT '传真',
-  `cus_moble` char(20) NOT NULL COMMENT '手机号',
+  `cus_mobile` char(20) NOT NULL DEFAULT '' COMMENT '手机号',
   `cus_email` char(20) NOT NULL COMMENT '邮箱',
-  `cus_http` char(60) NOT NULL COMMENT '网址',
-  `cus_code` char(20) NOT NULL COMMENT '邮编',
-  `cus_prov` char(10) NOT NULL DEFAULT '' COMMENT '省份',
-  `cus_city` char(10) NOT NULL DEFAULT '' COMMENT '城市',
-  `cus_dist` char(10) NOT NULL DEFAULT '' COMMENT '县区',
-  `cus_street` varchar(100) NOT NULL COMMENT '街道信息',
+  `cus_business` varchar(255) NOT NULL DEFAULT '' COMMENT '业务经理',
+  `cus_order_ren` varchar(255) NOT NULL DEFAULT '' COMMENT '跟单员',
+  `cus_post` varchar(255) NOT NULL DEFAULT '',
+  `cus_prov` varchar(100) NOT NULL DEFAULT '' COMMENT '省份',
+  `cus_city` varchar(100) NOT NULL DEFAULT '' COMMENT '城市',
+  `cus_dist` varchar(100) NOT NULL DEFAULT '' COMMENT '县区',
+  `cus_section` varchar(255) NOT NULL DEFAULT '',
+  `cus_sex` tinyint(2) unsigned NOT NULL DEFAULT '0',
+  `cus_qq` varchar(255) NOT NULL DEFAULT '',
+  `cus_street` varchar(100) NOT NULL DEFAULT '' COMMENT '街道信息',
   `create_time` int(16) NOT NULL DEFAULT '0' COMMENT '添加时间',
   `update_time` int(16) NOT NULL DEFAULT '0' COMMENT '更新时间',
   `status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '状态',
   PRIMARY KEY (`cus_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1681 DEFAULT CHARSET=utf8 COMMENT='客户信息表';
+) ENGINE=InnoDB AUTO_INCREMENT=1687 DEFAULT CHARSET=utf8 COMMENT='客户信息表';
 
 -- ----------------------------
 -- Records of syc_customers
 -- ----------------------------
-INSERT INTO `syc_customers` VALUES ('1680', '0', '湖北荣宝电子科技有限公', '荣宝电子', '020-8989898', '020-8989898', '13800138000', '13800138000@163.com', 'http://www.baidu.com', '510000', '广东省', '广州市', '天河区', '详细地址详细地址详细地址详细地址详细地址', '1533567325', '1533567325', '1');
+INSERT INTO `syc_customers` VALUES ('1686', '0', '广州市进销传系统有限公司', '进销传系统', 'nice172', '020-89898989', '020-89898989', '13800138000', '354575573@qq.com', '彭立新', '1', 'PHP', '广东省', '广州市', '天河区', '工作部', '0', '354575573', '中山大道西1025号', '1533614328', '1533614328', '1');
 
 -- ----------------------------
 -- Table structure for syc_customers_contact
@@ -240,9 +245,8 @@ CREATE TABLE `syc_customers_contact` (
   `con_name` char(16) NOT NULL COMMENT '姓名',
   `con_sex` tinyint(2) DEFAULT '1' COMMENT '性别1男0女',
   `con_post` char(20) NOT NULL DEFAULT '' COMMENT '职位',
-  `con_phome` char(20) NOT NULL DEFAULT '' COMMENT '座机',
+  `con_section` varchar(255) NOT NULL DEFAULT '' COMMENT '部门',
   `con_mobile` char(20) NOT NULL DEFAULT '' COMMENT '手机号',
-  `con_fax` char(20) NOT NULL DEFAULT '' COMMENT '传真',
   `con_qq` char(20) NOT NULL DEFAULT '' COMMENT 'QQ',
   `con_email` char(30) NOT NULL DEFAULT '' COMMENT '邮箱',
   `con_address` varchar(50) NOT NULL DEFAULT '' COMMENT '详细地址',
@@ -251,12 +255,14 @@ CREATE TABLE `syc_customers_contact` (
   `update_time` int(16) NOT NULL DEFAULT '0' COMMENT '更新时间',
   `status` tinyint(2) NOT NULL DEFAULT '0' COMMENT '状态',
   PRIMARY KEY (`con_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='客户联系人表';
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COMMENT='客户联系人表';
 
 -- ----------------------------
 -- Records of syc_customers_contact
 -- ----------------------------
-INSERT INTO `syc_customers_contact` VALUES ('1', '1680', '测试', '1', '仓管理', '', '13800138001', '', '13800138001', '13800138001@qq.com', '', '13800138001@qq.com', '1533568039', '1533568039', '1');
+INSERT INTO `syc_customers_contact` VALUES ('5', '1686', 'nice172', '1', '开发者', '销售部', '13800138000', '354575573', '354575573@qq.com', '广东省广州市天河区中山大道西1025号', '客户备注内容', '1533614328', '1533614328', '1');
+INSERT INTO `syc_customers_contact` VALUES ('6', '1686', '蜡笔小新', '1', '仓管', '仓储物流部', '13800138001', '354575575', '354575575@qq.com', '广州市天河区中山大道西1025号', '备注蜡笔小新', '1533622131', '1533622131', '1');
+INSERT INTO `syc_customers_contact` VALUES ('7', '1686', 'fdsafa', '1', 'fdsafsaf', '采购部', '13800138000', 'fsafdsadf', 'fsdafa', 'fdsafsa', 'fsadf', '1533623950', '1533624036', '-1');
 
 -- ----------------------------
 -- Table structure for syc_customers_evaluate
@@ -292,7 +298,7 @@ CREATE TABLE `syc_customers_message` (
 -- ----------------------------
 -- Records of syc_customers_message
 -- ----------------------------
-INSERT INTO `syc_customers_message` VALUES ('1680', '详细地址详细地址详细地址详细地址详细地址详细地址详细地址详细地址详细地址详细地址详细地址');
+INSERT INTO `syc_customers_message` VALUES ('1686', '客户备注内容');
 
 -- ----------------------------
 -- Table structure for syc_customers_premises
@@ -944,6 +950,38 @@ INSERT INTO `syc_storage_charge` VALUES ('23', 'H-08', '扣板槽', '0.16', '5',
 INSERT INTO `syc_storage_charge` VALUES ('24', 'H-06', '包边座', '0.45', '5.4', '', '1', '1512127012', '1512127012', '1');
 
 -- ----------------------------
+-- Table structure for syc_supplier
+-- ----------------------------
+DROP TABLE IF EXISTS `syc_supplier`;
+CREATE TABLE `syc_supplier` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `supplier_name` varchar(255) NOT NULL DEFAULT '',
+  `supplier_short` varchar(255) NOT NULL DEFAULT '',
+  `supplier_mobile` char(12) NOT NULL DEFAULT '',
+  `supplier_contacts` varchar(50) NOT NULL DEFAULT '',
+  `supplier_email` varchar(50) NOT NULL DEFAULT '',
+  `supplier_post` varchar(100) NOT NULL DEFAULT '',
+  `supplier_status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0禁用',
+  `supplier_qq` varchar(12) NOT NULL DEFAULT '',
+  `supplier_like` varchar(255) NOT NULL DEFAULT '',
+  `supplier_payment` varchar(100) NOT NULL DEFAULT '',
+  `supplier_province` varchar(50) NOT NULL DEFAULT '',
+  `supplier_city` varchar(50) NOT NULL DEFAULT '',
+  `supplier_area` varchar(50) NOT NULL DEFAULT '',
+  `supplier_address` varchar(255) NOT NULL DEFAULT '',
+  `supplier_remark` text,
+  `create_time` int(10) unsigned NOT NULL DEFAULT '0',
+  `update_time` int(10) unsigned NOT NULL DEFAULT '0',
+  `add_uid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '添加UID',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of syc_supplier
+-- ----------------------------
+INSERT INTO `syc_supplier` VALUES ('1', '供应商名称', '简称', '13800138000', '联系人', '353575573@qq.com', '部门职务', '1', '353575573', 'php', '现金交易', '广东省', '广州市', '天河区', '详细地址1', '备注内容备注内容备注内容', '1533632664', '1533636165', '2');
+
+-- ----------------------------
 -- Table structure for syc_users
 -- ----------------------------
 DROP TABLE IF EXISTS `syc_users`;
@@ -972,5 +1010,5 @@ CREATE TABLE `syc_users` (
 -- Records of syc_users
 -- ----------------------------
 INSERT INTO `syc_users` VALUES ('1', 'asdasd', 'sha256:1000:X2vbzkCcKSScvZZ5ZUDs7DvTmergIc5u:fQt8UQynrp5psap5MoOq4scNMLNhcjIl', '开发者', '1', '354575573@qq.com', '/uploads/avatar/582d3a26a3369.jpg', '2017-01-01', '161', '1451577600', '1497704499', '127.0.0.1', '127.0.0.1', '16', '1');
-INSERT INTO `syc_users` VALUES ('2', 'admin', 'sha256:1000:bb+qr8kui4m4JriYM/aLnznOODBwZfbi:30utxhFU7cxebnazg8Xh5TEkAmzR6ymJ', '管理员', '1', 'nice172@126.com', '', '2018-08-05', '4', '1533480247', '1533480247', '192.168.1.225', '', '16', '1');
+INSERT INTO `syc_users` VALUES ('2', 'admin', 'sha256:1000:bb+qr8kui4m4JriYM/aLnznOODBwZfbi:30utxhFU7cxebnazg8Xh5TEkAmzR6ymJ', '管理员', '1', 'nice172@126.com', '', '2018-08-05', '5', '1533480247', '1533480247', '192.168.1.225', '', '16', '1');
 INSERT INTO `syc_users` VALUES ('3', 'nice172', 'sha256:1000:GM0kcPbE+QNRSpmsG58qckJUkekhvpwi:XwmDtVMPAfE8DDYUdVW5DF5AOLljRm8q', '测试号', '1', 'nice172@163.com', '', '2018-08-06', '0', '1533526543', '1533526543', '10.10.0.99', '', '14', '1');

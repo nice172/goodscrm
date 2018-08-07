@@ -19,73 +19,60 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <form method="post" id="addCustomersForm" class="ajaxForm" action="{:url('add_do')}">
-                            <input type="hidden" name="__token__" value="{$Request.token}" />
+                        <form method="post" id="addCustomersForm" class="ajaxForm" action="{:url('edit_do')}">
+                        <input type="hidden" name="supplier_id" value="{$data.id}" />
+                           
                             <table class="table contact-template-form">
                                 <tbody>
                                 <tr>
                                     <td colspan="4">
                                         <div class="bs-callout bs-callout-warning">
-                                            <span>客户信息</span>
+                                            <span>供应商信息</span>
                                         </div>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>公司名称:</span></td>
+                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>供应商名称:</span></td>
                                     <td width="35%">
-                                        <input type="text" class="form-control w300" name="con_name" id="con_name">
+                                        <input type="text" class="form-control w300" name="supplier_name" value="{$data.supplier_name}" id="supplier_name">
                                     </td>
                                     <td width="15%" class="right-color"><span class="text-danger">*</span><span>简称:</span></td>
-                                    <td width="35%"><input type="text" class="form-control w300" name="con_short" id="con_short"></td>
+                                    <td width="35%"><input type="text" class="form-control w300" value="{$data.supplier_short}" name="supplier_short" id="supplier_short"></td>
                                 </tr>
                                 <tr>
-                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>电话号码:</span></td>
-                                    <td width="35%"><input type="text" class="form-control w300" name="con_phome" id="con_phome"></td>
-                                    <td width="15%" class="right-color"><span>传真:</span></td>
-                                    <td width="35%"><input type="text" class="form-control w300" name="con_fax" id="con_fax"></td>
-                                </tr>
-                                <tr>
-                                    <td width="15%" class="right-color"><span>手机号码:</span></td>
+                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>手机号码:</span></td>
                                     <td width="35%">
-                                        <input type="text" class="form-control w300" name="con_mobile" id="con_mobile" >
+                                        <input type="text" class="form-control w300" name="supplier_mobile" value="{$data.supplier_mobile}" id="con_mobile" >
                                     </td>
                                     <td width="15%" class="right-color"><span class="text-danger">*</span><span>联系人:</span></td>
-                                    <td width="35%"><input type="text" class="form-control w300" name="con_duty" id="con_duty" ></td>
+                                    <td width="35%"><input type="text" class="form-control w300" value="{$data.supplier_contacts}" name="supplier_contacts" id="con_duty" ></td>
                                 </tr>
                                 <tr>
                                     <td width="15%" class="right-color"><span class="text-danger">*</span><span>E-Mail:</span></td>
-                                    <td width="35%"><input type="text" class="form-control w300" name="con_email" id="con_email"></td>
-                                    <td width="15%" class="right-color"><span>职务:</span></td>
-                                    <td width="35%"><input type="text" class="form-control w300" name="con_post" id="con_post" placeholder=""></td>
+                                    <td width="35%"><input type="text" class="form-control w300" value="{$data.supplier_email}" name="supplier_email" id="con_email"></td>
+                                    <td width="15%" class="right-color"><span>部门职务:</span></td>
+                                    <td width="35%"><input type="text" class="form-control w300" value="{$data.supplier_post}" name="supplier_post" id="con_post" placeholder=""></td>
                                 </tr>
                                 <tr>
-                                    <td width="15%" class="right-color"><span>性别:</span></td>
+                                    <td width="15%" class="right-color"><span>状态:</span></td>
                                     <td width="35%">
-                                    <select class="syc-select w300" name="con_sex">
-                                            <option value="-1">--请选择性别--</option>
-                                            <option value="1">男</option>
-                                            <option value="0">女</option>
+                                    <select class="syc-select w300" name="supplier_status">
+                                            <option value="1" {if condition="$data['supplier_status']"}selected="selected"{/if}>正常</option>
+                                            <option value="0" {if condition="!$data['supplier_status']"}selected="selected"{/if}>禁用</option>
                                     </select>
                                     </td>
                                     <td width="15%" class="right-color"><span>QQ:</span></td>
-                                    <td width="35%"><input type="text" class="form-control w300" name="con_qq" id="con_qq" placeholder=""></td>
+                                    <td width="35%"><input type="text" class="form-control w300" value="{$data.supplier_qq}" name="supplier_qq" id="con_qq" placeholder=""></td>
                                 </tr>
                                 <tr>
-                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>部门:</span></td>
+                                    <td width="15%" class="right-color"><span>爱好:</span></td>
+                                    <td width="35%"><input type="text" class="form-control w300" value="{$data.supplier_like}" name="supplier_like" id="con_qq" placeholder=""></td>
+                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>付款方式:</span></td>
                                     <td width="35%">
-                                       <select class="syc-select w300" name="con_section">
-                                            <option value="0">--请选择部门--</option>
-                                            <?php foreach ($section as $val){?>
-                                            <option value="<?php echo $val;?>"><?php echo $val;?></option>
-                                            <?php }?>
-                                            </select>
-                                    </td>
-                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>业务经理:</span></td>
-                                    <td width="35%">
-                                            <select class="syc-select w300" name="con_business">
-                                            <option value="0">--请选择业务经理--</option>
-                                            <?php foreach ($business as $val){?>
-                                            <option value="<?php echo $val;?>"><?php echo $val;?></option>
+                                            <select class="syc-select w300" name="supplier_payment">
+                                            <option value="0">--请选择付款方式--</option>
+                                            <?php foreach ($payment as $val){?>
+                                            <option value="<?php echo $val;?>" {if condition="$val == $data['supplier_payment']"}selected="selected"{/if}><?php echo $val;?></option>
                                             <?php }?>
                                             </select>
                                     </td>
@@ -94,14 +81,14 @@
                                 <tr>
                                     <td width="15%" class="right-color"><span class="text-danger">*</span><span>详细地址:</span></td>
                                     <td width="35%" colspan="3" id="city_4">
-                                        <select class="syc-select w150 prov" name="con_prov" id="selectProvince">
+                                        <select class="syc-select w150 prov" name="supplier_province" id="selectProvince">
                                             <option>--请选择省份--</option>
                                         </select>
-                                        <select class="syc-select w150 city" name="con_city" id="selectCitp">
+                                        <select class="syc-select w150 city" name="supplier_city" id="selectCitp">
                                         </select>
-                                        <select class="syc-select w150 dist" name="con_dist" id="selectCounty">
+                                        <select class="syc-select w150 dist" name="supplier_area" id="selectCounty">
                                         </select>
-                                        <input type="text" class="form-control" style="margin-top: 10px;width: 50%;" name="con_street" placeholder="街道信息">
+                                        <input type="text" class="form-control" value="{$data.supplier_address}" style="margin-top: 10px;width: 50%;" name="supplier_address" placeholder="街道信息">
                                     </td>
                                 </tr>
 
@@ -115,7 +102,7 @@
                                 </tr>
                                 <tr>
                                     <td width="15%" class="right"><span>备注内容:</span></td>
-                                    <td colspan="3"><textarea class="form-control" name="con_content" id="con_content" rows="6"></textarea> </td>
+                                    <td colspan="3"><textarea class="form-control" name="supplier_remark" id="con_content" rows="6">{$data.supplier_remark}</textarea> </td>
                                 </tr>
 
                                 <tr>
@@ -140,9 +127,9 @@
 <script type="text/javascript">
     $(document).ready(function () {
         // 当前页面分类高亮
-        $("#sidebar-sales").addClass("sidebar-nav-active"); // 大分类
-        $("#sidebar-customers").addClass("active"); // 小分类
-        $("#city_4").citySelect({prov:"北京市", city:"东城区", dist:""});
+        $("#sidebar-storage").addClass("sidebar-nav-active"); // 大分类
+        $("#supplier-index").addClass("active"); // 小分类
+        $("#city_4").citySelect({prov:"{$data.supplier_province}", city:"{$data.supplier_city}", dist:"{$data.supplier_area}"});
 
     });
 

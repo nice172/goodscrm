@@ -22,8 +22,19 @@
                         <input type="text" class="form-control w300 fleft" name="con_mobile" id="inputmobile" placeholder="手机号">
                     </div>
                 </div>
+                  <div class="form-group">
+                    <label for="inputpost" class="col-sm-2 control-label">部门</label>
+                    <div class="col-sm-10">
+                        <select class="syc-select w300 fleft" name="con_section">
+                                            <option value="0">--请选择部门--</option>
+                                            <?php foreach ($section as $val){?>
+                                            <option value="<?php echo $val;?>"><?php echo $val;?></option>
+                                            <?php }?>
+                                            </select>
+                    </div>
+                </div>
                 <div class="form-group">
-                    <label for="inputpost" class="col-sm-2 control-label">职位</label>
+                    <label for="inputpost" class="col-sm-2 control-label">职务</label>
                     <div class="col-sm-10">
                         <input type="text" class="form-control w300 fleft" name="con_post" id="inputpost" placeholder="职位">
                     </div>
@@ -38,6 +49,12 @@
                     <label for="inputemail" class="col-sm-2 control-label">Email</label>
                     <div class="col-sm-10">
                         <input type="text" class="form-control w300 fleft" name="con_email" id="inputemail" placeholder="邮箱">
+                    </div>
+                </div>
+                                <div class="form-group">
+                    <label for="inputdescription" class="col-sm-2 control-label">送货地址</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control w300 fleft" name="con_address" id="con_address" placeholder="送货地址">
                     </div>
                 </div>
                 <div class="form-group">

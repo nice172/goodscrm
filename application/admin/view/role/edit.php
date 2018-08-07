@@ -55,18 +55,18 @@
         <div class="form-group">
         
         <div class="col-sm-12">
-        
+        <div class="icheck-list">
 <div class="col-xs-12 col-sm-12" style="margin-top:10px;margin-bottom:5px;">
 <span style="font-weight: 600;margin-bottom:10px;display:block;">选择权限</span>
 			{foreach name="lists" item="value"}
 			<dl class="rule">
-				<dt><label for="parent_{$value['id']}"><input type="checkbox" id="parent_{$value['id']}" {if condition="in_array($value['id'],$data['rule_pids'])"}checked="checked"{/if} name="parent[{$value['id']}]" value="{$value['id']}"/>{$value['title']}</label></dt>
+				<dt><label for="parent_{$value['id']}"><input type="checkbox" class="icheck" id="parent_{$value['id']}" {if condition="in_array($value['id'],$data['rule_pids'])"}checked="checked"{/if} name="parent[{$value['id']}]" value="{$value['id']}"/>{$value['title']}</label></dt>
 				{if condition="isset($value['child'])"}
 				<dd>
 					{foreach name="value['child']" item="vv"}
-						<label for="rule_{$vv['id']}"><input type="checkbox" id="rule_{$vv['id']}" {if condition="in_array($vv['id'],$data['rules'])"}checked="checked"{/if} name="rule[{$vv['id']}]" value="{$vv['id']}"/>{$vv['title']}</label>
+						<label for="rule_{$vv['id']}"><input type="checkbox" class="icheck" id="rule_{$vv['id']}" {if condition="in_array($vv['id'],$data['rules'])"}checked="checked"{/if} name="rule[{$vv['id']}]" value="{$vv['id']}"/>{$vv['title']}</label>
 						{foreach name="vv['child']" item="v3"}
-							<label for="rule_{$v3['id']}"><input type="checkbox" id="rule_{$v3['id']}" {if condition="in_array($v3['id'],$data['rules'])"}checked="checked"{/if} name="rule[{$v3['id']}]" value="{$v3['id']}"/>{$v3['title']}</label>
+							<label for="rule_{$v3['id']}"><input type="checkbox" class="icheck" id="rule_{$v3['id']}" {if condition="in_array($v3['id'],$data['rules'])"}checked="checked"{/if} name="rule[{$v3['id']}]" value="{$v3['id']}"/>{$v3['title']}</label>
 						{/foreach}
 					{/foreach}
 				</dd>
@@ -74,6 +74,7 @@
 			</dl>
 			{/foreach}
 
+</div>
 </div>
 
         

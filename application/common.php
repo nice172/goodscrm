@@ -177,6 +177,13 @@ function pbkdf2($algorithm, $password, $salt, $count, $key_length, $raw_output =
     }
 }
 
+function getParams($id){
+   $id = intval($id);
+   $find = db('params')->where(['id' => $id])->find();
+   if (empty($find)) return [];
+   $find['params_value'] = explode("\n", $find['params_value']);
+   return $find;
+}
 
 /**
  * 递归子节点
