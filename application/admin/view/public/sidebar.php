@@ -88,9 +88,9 @@
                                 </a>
                             </li>
                             <li class="nav-item" id="storage-xingcai">
-                                <a href="{:Url('storage/charge')}" class="sidebar-trans">
+                                <a href="{:url('Goods/index')}" class="sidebar-trans">
                                     <div class="nav-icon sidebar-trans"><span class="icon-ecs"></span></div>
-                                    <span class="nav-title">型材管理</span>
+                                    <span class="nav-title">商品维护</span>
                                 </a>
                             </li>
                             <li class="nav-item" id="storage-jinliao">

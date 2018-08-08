@@ -132,7 +132,7 @@
             submitHandler: function(form) {
                 //
                 $.ajax({
-                    url: '{:Url("contacts/edit_do")}',
+                    url: '{:url("contacts/edit_do")}',
                     type: 'post',
                     dataType: 'JSON',
                     data: $("#editUserForm").serialize(),

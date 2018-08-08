@@ -9,7 +9,7 @@
         <div class="col-lg-12">
             <form class="form-horizontal" method="post" id="addUserForm">
                 <input type="hidden" name="__token__" value="{$Request.token}" />
-                <input type="hidden" name="con_cus_id" value="{$data.cus_id}" />
+                <input type="hidden" name="con_id" value="{$data.id}" />
                 <div class="form-group">
                     <label for="inputname" class="col-sm-2 control-label"><span class="text-danger">*</span>姓名</label>
                     <div class="col-sm-10">
@@ -141,7 +141,7 @@
             submitHandler: function(form) {
                 //
                 $.ajax({
-                    url: '{:url("contacts/add_do")}',
+                    url: '{:url("contacts_do")}',
                     type: 'post',
                     dataType: 'JSON',
                     data: $("#addUserForm").serialize(),

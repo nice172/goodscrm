@@ -10,7 +10,7 @@
                         <div class="console-title console-title-border clearfix">
                             <div class="pull-left">
                                 <h5>{$title}</h5>
-                                <a href="{:Url('customers/index')}">
+                                <a href="javascript:window.history.go(-1);">
                                     <button class="btn btn-default"><span class="icon-goback"></span>返回</button>
                                 </a>
                             </div>
@@ -140,7 +140,7 @@
                 title : '选择物流',
                 width: '800',
                 height: '700',
-                url : '{:Url(\'logistics/select\')}',
+                url : '{:url(\'logistics/select\')}',
                 callback:function(data){
                     if(data && data.results && data.results.length > 0 ) {
                         var logid = data.results[0].logid;
@@ -157,7 +157,7 @@
                 title : '新增物流',
                 width: '800',
                 height: '320',
-                url : '{:Url(\'logistics/add\')}',
+                url : '{:url(\'logistics/add\')}',
             });
         },
         //收货地址选择默认联系人
@@ -166,7 +166,7 @@
             if (e!=='') {
                 var data = {cusid:cusid};
                 $.ajax({
-                    url: '{:Url("premises/getContactName")}',
+                    url: '{:url("premises/getContactName")}',
                     type: 'POST', //GET
                     data: data,
                     timeout:5000,    //超时时间

@@ -15,7 +15,7 @@
                             </div>
                             <div class="pull-right">
                                 <a class="btn btn-primary" href="{:url('add')}">新增账户</a>
-                                <a href="{:url('users/index')}" class="btn btn-default">
+                                <a href="javascript:window.location.reload();" class="btn btn-default">
                                     <span class="glyphicon glyphicon-refresh"></span>
                                     <span>刷新</span></a>
                             </div>
@@ -53,22 +53,22 @@
                                         <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>账户状态</span><span class="title"></span><span class="caret"></span></a>
                                         <ul class="dropdown-menu aliyun-console-table-search-list">
                                             <li>
-                                                <a href="{:Url('users/index')}"><span>全部</span></a>
+                                                <a href="{:url('users/index')}"><span>全部</span></a>
                                             </li>
                                             <li>
-                                                <a href="{:Url('users/index',['m'=>'status','k'=>'1'])}" id="status_1">
+                                                <a href="{:url('users/index',['m'=>'status','k'=>'1'])}" id="status_1">
                                                     <span>正常</span></a>
                                             </li>
                                             <li>
-                                                <a href="{:Url('users/index',['m'=>'status','k'=>'2'])}" id="status_2">
+                                                <a href="{:url('users/index',['m'=>'status','k'=>'2'])}" id="status_2">
                                                     <span>审核</span></a>
                                             </li>
                                             <li>
-                                                <a href="{:Url('users/index',['m'=>'status','k'=>'0'])}" id="status_0">
+                                                <a href="{:url('users/index',['m'=>'status','k'=>'0'])}" id="status_0">
                                                     <span>禁用</span></a>
                                             </li>
                                             <li>
-                                                <a href="{:Url('users/index',['m'=>'status','k'=>'-1'])}" id="status_-1">
+                                                <a href="{:url('users/index',['m'=>'status','k'=>'-1'])}" id="status_-1">
                                                     <span>删除</span></a>
                                             </li>
                                         </ul>
@@ -93,7 +93,7 @@
                                     {if condition="$userinfo['id']!=1 && $vo['id']==1"}
                                     <a href="javascript:;">修改</a>
                                     {else}
-                                    <a href="{:Url('users/edit',['uid'=>$vo.id])}">修改</a>
+                                    <a href="{:url('users/edit',['uid'=>$vo.id])}">修改</a>
                                     {/if}
                                     <span class="text-explode">|</span>
                                     {if condition="$vo['id']!=1 && $userinfo['id']!=$vo['id']"}
@@ -172,7 +172,7 @@
                 });
                 if (valArr.length !== 0 && valArr !== null && valArr !== '') {
                     var data={name:'delallattr',uid:valArr.join(',')};
-                    $.sycToAjax("{:Url('users/delete')}", data);
+                    $.sycToAjax("{:url('users/delete')}", data);
                 };
             };
             return false;
@@ -182,7 +182,7 @@
         $("#searchprojectName").on('click', function () {
             var NameInput = $("input[name='projectNameInput']").val();
             if (NameInput !== null && NameInput !== '' && NameInput !== 'undefined') {
-                window.location.href="{:Url('users/index',['m'=>'nick'])}?k="+NameInput;
+                window.location.href="{:url('users/index',['m'=>'nick'])}?k="+NameInput;
             }
         });
 
@@ -190,7 +190,7 @@
         $("#AddUserModal").on('click', function () {
             bDialog.open({
                 title : '新增账户',
-                url : '{:Url(\'users/add\')}',
+                url : '{:url(\'users/add\')}',
                 callback:function(data){
                     if(data && data.results && data.results.length > 0 ) {
                         console.log();
@@ -205,7 +205,7 @@
         if(confirm("是否删除？")){
             if (!isNaN(e) && e !== null && e !== '') {
                 var data={name:'delone',uid:e};
-                $.sycToAjax("{:Url('users/delete')}", data);
+                $.sycToAjax("{:url('users/delete')}", data);
             }
         };
         return false;

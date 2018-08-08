@@ -7,28 +7,28 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-12">
-            <form class="form-horizontal" method="post" id="addUserForm">
+            <form class="form-horizontal" method="post" id="editUserForm">
                 <input type="hidden" name="__token__" value="{$Request.token}" />
-                <input type="hidden" name="con_cus_id" value="{$data.cus_id}" />
+                <input type="hidden" name="con_id" value="{$data.con_id}" />
                 <div class="form-group">
                     <label for="inputname" class="col-sm-2 control-label"><span class="text-danger">*</span>姓名</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control w300 fleft" name="con_name" id="inputname" placeholder="姓名">
+                        <input type="text" class="form-control w300 fleft" name="con_name" id="inputname" value="{$data.con_name}">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputmobile" class="col-sm-2 control-label"><span class="text-danger">*</span>手机号</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control w300 fleft" name="con_mobile" id="inputmobile" placeholder="手机号">
+                        <input type="text" class="form-control w300 fleft" name="con_mobile" id="inputmobile" value="{$data.con_mobile}">
                     </div>
                 </div>
-                  <div class="form-group">
+                 <div class="form-group">
                     <label for="inputpost" class="col-sm-2 control-label">部门</label>
                     <div class="col-sm-10">
                         <select class="syc-select w300 fleft" name="con_section">
                                             <option value="0">--请选择部门--</option>
                                             <?php foreach ($section as $val){?>
-                                            <option value="<?php echo $val;?>"><?php echo $val;?></option>
+                                            <option value="<?php echo $val;?>" <?php if ($data['con_section']==$val){?>selected="selected"<?php } ?>><?php echo $val;?></option>
                                             <?php }?>
                                             </select>
                     </div>
@@ -36,31 +36,32 @@
                 <div class="form-group">
                     <label for="inputpost" class="col-sm-2 control-label">职务</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control w300 fleft" name="con_post" id="inputpost" placeholder="职位">
+                        <input type="text" class="form-control w300 fleft" name="con_post" id="inputpost" value="{$data.con_post}">
                     </div>
                 </div>
+
                 <div class="form-group">
                     <label for="inputqq" class="col-sm-2 control-label">QQ</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control w300 fleft" name="con_qq" id="inputqq" placeholder="QQ">
+                        <input type="text" class="form-control w300 fleft" name="con_qq" id="inputqq" value="{$data.con_qq}">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputemail" class="col-sm-2 control-label">Email</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control w300 fleft" name="con_email" id="inputemail" placeholder="邮箱">
+                        <input type="text" class="form-control w300 fleft" name="con_email" id="inputemail" value="{$data.con_email}">
                     </div>
                 </div>
-                                <div class="form-group">
+                   <div class="form-group">
                     <label for="inputdescription" class="col-sm-2 control-label">送货地址</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control w300 fleft" name="con_address" id="con_address" placeholder="送货地址">
+                        <input type="text" class="form-control w300 fleft" name="con_address" id="con_address" value="{$data.con_address}" placeholder="送货地址">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputdescription" class="col-sm-2 control-label">备注信息</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control w300 fleft" name="con_description" id="inputdescription" placeholder="备注信息">
+                        <input type="text" class="form-control w300 fleft" name="con_description" id="inputdescription" value="{$data.con_description}">
                     </div>
                 </div>
 
@@ -88,26 +89,16 @@
 <script type="text/javascript">
     $(document).ready(function () {
         //表单验证
-        $("#addUserForm").validate({
+        $("#editUserForm").validate({
             rules: {
                 con_name: {
                     required: true,
+                    maxlength: 16,
                 },
                 con_mobile: {
                     required: true,
                     isMobile: true,
                 },
-                con_phome: {
-                    isPhone: true,
-                },
-            },
-            messages: {
-                con_name: {
-                    required: "姓名不能为空",
-                },
-                con_mobile: {
-                    required: "手机号不能为空",
-                }
             },
 
             //debug: true, // 调试时用，只验证不提交表单
@@ -141,10 +132,10 @@
             submitHandler: function(form) {
                 //
                 $.ajax({
-                    url: '{:url("contacts/add_do")}',
+                    url: '{:url("edit_e_do")}',
                     type: 'post',
                     dataType: 'JSON',
-                    data: $("#addUserForm").serialize(),
+                    data: $("#editUserForm").serialize(),
                     success: function (result) {
                         if (result.code > 0) {
                             toastr.success(result.msg)

@@ -8,6 +8,7 @@
  class Base extends Controller {
      
      protected $userinfo;
+     protected $empty = '<tr><td colspan="20" align="center">当前条件没有查到数据</td></tr>';
      
      public function _initialize(){
          parent::_initialize();
@@ -37,7 +38,7 @@
                  }
              }
          }
-         
+         $this->assign('empty',$this->empty);
      }
      
      protected function ajaxReturn($data){

@@ -178,7 +178,7 @@
             submitHandler: function(form) {
                 //
                 $.ajax({
-                    url: '{:Url("users/user_do")}',
+                    url: '{:url("users/user_do")}',
                     type: 'post',
                     dataType: 'JSON',
                     data: $("#addUserForm").serialize(),

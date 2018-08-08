@@ -15,7 +15,6 @@
                                 </a>
                             </div>
                             <div class="pull-right">
-                                <a class="btn btn-primary" href="{:url('customers/edit',['id'=>$data.cus_id])}">修改信息</a>
                                 <a href="javascript:window.location.reload();" class="btn btn-default">
                                     <span class="glyphicon glyphicon-refresh"></span>
                                     <span>刷新</span></a>
@@ -26,122 +25,31 @@
                 <div class="section-main">
                     <div class="section-left">
                         <div class="tab-content section-wrap">
-                            <!--基本信息-->
-                            <div class="tab-pane active" id="jibenxinxi">
-                                <table class="table table-condensed" style="margin-top:0;">
-                                    <tbody>
-                                    <tr>
-                                        <td width="15%" class="right-color"><span>公司名称:</span></td>
-                                        <td width="35%">
-                                            <span>{$data.cus_name}</span>
-                                        </td>
-                                        <td width="15%" class="right-color"><span>简称:</span></td>
-                                        <td width="35%"><span>{$data.cus_short}</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td width="15%" class="right-color"><span>电话号码:</span></td>
-                                        <td width="35%"><span>{$data.cus_phome}</span></td>
-                                        <td width="15%" class="right-color"><span>传真:</span></td>
-                                        <td width="35%"><span>{$data.cus_fax}</span></td>
-                                    </tr>
-                                    <tr>
-
-                                        <td width="15%" class="right-color"><span>手机号码:</span></td>
-                                        <td width="35%"><span>{$data.cus_mobile}</span></td>
-                                        <td width="15%" class="right-color"><span>业务经理:</span></td>
-                                        <td width="35%"><span>{$data.cus_business}</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td width="15%" class="right-color"><span>E-MAIL:</span></td>
-                                        <td width="35%"><span>{$data.cus_email}</span></td>
-                                        <td width="15%" class="right-color"><span>跟单员:</span></td>
-                                        <td width="35%"><span>{$data.cus_order_ren}</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td width="15%" class="right-color"><span>详细地址:</span></td>
-                                        <td width="35%" colspan="3" id="city_4">{$data.cus_prov} {$data.cus_city} {$data.cus_dist} {$data.cus_street}</td>
-                                    </tr>
-                                    <tr>
-                                        <td width="15%" class="right-color"><span>备注信息:</span></td>
-                                        <td width="35%" colspan="3">{$msg.msg_content}</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                                <table class="table table-hover" style="margin-top:0;">
-                                    <thead>
-                                    <tr>
-                                        <th colspan="8">
-                                            <div class="pull-left">
-                                                <div class="bs-callout bs-callout-warning">
-                                                    <span>联系人</span>
-                                                </div>
-                                            </div>
-                                            <div class="pull-right" style="margin-top: 5px;">
-                                                <a class="btn btn-primary" onclick=setHandle.addContact("{$data.cus_id}");>新增</a>
-                                            </div>
-                                        </th>
-                                    </tr>
-                                    <tr>
-                                        <th>联系人</th>
-                                        <th>手机号码</th>
-                                        <th>职位</th>
-                                        <th>部门</th>
-                                        <th>性别</th>
-                                        <th>QQ</th>
-                                        <th>Email</th>
-                                        <th class="text-right">操作</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {volist name="contact" id="vo" empty="$empty_con"}
-                                    <tr class="thead-tbl-adduser">
-                                        <td>{$vo.con_name}</td>
-                                        <td>{$vo.con_mobile}</td>
-                                        <td>{$vo.con_post}</td>
-                                        <td>{$vo.con_section}</td>
-                                        <td>{eq name="$vo.con_sex" value="1"}
-                                            		男{else/}女{/eq}
-                                        </td>
-                                        <td>{$vo.con_qq}</td>
-                                        <td>{$vo.con_email}</td>
-                                        <td class="text-right">
-                                            <a href="javascript:void(0);" onclick="setHandle.edituser('{$vo.con_id}')">查看</a>
-                                            {neq name="$data.cus_con_id" value="$vo.con_id"}
-                                            <span class="text-explode">|</span>
-                                            <a href="javascript:void(0);" onclick="setHandle.deluser('{$vo.con_id}');">删除</a>{/neq}
-                                        </td>
-                                    </tr>
-                                    {/volist}
-                                    </tbody>
-                                </table>
-                            </div>
-                            <!--历史订单-->
-                            <div class="tab-pane" id="lishidingdan">
+                            <div class="tab-pane active">
                                 <table class="table table-condensed" style="margin-top:0;">
                                     <thead>
                                     <tr>
                                         <th colspan="9">
                                             <div class="pull-left">
                                                 <div class="bs-callout bs-callout-warning">
-                                                    <span>下单记录</span>
+                                                    <span>产品列表</span>
                                                 </div>
                                             </div>
                                         </th>
                                     </tr>
                                     <tr>
-                                        <th>订单编号</th>
-                                        <th>订单数量</th>
-                                        <th>订单金额</th>
-                                        <th>已收订金</th>
-                                        <th>已收余款</th>
-                                        <th>客户确认</th>
-                                        <th>订单状况</th>
-                                        <th>销售日期</th>
-                                        <th>发货日期</th>
+                                        <th>ID编号</th>
+                                        <th>产品名称</th>
+                                        <th>产品规格</th>
+                                        <th>单位</th>
+                                        <th>单价</th>
+                                        <th>创建时间</th>
+                                        <th>更新时间</th>
+                                        <th>操作</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    {volist name="lsdd" id="vo" empty="$empty_lsdd"}
+                                    {volist name="lsdd" id="vo" empty="$empty"}
                                     <tr>
                                         <td>
                                             <a href="{:url('orders/view',['pid'=>$vo.pnumber])}" target="_blank">{$vo.pnumber}</a>
@@ -179,20 +87,17 @@
                             <ul class="nav nav-tabs section-nav">
                                 <li class="first-li">
                                     <i class="fa fa-list"></i>
-                                    <span class="spans1">{$data.cus_name}</span>
+                                    <span class="spans1">{$data.supplier_name}</span>
                                 </li>
-                                <li class="active"><a href="#jibenxinxi" data-toggle="tab">基本信息</a></li>
-                                <li class=""><a href="#lishidingdan" data-toggle="tab">下单记录</a></li>
+                                <li class=""><a href="{:url('view',['id' => $data['id']])}">基本信息</a></li>
+                                <li class="active"><a href="javascript:;" data-toggle="tab">产品列表</a></li>
+                                <li class=""><a href="{:url('view',['id' => $data['id']])}?show=order">采购记录</a></li>
                             </ul>
                         </div>
                     </div>
                 </div>
                 <!--内容结束-->
             </div>
-        </div>
-    </div>
-</div>
-
 {/block}
 {block name="footer"}
 <script type="text/javascript" src="/assets/plugins/jquery-validation/js/jquery.validate.js"></script>
@@ -200,8 +105,8 @@
 <script type="text/javascript">
     $(document).ready(function() {
         // 当前页面分类高亮
-        $("#sidebar-sales").addClass("sidebar-nav-active"); // 大分类
-        $("#sidebar-customers").addClass("active"); // 小分类
+        $("#sidebar-storage").addClass("sidebar-nav-active"); // 大分类
+        $("#supplier-index").addClass("active"); // 小分类
 
         $(".thead-tbl-adduser").hover(function(){
             $(this).find(".implicit").removeClass('hide');
@@ -209,7 +114,7 @@
             $(this).find(".implicit").addClass('hide');
         });
         //premises
-        $("#city_shouhuo").citySelect({prov:'{$data.cus_prov}',city:'{$data.cus_city}',dist:'{$data.cus_dist}'});
+        $("#city_shouhuo").citySelect({prov:'{$data.supplier_province}',city:'{$data.supplier_city}',dist:'{$data.supplier_area}'});
 
         //提交收货地址信息
         $("#editPremisesSubmit").click(function () {
@@ -246,7 +151,7 @@
                 title : '新增联系人',
                 width: '800',
                 height: '520',
-                url : '{:url(\'contacts/add\')}?id='+e,
+                url : '{:url(\'supplier/add_contacts\')}?id='+e,
                 callback:function(data){
                     if(data && data.results && data.results.length > 0 ) {
                         //window.location.href = data.results[0].url;
@@ -259,10 +164,10 @@
         adduser: function (e) {
             //console.log(e)
             $.ajax({
-                url: '{:url(\'customers/adduser\')}',
+                url: '<?php echo url('adduser');?>',
                 type: 'post',
                 dataType: 'JSON',
-                data: {con:e,cus:'{$data.cus_id}'},
+                data: {con:e,cus:'{$data.id}'},
                 success: function (result) {
                     if (result.code > 0) {
                         toastr.success(result.msg)
@@ -282,7 +187,7 @@
                 title : '查看联系人',
                 width: '800',
                 height: '520',
-                url : '{:url(\'contacts/edit\')}?id='+e,
+                url : '<?php echo url('edit_contacts');?>?id='+e,
                 callback:function(data){
                     if(data && data.results && data.results.length > 0 ) {
                         //window.location.href = data.results[0].url;
@@ -297,7 +202,7 @@
 				return false;
         	}
             $.ajax({
-                url: '{:url(\'contacts/deluser\')}',
+                url: '<?php echo url('deluser');?>',
                 type: 'post',
                 dataType: 'JSON',
                 data: {id:e},

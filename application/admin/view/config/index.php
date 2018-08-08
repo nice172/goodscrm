@@ -20,7 +20,7 @@
                 </div>
                 <div class="row">
                     <div class="col-lg-12">
-                        <form id="ConfigFormEdit" action="{:Url('config/edit')}" method="post">
+                        <form id="ConfigFormEdit" action="{:url('config/edit')}" method="post">
                             <table class="table table-hover">
                                 <thead>
                                 <tr>

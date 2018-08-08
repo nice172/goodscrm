@@ -6,7 +6,11 @@ use think\Image;
 class Goods extends Base {
 	
 	public function index(){
-		echo 123;
+		
+	    $this->assign('page','');
+	    $this->assign('list',[]);
+	    $this->assign('title','商品维护');
+	    return $this->fetch();
 	}
 	
 	//商品类型
