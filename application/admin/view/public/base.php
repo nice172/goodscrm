@@ -8,7 +8,10 @@
 {include file="public/topbar"}
 <div class="viewFramework-body viewFramework-sidebar-full">
     {include file="public/sidebar"}
-    <div class="viewFramework-product">
+    <div class="viewFramework-product <?php if (isset($sub_class)){echo $sub_class;}?>">
+    <!-- 中间导航 开始 viewFramework-product-col-1-->
+    {block name="sub_sidebar"}{/block}
+    <!-- 中间导航 结束 -->
         <div class="viewFramework-product-body">
         
         	{block name="main"}{/block}

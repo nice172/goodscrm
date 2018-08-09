@@ -10,6 +10,7 @@ class Goods extends Base {
 	    $this->assign('page','');
 	    $this->assign('list',[]);
 	    $this->assign('title','商品维护');
+	    $this->assign('sub_class','viewFramework-product-col-1');
 	    return $this->fetch();
 	}
 	
@@ -191,8 +192,50 @@ class Goods extends Base {
 		foreach ($goods_type as $key => $value) {
 			$new_goods_type[$value['goods_type_id']] = ['goods_type_id' => $value['goods_type_id'],'type_name' => $value['type_name']];
 		}
+		$this->assign('title','商品维护');
+		$this->assign('sub_class','viewFramework-product-col-1');
 		$this->assign('goods_type',$new_goods_type);
 		return $this->fetch();
+	}
+	
+	public function deletecategory(){
+	    if ($this->request->isAjax()){
+	        $category_id = $this->request->param('category_id',0,'intval');
+	        $categoryInfo = db('goods_category')->where(['category_id' => $category_id])->find();
+	        if (empty($categoryInfo)) $this->error('分类信息不存在',url('category'));
+	        if (db('goods_category')->where(['category_id' => $category_id])->delete()){
+	            $this->success('删除成功');
+	        }
+	        $this->error('删除失败');
+	    }
+	}
+	
+	public function updatecategory(){
+	    $category_id = $this->request->param('category_id',0,'intval');
+	    $categoryInfo = db('goods_category')->where(['category_id' => $category_id])->find();
+	    if (empty($categoryInfo)) $this->error('分类信息不存在',url('category'));
+	    if ($this->request->isAjax()){
+	        $db = db('goods_category');
+	        $name = $this->request->param('category_name');
+	        if (!empty($db->where(['category_id' => array('NEQ',$category_id),'category_name' => $name])->find())){
+	            $this->error('分类名称已存在');
+	        }
+	        if ($db->update($this->request->param())){
+	            $this->success('修改成功');
+	        }
+	        $this->error('修改失败');
+	        return;
+	    }
+	    $this->assign('categoryInfo',$categoryInfo);
+	    $lists = db('goods_category')->select();
+	    $this->assign('lists',$lists);
+	    $goods_type = db('goods_type')->field(array('goods_type_id','type_name'))->select();
+	    $new_goods_type = array();
+	    foreach ($goods_type as $key => $value) {
+	        $new_goods_type[$value['goods_type_id']] = ['goods_type_id' => $value['goods_type_id'],'type_name' => $value['type_name']];
+	    }
+	    $this->assign('goods_type',$new_goods_type);
+	    return $this->fetch();
 	}
 	
 	public function addcategory(){

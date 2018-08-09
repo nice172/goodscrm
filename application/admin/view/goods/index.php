@@ -1,52 +1,14 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    {include file="public/header"}
-</head>
-<body>
-{// 引入顶部导航文件}
-{include file="public/topbar"}
+{extend name="public/base"}
+{block name="header"}
 
-<div class="viewFramework-body viewFramework-sidebar-full">
-    {// 引入左侧导航文件}
-    {include file="public/sidebar"}
-    <!-- 主体内容 开始 -->
-    <div class="viewFramework-product viewFramework-product-col-1">
-        <!-- 中间导航 开始 viewFramework-product-col-1-->
-        <div class="viewFramework-product-navbar">
-            <div class="product-nav-stage product-nav-stage-main">
-                <div class="product-nav-scene product-nav-main-scene">
-                    <div class="product-nav-title">型材管理</div>
-                    <div class="product-nav-list">
-                        <ul>
-                            <li class="active">
-                                <a href="{:Url('storage/charge')}">
-                                    <div class="nav-icon"></div><div class="nav-title">铝材管理</div>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{:Url('storage/bancailist')}">
-                                    <div class="nav-icon"></div><div class="nav-title">板材管理</div>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!--缩小展开-->
-        <div class="viewFramework-product-navbar-collapse">
-            <div class="product-navbar-collapse-inner" title="缩小/展开">
-                <div class="product-navbar-collapse-bg"></div>
-                <div class="product-navbar-collapse">
-                    <span class="icon-collapse-left"></span>
-                    <span class="icon-collapse-right"></span>
-                </div>
-            </div>
-        </div>
-        <!-- 中间导航 结束 -->
-        <div class="viewFramework-product-body">
-            <div class="console-container">
+{/block}
+
+{block name="sub_sidebar"}
+{include file="goods/goods_sidebar"}
+{/block}
+
+{block name="main"}
+            <div class="container-fluid">
                 <!--内容开始-->
                 <div class="row">
                     <div class="col-lg-12">
@@ -58,7 +20,7 @@
                                 </a>
                             </div>
                             <div class="pull-right">
-                                <a class="btn btn-primary" href="{:Url('storage/charge_add')}">新增铝材</a>
+                                <a class="btn btn-primary" href="{:url('add')}">新增商品</a>
                                 <a href="javascript:window.location.reload();" class="btn btn-default">
                                     <span class="glyphicon glyphicon-refresh"></span>
                                     <span>刷新</span></a>
@@ -99,7 +61,7 @@
                                 <td>{php}echo $vo['lxkg'] * $vo['lxzhic'];{/php}</td>
                                 <td>{$vo.lx_uid}</td>
                                 <td>
-                                    <a href="{:Url('storage/charge_edit',['pid'=>$vo.lxid])}">修改</a>
+                                    <a href="{:url('storage/charge_edit',['pid'=>$vo.lxid])}">修改</a>
                                     <span class="text-explode">|</span>
                                     <a href="javascript:void(0);" onclick="deleteOne('{$vo.lxid}');">删除</a>
                                 </td>
@@ -119,12 +81,8 @@
                 </div>
                 <!--内容结束-->
             </div>
-        </div>
-    </div>
-</div>
-
-{// 引入底部公共JS文件}
-{include file="public/footer"}
+{/block}
+{block name="footer"}
 <script type="text/javascript">
     $(document).ready(function() {
         // 当前页面分类高亮
@@ -145,7 +103,7 @@
         if(confirm("确认删除？")){
             if (!isNaN(e) && e !== null && e !== '') {
                 var data={name:'delone',pid:e};
-                $.sycToAjax("{:Url('product/color_delete')}", data);
+                $.sycToAjax("{:url('product/color_delete')}", data);
             }
         };
         return false;
@@ -168,7 +126,7 @@
                     yes: function(index, layero) {
                         layer.close(index); //如果设定了yes回调，需进行手工关闭
                         var data={name:'delone',pid:e};
-                        $.sycToAjax("{:Url('storage/charge_delete')}", data);
+                        $.sycToAjax("{:url('storage/charge_delete')}", data);
                     }
                     ,btn2: function(index, layero){
                         layer.close(index);
@@ -178,5 +136,4 @@
         }
     }
 </script>
-</body>
-</html>
+{/block}

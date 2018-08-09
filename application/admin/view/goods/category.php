@@ -1,35 +1,40 @@
-{extend name="public/base" /}
+{extend name="public/base"}
+{block name="header"}
+
+{/block}
+
+{block name="sub_sidebar"}
+{include file="goods/goods_sidebar"}
+{/block}
+
 {block name="main"}
-<div class="main-content">
-<div class="main-content-inner">
-<div class="page-content">
-			
-<!-- #section:settings.box -->
-{include file="public/setting"}
-<!-- /section:settings.box -->
-<!--
-<div class="page-header">
-	<h1>Two menu </h1>
-</div> /.page-header -->
+<div class="container-fluid">
 
-<div class="row">
-<div class="col-xs-12">
-{include file="public/top_menu"}
-
-<div class="row maintop">
-<div class="col-xs-12 col-sm-2">
-<button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#exampleModal" >新增分类</button>
-</div>
-</div>
-
+	<!-- 导航 -->
+    <div class="row syc-bg-fff">
+        <div class="col-lg-12 syc-border-bs">
+        <div class="console-title">
+        <div class="pull-left">
+            <h5><span>商品分类管理</span></h5>
+            </div>
+            <div class="pull-right">
+            	<a class="btn btn-primary openModal" href="javascript:;">新增分类</a>
+                <a href="javascript:window.location.reload();" class="btn btn-default">
+                    <span class="glyphicon glyphicon-refresh"></span>
+                    <span>刷新</span></a>
+            </div>
+        </div>
+        </div>
+    </div>
+	<!-- 导航end -->
 
 <table id="sample-table-1" class="table table-striped table-bordered table-hover">
 	<thead>
 		<tr>
 			<th>ID</th>
 			<th>分类名称</th>
-			<th>显示导航</th>
-			<th>类型</th>
+<!-- 			<th>显示导航</th> -->
+			<th>所属类型</th>
 			<th>状态</th>
 			<th>操作</th>
 		</tr>
@@ -47,14 +52,13 @@
 			              		└<?php echo str_repeat('─', substr_count($v['path'], '_'));?>
 			              		<?php echo $v['category_name'].'(ID:'.$v['category_id'].')';?>
 			</td>
-			<td>{if condition="$v['is_nav']"}是{else/}否{/if}</td>
+<!-- 			<td>{if condition="$v['is_nav']"}是{else/}否{/if}</td> -->
 			<td><?php if (isset($goods_type[$v['goods_type_id']])) echo $goods_type[$v['goods_type_id']]['type_name'];?></td>
 			<td>{if condition="$v['status']"}显示{else/}禁用{/if}</td>
 			<td>
 			
 				<div class="hidden-sm hidden-xs btn-group">
-					<a href="javascript:;" class="btn btn-xs btn-danger exampleModal2" item-id="<?php echo $v['category_id'];?>" data-id="<?php echo $v['goods_type_id'];?>">筛选条件</a>
-					<a href="<?php echo url('updateCategory',array('category_id' => $v['category_id']));?>" class="btn btn-xs btn-danger" data-id="<?php echo $v['category_id'];?>">修改</a>
+					<a href="javascript:;" class="btn btn-xs btn-danger updatecategory" data-id="<?php echo $v['category_id'];?>">修改</a>
 					<button class="btn btn-xs btn-danger ajaxDelete" data-id="<?php echo $v['category_id'];?>" action="<?php echo url('deleteCategory',array('category_id' => $v['category_id']));?>">
 						<i class="ace-icon fa fa-trash-o bigger-120"></i>
 					</button>
@@ -96,11 +100,15 @@
 <?php echo $page;?>
 </div>
 
-<div class="bd-example">
 <!--   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">Open modal for @mdo</button> -->
 <!--   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@fat">Open modal for @fat</button> -->
 <!--   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@getbootstrap">Open modal for @getbootstrap</button> -->
-  <div class="modal fade" aria-hidden="true" data-backdrop="static" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+
+</div><!-- /.col -->
+{/block}
+{block name="footer"}
+
+<div class="modal fade" aria-hidden="true" data-backdrop="static" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
       <form method="post" class="ajaxForm" enctype="multipart/form-data" action="<?php echo url('addCategory');?>">
@@ -114,14 +122,14 @@
         <div class="modal-body">
         
         	<div class="tabbable">
-				<ul class="nav nav-tabs" id="myTab">
-					<li class="active">
-						<a data-toggle="tab" href="#home">基本</a>
-					</li>
-					<li>
-						<a data-toggle="tab" href="#messages">META</a>
-					</li>
-				</ul>
+<!-- 				<ul class="nav nav-tabs" id="myTab"> -->
+<!-- 					<li class="active"> -->
+<!-- 						<a data-toggle="tab" href="#home">基本</a> -->
+<!-- 					</li> -->
+<!-- 					<li> -->
+<!-- 						<a data-toggle="tab" href="#messages">META</a> -->
+<!-- 					</li> -->
+<!-- 				</ul> -->
 
 				<div class="tab-content">
 					<div id="home" class="tab-pane fade in active">
@@ -153,11 +161,11 @@
 			              <label for="category_name" class="control-label">分类名称:</label>
 			              <input type="text" name="category_name" required="required" class="form-control" id="category_name">
 			            </div>
-			            <div class="form-group">
-			              <label for="price_nums" class="control-label">价格区间个数:</label>
-			              <input type="text" name="price_nums" required="required" class="form-control" id="price_nums">
-			            </div>
-            <div class="form-group">
+<!-- 			            <div class="form-group hidden"> -->
+<!-- 			              <label for="price_nums" class="control-label">价格区间个数:</label> -->
+<!-- 			              <input type="text" name="price_nums" required="required" class="form-control" id="price_nums"> -->
+<!-- 			            </div> -->
+            <div class="form-group hidden">
               <label for="" class="control-label">状态:</label>
               
 				<div class="radio">
@@ -173,7 +181,7 @@
 				</div>
 			  
             </div>
-            <div class="form-group">
+            <div class="form-group hidden">
               <label for="" class="control-label">是否导航:</label>
               
 				<div class="radio">
@@ -193,6 +201,10 @@
               <label for="sort" class="control-label">排序:</label>
               <input type="text" name="sort" value="50" required="required" class="form-control" id="sort">
             </div>
+            			            <div class="form-group">
+			              <label for="desciption" class="control-label">分类描述:</label>
+			              <textarea name="description" class="form-control" id="description" style="width: 100%;resize:none;"></textarea>
+			            </div>
 					</div>
 
 					<div id="messages" class="tab-pane fade">
@@ -200,10 +212,7 @@
 			              <label for="keywords" class="control-label">分类关键字:</label>
 			              <input type="text" name="keywords" class="form-control" id="keywords">
 			            </div>
-			            <div class="form-group">
-			              <label for="desciption" class="control-label">分类描述:</label>
-			              <textarea name="description" class="form-control" id="description" cols="30" rows="10"></textarea>
-			            </div>
+
 					</div>
 				</div>
 			</div>
@@ -217,58 +226,11 @@
       </div>
     </div>
   </div>
-</div>
 
-<div class="modal fade" aria-hidden="true" data-backdrop="static" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-      <form method="post" class="ajaxForm formFilterAttr" enctype="multipart/form-data" action="<?php echo url('updatefilter');?>">
-        <input type="hidden" name="category_id" value=""/>
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-            <span class="sr-only">关闭</span>
-          </button>
-          <h4 class="modal-title" id="exampleModalLabel">新增筛选条件</h4>
-        </div>
-        <div class="modal-body">
-
-		<div class="form-group">
-              <label class="col-sm-3 control-label no-padding-right" for="filter_attr">筛选条件:</label>
-			  <div class="col-sm-9">
-				  <select name="filter_attr[]" class="filter_attr col-xs-10 col-sm-5">
-				  	<option value="0">请选择</option>
-				  </select>
-				  <span class="help-inline col-xs-12 col-sm-7">
-				  <div class="middle" style="padding-top:5px;cursor:pointer;">增加条件</div>
-				  </span>
-			  </div>
-          </div>
-          <div class="space-8" style="clear:both;"></div>
-        
-        </div>
-		
-        
-        
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
-          <button type="submit" class="btn btn-primary">提交</button>
-        </div>
-        </form>
-      </div>
-    </div>
-  </div>
-
-</div><!-- /.col -->
-</div><!-- /.row -->
-</div><!-- /.page-content -->
-</div>
-</div><!-- /.main-content -->
-{/block}
-{block name="footer_static"}
 <script type="text/javascript">
 $(function(){
-	
+    $("#sidebar-storage").addClass("sidebar-nav-active"); // 大分类
+    $("#storage-xingcai").addClass("active"); // 小分类
 	$('.openModal').click(function(){
 		$('#exampleModal').modal({
 			show : true,
@@ -346,6 +308,22 @@ $(function(){
 // 		});
 
 	});
+
+    $(".updatecategory").click(function () {
+        var title = '修改分类';
+        var category_id = $(this).attr('data-id');
+        bDialog.open({
+            title : title,
+            height: 460,
+            width:550,
+            url : '{:url(\'updatecategory\')}?category_id='+category_id,
+            callback:function(data){
+                if(data && data.results && data.results.length > 0 ) {
+                    window.location.reload();
+                }
+            }
+        });
+    });
 	
 	$('.width100').blur(function(){
 		$.ajax({type:'post',url:'<?php echo url('updateTypeName');?>',data:{type_name:$(this).val(),goods_type_id:$(this).attr('data-id')},success:function(data){
