@@ -1,58 +1,20 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    {include file="public/header"}
-</head>
-<body>
-{// 引入顶部导航文件}
-{include file="public/topbar"}
+{extend name="public/base"}
+{block name="header"}
 
-<div class="viewFramework-body viewFramework-sidebar-full">
-    {// 引入左侧导航文件}
-    {include file="public/sidebar"}
-    <!-- 主体内容 开始 -->
-    <div class="viewFramework-product viewFramework-product-col-1">
-        <!-- 中间导航 开始 viewFramework-product-col-1-->
-        <div class="viewFramework-product-navbar">
-            <div class="product-nav-stage product-nav-stage-main">
-                <div class="product-nav-scene product-nav-main-scene">
-                    <div class="product-nav-title">型材管理</div>
-                    <div class="product-nav-list">
-                        <ul>
-                            <li class="active">
-                                <a href="{:Url('storage/charge')}">
-                                    <div class="nav-icon"></div><div class="nav-title">铝材管理</div>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{:Url('storage/bancailist')}">
-                                    <div class="nav-icon"></div><div class="nav-title">板材管理</div>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!--缩小展开-->
-        <div class="viewFramework-product-navbar-collapse">
-            <div class="product-navbar-collapse-inner" title="缩小/展开">
-                <div class="product-navbar-collapse-bg"></div>
-                <div class="product-navbar-collapse">
-                    <span class="icon-collapse-left"></span>
-                    <span class="icon-collapse-right"></span>
-                </div>
-            </div>
-        </div>
-        <!-- 中间导航 结束 -->
-        <div class="viewFramework-product-body">
-            <div class="console-container">
+{/block}
+
+{block name="sub_sidebar"}
+{include file="goods/goods_sidebar"}
+{/block}
+
+{block name="main"}
+<div class="container-fluid">
                 <!--内容开始-->
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="console-title console-title-border clearfix">
                             <div class="pull-left">
-                                <h5><span>{$title}</span></h5>
+                                <h5><span>新增商品</span></h5>
                                 <a href="javascript:history.go(-1);" class="btn btn-default">
                                     <span class="icon-goback"></span><span>返回</span>
                                 </a>
@@ -111,12 +73,8 @@
                 </div>
                 <!--内容结束-->
             </div>
-        </div>
-    </div>
-</div>
-
-{// 引入底部公共JS文件}
-{include file="public/footer"}
+{/block}
+{block name="footer"}
 <script type="text/javascript" src="/assets/plugins/jquery-validation/js/jquery.validate.js"></script>
 <link href="/assets/plugins/fileinput/fileinput.css" rel="stylesheet" type="text/css" />
 <script src="/assets/plugins/fileinput/fileinput.js" type="text/javascript"></script>
@@ -216,5 +174,4 @@
         });
     })
 </script>
-</body>
-</html>
+{/block}

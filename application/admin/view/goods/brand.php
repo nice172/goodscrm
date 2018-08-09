@@ -1,34 +1,38 @@
-{extend name="public/base" /}
+{extend name="public/base"}
+{block name="header"}
+
+{/block}
+
+{block name="sub_sidebar"}
+{include file="goods/goods_sidebar"}
+{/block}
+
 {block name="main"}
-<div class="main-content">
-<div class="main-content-inner">
-<div class="page-content">
-			
-<!-- #section:settings.box -->
-{include file="public/setting"}
-<!-- /section:settings.box -->
-<!--
-<div class="page-header">
-	<h1>Two menu </h1>
-</div> /.page-header -->
+<div class="container-fluid">
 
-<div class="row">
-<div class="col-xs-12">
-{include file="public/top_menu"}
-
-<div class="row maintop">
-<div class="col-xs-12">
-<button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#exampleModal" >新增品牌</button>
-</div>
-</div>
-
+	<!-- 导航 -->
+    <div class="row syc-bg-fff">
+        <div class="col-lg-12 syc-border-bs">
+        <div class="console-title">
+        <div class="pull-left">
+            <h5><span>品牌管理</span></h5>
+            </div>
+            <div class="pull-right">
+            	<a class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" href="javascript:;">新增品牌</a>
+                <a href="javascript:window.location.reload();" class="btn btn-default">
+                    <span class="glyphicon glyphicon-refresh"></span>
+                    <span>刷新</span></a>
+            </div>
+        </div>
+        </div>
+    </div>
+	<!-- 导航end -->
 
 <table id="sample-table-1" class="table table-striped table-bordered table-hover">
 	<thead>
 		<tr>
 			<th>ID</th>
 			<th>品牌名称</th>
-			<th>品牌LOGO</th>
 			<th>状态</th>
 			<th>排序</th>
 			<th>操作</th>
@@ -42,13 +46,6 @@
 			<td>{$v.brand_id}</td>
 			<td>{$v.brand_name}</td>
 			<td>
-			<?php if ($v['cloud_upload']){ ?>
-			<img src="<?php echo config('CLOUD_URL').'/'.urlencode($v['brand_logo']);?>" alt="<?php echo $v['brand_name'];?>" height="25" />
-			<?php }else{ ?>
-			<img src="<?php echo request()->domain().$v['brand_logo'];?>" alt="<?php echo $v['brand_name'];?>"  height="25" />
-			<?php }?>
-			</td>
-			<td>
 				<?php if ($v['status']){ ?>
 					显示
 				<?php }else {?>
@@ -59,8 +56,8 @@
 			<td>
 			
 				<div class="hidden-sm hidden-xs btn-group">
-					<a href="<?php echo url('updateParams',array('brand_id' => $v['brand_id']));?>" class="btn btn-xs btn-danger" data-id="<?php echo $v['brand_id'];?>">修改</a>
-					<button class="btn btn-xs btn-danger ajaxDelete" data-id="<?php echo $v['brand_id'];?>" action="<?php echo url('deleteAttr',array('brand_id' => $v['brand_id']));?>">
+					<a href="javascript:;" class="btn btn-xs btn-danger openModal" data-id="<?php echo $v['brand_id'];?>">修改</a>
+					<button class="btn btn-xs btn-danger ajaxDelete" data-id="<?php echo $v['brand_id'];?>" action="<?php echo url('delbrand',array('brand_id' => $v['brand_id']));?>">
 						<i class="ace-icon fa fa-trash-o bigger-120"></i>
 					</button>
 				</div>
@@ -96,10 +93,19 @@
 {/foreach}
 	<?php }?>	
 	</tbody>
+<tfoot>
+<tr>
+    <td colspan="9">
+        <div class="pull-right page-box">{$page}</div>
+    </td>
+</tr>
+</tfoot>
+
 </table>
-<div class="pager">
-<?php echo $page;?>
-</div>
+
+</div><!-- /.col -->
+{/block}
+{block name="footer"}
 
 <div class="bd-example">
 <!--   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">Open modal for @mdo</button> -->
@@ -108,7 +114,7 @@
   <div class="modal fade" aria-hidden="true" data-backdrop="static" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
-      <form method="post" class="ajaxForm" enctype="multipart/form-data" action="<?php echo url('addBrand');?>">
+      <form method="post" class="ajaxForm" enctype="multipart/form-data" action="<?php echo url('addbrand');?>">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
@@ -150,12 +156,11 @@
 			  
             </div>
             
-				<div class="form-group">
+				<!--<div class="form-group">
 					<div class="col-xs-12">
 						<input multiple="" name="file" type="file" id="id-input-file-3" />
-						<!-- /section:custom/file-input -->
 					</div>
-				</div>
+				</div>-->
             
             <div class="form-group">
               <label for="sort" class="control-label">排序:</label>
@@ -171,17 +176,11 @@
     </div>
   </div>
 </div>
-
-
-</div><!-- /.col -->
-</div><!-- /.row -->
-</div><!-- /.page-content -->
-</div>
-</div><!-- /.main-content -->
-{/block}
-{block name="footer_static"}
 <script type="text/javascript">
 $(function(){
+    $("#sidebar-storage").addClass("sidebar-nav-active"); // 大分类
+    $("#storage-xingcai").addClass("active"); // 小分类
+	/*
 	var upload_in_progress = false;
 	$('#id-input-file-3').ace_file_input({
 		style:'well',
@@ -219,20 +218,37 @@ $(function(){
 		//console.log($(this).data('ace_input_method'));
 		//$(this).ace_file_input('loading', true);
 	});
-	
+	*/
 
+$('.close,.btn-secondary,.btn-primary').click(function(){
+	$('#exampleModalLabel').text('新增品牌');
+});
 	
 	$('.openModal').click(function(){
-		$('#exampleModal').modal({
-			show : true,
-			keyboard : false,
-		});
+		var brand_id = $(this).attr('data-id');
+		if(brand_id != ''){
+			$.get('<?php echo url('get_brand');?>?brand_id='+brand_id,{},function(res){
+				$('#exampleModalLabel').text('修改品牌');
+				$('#brand_name').val(res.data.brand_name);
+				$('#desciption').val(res.data.desciption);
+				$('#brand_name_en').val(res.data.brand_name_en);
+				$('#website').val(res.data.website);
+				$('#sort').val(res.data.sort);
+				$('#exampleModal').modal({
+					show : true,
+					keyboard : false,
+				});
+			});
+			
+		}
 	});
 
 	$('.width100').blur(function(){
-		$.ajax({type:'post',url:'<?php echo url('updateSort');?>',data:{sort:$(this).val(),goods_attr_id:$(this).attr('data-id')},success:function(data){
-			var data = JSON.parse(data);
-			if(data.code==0) layer.msg(data.msg, function(){});
+		$.ajax({type:'post',url:'<?php echo url('brandsort');?>',data:{sort:$(this).val(),brand_id:$(this).attr('data-id')},success:function(data){
+			if(data.code==0) {
+				toastr.error(data.msg);
+				}else{
+					toastr.success('排序成功');}
 		}});
 	});
 });

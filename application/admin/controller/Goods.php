@@ -5,6 +5,10 @@ use think\Image;
 
 class Goods extends Base {
 	
+	public function _initialize(){
+		parent::_initialize();
+	}
+	
 	public function index(){
 		
 	    $this->assign('page','');
@@ -47,11 +51,31 @@ class Goods extends Base {
 		}
 	}
 	
+	public function brandsort(){
+		if ($this->request->isAjax()){
+			$data = $this->request->post();
+			if ($data['sort'] < 0) $data['sort'] = 1;
+			if (!db('goods_brand')->where(array('brand_id' => $data['brand_id']))->setField('sort',intval($data['sort']))){
+				$this->ajaxReturn(array('code' => 0,'msg' => '排序失败'));
+			}
+		}
+	}
+	
 	public function deletetype(){
 		if ($this->request->isAjax()){
 			$data = $this->request->param();
 			db('goods_type')->where(array(
 					'goods_type_id' => $data['goods_type_id'],
+			))->delete();
+			$this->ajaxReturn(array('code' => 1,'msg' => '删除成功'));
+		}
+	}
+	
+	public function delbrand(){
+		if ($this->request->isAjax()){
+			$data = $this->request->param();
+			db('goods_brand')->where(array(
+					'brand_id' => $data['brand_id'],
 			))->delete();
 			$this->ajaxReturn(array('code' => 1,'msg' => '删除成功'));
 		}
@@ -150,7 +174,19 @@ class Goods extends Base {
 		$lists = db('goods_brand')->paginate(config('PAGE_SIZE'));
 		$this->assign('lists',$lists);
 		$this->assign('page',$lists->render());
+		$this->assign('title','商品维护');
+		$this->assign('sub_class','viewFramework-product-col-1');
 		return $this->fetch();
+	}
+	
+	public function get_brand(){
+		if ($this->request->isAjax()){
+			$data = $this->request->param();
+			$find = db('goods_brand')->where(array(
+					'brand_id' => $data['brand_id'],
+			))->find();
+			$this->success('ok','',$find);
+		}
 	}
 	
 	public function addbrand(){
@@ -173,8 +209,9 @@ class Goods extends Base {
 					}
 				}
 			}else{
-				$info = $this->upload_file('brand');
-				$data['brand_logo'] = $info['path'];
+				// $info = $this->upload_file('brand');
+				//$data['brand_logo'] = $info['path'];
+				$data['brand_logo'] = '';
 			}
 			if (db('goods_brand')->insert($data)){
 				$this->ajaxReturn(['code' => 1,'msg' => '新增成功']);
@@ -281,6 +318,8 @@ class Goods extends Base {
 		$this->assign('brand',$brand);
 		$goods_type = db('goods_type')->field(array('goods_type_id','type_name'))->select();
 		$this->assign('goods_type',$goods_type);
+		$this->assign('title','商品维护');
+		$this->assign('sub_class','viewFramework-product-col-1');
 		return $this->fetch();
 	}
 	
@@ -293,7 +332,6 @@ class Goods extends Base {
 // 				'source_thumb' => $data['path']
 			);
 		}else{
-			
 			$data = $this->upload_file('goods');
 			$Image = Image::open('.'.$data['path']);
 			$filename = $data['filename'];

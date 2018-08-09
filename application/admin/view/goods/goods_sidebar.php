@@ -10,6 +10,11 @@
                                     <div class="nav-icon"></div><div class="nav-title">商品分类</div>
                                 </a>
                             </li>
+                            <li {if condition="ACTION_NAME=='brand'"}class="active"{/if}>
+                                <a href="{:url('goods/brand')}">
+                                    <div class="nav-icon"></div><div class="nav-title">品牌管理</div>
+                                </a>
+                            </li>
                             <li {if condition="ACTION_NAME=='index'"}class="active"{/if}>
                                 <a href="{:url('goods/index')}">
                                     <div class="nav-icon"></div><div class="nav-title">商品列表</div>
