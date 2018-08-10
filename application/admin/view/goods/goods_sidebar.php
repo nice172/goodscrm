@@ -15,7 +15,7 @@
                                     <div class="nav-icon"></div><div class="nav-title">品牌管理</div>
                                 </a>
                             </li>
-                            <li {if condition="ACTION_NAME=='index'"}class="active"{/if}>
+                            <li {if condition="ACTION_NAME=='index' or ACTION_NAME=='add'"}class="active"{/if}>
                                 <a href="{:url('goods/index')}">
                                     <div class="nav-icon"></div><div class="nav-title">商品列表</div>
                                 </a>

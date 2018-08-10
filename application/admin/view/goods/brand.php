@@ -115,6 +115,7 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
       <form method="post" class="ajaxForm" enctype="multipart/form-data" action="<?php echo url('addbrand');?>">
+        <div class="hidden_brand_id"></div>
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
@@ -133,7 +134,7 @@
             </div>
             <div class="form-group">
               <label for="desciption" class="control-label">品牌描述:</label>
-              <input type="text" name="description" class="form-control" id="desciption">
+              <input type="text" name="description" class="form-control" id="description">
             </div>
             <div class="form-group">
               <label for="website" class="control-label">品牌网址:</label>
@@ -220,8 +221,10 @@ $(function(){
 	});
 	*/
 
-$('.close,.btn-secondary,.btn-primary').click(function(){
+$('.close,.btn-secondary').click(function(){
 	$('#exampleModalLabel').text('新增品牌');
+	$('.ajaxForm').resetForm();
+	$('.hidden_brand_id').html('');
 });
 	
 	$('.openModal').click(function(){
@@ -229,8 +232,9 @@ $('.close,.btn-secondary,.btn-primary').click(function(){
 		if(brand_id != ''){
 			$.get('<?php echo url('get_brand');?>?brand_id='+brand_id,{},function(res){
 				$('#exampleModalLabel').text('修改品牌');
+				$('.hidden_brand_id').html('<input type="hidden" name="brand_id" value="'+res.data.brand_id+'" />');
 				$('#brand_name').val(res.data.brand_name);
-				$('#desciption').val(res.data.desciption);
+				$('#description').val(res.data.description);
 				$('#brand_name_en').val(res.data.brand_name_en);
 				$('#website').val(res.data.website);
 				$('#sort').val(res.data.sort);

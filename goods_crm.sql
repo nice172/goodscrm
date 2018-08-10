@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50714
 File Encoding         : 65001
 
-Date: 2018-08-08 17:36:41
+Date: 2018-08-10 18:11:29
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -424,6 +424,40 @@ INSERT INTO `syc_fittings_lock` VALUES ('1', '白至尊', '55.00', '1', '', '', 
 INSERT INTO `syc_fittings_lock` VALUES ('2', '至尊锁', '60.00', '1', '', '', '', '1511074473', '1511074473', '1');
 
 -- ----------------------------
+-- Table structure for syc_goods
+-- ----------------------------
+DROP TABLE IF EXISTS `syc_goods`;
+CREATE TABLE `syc_goods` (
+  `goods_id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '商品id',
+  `goods_name` varchar(255) NOT NULL DEFAULT '' COMMENT '商品名称',
+  `category_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '商品分类',
+  `goods_type_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '商品类型',
+  `brand_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '品牌',
+  `supplier_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '所属供应商',
+  `unit` varchar(20) NOT NULL DEFAULT '' COMMENT '商品单位',
+  `market_price` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '销售价格',
+  `shop_price` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '采购价',
+  `remark` text COMMENT '备注',
+  `goods_attr` text COMMENT '商品属性',
+  `goods_weight` varchar(50) NOT NULL DEFAULT '' COMMENT '商品重量',
+  `store_number` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '商品库存',
+  `store_attr` varchar(255) NOT NULL DEFAULT '' COMMENT '库存属性',
+  `copyright` varchar(255) NOT NULL DEFAULT '' COMMENT '所有权',
+  `address` varchar(255) NOT NULL DEFAULT '' COMMENT '具体位置',
+  `status` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '0禁售',
+  `create_time` int(10) unsigned NOT NULL DEFAULT '0',
+  `update_time` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`goods_id`),
+  KEY `supplier_id` (`supplier_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of syc_goods
+-- ----------------------------
+INSERT INTO `syc_goods` VALUES ('1', '测试商品', '3', '1', '2', '1', '台', '3399.00', '2999.00', '测试商品备注', '[{\"goods_attr_id\":12,\"attr_name:\":\"\\u989c\\u8272\"},{\"goods_attr_id\":13,\"attr_name:\":\"\\u7f51\\u7edc\\u5236\\u5f0f\"},{\"goods_attr_id\":14,\"attr_name:\":\"\\u5957\\u9910\"},{\"goods_attr_id\":16,\"attr_name:\":\"ab\"}]', '0.23KG', '1000', '库存属性', '小米公司', '具体位置具体位置具体位置具体位置具体位置', '1', '1533893242', '1533893242');
+INSERT INTO `syc_goods` VALUES ('2', 'fsafsa', '1', '2', '2', '1', '件', '12112.00', '12.00', '23132', null, '31233', '32133', '313131', '321313', '具体位置具体位置具体位置具体位置具体位置', '1', '1533893431', '1533893431');
+
+-- ----------------------------
 -- Table structure for syc_goods_attr
 -- ----------------------------
 DROP TABLE IF EXISTS `syc_goods_attr`;
@@ -473,14 +507,14 @@ CREATE TABLE `syc_goods_brand` (
   `cloud_upload` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '1是云上传',
   PRIMARY KEY (`brand_id`),
   KEY `brand_name` (`brand_name`) USING BTREE
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of syc_goods_brand
 -- ----------------------------
 INSERT INTO `syc_goods_brand` VALUES ('1', '华为', 'HUAWEI', '华为手机', 'VElN5oiq5Zu+MjAxNzExMjUxNzM1NDYucG5n.png', '1', '', '50', '1');
 INSERT INTO `syc_goods_brand` VALUES ('2', '小米', 'MI', '小米手机', '/uploads/brand/20171125/c532c05db25afbb09eb11238c5ce4f63.png', '1', 'https://mi.jd.com', '50', '0');
-INSERT INTO `syc_goods_brand` VALUES ('3', '测试品牌', 'test', '测试品牌', '/uploads/brand/20171125/0c5b15e633da639dee899cfd86951de0.png', '1', 'https://mi.jd.com', '50', '0');
+INSERT INTO `syc_goods_brand` VALUES ('3', '测试品牌', 'testa', '测试品牌', '', '1', 'https://mi.jd.com', '50', '0');
 
 -- ----------------------------
 -- Table structure for syc_goods_category
@@ -500,7 +534,7 @@ CREATE TABLE `syc_goods_category` (
   `goods_type_id` int(10) unsigned NOT NULL DEFAULT '0',
   `price_nums` tinyint(6) unsigned NOT NULL DEFAULT '5',
   PRIMARY KEY (`category_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of syc_goods_category
@@ -512,7 +546,7 @@ INSERT INTO `syc_goods_category` VALUES ('4', '对讲机', '对讲机', '对讲�
 INSERT INTO `syc_goods_category` VALUES ('5', '家用电器', '家用电器', '家用电器', '0', '0', '50', '', '0', '1', '0', '5');
 INSERT INTO `syc_goods_category` VALUES ('6', '大家电', '大家电', '大家电', '5', '0', '50', '', '0_5', '1', '0', '5');
 INSERT INTO `syc_goods_category` VALUES ('7', '电视机', '', '', '6', '0', '50', '', '0_5_6', '1', '0', '5');
-INSERT INTO `syc_goods_category` VALUES ('8', '电冰箱', '', '', '6', '0', '50', '', '0_5_6', '1', '0', '5');
+INSERT INTO `syc_goods_category` VALUES ('8', '电冰箱', '', '9999999999', '6', '0', '50', '', '0', '1', '0', '5');
 
 -- ----------------------------
 -- Table structure for syc_goods_type
@@ -656,7 +690,7 @@ CREATE TABLE `syc_params` (
   `sort` smallint(6) unsigned NOT NULL DEFAULT '0',
   `params_value` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of syc_params
@@ -665,6 +699,7 @@ INSERT INTO `syc_params` VALUES ('1', '付款方式', '付款方式', '10', '现
 INSERT INTO `syc_params` VALUES ('5', 'admin', 'gsaf', '50', 'fsafaffa');
 INSERT INTO `syc_params` VALUES ('7', '部门', '部门', '50', '销售部\n采购部\n工作部\n生产部\n仓储物流部');
 INSERT INTO `syc_params` VALUES ('8', '业务经理', '业务经理', '50', '彭立新');
+INSERT INTO `syc_params` VALUES ('9', '单位', '单位', '50', '张\n件\n个\n条\n包\n只\n台');
 
 -- ----------------------------
 -- Table structure for syc_product_color
@@ -1042,5 +1077,5 @@ CREATE TABLE `syc_users` (
 -- Records of syc_users
 -- ----------------------------
 INSERT INTO `syc_users` VALUES ('1', 'asdasd', 'sha256:1000:X2vbzkCcKSScvZZ5ZUDs7DvTmergIc5u:fQt8UQynrp5psap5MoOq4scNMLNhcjIl', '开发者', '1', '354575573@qq.com', '/uploads/avatar/582d3a26a3369.jpg', '2017-01-01', '161', '1451577600', '1497704499', '127.0.0.1', '127.0.0.1', '16', '1');
-INSERT INTO `syc_users` VALUES ('2', 'admin', 'sha256:1000:bb+qr8kui4m4JriYM/aLnznOODBwZfbi:30utxhFU7cxebnazg8Xh5TEkAmzR6ymJ', '管理员', '1', 'nice172@126.com', '', '2018-08-05', '6', '1533480247', '1533480247', '192.168.1.225', '', '16', '1');
+INSERT INTO `syc_users` VALUES ('2', 'admin', 'sha256:1000:bb+qr8kui4m4JriYM/aLnznOODBwZfbi:30utxhFU7cxebnazg8Xh5TEkAmzR6ymJ', '管理员', '1', 'nice172@126.com', '', '2018-08-05', '8', '1533480247', '1533480247', '192.168.1.225', '', '16', '1');
 INSERT INTO `syc_users` VALUES ('3', 'nice172', 'sha256:1000:GM0kcPbE+QNRSpmsG58qckJUkekhvpwi:XwmDtVMPAfE8DDYUdVW5DF5AOLljRm8q', '测试号', '1', 'nice172@163.com', '', '2018-08-06', '0', '1533526543', '1533526543', '10.10.0.99', '', '14', '1');

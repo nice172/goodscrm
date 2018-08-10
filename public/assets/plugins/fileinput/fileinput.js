@@ -116,7 +116,9 @@
             }
         },
         footer: function(a, b, c, d) {
+        	
             var e = k.data[a];
+
             if (c = void 0 === c || c, 0 === e.config.length || da(e.config[b])) return "";
             var f = e.config[b],
                 g = fa("caption", f),
@@ -145,7 +147,7 @@
     }, X = {
         showRemove: !0,
         showUpload: !0,
-        showZoom: !0,
+        showZoom: false,
         showDrag: !0,
         removeIcon: '<i class="glyphicon glyphicon-trash text-danger"></i>',
         removeClass: "btn btn-xs btn-default",
@@ -160,7 +162,8 @@
         dragClass: "text-info",
         dragTitle: "Move / Rearrange",
         dragSettings: {},
-        indicatorNew: '<i class="glyphicon glyphicon-hand-down text-warning"></i>',
+        //indicatorNew: '<i class="glyphicon glyphicon-hand-down text-warning"></i>',
+        indicatorNew: '',
         indicatorSuccess: '<i class="glyphicon glyphicon-ok-sign text-success"></i>',
         indicatorError: '<i class="glyphicon glyphicon-exclamation-sign text-danger"></i>',
         indicatorLoading: '<i class="glyphicon glyphicon-hand-up text-muted"></i>',

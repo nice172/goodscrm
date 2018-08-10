@@ -373,7 +373,7 @@ function authCheck($rule, $uid, $true, $false='没有权限') {
         return $true;    //如果是，则直接返回真值，不需要进行权限验证
     } else {
         //如果不是，则进行权限验证；
-        $Auth = new \Org\Auth();
+        $Auth = new \Auth();
         return $Auth->check($rule, $uid) ? $true : $false;
     }
 }

@@ -213,6 +213,13 @@ class Goods extends Base {
 				//$data['brand_logo'] = $info['path'];
 				$data['brand_logo'] = '';
 			}
+			if (isset($data['brand_id']) && intval($data['brand_id']) > 0){
+			    if (db('goods_brand')->update($data)){
+			        $this->ajaxReturn(['code' => 1,'msg' => '修改成功']);
+			    }
+			    $this->ajaxReturn(['code' => 0,'msg' => '修改失败']);
+			    return;
+			}
 			if (db('goods_brand')->insert($data)){
 				$this->ajaxReturn(['code' => 1,'msg' => '新增成功']);
 			}
@@ -311,13 +318,71 @@ class Goods extends Base {
 		}
 	}
 	
+	public function change_type(){
+	    if ($this->request->isAjax()){
+	        $goods_type_id = $this->request->param('goods_type_id',0,'intval');
+	        $attr = db('goods_attr')->where(['goods_type_id' => $goods_type_id,'attr_type' => 1])->select();
+	        $html = '';
+	        foreach ($attr as $key => $value){
+	            $attr_value = explode("\n", $value['attr_value']);
+	            $html .= '<div class="form-group">';
+	            $html .= '<label for="goods_weight" class="col-sm-2 control-label">'.$value['attr_name'].'</label>';
+	            $html .= '<div class="col-sm-10"><select class="form-control w300" name="attr['.$value['goods_attr_id'].']">';
+	            foreach ($attr_value as $val){
+	                $html .= '<option value="'.$val.'">'.$val.'</option>';
+	            }
+	            $html .= '</select></div></div>';
+	        }
+	        echo $html;
+	    }
+	}
+	
 	public function add(){
+	    
+	    if ($this->request->isAjax()){
+	        $data = $this->request->param();
+	        if (!empty($data['attr'])){
+	            $goods_attr = [];
+	            foreach ($data['attr'] as $attr_id => $value){
+	                $attr = db('goods_attr')->where(['goods_attr_id' => $attr_id])->field('attr_name')->find();
+	                if (!empty($attr)) {
+	                    $goods_attr[] = [
+	                        'goods_attr_id' => $attr_id,
+	                        'attr_name:' => $attr['attr_name']
+	                    ];
+	                }
+	            }
+	            $data['goods_attr'] = json_encode($goods_attr);
+	        }
+	        unset($data['attr']);
+	        $data['create_time'] = time();
+	        $data['update_time'] = time();
+	        $data['status'] = 1;
+	        if (db('goods')->insert($data)){
+	            $this->success('新增成功');
+	        }else{
+	            $this->error('新增失败');
+	        }
+	        return;
+	    }
+	    
 		$category = db('goods_category')->where(array('status' => 1))->select();
 		$this->assign('category',$category);
+		
 		$brand = db('goods_brand')->where(array('status' => 1))->select();
 		$this->assign('brand',$brand);
+		
 		$goods_type = db('goods_type')->field(array('goods_type_id','type_name'))->select();
 		$this->assign('goods_type',$goods_type);
+		
+		$supplier = db('supplier')->where(['supplier_status' => 1])->field(array('supplier_name','id'))->select();
+		$this->assign('supplier',$supplier);
+		
+		$unit = getParams(9);
+		if (!empty($unit)){
+		    $unit = $unit['params_value'];
+		}
+		$this->assign('unit',$unit);
 		$this->assign('title','商品维护');
 		$this->assign('sub_class','viewFramework-product-col-1');
 		return $this->fetch();

@@ -1,6 +1,6 @@
 {extend name="public/base"}
 {block name="header"}
-
+<style>.tab-pane{padding-top:15px;}</style>
 {/block}
 
 {block name="sub_sidebar"}
@@ -25,49 +25,159 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="portlet margin-top-3">
-                            <form class="form-horizontal" method="post" id="form1">
-                                <div class="alert alert-warning alert-dismissible" role="alert">
-                                    <strong>温馨提示</strong> 【KG/M】 和 【支长/M】 只能是整数或小数点后最多<B> 4 </B>位数，如：0.3542。
-                                </div>
-                                <div class="form-group">
-                                    <label for="lxname" class="col-sm-2 control-label"><span class="text-danger">*</span>名称</label>
+ <form class="form-horizontal ajaxForm" method="post" action="<?php echo url('add');?>" id="form1">
+  <!-- Nav tabs -->
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">商品信息</a></li>
+    <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">商品属性</a></li>
+    <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">其他信息</a></li>
+  </ul>
+<!--<div class="alert alert-warning alert-dismissible" role="alert">
+    <strong>温馨提示</strong> 【KG/M】 和 【支长/M】 只能是整数或小数点后最多<B> 4 </B>位数，如：0.3542。
+</div>-->
+  <!-- Tab panes -->
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="home">
+						<div class="form-group">
+                                    <label for="goods_name" class="col-sm-2 control-label"><span class="text-danger">*</span>商品名称</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control w300" name="lxname" id="lxname" placeholder="输入名称">
+                                        <input type="text" class="form-control w300" name="goods_name" id="goods_name" placeholder="输入商品名称">
+                                    </div>
+                                </div>
+                                 <div class="form-group">
+                                    <label class="col-sm-2 control-label"><span class="text-danger">*</span>供应商</label>
+                                    <div class="col-sm-10">
+                                        <select name="supplier_id" class="form-control w300" id="supplier_id">
+                                        <option value="0">选择供应商</option>
+                                        <?php foreach ($supplier as $key => $value):?>
+                                        <option value="<?php echo $value['id']?>"><?php echo $value['supplier_name'];?></option>
+                                        <?php endforeach;?>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label">型号</label>
+                                    <label class="col-sm-2 control-label"><span class="text-danger">*</span>商品分类</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control w300" name="lxxh" id="lxxh" placeholder="输入如：H-31">
+                                        <select name="category_id" class="form-control w300" id="category_id">
+                                        <option value="0">选择分类</option>
+                                        <?php foreach ($category as $key => $value):?>
+                                        <option value="<?php echo $value['category_id'];?>" path="<?php echo $value['path'].'_'.$value['category_id'];?>">
+			              		<?php echo str_repeat('&nbsp;&nbsp;&nbsp;&nbsp;', substr_count($value['path'], '_'));?>
+			              		└<?php echo str_repeat('─', substr_count($value['path'], '_'));?>
+			              		<?php echo $value['category_name'];?>
+			              		</option>
+                                        <?php endforeach;?>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="lxkg" class="col-sm-2 control-label"><span class="text-danger">*</span>KG/M</label>
+                                    <label class="col-sm-2 control-label"><span class="text-danger">*</span>商品品牌</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control w300" name="lxkg" id="lxkg" placeholder="输入如：1.907">
-                                        <span>每米（M）的重量</span>
+                                        <select name="brand_id" class="form-control w300" id="brand_id">
+                                        <option value="0">选择品牌</option>
+                                        <?php foreach ($brand as $key => $value):?>
+                                        <option value="<?php echo $value['brand_id'];?>"><?php echo $value['brand_name'];?></option>
+                                        <?php endforeach;?>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="lxzhic" class="col-sm-2 control-label"><span class="text-danger">*</span>支长/M</label>
+                                    <label for="unit" class="col-sm-2 control-label"><span class="text-danger">*</span>单位</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control w300" name="lxzhic" id="lxzhic" placeholder="输入如：6.3">
-                                        <span>单支的总长度</span>
+                                        <select name="unit" class="form-control w300" id="unit">
+                                        <option value="">选择单位</option>
+                                        <?php foreach ($unit as $key => $value):?>
+                                        <option value="<?php echo $value;?>"><?php echo $value;?></option>
+                                        <?php endforeach;?>
+                                        </select>
+<!--                                         <span>单支的总长度</span> -->
                                     </div>
                                 </div>
+                                   <div class="form-group">
+                                    <label for="shop_price" class="col-sm-2 control-label"><span class="text-danger">*</span>采购价</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control w300" name="shop_price" id="shop_price" placeholder="输入采购价">
+                                    </div>
+                                </div>
+                                                                <div class="form-group">
+                                    <label for="market_price" class="col-sm-2 control-label"><span class="text-danger">*</span>销售价</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control w300" name="market_price" id="market_price" placeholder="输入销售价">
+                                    </div>
+                                </div>
+                          <div class="form-group">
+                                    <label for="remark" class="col-sm-2 control-label">备注</label>
+                                    <div class="col-sm-10">
+                                        <textarea name="remark" id="remark" class="form-control w300" style="height: 150px;resize:none;"></textarea>
+                                    </div>
+                                </div>
+<!-- 
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label">图形</label>
+                                    <label class="col-sm-2 control-label">图片</label>
                                     <div class="col-sm-8">
                                         <input id="input-4" name="lximg" type="file" multiple class="file-loading form-control input-circle-right">
                                     </div>
                                 </div>
-                                <div class="modal-footer">
-                                    <div class="col-md-offset-2 col-md-8 left">
-                                        <button type="submit" class="btn btn-primary">保 存</button>
-                                        <button type="reset" class="btn btn-default">重 置</button>
-                                    </div>
-                                </div>
-                            </form>
+ -->
+    </div>
+    <div role="tabpanel" class="tab-pane" id="profile">
+    
+    <div class="form-group">
+        <label for="goods_type_id" class="col-sm-2 control-label"><span class="text-danger">*</span>商品类型</label>
+        <div class="col-sm-10">
+            <select name="goods_type_id" class="form-control attrChange w300" id="unit">
+            <option value="0">选择商品类型</option>
+            <?php foreach ($goods_type as $key => $value):?>
+            <option value="<?php echo $value['goods_type_id'];?>"><?php echo $value['type_name'];?></option>
+            <?php endforeach;?>
+            </select>
+        </div>
+    </div>
+    
+    <div class="appendAttr"></div>
+    
+    </div>
+    <div role="tabpanel" class="tab-pane" id="messages">
+           <div class="form-group">
+            <label for="goods_weight" class="col-sm-2 control-label"><span class="text-danger">*</span>商品重量</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control w300" name="goods_weight" id="goods_weight" placeholder="输入商品重量">
+            </div>
+        </div>
+                   <div class="form-group">
+            <label for="store_number" class="col-sm-2 control-label"><span class="text-danger">*</span>商品库存</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control w300" name="store_number" id="store_number" placeholder="输入商品库存">
+            </div>
+        </div>
+            <div class="form-group">
+            <label for="store_attr" class="col-sm-2 control-label"><span class="text-danger">*</span>库存属性</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control w300" name="store_attr" id="store_attr" placeholder="输入库存属性">
+            </div>
+            </div>
+              <div class="form-group">
+            <label for="copyright" class="col-sm-2 control-label"><span class="text-danger">*</span>所有权</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control w300" name="copyright" id="copyright" placeholder="输入所有权">
+            </div>
+        </div>
+         <div class="form-group">
+            <label for="address" class="col-sm-2 control-label"><span class="text-danger">*</span>具体位置</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control w300" name="address" id="address" placeholder="输入具体位置">
+            </div>
+        </div>
+    </div>
+  </div>
+                
+    <div class="modal-footer">
+        <div class="col-md-offset-2 col-md-8 left">
+            <button type="submit" class="btn btn-primary">保 存</button>
+            <button type="reset" class="btn btn-default">重 置</button>
+        </div>
+    </div>
+</form>
                         </div>
                     </div>
                 </div>
@@ -83,10 +193,18 @@
 <script src="/assets/plugins/icheck/icheck.min.js" type="text/javascript"></script>
 <script type="text/javascript">
     $(document).ready(function() {
+    	
         // 当前页面分类高亮
         $("#sidebar-storage").addClass("sidebar-nav-active"); // 大分类
         $("#storage-xingcai").addClass("active"); // 小分类
 
+		$('.attrChange').change(function(){
+			var goods_type_id = $(this).val();
+			$.get('<?php echo url('change_type');?>',{goods_type_id:goods_type_id},function(res){
+				$('.appendAttr').html(res);
+			});
+		});
+        
         //料型颜色
         $('input[type="checkbox"]').iCheck({
             checkboxClass: 'icheckbox_square-blue', //颜色设置
@@ -101,77 +219,14 @@
             showUpload: false, //是否显示上传按钮
             showCaption: false,//是否显示标题
             showRemove: false,//是否显示删除
-            //showRemove: false,//是否显示删除
+            showRemove: true,//是否显示删除
+            showZoom: false,
             //预览图片的设置
             initialPreview: [
                 "<img src='/uploads/noimage.png' class='file-preview-image' style='width:auto;height:100px;'>",
             ],
         });
 
-        //提交表单
-        $("#form1").validate({
-            //
-            rules: {
-                lxname: {
-                    required: true,
-                    remote:{
-                        url:"charge_name",
-                        dataType: "json",           //接受数据格式
-                        type:"post",
-                        data: {                     //要传递的数据
-                            name: function() {
-                                return $("#lxname").val();
-                            }
-                        }
-                    }
-                },
-                lxkg: {required: true,isNumber: true},
-                lxzhic: {required: true,isNumber: true},
-            },
-            messages: {
-                lxname: {remote:'已存在铝材名称'},
-            },
-            focusInvalid: true,
-            onkeyup: false,
-            errorElement: 'label',
-            errorClass: "error",
-            highlight: function(element, errorClass) {
-                $(element).closest('.form-control').addClass(errorClass);
-            },
-            unhighlight: function (element, errorClass) {
-                $(element).closest('.form-control').removeClass(errorClass);
-            },
-            //errorPlacement: function(error, element) {}, //设置验证消息不显示
-            //invalidHandler: function(){toastr.warning("填写不完整请认真检查");},
-            submitHandler: function(form) {
-                // 文件上传类 获取整个表单数据
-                var formData = new FormData(form);
-                $.ajax({
-                    url: "{:Url('storage/charge_add')}",
-                    type: 'POST',
-                    data: formData,
-                    processData: false, // 告诉jQuery不要去处理发送的数据
-                    contentType: false, // 告诉jQuery不要去设置Content-Type请求头
-                    success: function (result) {
-                        if (result.code == '1') {
-                            toastr.success(result.msg)
-                            window.setTimeout(function(){
-                                location.href=result.url;
-                            }, 1000);
-                        } else {
-                            toastr.error(result.msg);
-                            window.setTimeout(function(){
-                                window.location.reload();
-                            }, 1000);
-                        }
-                    },
-                    error: function (result) {
-                        alert(result);
-                    }
-                });
-                return false; // 阻止表单自动提交事件
-            },
-        });
-    })
+    });
 </script>
 {/block}
