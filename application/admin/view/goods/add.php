@@ -48,7 +48,7 @@
                                     <label class="col-sm-2 control-label"><span class="text-danger">*</span>供应商</label>
                                     <div class="col-sm-10">
                                         <select name="supplier_id" class="form-control w300" id="supplier_id">
-                                        <option value="0">选择供应商</option>
+                                        <option value="">选择供应商</option>
                                         <?php foreach ($supplier as $key => $value):?>
                                         <option value="<?php echo $value['id']?>"><?php echo $value['supplier_name'];?></option>
                                         <?php endforeach;?>
@@ -59,7 +59,7 @@
                                     <label class="col-sm-2 control-label"><span class="text-danger">*</span>商品分类</label>
                                     <div class="col-sm-10">
                                         <select name="category_id" class="form-control w300" id="category_id">
-                                        <option value="0">选择分类</option>
+                                        <option value="">选择分类</option>
                                         <?php foreach ($category as $key => $value):?>
                                         <option value="<?php echo $value['category_id'];?>" path="<?php echo $value['path'].'_'.$value['category_id'];?>">
 			              		<?php echo str_repeat('&nbsp;&nbsp;&nbsp;&nbsp;', substr_count($value['path'], '_'));?>
@@ -74,7 +74,7 @@
                                     <label class="col-sm-2 control-label"><span class="text-danger">*</span>商品品牌</label>
                                     <div class="col-sm-10">
                                         <select name="brand_id" class="form-control w300" id="brand_id">
-                                        <option value="0">选择品牌</option>
+                                        <option value="">选择品牌</option>
                                         <?php foreach ($brand as $key => $value):?>
                                         <option value="<?php echo $value['brand_id'];?>"><?php echo $value['brand_name'];?></option>
                                         <?php endforeach;?>
@@ -123,9 +123,9 @@
     <div role="tabpanel" class="tab-pane" id="profile">
     
     <div class="form-group">
-        <label for="goods_type_id" class="col-sm-2 control-label"><span class="text-danger">*</span>商品类型</label>
+        <label for="goods_type_id" class="col-sm-2 control-label"><span class="text-danger"></span>商品类型</label>
         <div class="col-sm-10">
-            <select name="goods_type_id" class="form-control attrChange w300" id="unit">
+            <select name="goods_type_id" class="form-control attrChange w300" id="goods_type_id">
             <option value="0">选择商品类型</option>
             <?php foreach ($goods_type as $key => $value):?>
             <option value="<?php echo $value['goods_type_id'];?>"><?php echo $value['type_name'];?></option>

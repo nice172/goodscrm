@@ -31,39 +31,58 @@
                 <div class="marginTop10"></div>
                 <div class="row">
                     <div class="col-lg-12">
-                        <table class="table syc-table border">
+                    
+                    <div class="sub-button-line form-inline">
+                            <form class="pull-left">
+                                <div class="form-group">
+                                    <label class="control-label" for="goods_name">商品名称 :</label>
+                                    <input name="goods_name" id="goods_name" class="ipt form-control" <?php if (isset($_GET['goods_name'])):?>value="<?php echo $_GET['goods_name'];?>"<?php endif;?> />
+                                    </div>
+                                <div class="form-group">
+                                    <label class="control-label" for="supplier_name">供应商 :</label>
+                                    <input name="supplier_name" id="supplier_name" class="ipt form-control" <?php if (isset($_GET['supplier_name'])):?>value="<?php echo $_GET['supplier_name'];?>"<?php endif;?> />
+                                </div>
+                                
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary" id="searchprojectName">查找</button>
+                                </div>
+                            </form>
+<!--                             <div class="pull-right"> -->
+<!--                                 <a class="btn btn-primary" href="{:Url('customers/excel')}" target="_blank">导出Excel</a> -->
+<!--                             </div> -->
+                        </div>
+                    	<div style="clear:both;"></div>
+                        <table class="table syc-table border marginTop10">
                             <thead>
                             <tr>
-                                <th width="120">图形</th>
-                                <th>型号</th>
-                                <th>铝材名称</th>
-                                <th>KG/M</th>
-                                <th>支长/M</th>
-                                <th>支长重量<br/>KG</th>
-                                <th>添加员</th>
+                                <th>ID编号</th>
+                                <th>商品名称</th>
+                                <th>商品分类</th>
+                                <th>供应商</th>
+                                <th>商品品牌</th>
+                                <th>单位</th>
+                                <th>采购价</th>
+                                <th>销售价</th>
                                 <th>操作</th>
                             </tr>
                             </thead>
                             <tbody>
                             {volist name="$list" id="vo" empty="$empty"}
                             <tr>
-                                <td class="st-list-img">
-                                    {eq name="$vo.lximg" value=""}
-                                    <img src="/uploads/noimage.png">
-                                    {else/}
-                                    <img src="{$vo.lximg}">
-                                    {/eq}
-                                </td>
-                                <td>{$vo.lxxhao}</td>
-                                <td>{$vo.lxname}</td>
-                                <td>{$vo.lxkg}</td>
-                                <td>{$vo.lxzhic}</td>
-                                <td>{php}echo $vo['lxkg'] * $vo['lxzhic'];{/php}</td>
-                                <td>{$vo.lx_uid}</td>
+                                <td>{$vo.goods_id}</td>
+                                <td>{$vo.goods_name}</td>
+                                <td>{$vo.category_name}</td>
+                                <td>{$vo.supplier_name}</td>
+                                <td>{$vo.brand_name}</td>
+                                <td>{$vo.unit}</td>
+                                <td>{$vo.shop_price}</td>
+                                <td>{$vo.market_price}</td>
                                 <td>
-                                    <a href="{:url('storage/charge_edit',['pid'=>$vo.lxid])}">修改</a>
+                                	<a href="{:url('goodsinfo',['gid'=>$vo.goods_id])}">详情</a>
+                                	<span class="text-explode">|</span>
+                                    <a href="{:url('goods_edit',['gid'=>$vo.goods_id])}">修改</a>
                                     <span class="text-explode">|</span>
-                                    <a href="javascript:void(0);" onclick="deleteOne('{$vo.lxid}');">删除</a>
+                                    <a href="javascript:void(0);" onclick="deleteOne('{$vo.goods_id}');">删除</a>
                                 </td>
                             </tr>
                             {/volist}
@@ -71,7 +90,7 @@
                             </tbody>
                             <tfoot>
                             <tr>
-                                <td colspan="8">
+                                <td colspan="20">
                                     <div class="pull-right page-box">{$page}</div>
                                 </td>
                             </tr>
@@ -102,8 +121,8 @@
     function deleteOnes(e) {
         if(confirm("确认删除？")){
             if (!isNaN(e) && e !== null && e !== '') {
-                var data={name:'delone',pid:e};
-                $.sycToAjax("{:url('product/color_delete')}", data);
+                var data={name:'delone',gid:e};
+                $.sycToAjax("{:url('goodsdel')}", data);
             }
         };
         return false;
@@ -125,8 +144,8 @@
                     btn: ['确认', '取消'],
                     yes: function(index, layero) {
                         layer.close(index); //如果设定了yes回调，需进行手工关闭
-                        var data={name:'delone',pid:e};
-                        $.sycToAjax("{:url('storage/charge_delete')}", data);
+                        var data={name:'delone',gid:e};
+                        $.sycToAjax("{:url('goodsdel')}", data);
                     }
                     ,btn2: function(index, layero){
                         layer.close(index);

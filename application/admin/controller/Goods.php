@@ -2,8 +2,11 @@
 namespace app\admin\controller;
 
 use think\Image;
+use think\Validate;
 
 class Goods extends Base {
+	
+	protected $scene = 'add';
 	
 	public function _initialize(){
 		parent::_initialize();
@@ -11,11 +14,80 @@ class Goods extends Base {
 	
 	public function index(){
 		
-	    $this->assign('page','');
-	    $this->assign('list',[]);
+		$goods_name = $this->request->param('goods_name');
+		$supplier_name = $this->request->param('supplier_name');
+		
+		if (empty($supplier_name)){
+			$where = ['status' => ['neq','-1']];
+			if ($goods_name != ''){
+				$where['goods_name'] = ['like',"%$goods_name%"];
+			}
+			$result = db('goods')->where($where)->paginate(config('PAGE_SIZE'),false,['query' => $this->request->param()]);
+		}
+		
+		if (!empty($supplier_name)){
+			$where = [
+				'supplier_name' => ['like',"%{$supplier_name}%"],
+			];
+			if (!empty($goods_name)){
+				$where['goods_name'] = ['like',"%$goods_name%"];
+			}
+			$result = db('goods g')->join('__SUPPLIER__ s','g.supplier_id=s.id')
+			->where($where)->paginate(config('PAGE_SIZE'),false,['query' => $this->request->param()]);
+		}
+		
+		$lists = $result->all();
+		
+		foreach ($lists as $key => $value){
+			$supplier = db('supplier')->where(['id' => $value['supplier_id']])->find();
+			$lists[$key]['supplier_name'] = $supplier['supplier_name'];
+			$category = db('goods_category')->where(['category_id' => $value['category_id']])->find();
+			$lists[$key]['category_name'] = $category['category_name'];
+			$brand = db('goods_brand')->where(['brand_id' => $value['brand_id']])->find();
+			$lists[$key]['brand_name'] = $brand['brand_name'];
+		}
+		
+		$this->assign('list',$lists);
+		$this->assign('page',$result->render());
 	    $this->assign('title','商品维护');
 	    $this->assign('sub_class','viewFramework-product-col-1');
 	    return $this->fetch();
+	}
+	
+	public function goodsdel(){
+		if ($this->request->isAjax()){
+			$goods_id = $this->request->param('gid',0,'intval');
+			if ($goods_id <= 0){
+				$this->error('参数错误');
+			}
+			if (db('goods')->where(['goods_id' => $goods_id])->setField('status','-1')){
+				$this->success('删除成功');
+			}
+			$this->error('删除失败');
+		}
+	}
+	
+	public function goodsinfo(){
+		$goods_id = $this->request->param('gid',0,'intval');
+		if ($goods_id <= 0){
+			$this->error('参数错误');
+		}
+		$find = db('goods')->where(array(
+			'goods_id' => $goods_id,
+			'status' => ['neq','-1']
+		))->find();
+		if (empty($find)) $this->error('商品信息不存在');
+		$find['category_name'] = db('goods_category')->where(['category_id' => $find['category_id']])->value('category_name');
+		$find['supplier_name'] = db('supplier')->where(['id' => $find['supplier_id']])->value('supplier_name');
+		$find['brand_name'] = db('goods_brand')->where(['brand_id' => $find['brand_id']])->value('brand_name');
+		if ($find['goods_type_id'] != 0){
+			$find['goods_type'] = db('goods_type')->where(['goods_type_id' => $find['goods_type_id']])->value('type_name');
+			$find['goods_attr'] = json_decode($find['goods_attr'],true);
+		}
+		$this->assign('data',$find);
+		$this->assign('title','商品维护');
+		$this->assign('sub_class','viewFramework-product-col-1');
+		return $this->fetch();
 	}
 	
 	//商品类型
@@ -337,10 +409,53 @@ class Goods extends Base {
 	    }
 	}
 	
+	protected $goods_rules = [
+		'goods_name' => 'require',
+		'supplier_id' => 'require',
+		'category_id' => 'require',
+		'brand_id' => 'require',
+		'unit' => 'require',
+		'shop_price' => 'require|number',
+		'market_price' => 'require|number',
+		'goods_weight' => 'require',
+		'store_number' => 'require|number',
+		'store_attr' => 'require',
+		'copyright' => 'require',
+		'address' => 'require'
+	];
+	protected $goods_message = [
+		'goods_name.require' => '商品名称不能为空',
+		'supplier_id.require' => '请选择供应商',
+		'category_id.require' => '请选择商品分类',
+		'brand_id.require' => '请选择商品品牌',
+		'unit.require' => '请选择单位',
+		'shop_price.require' => '采购价不能为空',
+		'shop_price.number' => '采购价不正确',
+		'market_price.require' => '销售价不能为空',
+		'market_price.number' => '销售价不正确',
+		'goods_weight.require' => '商品重量不能为空',
+		'store_number.require' => '商品库存不能为空',
+		'store_number.number' => '商品库存不正确',
+		'store_attr.require' => '库存属性不能为空',
+		'copyright.require' => '所有权不能为空',
+		'address.require' => '具体位置不能为空',
+	];
+	
 	public function add(){
-	    
 	    if ($this->request->isAjax()){
 	        $data = $this->request->param();
+	        $validate = new Validate($this->goods_rules,$this->goods_message);
+	        if (!$validate->check($data)){
+	        	$this->error($validate->getError());
+	        }
+	        $data['supplier_id'] = intval($data['supplier_id']);
+	        if ($data['supplier_id'] <= 0) $this->error('选择供应商不正确');
+	        $data['category_id'] = intval($data['category_id']);
+	        if ($data['category_id'] <= 0) $this->error('选择商品分类不正确');
+	        $data['brand_id'] = intval($data['brand_id']);
+	        if ($data['brand_id'] <= 0) $this->error('选择品牌不正确');
+	        if ($data['shop_price'] < 0) $this->error('采购价不正确');
+	        if ($data['market_price'] < 0) $this->error('销售价不正确');
 	        if (!empty($data['attr'])){
 	            $goods_attr = [];
 	            foreach ($data['attr'] as $attr_id => $value){
@@ -348,7 +463,8 @@ class Goods extends Base {
 	                if (!empty($attr)) {
 	                    $goods_attr[] = [
 	                        'goods_attr_id' => $attr_id,
-	                        'attr_name:' => $attr['attr_name']
+	                        'attr_name' => $attr['attr_name'],
+	                    	'attr_value' => $value,
 	                    ];
 	                }
 	            }
