@@ -66,7 +66,6 @@
                     </li>
                     
                     <!-- 供应商管理 -->
-                    
                     <li class="sidebar-nav" id="sidebar-storage">
                         <div class="sidebar-title sidebar-trans">
                             <div class="sidebar-title-inner">
@@ -81,22 +80,35 @@
                                     <span class="nav-title">供应商列表</span>
                                 </a>
                             </li>
-                            <li class="nav-item" id="storage-index">
-                                <a href="{:Url('storage/index')}" class="sidebar-trans">
-                                    <div class="nav-icon sidebar-trans"><span class="icon-ecs"></span></div>
-                                    <span class="nav-title">原料仓库</span>
-                                </a>
-                            </li>
+                            
                             <li class="nav-item" id="storage-xingcai">
                                 <a href="{:url('Goods/index')}" class="sidebar-trans">
                                     <div class="nav-icon sidebar-trans"><span class="icon-ecs"></span></div>
                                     <span class="nav-title">商品维护</span>
                                 </a>
                             </li>
-                            <li class="nav-item" id="storage-jinliao">
-                                <a href="{:Url('storage/numlc')}" class="sidebar-trans">
+                        </ul>
+                    </li>
+                    
+                    <li class="sidebar-nav" id="sidebar-baojia">
+                        <div class="sidebar-title sidebar-trans">
+                            <div class="sidebar-title-inner">
+                                <span class="sidebar-title-icon icon-arrow-right"></span>
+                                <span class="sidebar-title-text">报价管理</span>
+                            </div>
+                        </div>
+                        <ul class="sidebar-trans submenu">
+                            <li class="nav-item" id="baojia-index">
+                                <a href="{:Url('baojia/index')}" class="sidebar-trans">
                                     <div class="nav-icon sidebar-trans"><span class="icon-ecs"></span></div>
-                                    <span class="nav-title">新增进料</span>
+                                    <span class="nav-title">报价列表</span>
+                                </a>
+                            </li>
+                            
+                            <li class="nav-item" id="storage-xingcai">
+                                <a href="{:url('baojia/record')}" class="sidebar-trans">
+                                    <div class="nav-icon sidebar-trans"><span class="icon-ecs"></span></div>
+                                    <span class="nav-title">报价记录</span>
                                 </a>
                             </li>
                         </ul>

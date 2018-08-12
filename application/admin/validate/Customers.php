@@ -14,6 +14,7 @@ class Customers extends Validate {
         'con_email' => 'require',
         'con_section' => 'require',
         'con_business' => 'require',
+    	'con_order_ren' => 'require',
         'con_prov' => 'require',
         'con_city' => 'require',
         'con_street' => 'require'
@@ -30,6 +31,7 @@ class Customers extends Validate {
         'con_email.email' => 'E-Mail格式不对',
         'con_section.require' => '部门不能为空',
         'con_business.require' => '业务经理不能为空',
+    	'con_order_ren.require' => '跟单员不能为空',
         'con_street.require' => '详细地址不能为空',
         'con_prov.require' => '省份不能为空',
         'con_city.require' => '城市不能为空'

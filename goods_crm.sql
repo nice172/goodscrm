@@ -1,16 +1,16 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : localhost
+Source Server         : localhost3306
 Source Server Version : 50714
-Source Host           : 127.0.0.1:3306
+Source Host           : localhost:3306
 Source Database       : goods_crm
 
 Target Server Type    : MYSQL
 Target Server Version : 50714
 File Encoding         : 65001
 
-Date: 2018-08-10 18:11:29
+Date: 2018-08-12 22:34:56
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -171,6 +171,30 @@ INSERT INTO `syc_bancai_list` VALUES ('7', '801', '', '860*2150', '', '', '1', '
 INSERT INTO `syc_bancai_list` VALUES ('8', '802', '', '860*2050', '', '', '1', '', '1512213006', '1512213006', '1');
 
 -- ----------------------------
+-- Table structure for syc_baojia
+-- ----------------------------
+DROP TABLE IF EXISTS `syc_baojia`;
+CREATE TABLE `syc_baojia` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `cus_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '客户id',
+  `order_sn` varchar(50) NOT NULL DEFAULT '' COMMENT '报价单号',
+  `company_name` varchar(255) NOT NULL DEFAULT '',
+  `company_short` varchar(255) NOT NULL DEFAULT '',
+  `contacts` varchar(50) NOT NULL DEFAULT '',
+  `fax` varchar(50) NOT NULL DEFAULT '',
+  `email` varchar(50) NOT NULL DEFAULT '',
+  `order_remark` text,
+  `status` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `create_time` int(10) unsigned NOT NULL DEFAULT '0',
+  `update_time` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- ----------------------------
+-- Records of syc_baojia
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for syc_config
 -- ----------------------------
 DROP TABLE IF EXISTS `syc_config`;
@@ -233,7 +257,7 @@ CREATE TABLE `syc_customers` (
 -- ----------------------------
 -- Records of syc_customers
 -- ----------------------------
-INSERT INTO `syc_customers` VALUES ('1686', '0', '广州市进销传系统有限公司', '进销传系统', 'nice172', '020-89898989', '020-89898989', '13800138000', '354575573@qq.com', '彭立新', '1', 'PHP', '广东省', '广州市', '天河区', '工作部', '0', '354575573', '中山大道西1025号', '1533614328', '1533614328', '1');
+INSERT INTO `syc_customers` VALUES ('1686', '0', '广州市进销传系统有限公司', '进销传系统', 'nice172', '020-89898989', '020-89898989', '13800138000', '354575573@qq.com', '彭立新', '跟单员2', 'PHP', '广东省', '广州市', '天河区', '工作部', '0', '354575573', '中山大道西1025号', '1533614328', '1533614328', '1');
 
 -- ----------------------------
 -- Table structure for syc_customers_contact
@@ -444,18 +468,21 @@ CREATE TABLE `syc_goods` (
   `store_attr` varchar(255) NOT NULL DEFAULT '' COMMENT '库存属性',
   `copyright` varchar(255) NOT NULL DEFAULT '' COMMENT '所有权',
   `address` varchar(255) NOT NULL DEFAULT '' COMMENT '具体位置',
-  `status` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '0禁售',
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0禁售，-1删除',
   `create_time` int(10) unsigned NOT NULL DEFAULT '0',
   `update_time` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`goods_id`),
   KEY `supplier_id` (`supplier_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of syc_goods
 -- ----------------------------
-INSERT INTO `syc_goods` VALUES ('1', '测试商品', '3', '1', '2', '1', '台', '3399.00', '2999.00', '测试商品备注', '[{\"goods_attr_id\":12,\"attr_name:\":\"\\u989c\\u8272\"},{\"goods_attr_id\":13,\"attr_name:\":\"\\u7f51\\u7edc\\u5236\\u5f0f\"},{\"goods_attr_id\":14,\"attr_name:\":\"\\u5957\\u9910\"},{\"goods_attr_id\":16,\"attr_name:\":\"ab\"}]', '0.23KG', '1000', '库存属性', '小米公司', '具体位置具体位置具体位置具体位置具体位置', '1', '1533893242', '1533893242');
+INSERT INTO `syc_goods` VALUES ('1', '测试商品', '3', '1', '2', '1', '台', '3399.00', '2999.00', '测试商品备注', '[{\"goods_attr_id\":12,\"attr_name\":\"\\u989c\\u8272\",\"attr_value\":\"\\u767d\\u8272\"},{\"goods_attr_id\":13,\"attr_name\":\"\\u7f51\\u7edc\\u5236\\u5f0f\",\"attr_value\":\"\\u79fb\\u52a84G\\/\\u8054\\u901a4G\\/\\u7535\\u4fe14G\"},{\"goods_attr_id\":14,\"attr_name\":\"\\u5957\\u9910\",\"attr_value\":\"\\u5957\\u9910\\u4e8c\"},{\"goods_attr_id\":16,\"attr_name\":\"ab\",\"attr_value\":\"php\"}]', '0.23KG', '1000', '库存属性', '小米公司', '具体位置具体位置具体位置具体位置具体位置', '1', '1533893242', '1533893242');
 INSERT INTO `syc_goods` VALUES ('2', 'fsafsa', '1', '2', '2', '1', '件', '12112.00', '12.00', '23132', null, '31233', '32133', '313131', '321313', '具体位置具体位置具体位置具体位置具体位置', '1', '1533893431', '1533893431');
+INSERT INTO `syc_goods` VALUES ('4', '小米手机iPhone6s 32G', '3', '1', '2', '1', '台', '2199.00', '1999.00', '小米手机iPhone6s 32G备注', '[{\"goods_attr_id\":12,\"attr_name\":\"\\u989c\\u8272\",\"attr_value\":\"\\u767d\\u8272\"},{\"goods_attr_id\":13,\"attr_name\":\"\\u7f51\\u7edc\\u5236\\u5f0f\",\"attr_value\":\"\\u79fb\\u52a84G\\/\\u8054\\u901a4G\\/\\u7535\\u4fe14G\"},{\"goods_attr_id\":14,\"attr_name\":\"\\u5957\\u9910\",\"attr_value\":\"\\u5957\\u9910\\u4e8c\"},{\"goods_attr_id\":16,\"attr_name\":\"ab\",\"attr_value\":\"php\"}]', '0.23KG', '999', '小米广州仓库', '小米科技', '广州81号仓库', '1', '1533972542', '1533972542');
+INSERT INTO `syc_goods` VALUES ('5', 'gasafsdf', '3', '2', '1', '1', '台', '3123.00', '12.00', '3122313', '', '231', '312313', '3213', '3213', '31223', '1', '1533974547', '1534059560');
+INSERT INTO `syc_goods` VALUES ('6', '测试商品2', '7', '1', '1', '1', '台', '3999.00', '3899.00', '备注备注备注备注备注备注备注备注', '[{\"goods_attr_id\":12,\"attr_name\":\"\\u989c\\u8272\",\"attr_value\":\"\\u767d\\u8272\"},{\"goods_attr_id\":13,\"attr_name\":\"\\u7f51\\u7edc\\u5236\\u5f0f\",\"attr_value\":\"\\u79fb\\u52a84G+\"},{\"goods_attr_id\":14,\"attr_name\":\"\\u5957\\u9910\",\"attr_value\":\"\\u5957\\u9910\\u4e8c\"},{\"goods_attr_id\":16,\"attr_name\":\"ab\",\"attr_value\":\"java\"}]', '5.23KG', '9996', '华为广州仓库', '华为科技', '广东省广州市天河区', '1', '1533975224', '1534059313');
 
 -- ----------------------------
 -- Table structure for syc_goods_attr
@@ -690,7 +717,7 @@ CREATE TABLE `syc_params` (
   `sort` smallint(6) unsigned NOT NULL DEFAULT '0',
   `params_value` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of syc_params
@@ -700,6 +727,7 @@ INSERT INTO `syc_params` VALUES ('5', 'admin', 'gsaf', '50', 'fsafaffa');
 INSERT INTO `syc_params` VALUES ('7', '部门', '部门', '50', '销售部\n采购部\n工作部\n生产部\n仓储物流部');
 INSERT INTO `syc_params` VALUES ('8', '业务经理', '业务经理', '50', '彭立新');
 INSERT INTO `syc_params` VALUES ('9', '单位', '单位', '50', '张\n件\n个\n条\n包\n只\n台');
+INSERT INTO `syc_params` VALUES ('10', '跟单员', '跟单员', '50', '跟单员1\n跟单员2\n跟单员3');
 
 -- ----------------------------
 -- Table structure for syc_product_color

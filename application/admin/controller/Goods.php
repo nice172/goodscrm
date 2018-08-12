@@ -392,21 +392,38 @@ class Goods extends Base {
 	
 	public function change_type(){
 	    if ($this->request->isAjax()){
-	        $goods_type_id = $this->request->param('goods_type_id',0,'intval');
-	        $attr = db('goods_attr')->where(['goods_type_id' => $goods_type_id,'attr_type' => 1])->select();
-	        $html = '';
-	        foreach ($attr as $key => $value){
-	            $attr_value = explode("\n", $value['attr_value']);
-	            $html .= '<div class="form-group">';
-	            $html .= '<label for="goods_weight" class="col-sm-2 control-label">'.$value['attr_name'].'</label>';
-	            $html .= '<div class="col-sm-10"><select class="form-control w300" name="attr['.$value['goods_attr_id'].']">';
-	            foreach ($attr_value as $val){
-	                $html .= '<option value="'.$val.'">'.$val.'</option>';
-	            }
-	            $html .= '</select></div></div>';
-	        }
+	    	$goods_type_id = $this->request->param('goods_type_id',0,'intval');
+	    	$html = self::getHtml($goods_type_id);
 	        echo $html;
 	    }
+	}
+	
+	private function getHtml($goods_type_id,$goods_attr=[]){
+		$attr = db('goods_attr')->where(['goods_type_id' => $goods_type_id,'attr_type' => 1])->select();
+		$html = '';
+		foreach ($attr as $key => $value){
+			$attr_value = explode("\n", $value['attr_value']);
+			$html .= '<div class="form-group">';
+			$html .= '<label for="goods_weight" class="col-sm-2 control-label">'.$value['attr_name'].'</label>';
+			$html .= '<div class="col-sm-10"><select class="form-control w300" name="attr['.$value['goods_attr_id'].']">';
+			foreach ($attr_value as $val){
+				if (empty($goods_attr)){
+					$html .= '<option value="'.$val.'">'.$val.'</option>';
+				}else{
+					$selected = '';
+					foreach ($goods_attr as $x_val){
+						if ($x_val['goods_attr_id']==$value['goods_attr_id'] && $x_val['attr_value']==$val){
+							$selected = 'selected="selected"';
+							break;
+						}
+					}
+					$option = '<option value="'.$val.'" '.$selected.'>'.$val.'</option>';
+					$html .= $option;
+				}
+			}
+			$html .= '</select></div></div>';
+		}
+		return $html;
 	}
 	
 	protected $goods_rules = [
@@ -497,6 +514,78 @@ class Goods extends Base {
 		$unit = getParams(9);
 		if (!empty($unit)){
 		    $unit = $unit['params_value'];
+		}
+		$this->assign('unit',$unit);
+		$this->assign('title','商品维护');
+		$this->assign('sub_class','viewFramework-product-col-1');
+		return $this->fetch();
+	}
+	
+	public function goods_edit(){
+		if ($this->request->isAjax()){
+			$data = $this->request->param();
+			$validate = new Validate($this->goods_rules,$this->goods_message);
+			if (!$validate->check($data)){
+				$this->error($validate->getError());
+			}
+			$data['supplier_id'] = intval($data['supplier_id']);
+			if ($data['supplier_id'] <= 0) $this->error('选择供应商不正确');
+			$data['category_id'] = intval($data['category_id']);
+			if ($data['category_id'] <= 0) $this->error('选择商品分类不正确');
+			$data['brand_id'] = intval($data['brand_id']);
+			if ($data['brand_id'] <= 0) $this->error('选择品牌不正确');
+			if ($data['shop_price'] < 0) $this->error('采购价不正确');
+			if ($data['market_price'] < 0) $this->error('销售价不正确');
+			$goods_attr = [];
+			if (!empty($data['attr'])){
+				foreach ($data['attr'] as $attr_id => $value){
+					$attr = db('goods_attr')->where(['goods_attr_id' => $attr_id])->field('attr_name')->find();
+					if (!empty($attr)) {
+						$goods_attr[] = [
+							'goods_attr_id' => $attr_id,
+							'attr_name' => $attr['attr_name'],
+							'attr_value' => $value,
+						];
+					}
+				}
+			}
+			if (empty($goods_attr)){
+				$data['goods_attr'] = '';
+			}else{
+				$data['goods_attr'] = json_encode($goods_attr);
+			}
+			unset($data['attr']);
+			$data['update_time'] = time();
+			if (db('goods')->update($data)){
+				$this->success('修改成功');
+			}else{
+				$this->error('修改失败');
+			}
+			return;
+		}
+		$goods_id = $this->request->param('gid',0,'intval');
+		if ($goods_id <= 0) $this->error('参数错误');
+		$goodinfo = db('goods')->where(['goods_id' => $goods_id,'status' => ['neq','-1']])->find();
+		if (empty($goodinfo)) $this->error('商品信息不存在');
+		$goodinfo['goods_attr'] = json_decode($goodinfo['goods_attr'],true);
+		$goodinfo['attr_html'] = self::getHtml($goodinfo['goods_type_id'],$goodinfo['goods_attr']);
+		$this->assign('goods',$goodinfo);
+		
+		$category = db('goods_category')->where(array('status' => 1))->select();
+		$this->assign('category',$category);
+		
+		$brand = db('goods_brand')->where(array('status' => 1))->select();
+		$this->assign('brand',$brand);
+		
+		$goods_type = db('goods_type')->field(array('goods_type_id','type_name'))->select();
+		$this->assign('goods_type',$goods_type);
+		
+		$supplier = db('supplier')->where(['supplier_status' => 1])->field(array('supplier_name','id'))->select();
+		$this->assign('supplier',$supplier);
+		
+		$unit = getParams(9);
+		if (!empty($unit)){
+			$unit = $unit['params_value'];
 		}
 		$this->assign('unit',$unit);
 		$this->assign('title','商品维护');

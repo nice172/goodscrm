@@ -36,10 +36,10 @@ class Customers extends Base{
             $where .= " and cus_short like '%{$cus_short}%'";
         }
         $data = $Customers->where($where)->paginate('', false, ['query' => $query ]);
-        foreach ($data as $key => $value){
-            $user = db('users')->where(['id' => $value['cus_order_ren']])->find();
-            $data[$key]['cus_order_ren'] = $user['user_nick'];
-        }
+//         foreach ($data as $key => $value){
+//             $user = db('users')->where(['id' => $value['cus_order_ren']])->find();
+//             $data[$key]['cus_order_ren'] = $user['user_nick'];
+//         }
   
         // 获取分页显示
         $page = $data->render();
@@ -69,6 +69,11 @@ class Customers extends Base{
         if (!empty($business)){
             $business = $business['params_value'];
         }
+        $order_ren = getParams(10); //获取跟单员
+        if (!empty($order_ren)){
+        	$order_ren= $order_ren['params_value'];
+        }
+        $this->assign('order_ren',$order_ren);
         $this->assign('business',$business);
         $this->assign('section',$section);
         $this->assign('property', $property);
@@ -97,7 +102,7 @@ class Customers extends Base{
                 'cus_duty' => $duty,
                 'cus_phome' => $request->param('con_phome'),
                 'cus_fax' => $request->param('con_fax'),
-                'cus_order_ren' => $this->userinfo['id'],
+                'cus_order_ren' => $request->param('con_order_ren'),
                 'cus_mobile' => $request->param('con_mobile'),
                 'cus_email' => $request->param('con_email'),
                 'cus_business' => $request->param('con_business'),
@@ -176,6 +181,11 @@ class Customers extends Base{
         if (!empty($business)){
             $business = $business['params_value'];
         }
+        $order_ren = getParams(10); //获取跟单员
+        if (!empty($order_ren)){
+        	$order_ren= $order_ren['params_value'];
+        }
+        $this->assign('order_ren',$order_ren);
         $this->assign('business',$business);
         $this->assign('section',$section);
         $this->assign($assign);
@@ -204,6 +214,7 @@ class Customers extends Base{
             'cus_duty' => $request->param('cus_duty'),
             'cus_phome' => $request->param('cus_phome'),
             'cus_fax' => $request->param('cus_fax'),
+        	'cus_order_ren' => $request->param('con_order_ren'),
             'cus_mobile' => $request->param('cus_mobile'),
             'cus_email' => $request->param('cus_email'),
             'cus_business' => $request->param('cus_business'),

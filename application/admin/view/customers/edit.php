@@ -96,6 +96,17 @@
                                             </select>
                                     </td>
                                 </tr>
+                                                                                             <tr>
+                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>跟单员:</span></td>
+                                    <td width="35%" colspan="3">
+                                             <select class="syc-select w300" name="con_order_ren">
+                                            <option value="">--请选择跟单员--</option>
+                                            <?php foreach ($order_ren as $val){?>
+                                            <option value="<?php echo $val;?>" {if condition="$data['cus_order_ren'] eq $val"}selected="selected"{/if}><?php echo $val;?></option>
+                                            <?php }?>
+                                            </select>
+                                    </td>
+                                </tr>
                                 <tr>
                                     <td width="15%" class="right-color"><span>详细地址:</span></td>
                                     <td width="35%" colspan="3" id="city_4">
