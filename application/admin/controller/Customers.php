@@ -29,7 +29,7 @@ class Customers extends Base{
         $where = "status=1";
         if ($start_time != '' && $end_time != ''){
             $start_time = strtotime($start_time);
-            $end_time = strtotime($end_time);
+            $end_time = strtotime($end_time.' 23:59:59');
             $where .= " and create_time >= '{$start_time}' and create_time <= '{$end_time}'";
         }
         if ($cus_short != ''){

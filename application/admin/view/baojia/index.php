@@ -74,20 +74,23 @@
                             <tbody>
                             {volist name="$list" id="vo" empty="$empty"}
                             <tr>
-                                <td>{$vo.goods_id}</td>
-                                <td>{$vo.goods_name}</td>
-                                <td>{$vo.category_name}</td>
-                                <td>{$vo.supplier_name}</td>
-                                <td>{$vo.brand_name}</td>
-                                <td>{$vo.unit}</td>
-                                <td>{$vo.shop_price}</td>
-                                <td>{$vo.market_price}</td>
+                                <td>{$vo.id}</td>
+                                <td>{$vo.order_sn}</td>
+                                <td>{$vo.create_time|date='Y-m-d',###}</td>
+                                <td>{$vo.company_short}</td>
+                                <td>{$vo.company_name}</td>
+                                <td>{$vo.contacts}</td>
+                                <td>{$vo.fax}</td>
+                                <td>{$vo.email}</td>
+                                <td>{$vo.order_handle}</td>
+                                <td>{$vo.create_time|date='Y-m-d H:i:s',###}</td>
+                                <td>{if condition="$vo.status==1"}未确认{else}已确认{/if}</td>
                                 <td>
-                                	<a href="{:url('goodsinfo',['gid'=>$vo.goods_id])}">详情</a>
+                                	<a href="{:url('info',['gid'=>$vo.id])}">详情</a>
                                 	<span class="text-explode">|</span>
-                                    <a href="{:url('goods_edit',['gid'=>$vo.goods_id])}">修改</a>
+                                    <a href="{:url('edit',['gid'=>$vo.id])}">修改</a>
                                     <span class="text-explode">|</span>
-                                    <a href="javascript:void(0);" onclick="deleteOne('{$vo.goods_id}');">删除</a>
+                                    <a href="javascript:void(0);" onclick="deleteOne('{$vo.id}');">删除</a>
                                 </td>
                             </tr>
                             {/volist}
@@ -126,5 +129,16 @@
         });
 
     });
+    function deleteOne(e) {
+        if (!isNaN(e) && e !== null && e !== '') {
+            if(confirm("确认删除？")){
+                if (!isNaN(e) && e !== null && e !== '') {
+                    var data={name:'delone',gid:e};
+                    $.sycToAjax("{:url('delete')}", data);
+                }
+            };
+            return false;
+        }
+    }
 </script>
 {/block}

@@ -23,7 +23,7 @@
                         <div class="portlet margin-top-3">
  <form class="form-horizontal ajaxForm2" method="post" action="<?php echo url('add');?>" id="form1">
   <ul class="nav nav-tabs" role="tablist">
-    <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">商品信息</a></li>
+    <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">基本信息</a></li>
     <li role="presentation"><a href="#goods" aria-controls="goods" role="tab" data-toggle="tab">商品</a></li>
   </ul>
   <!-- Tab panes -->
@@ -73,6 +73,17 @@
                                     <label for="email" class="col-sm-2 control-label"><span class="text-danger">*</span>E-Mail</label>
                                     <div class="col-sm-10">
                                         <input type="text" class="form-control w300" name="email" id="email">
+                                    </div>
+                                </div>
+                               <div class="form-group">
+                                    <label for="email" class="col-sm-2 control-label"><span class="text-danger">*</span>跟单员</label>
+                                    <div class="col-sm-10">
+                                        <select name="order_handle" class="form-control w300" id="order_handle">
+                                     <option value="">--请选择跟单员--</option>
+                                            <?php foreach ($order_handle as $val){?>
+                                            <option value="<?php echo $val;?>"><?php echo $val;?></option>
+                                            <?php }?>
+                                    </select>
                                     </div>
                                 </div>
                           <div class="form-group">
@@ -252,7 +263,7 @@ function goodsList(goods_info){
 		html += '<td>'+num+'</td>';
 		html += '<td>'+goods_info[j]['goods_name']+'</td>';
 		html += '<td>'+goods_info[j]['unit']+'</td>';
-		html += '<td class="market_price"><input type="text" name="market_price" style="width:80px;display:none;" value="'+goods_info[j]['market_price']+'" /><span class="inputspan">'+goods_info[j]['market_price']+'</span></td>';
+		html += '<td class="market_price"><input type="text" data-market_price="'+goods_info[j]['market_price']+'" oninput="checkNum(this)" name="market_price" style="width:80px;display:none;" value="'+goods_info[j]['market_price']+'" /><span class="inputspan">'+goods_info[j]['market_price']+'</span></td>';
 		html += '<td class="remark"><input type="text" name="remark" style="width:200px;display:none;" value="'+goods_info[j]['remark']+'" /><span class="inputspan">'+goods_info[j]['remark']+'</span></td>';
 		html += '<td><a href="javascript:;" onclick="update('+j+')" class="update">修改</a><span class="text-explode">|</span><a href="javascript:;" onclick="_delete('+j+')" class="delete">删除</a></td>';
 		html += '</tr>';
@@ -263,7 +274,11 @@ function goodsList(goods_info){
 function update(index){
 	if(status == 2){
 		status = 1;
-		goods_info[index]['market_price'] = $('.goods_'+index+' input[name=market_price]').val();
+		var market_price = $('.goods_'+index+' input[name=market_price]').val();
+		if(market_price == ''){
+			market_price = $('.goods_'+index+' input[name=market_price]').attr('data-market_price');
+		}
+		goods_info[index]['market_price'] = market_price;
 		goods_info[index]['remark'] = $('.goods_'+index+' input[name=remark]').val();
 		goodsList(goods_info);
 		return;
@@ -272,6 +287,14 @@ function update(index){
 	$('.goods_'+index+' .update').text('保存');
 	$('.goods_'+index+' span.inputspan').hide();
 	$('.goods_'+index+' input').show();
+}
+
+function checkNum(obj){
+	obj.value = obj.value.replace(/[^\d.]/g,"");//清除"数字"和"."以外的字符
+	obj.value = obj.value.replace(/^\./g,"");//验证第一个字符是数字而不是
+	obj.value = obj.value.replace(/\.{2,}/g,".");//只保留第一个. 清除多余的
+	obj.value = obj.value.replace(".","$#$").replace(/\./g,"").replace("$#$",".");
+	obj.value = obj.value.replace(/^(\-)*(\d+)\.(\d\d).*$/,'$1$2.$3');//只能输入三个小数.(\d\d\d) 修改个数  加\d
 }
 
 function _delete(index){
