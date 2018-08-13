@@ -1,16 +1,16 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : localhost3306
+Source Server         : localhost
 Source Server Version : 50714
-Source Host           : localhost:3306
+Source Host           : 127.0.0.1:3306
 Source Database       : goods_crm
 
 Target Server Type    : MYSQL
 Target Server Version : 50714
 File Encoding         : 65001
 
-Date: 2018-08-12 22:34:56
+Date: 2018-08-13 18:08:34
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -178,21 +178,48 @@ CREATE TABLE `syc_baojia` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `cus_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '客户id',
   `order_sn` varchar(50) NOT NULL DEFAULT '' COMMENT '报价单号',
+  `order_handle` varchar(50) NOT NULL DEFAULT '',
   `company_name` varchar(255) NOT NULL DEFAULT '',
   `company_short` varchar(255) NOT NULL DEFAULT '',
   `contacts` varchar(50) NOT NULL DEFAULT '',
   `fax` varchar(50) NOT NULL DEFAULT '',
   `email` varchar(50) NOT NULL DEFAULT '',
   `order_remark` text,
-  `status` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `status` tinyint(1) NOT NULL DEFAULT '0',
   `create_time` int(10) unsigned NOT NULL DEFAULT '0',
   `update_time` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of syc_baojia
 -- ----------------------------
+INSERT INTO `syc_baojia` VALUES ('1', '1686', 'CS-Q-08/1311410841', '跟单员2', '广州市进销传系统有限公司', '进销传系统', 'nice172', '020-89898989', '354575573@qq.com', 'order_remarkorder_remarkorder_remarkorder_remarkorder_remarkorder_remark', '1', '1534132387', '1534145618');
+
+-- ----------------------------
+-- Table structure for syc_baojia_goods
+-- ----------------------------
+DROP TABLE IF EXISTS `syc_baojia_goods`;
+CREATE TABLE `syc_baojia_goods` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `baojia_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `goods_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `goods_name` varchar(255) NOT NULL DEFAULT '',
+  `unit` varchar(50) NOT NULL DEFAULT '',
+  `goods_price` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `remark` varchar(255) NOT NULL DEFAULT '',
+  `create_time` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of syc_baojia_goods
+-- ----------------------------
+INSERT INTO `syc_baojia_goods` VALUES ('1', '1', '4', '小米手机iPhone6s 32G', '台', '2199.00', '小米手机iPhone6s 32G备注', '1534132387');
+INSERT INTO `syc_baojia_goods` VALUES ('6', '1', '6', '测试商品2', '台', '3999.00', '备注备注备注备注备注备注备注备注', '1534144452');
+INSERT INTO `syc_baojia_goods` VALUES ('7', '1', '1', '测试商品', '台', '213.00', '商品备注', '1534144452');
+INSERT INTO `syc_baojia_goods` VALUES ('8', '1', '2', 'fsafsa', '件', '12112.00', '23132', '1534144574');
+INSERT INTO `syc_baojia_goods` VALUES ('9', '1', '5', 'gasafsdf', '台', '3123.00', '3122313', '1534144574');
 
 -- ----------------------------
 -- Table structure for syc_config
@@ -1105,5 +1132,5 @@ CREATE TABLE `syc_users` (
 -- Records of syc_users
 -- ----------------------------
 INSERT INTO `syc_users` VALUES ('1', 'asdasd', 'sha256:1000:X2vbzkCcKSScvZZ5ZUDs7DvTmergIc5u:fQt8UQynrp5psap5MoOq4scNMLNhcjIl', '开发者', '1', '354575573@qq.com', '/uploads/avatar/582d3a26a3369.jpg', '2017-01-01', '161', '1451577600', '1497704499', '127.0.0.1', '127.0.0.1', '16', '1');
-INSERT INTO `syc_users` VALUES ('2', 'admin', 'sha256:1000:bb+qr8kui4m4JriYM/aLnznOODBwZfbi:30utxhFU7cxebnazg8Xh5TEkAmzR6ymJ', '管理员', '1', 'nice172@126.com', '', '2018-08-05', '8', '1533480247', '1533480247', '192.168.1.225', '', '16', '1');
+INSERT INTO `syc_users` VALUES ('2', 'admin', 'sha256:1000:bb+qr8kui4m4JriYM/aLnznOODBwZfbi:30utxhFU7cxebnazg8Xh5TEkAmzR6ymJ', '管理员', '1', 'nice172@126.com', '', '2018-08-05', '10', '1533480247', '1533480247', '192.168.1.225', '', '16', '1');
 INSERT INTO `syc_users` VALUES ('3', 'nice172', 'sha256:1000:GM0kcPbE+QNRSpmsG58qckJUkekhvpwi:XwmDtVMPAfE8DDYUdVW5DF5AOLljRm8q', '测试号', '1', 'nice172@163.com', '', '2018-08-06', '0', '1533526543', '1533526543', '10.10.0.99', '', '14', '1');
