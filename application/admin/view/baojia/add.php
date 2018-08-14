@@ -89,7 +89,7 @@
                           <div class="form-group">
                                     <label for="remark" class="col-sm-2 control-label">备注</label>
                                     <div class="col-sm-10">
-                                        <textarea name="order_remark" id="order_remark" class="form-control w300" style="height: 150px;resize:none;"></textarea>
+                                        <textarea name="order_remark" id="order_remark" class="form-control w300" style="height: 150px;resize:none;">{$order_remark}</textarea>
                                     </div>
                                 </div>
 
@@ -129,8 +129,8 @@
                 
     <div class="modal-footer">
         <div class="col-md-offset-2 col-md-8 left">
-            <button type="submit" class="btn btn-primary">保 存</button>
-            <button type="submit" class="btn btn-primary">生成PDF文件并发送</button>
+            <button type="submit" send="save" class="btn btn-primary">保 存</button>
+            <button type="submit" send="email" class="btn btn-primary">生成PDF文件并发送</button>
             <button type="reset" onclick="history.go(-1);" class="btn btn-default">取消</button>
         </div>
     </div>
@@ -309,8 +309,9 @@ function _delete(index){
 	goodsList(goods_info);
 }
 $('.ajaxForm2').submit(function(){
+	var send = $('button').attr('send');
 	$(this).ajaxSubmit({
-		data:{goods_info:goods_info},
+		data:{goods_info:goods_info,send:send},
 		success: function(res){
 			if(res.code == 1){
 				toastr.success(res.msg);

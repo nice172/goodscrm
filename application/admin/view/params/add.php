@@ -42,6 +42,16 @@
                 <textarea name="desc" id="desc" class="form-control w300 fleft" style="resize:none;height:100px;"></textarea>
             </div>
         </div>
+                        <div class="form-group">
+            <label for="desc" class="col-sm-2 control-label"><span class="text-danger"></span>类型</label>
+            <div class="col-sm-10">
+                <label for="radio1"><input id="radio1" type="radio" name="type" value="0" checked="checked" />选项值</label>
+                &nbsp;&nbsp;
+                <label for="radio2"><input id="radio2" type="radio" name="type" value="1"/>文本</label>
+                &nbsp;&nbsp;
+                <label for="radio3"><input id="radio3" type="radio" name="type" value="2" />图片</label>
+            </div>
+        </div>
         <div class="form-group">
             <label for="params_value" class="col-sm-2 control-label"><span class="text-danger">*</span>可选值</label>
             <div class="col-sm-10">
@@ -49,10 +59,16 @@
             	<span class="help-block">每行一个值</span>
             </div>
         </div>
-                <div class="form-group">
+          <div class="form-group">
             <label for="sort" class="col-sm-2 control-label"><span class="text-danger">*</span>排序</label>
             <div class="col-sm-10">
                 <input type="text" class="form-control w300 fleft" name="sort" id="sort" value="50" placeholder="请输入排序">
+            </div>
+        </div>
+       <div class="form-group">
+            <label for="sort" class="col-sm-2 control-label">上传图片</label>
+            <div class="col-sm-10">
+                <input type="file" name="file" />
             </div>
         </div>
         <div class="modal-footer">

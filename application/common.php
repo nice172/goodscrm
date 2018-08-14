@@ -1,4 +1,5 @@
 <?php
+
 // +----------------------------------------------------------------------
 // | ThinkPHP [ WE CAN DO IT JUST THINK ]
 // +----------------------------------------------------------------------
@@ -183,6 +184,76 @@ function getParams($id){
    if (empty($find)) return [];
    $find['params_value'] = explode("\n", $find['params_value']);
    return $find;
+}
+
+function getTextParams($id){
+    $id = intval($id);
+    $find = db('params')->where(['id' => $id])->find();
+    if (empty($find)) return '';
+    return $find['params_value'];
+}
+
+function getFileParams($id){
+    $id = intval($id);
+    $find = db('params')->where(['id' => $id])->find();
+    if (empty($find)) return '';
+    return $find['file'];
+}
+
+function send_email($user,$Subject='',$file='',$Body='',$AltBody=''){
+    $mail = new PHPMailer\PHPMailer();
+    try {
+        //Server settings
+        $mail->SMTPDebug = false;                                 // Enable verbose debug output
+        $mail->isSMTP();                                      // Set mailer to use SMTP
+        $mail->Host = 'smtp.126.com';  // Specify main and backup SMTP servers
+        $mail->SMTPAuth = true;                               // Enable SMTP authentication
+        $mail->Username = 'nice172@126.com';                 // SMTP username
+        $mail->Password = 'nice172';                           // SMTP password
+        $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
+        $mail->Port = 25;                                    // TCP port to connect to
+        
+        //Recipients
+        $mail->setFrom('nice172@126.com', 'Admin');
+        if (empty($user)) return false;
+        if (is_array($user)){
+            foreach ($user as $val){
+                $mail->addAddress($val);     // Add a recipient
+            }
+        }else{
+            $mail->addAddress($user);
+        }
+        // 	        $mail->addAddress('ellen@example.com');               // Name is optional
+        // 	        $mail->addReplyTo('info@example.com', 'Information');
+        // 	        $mail->addCC('cc@example.com');
+        // 	        $mail->addBCC('bcc@example.com');
+        
+        //Attachments
+        if (!empty($file)){
+            if (is_array($file)){
+                foreach ($file as $path){
+                    $mail->addAttachment($path);         // Add attachments
+                }
+            }else{
+                $mail->addAttachment($file);         // Add attachments
+            }
+        }
+        
+        // 	        $mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
+        
+        //Content
+        $mail->isHTML(true);                                  // Set email format to HTML
+        $mail->Subject = $Subject?:'Here is the subject';
+        $mail->Body    = 'This is the HTML message body <b>in bold!</b>';
+        $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+        
+        $mail->send();
+        //echo 'Message has been sent';
+        return true;
+    } catch (\Exception $e) {
+        echo 'Message could not be sent. Mailer Error: ', $mail->ErrorInfo;
+    }
+    return false;
 }
 
 /**

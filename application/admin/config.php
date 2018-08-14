@@ -9,4 +9,5 @@ return [
         'NO_AUTH_URL' => array(),
     ),
     'PAGE_SIZE' => 10,
+    'UPLOAD_DIR' => 'uploads'
 ];

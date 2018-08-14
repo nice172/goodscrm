@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50714
 File Encoding         : 65001
 
-Date: 2018-08-13 18:08:34
+Date: 2018-08-14 17:48:58
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -176,6 +176,7 @@ INSERT INTO `syc_bancai_list` VALUES ('8', '802', '', '860*2050', '', '', '1', '
 DROP TABLE IF EXISTS `syc_baojia`;
 CREATE TABLE `syc_baojia` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `create_uid` int(10) unsigned NOT NULL DEFAULT '0',
   `cus_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '客户id',
   `order_sn` varchar(50) NOT NULL DEFAULT '' COMMENT '报价单号',
   `order_handle` varchar(50) NOT NULL DEFAULT '',
@@ -194,7 +195,7 @@ CREATE TABLE `syc_baojia` (
 -- ----------------------------
 -- Records of syc_baojia
 -- ----------------------------
-INSERT INTO `syc_baojia` VALUES ('1', '1686', 'CS-Q-08/1311410841', '跟单员2', '广州市进销传系统有限公司', '进销传系统', 'nice172', '020-89898989', '354575573@qq.com', 'order_remarkorder_remarkorder_remarkorder_remarkorder_remarkorder_remark', '1', '1534132387', '1534145618');
+INSERT INTO `syc_baojia` VALUES ('1', '2', '1686', 'CS-Q-08/1311410841', '跟单员2', '广州市进销传系统有限公司', '进销传系统', 'nice172', '020-89898989', '354575573@qq.com', 'order_remarkorder_remarkorder_remarkorder_remarkorder_remarkorder_remark', '1', '1534132387', '1534240032');
 
 -- ----------------------------
 -- Table structure for syc_baojia_goods
@@ -743,18 +744,25 @@ CREATE TABLE `syc_params` (
   `desc` text,
   `sort` smallint(6) unsigned NOT NULL DEFAULT '0',
   `params_value` text,
+  `type` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '1文本显示',
+  `file` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of syc_params
 -- ----------------------------
-INSERT INTO `syc_params` VALUES ('1', '付款方式', '付款方式', '10', '现金交易\n月结30天\n月结60天\n月结90天\n月结180天');
-INSERT INTO `syc_params` VALUES ('5', 'admin', 'gsaf', '50', 'fsafaffa');
-INSERT INTO `syc_params` VALUES ('7', '部门', '部门', '50', '销售部\n采购部\n工作部\n生产部\n仓储物流部');
-INSERT INTO `syc_params` VALUES ('8', '业务经理', '业务经理', '50', '彭立新');
-INSERT INTO `syc_params` VALUES ('9', '单位', '单位', '50', '张\n件\n个\n条\n包\n只\n台');
-INSERT INTO `syc_params` VALUES ('10', '跟单员', '跟单员', '50', '跟单员1\n跟单员2\n跟单员3');
+INSERT INTO `syc_params` VALUES ('1', '付款方式', '付款方式', '10', '现金交易\n月结30天\n月结60天\n月结90天\n月结180天', '0', '');
+INSERT INTO `syc_params` VALUES ('5', 'admin', 'gsaf', '50', 'fsafaffa', '0', '');
+INSERT INTO `syc_params` VALUES ('7', '部门', '部门', '50', '销售部\n采购部\n工作部\n生产部\n仓储物流部', '0', '');
+INSERT INTO `syc_params` VALUES ('8', '业务经理', '业务经理', '50', '彭立新', '0', '');
+INSERT INTO `syc_params` VALUES ('9', '单位', '单位', '50', '张\n件\n个\n条\n包\n只\n台', '0', '');
+INSERT INTO `syc_params` VALUES ('10', '跟单员', '跟单员', '50', '跟单员1\n跟单员2\n跟单员3', '0', '');
+INSERT INTO `syc_params` VALUES ('11', '审核印章', '审核印章', '50', '审核印章', '2', '/uploads/20180814/0372ffd6312b9e66b13d820294021640.gif');
+INSERT INTO `syc_params` VALUES ('12', 'PDF文件LOGO', 'PDF文件LOGO', '50', 'PDF文件LOGO', '2', '/uploads/20180814/512a803c3fca5bfe1928fb39d9f7746f.png');
+INSERT INTO `syc_params` VALUES ('13', '报价单备注', '报价单备注', '50', '报价单备注报价单备注报价单备注报价单备注\n报价单备注报价单备注报价单备注报价单备注\n报价单备注报价单备注报价单备注报价单备注\n报价单备注\n报价单备注\n报价单备注', '1', '');
+INSERT INTO `syc_params` VALUES ('14', 'PDF文件标题', 'PDF文件标题', '50', '众山化工有限公司', '1', '');
+INSERT INTO `syc_params` VALUES ('15', 'PDF文件英文标题', 'PDF文件英文标题', '50', 'CSUN(SICHUAN) CHEMICAL CO.,LTD', '1', '');
 
 -- ----------------------------
 -- Table structure for syc_product_color
@@ -1132,5 +1140,5 @@ CREATE TABLE `syc_users` (
 -- Records of syc_users
 -- ----------------------------
 INSERT INTO `syc_users` VALUES ('1', 'asdasd', 'sha256:1000:X2vbzkCcKSScvZZ5ZUDs7DvTmergIc5u:fQt8UQynrp5psap5MoOq4scNMLNhcjIl', '开发者', '1', '354575573@qq.com', '/uploads/avatar/582d3a26a3369.jpg', '2017-01-01', '161', '1451577600', '1497704499', '127.0.0.1', '127.0.0.1', '16', '1');
-INSERT INTO `syc_users` VALUES ('2', 'admin', 'sha256:1000:bb+qr8kui4m4JriYM/aLnznOODBwZfbi:30utxhFU7cxebnazg8Xh5TEkAmzR6ymJ', '管理员', '1', 'nice172@126.com', '', '2018-08-05', '10', '1533480247', '1533480247', '192.168.1.225', '', '16', '1');
+INSERT INTO `syc_users` VALUES ('2', 'admin', 'sha256:1000:bb+qr8kui4m4JriYM/aLnznOODBwZfbi:30utxhFU7cxebnazg8Xh5TEkAmzR6ymJ', '管理员', '1', 'nice172@126.com', '', '2018-08-05', '11', '1533480247', '1533480247', '192.168.1.225', '', '16', '1');
 INSERT INTO `syc_users` VALUES ('3', 'nice172', 'sha256:1000:GM0kcPbE+QNRSpmsG58qckJUkekhvpwi:XwmDtVMPAfE8DDYUdVW5DF5AOLljRm8q', '测试号', '1', 'nice172@163.com', '', '2018-08-06', '0', '1533526543', '1533526543', '10.10.0.99', '', '14', '1');

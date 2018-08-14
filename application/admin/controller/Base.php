@@ -54,7 +54,7 @@
      	}
      	// 移动到框架应用根目录/public/uploads/ 目录下
      	if (!empty($subDir)) $subDir = DS.$subDir;
-     	$info = $file->move(ROOT_PATH . config('UPLOAD_DIR') . $subDir);
+     	$info = $file->move(config('UPLOAD_DIR') . $subDir);
      	if($info){
      		// 成功上传后 获取上传信息
      		// 输出 jpg

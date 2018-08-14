@@ -104,13 +104,6 @@
                                     <span class="nav-title">报价列表</span>
                                 </a>
                             </li>
-                            
-                            <li class="nav-item" id="storage-xingcai">
-                                <a href="{:url('baojia/record')}" class="sidebar-trans">
-                                    <div class="nav-icon sidebar-trans"><span class="icon-ecs"></span></div>
-                                    <span class="nav-title">报价记录</span>
-                                </a>
-                            </li>
                         </ul>
                     </li>
                     

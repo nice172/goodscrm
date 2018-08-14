@@ -45,6 +45,16 @@ class Params extends Base {
             }
             $data = $this->request->post();
             unset($data['__token__']);
+            $file = '';
+            if (!empty($_FILES)){
+                $file = $this->upload_file();
+                if (is_array($file)){
+                    $file = $file['path'];
+                }else{
+                    $file = '';
+                }
+            }
+            $data['file'] = $file;
             if (db('params')->insert($data)){
                 $this->success('新增成功',url('index'));
             }
@@ -66,6 +76,21 @@ class Params extends Base {
                 $this->error($validate->getError());
             }
             $data = $this->request->post();
+            $file = '';
+            if (!empty($_FILES)){
+                $file = $this->upload_file();
+                if (is_array($file)){
+                    $file = $file['path'];
+                }else{
+                    $file = '';
+                }
+            }
+            if (!empty($file)){
+                $data['file'] = $file;
+            }else{
+                $data['file'] = $data['org_file'];
+            }
+            unset($data['org_file']);
             if (db('params')->update($data)){
                 $this->success('修改成功',url('index'));
             }

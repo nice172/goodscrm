@@ -130,8 +130,8 @@
                 
     <div class="modal-footer">
         <div class="col-md-offset-2 col-md-8 left">
-            <button type="submit" class="btn btn-primary">保 存</button>
-            <button type="submit" class="btn btn-primary">生成PDF文件并发送</button>
+            <input type="submit" value="保 存" name="save" class="btn btn-primary" />
+            <input type="submit" value="生成PDF文件并发送" name="saveemail" class="btn btn-primary" />
             <button type="reset" onclick="history.go(-1);" class="btn btn-default">取消</button>
         </div>
     </div>
@@ -319,22 +319,35 @@ function _delete(bid,index){
 		//$.get('<?php echo url('ajaxdel');?>?baojia_id={$order.id}&bid='+bid,{},function(res){});
 	}
 }
-$('.ajaxForm2').submit(function(){
-	$(this).ajaxSubmit({
-		data:{goods_info:goods_info},
-		success: function(res){
-			if(res.code == 1){
-				toastr.success(res.msg);
-				if(res.url != '' && typeof res.url != 'undefined'){
-					setTimeout(function(){window.location.href = res.url;},2000);
-					}else{
-						setTimeout(function(){window.location.reload();},2000);
-						}
-			}else{
-				toastr.error(res.msg);
-				}
-		}
-	});
-	return false;});
+
+$('input[name=save]').click(function(){
+	_ajaxSubmit('save');
+	return false;
+});
+
+$('input[name=saveemail]').click(function(){
+	_ajaxSubmit('saveemail');
+	return false;
+});
+
+function _ajaxSubmit(type){
+	//$('.ajaxForm2').submit(function(){
+		$('.ajaxForm2').ajaxSubmit({
+			data:{goods_info:goods_info,type:type},
+			success: function(res){
+				if(res.code == 1){
+					toastr.success(res.msg);
+					if(res.url != '' && typeof res.url != 'undefined'){
+						setTimeout(function(){window.location.href = res.url;},2000);
+						}else{
+							setTimeout(function(){window.location.reload();},2000);
+							}
+				}else{
+					toastr.error(res.msg);
+					}
+			}
+		});
+		//return false;});
+}
 </script>
 {/block}

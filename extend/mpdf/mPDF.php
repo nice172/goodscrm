@@ -3431,7 +3431,7 @@ function AddFont($family,$style='') {
 	// Use OTL OpenType Table Layout - GSUB
 	if (isset($this->fontdata[$family]['useOTL']) && ($this->fontdata[$family]['useOTL'])) {
 		if (!class_exists('otl', false)) { include(_MPDF_PATH.'classes/otl.php'); }
-		if (empty($this->otl)) { $this->otl = new otl($this); }
+		if (empty($this->otl)) { $this->otl = new \otl($this); }
 	}
 /*-- END OTL --*/
 
@@ -5305,7 +5305,7 @@ function MultiCell($w,$h,$txt,$border=0,$align='',$fill=0,$link='',$directionali
 /*-- DIRECTW --*/
 function Write($h,$txt,$currentx=0,$link='',$directionality='ltr',$align='') {
 	if (!class_exists('directw', false)) { include(_MPDF_PATH.'classes/directw.php'); }
-	if (empty($this->directw)) { $this->directw = new directw($this); }
+	if (empty($this->directw)) { $this->directw = new \directw($this); }
 	$this->directw->Write($h,$txt,$currentx,$link,$directionality,$align);
 }
 /*-- END DIRECTW --*/
@@ -6373,7 +6373,7 @@ function printobjectbuffer($is_table=false, $blockdir=false) {
 				if (!class_exists('QRcode', false)) { 
 					include(_MPDF_PATH.'qrcode/qrcode.class.php'); 
 				}
-				$this->qrcode = new QRcode($objattr['code'], $objattr['errorlevel']);
+				$this->qrcode = new \QRcode($objattr['code'], $objattr['errorlevel']);
 				$this->qrcode->displayFPDF($this, $objattr['INNER-X'], $objattr['INNER-Y'], $objattr['bsize']*25, array(255,255,255), array(0,0,0));
 			}
 			else {
@@ -6398,7 +6398,7 @@ function printobjectbuffer($is_table=false, $blockdir=false) {
 			$this->SetFColor($this->ConvertColor(255));
 			if (isset($objattr['BORDER-WIDTH'])) { $this->PaintImgBorder($objattr,$is_table); }
 			if (!class_exists('directw', false)) { include(_MPDF_PATH.'classes/directw.php'); }
-			if (empty($this->directw)) { $this->directw = new directw($this); }
+			if (empty($this->directw)) { $this->directw = new \directw($this); }
 			if (isset($objattr['top-text'])) {
 				$this->directw->CircularText($objattr['INNER-X']+$objattr['INNER-WIDTH']/2, $objattr['INNER-Y']+$objattr['INNER-HEIGHT']/2, $objattr['r']/$k, $objattr['top-text'], 'top', $objattr['fontfamily'], $objattr['fontsize']/$k, $objattr['fontstyle'], $objattr['space-width'], $objattr['char-width'], (isset($objattr['divider']) ? $objattr['divider'] : ''));
 			}
@@ -9059,7 +9059,7 @@ function _putfonts() {
 				}
 				else {
 					if (!class_exists('TTFontFile', false)) { include(_MPDF_PATH .'classes/ttfontsuni.php'); }
-					$ttf = new TTFontFile();
+					$ttf = new \TTFontFile();
 					$font = $ttf->repackageTTF($this->FontFiles[$fontkey]['ttffile'], $this->fonts[$fontkey]['TTCfontID'], $this->debugfonts, $this->fonts[$fontkey]['useOTL']);	// mPDF 5.7.1
 
 					$originalsize = strlen($font);
@@ -9149,7 +9149,7 @@ function _putfonts() {
 		   if (!$font['used']) { continue; }
 		   $ssfaid="AA";
 		   if (!class_exists('TTFontFile', false)) { include(_MPDF_PATH .'classes/ttfontsuni.php'); }
-		   $ttf = new TTFontFile();
+		   $ttf = new \TTFontFile();
 		   for($sfid=0;$sfid<count($font['subsetfontids']);$sfid++) {
 			$this->fonts[$k]['n'][$sfid]=$this->n+1;		// NB an array for subset
 			$subsetname = 'MPDF'.$ssfaid.'+'.$font['name'];
@@ -10457,7 +10457,7 @@ function _getImage(&$file, $firsttime=true, $allowvector=true, $orig_srcpath=fal
 	// SVG
 	if ($type == 'svg') {
 		if (!class_exists('SVG', false)) { include(_MPDF_PATH .'classes/svg.php'); }
-		$svg = new SVG($this);
+		$svg = new \SVG($this);
 		$family=$this->FontFamily;
 		$style=$this->FontStyle;
 		$size=$this->FontSizePt;
@@ -11009,7 +11009,7 @@ function _getImage(&$file, $firsttime=true, $allowvector=true, $orig_srcpath=fal
 		if (!class_exists('gif', false)) { 
 			include_once(_MPDF_PATH.'classes/gif.php'); 
 		}
-		$gif=new CGIF();
+		$gif=new \CGIF();
 
 		$h=0;
 		$w=0;
@@ -11068,7 +11068,7 @@ function _getImage(&$file, $firsttime=true, $allowvector=true, $orig_srcpath=fal
 	// BMP (Windows Bitmap)
 	else if ($type == 'bmp') {
 		if (!class_exists('bmp', false)) { include(_MPDF_PATH.'classes/bmp.php'); }
-		if (empty($this->bmp)) { $this->bmp = new bmp($this); }
+		if (empty($this->bmp)) { $this->bmp = new \bmp($this); }
 		$info = $this->bmp->_getBMPimage($data, $file);
 		if (isset($info['error'])) {
 			return $this->_imageError($file, $firsttime, $info['error']); 
@@ -11085,7 +11085,7 @@ function _getImage(&$file, $firsttime=true, $allowvector=true, $orig_srcpath=fal
 	// WMF
 	else if ($type == 'wmf') {
 		if (!class_exists('wmf', false)) { include(_MPDF_PATH.'classes/wmf.php'); }
-		if (empty($this->wmf)) { $this->wmf = new wmf($this); }
+		if (empty($this->wmf)) { $this->wmf = new \wmf($this); }
 		$wmfres = $this->wmf->_getWMFimage($data);
 	  if ($wmfres[0]==0) { 
 		if ($wmfres[1]) { return $this->_imageError($file, $firsttime, $wmfres[1]); }
@@ -11697,7 +11697,7 @@ function Rotate($angle,$x=-1,$y=-1)
 
 function CircularText($x, $y, $r, $text, $align='top', $fontfamily='', $fontsize=0, $fontstyle='', $kerning=120, $fontwidth=100, $divider) {
 	if (!class_exists('directw', false)) { include(_MPDF_PATH.'classes/directw.php'); }
-	if (empty($this->directw)) { $this->directw = new directw($this); }
+	if (empty($this->directw)) { $this->directw = new \directw($this); }
 	$this->directw->CircularText($x, $y, $r, $text, $align, $fontfamily, $fontsize, $fontstyle, $kerning, $fontwidth, $divider);
 }
 
@@ -11752,7 +11752,7 @@ function _Arc($x1, $y1, $x2, $y2, $x3, $y3)
 function Shaded_box( $text,$font='',$fontstyle='B',$szfont='',$width='70%',$style='DF',$radius=2.5,$fill='#FFFFFF',$color='#000000',$pad=2 ) {
 	// F (shading - no line),S (line, no shading),DF (both)
 	if (!class_exists('directw', false)) { include(_MPDF_PATH.'classes/directw.php'); }
-	if (empty($this->directw)) { $this->directw = new directw($this); }
+	if (empty($this->directw)) { $this->directw = new \directw($this); }
 	$this->directw->Shaded_box( $text,$font,$fontstyle,$szfont,$width,$style,$radius,$fill,$color,$pad);
 }
 /*-- END DIRECTW --*/
@@ -15869,7 +15869,7 @@ function OpenTag($tag,$attr,&$ahtml,&$ihtml) {	// mPDF 6
 /*-- TOC --*/
      case 'TOC': //added custom-tag - set Marker for insertion later of ToC
 	if (!class_exists('tocontents', false)) { include(_MPDF_PATH.'classes/tocontents.php'); }
-	if (empty($this->tocontents)) { $this->tocontents = new tocontents($this); }
+	if (empty($this->tocontents)) { $this->tocontents = new \tocontents($this); }
 	$this->tocontents->openTagTOC($attr);
 	break;
 
@@ -15877,7 +15877,7 @@ function OpenTag($tag,$attr,&$ahtml,&$ihtml) {	// mPDF 6
 
      case 'TOCPAGEBREAK': // custom-tag - set Marker for insertion later of ToC AND adds PAGEBREAK
 	if (!class_exists('tocontents', false)) { include(_MPDF_PATH.'classes/tocontents.php'); }
-	if (empty($this->tocontents)) { $this->tocontents = new tocontents($this); }
+	if (empty($this->tocontents)) { $this->tocontents = new \tocontents($this); }
 	list($isbreak,$toc_id) = $this->tocontents->openTagTOCPAGEBREAK($attr);
 	if ($isbreak) break;
 	if (!isset($attr['RESETPAGENUM']) || $attr['RESETPAGENUM']<1) { $attr['RESETPAGENUM']=1; }	// mPDF 6
@@ -16467,7 +16467,7 @@ function OpenTag($tag,$attr,&$ahtml,&$ihtml) {	// mPDF 6
 		if (!class_exists('meter', false)) { 
 			include(_MPDF_PATH.'classes/meter.php'); 
 		}
-		$this->meter = new meter();
+		$this->meter = new \meter();
 		$svg = $this->meter->makeSVG(strtolower($tag), $type, $value, $max, $min, $optimum, $low, $high);
 		//Save to local file
 		$srcpath= _MPDF_TEMP_PATH.'_tempSVG'.uniqid(rand(1,100000),true).'_'.strtolower($tag).'.svg';
@@ -17450,7 +17450,7 @@ function OpenTag($tag,$attr,&$ahtml,&$ihtml) {	// mPDF 6
 		if (!class_exists('PDFBarcode', false)) { 
 			include(_MPDF_PATH.'classes/barcode.php'); 
 		}
-		$this->barcode = new PDFBarcode();
+		$this->barcode = new \PDFBarcode();
 
 		if ($objattr['btype'] == 'EAN13' || $objattr['btype'] == 'ISBN' || $objattr['btype'] == 'ISSN' || $objattr['btype'] == 'UPCA' || $objattr['btype'] == 'UPCE' || $objattr['btype'] == 'EAN8') {
 			$code = preg_replace('/\-/','',$objattr['code']);
@@ -21156,7 +21156,7 @@ function printbuffer($arrayaux,$blockstate=0,$is_table=false,$table_draft=false,
 	// Process bidirectional text ready for bidi-re-ordering (which is done after line-breaks are established in WriteFlowingBlock etc.)
 	if (($blockdir == 'rtl' || $this->biDirectional) && !$table_draft) {
 		if (!class_exists('otl', false)) { include(_MPDF_PATH.'classes/otl.php'); }
-		if (empty($this->otl)) { $this->otl = new otl($this); }
+		if (empty($this->otl)) { $this->otl = new \otl($this); }
 		$this->otl->_bidiPrepare($arrayaux, $blockdir);
 		$array_size = count($arrayaux);
 	}
@@ -28683,7 +28683,7 @@ function _putbookmarks()
 // Initiate, and Mark a place for the Table of Contents to be inserted
 function TOC($tocfont='', $tocfontsize=0, $tocindent=0, $resetpagenum='', $pagenumstyle='', $suppress='', $toc_orientation='', $TOCusePaging=true, $TOCuseLinking=false, $toc_id=0, $tocoutdent='') {
 	if (!class_exists('tocontents', false)) { include(_MPDF_PATH.'classes/tocontents.php'); }
-	if (empty($this->tocontents)) { $this->tocontents = new tocontents($this); }
+	if (empty($this->tocontents)) { $this->tocontents = new \tocontents($this); }
 	$this->tocontents->TOC($tocfont, $tocfontsize, $tocindent, $resetpagenum, $pagenumstyle, $suppress, $toc_orientation, $TOCusePaging, $TOCuseLinking, $toc_id, $tocoutdent);
 }
 
@@ -28691,7 +28691,7 @@ function TOC($tocfont='', $tocfontsize=0, $tocindent=0, $resetpagenum='', $pagen
 function TOCpagebreakByArray($a) {
 	if (!is_array($a)) { $a = array(); }
 	if (!class_exists('tocontents', false)) { include(_MPDF_PATH.'classes/tocontents.php'); }
-	if (empty($this->tocontents)) { $this->tocontents = new tocontents($this); }
+	if (empty($this->tocontents)) { $this->tocontents = new \tocontents($this); }
 	$tocoutdent = (isset($a['tocoutdent']) ? $a['tocoutdent'] : (isset($a['outdent']) ? $a['outdent'] : ''));
 	$TOCusePaging = (isset($a['TOCusePaging']) ? $a['TOCusePaging'] : (isset($a['paging']) ? $a['paging'] : true));
 	$TOCuseLinking = (isset($a['TOCuseLinking']) ? $a['TOCuseLinking'] : (isset($a['links']) ? $a['links'] : ''));
@@ -28743,7 +28743,7 @@ function TOCpagebreakByArray($a) {
 
 function TOCpagebreak($tocfont='', $tocfontsize='', $tocindent='', $TOCusePaging=true, $TOCuseLinking='', $toc_orientation='', $toc_mgl='',$toc_mgr='',$toc_mgt='',$toc_mgb='',$toc_mgh='',$toc_mgf='',$toc_ohname='',$toc_ehname='',$toc_ofname='',$toc_efname='',$toc_ohvalue=0,$toc_ehvalue=0,$toc_ofvalue=0, $toc_efvalue=0, $toc_preHTML='', $toc_postHTML='', $toc_bookmarkText='', $resetpagenum='', $pagenumstyle='', $suppress='', $orientation='', $mgl='',$mgr='',$mgt='',$mgb='',$mgh='',$mgf='',$ohname='',$ehname='',$ofname='',$efname='',$ohvalue=0,$ehvalue=0,$ofvalue=0,$efvalue=0, $toc_id=0, $pagesel='', $toc_pagesel='', $sheetsize='', $toc_sheetsize='', $tocoutdent='') {
 		if (!class_exists('tocontents', false)) { include(_MPDF_PATH.'classes/tocontents.php'); }
-		if (empty($this->tocontents)) { $this->tocontents = new tocontents($this); }
+		if (empty($this->tocontents)) { $this->tocontents = new \tocontents($this); }
 		if (!$resetpagenum) { $resetpagenum= 1; }	// mPDF 6
 		//Start a new page
 		if($this->state==0) $this->AddPage();
@@ -28765,7 +28765,7 @@ function TOC_Entry($txt, $level=0, $toc_id=0) {
   		if ($this->ColActive) { $ily = $this->y0; } else { $ily = $this->y; }	// use top of columns
 
 		if (!class_exists('tocontents', false)) { include(_MPDF_PATH.'classes/tocontents.php'); }
-		if (empty($this->tocontents)) { $this->tocontents = new tocontents($this); }
+		if (empty($this->tocontents)) { $this->tocontents = new \tocontents($this); }
 		$linkn = $this->AddLink();
 		$uid = '__mpdfinternallink_' . $linkn ;
 		if ($this->table_rotate) { $this->internallink[$uid] = array("Y"=>$ily,"PAGE"=>$this->page, "tbrot"=>true ); }
@@ -30983,7 +30983,7 @@ function WriteBarcode($code, $showtext=1, $x='', $y='', $size=1, $border=0, $pad
 			if (!class_exists('PDFBarcode', false)) { 
 				include(_MPDF_PATH.'classes/barcode.php'); 
 			}
-			$this->barcode = new PDFBarcode();
+			$this->barcode = new \PDFBarcode();
 			if ($btype == 'ISSN' || $btype == 'ISBN') {
 				$arrcode = $this->barcode->getBarcodeArray($code, 'EAN13');
 			}
@@ -31280,7 +31280,7 @@ function WriteBarcode2($code, $x='', $y='', $size=1, $height=1, $bgcol=false, $c
 			if (!class_exists('PDFBarcode', false)) { 
 				include(_MPDF_PATH.'classes/barcode.php'); 
 			}
-			$this->barcode = new PDFBarcode();
+			$this->barcode = new \PDFBarcode();
 			$arrcode = $this->barcode->getBarcodeArray($code, $btype, $print_ratio); 
 
 			if ($arrcode === false) { $this->Error('Error in barcode string: '.$code); }
@@ -32608,7 +32608,7 @@ function SetSourceFile($filename) {
 	$fn =& $this->current_filename;
 	if (!isset($this->parsers[$fn]))
 		// $this->parsers[$fn] =& new fpdi_pdf_parser($fn,$this);
-		$this->parsers[$fn] = new fpdi_pdf_parser($fn,$this);
+		$this->parsers[$fn] = new \fpdi_pdf_parser($fn,$this);
 	if (!$this->parsers[$fn]->success) {
 		$this->Error($this->parsers[$fn]->errormsg);	// Delete this line to return false on fail
 		return false;

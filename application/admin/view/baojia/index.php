@@ -84,9 +84,17 @@
                                 <td>{$vo.email}</td>
                                 <td>{$vo.order_handle}</td>
                                 <td>{$vo.create_time|date='Y-m-d H:i:s',###}</td>
-                                <td>{if condition="$vo.status==1"}未确认{else}已确认{/if}</td>
+                                <td>{if condition="$vo.status==1"}已发送{else}未发送{/if}</td>
                                 <td>
                                 	<a href="{:url('info',['gid'=>$vo.id])}">详情</a>
+                                	<span class="text-explode">|</span>
+                                	<a href="{:url('pdf',['gid'=>$vo.id])}" target="_blank">查看PDF</a>
+                                	<span class="text-explode">|</span>
+                                	{if condition="$vo.status==1"}
+                                	<a href="javascript:void(0);" onclick="send('{$vo.id}');">重新发送</a>
+                                	{else}
+                                	<a href="javascript:void(0);" onclick="send('{$vo.id}');">发送PDF</a>
+                                	{/if}
                                 	<span class="text-explode">|</span>
                                     <a href="{:url('edit',['gid'=>$vo.id])}">修改</a>
                                     <span class="text-explode">|</span>
@@ -135,6 +143,17 @@
                 if (!isNaN(e) && e !== null && e !== '') {
                     var data={name:'delone',gid:e};
                     $.sycToAjax("{:url('delete')}", data);
+                }
+            };
+            return false;
+        }
+    }
+    function send(e) {
+        if (!isNaN(e) && e !== null && e !== '') {
+            if(confirm("确认发送？")){
+                if (!isNaN(e) && e !== null && e !== '') {
+                    var data={name:'delone',gid:e};
+                    $.sycToAjax("{:url('send')}", data);
                 }
             };
             return false;

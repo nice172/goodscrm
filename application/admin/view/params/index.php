@@ -37,6 +37,7 @@
 			<th>参数描述</th>
 			<th>可选值</th>
 			<th>排序</th>
+			<th>图片</th>
 			<th>操作</th>
 		</tr>
 	</thead>
@@ -56,12 +57,17 @@
 			</td><td>
 				{$v.desc}
 			</td>
-						<td>
+						<td width="500px">
 				{$v['params_value']}
 			</td>	
 			
 <td>
 				{$v['sort']}
+			</td>
+			<td>
+				{if condition="$v['file']"}
+				<img src="{$v['file']}" alt="" width="50"/>
+				{/if}
 			</td>
 			<td>
 			
@@ -71,9 +77,9 @@
 						<i class="ace-icon fa fa-pencil bigger-120"></i>
 					</button>
 					
-					<button class="btn btn-xs btn-danger ajaxDelete" data-id="<?php echo $v['id'];?>" action="<?php echo url('delete',array('id' => $v['id']));?>">
+			<!-- 		<button class="btn btn-xs btn-danger ajaxDelete" data-id="<?php echo $v['id'];?>" action="<?php echo url('delete',array('id' => $v['id']));?>">
 						<i class="ace-icon fa fa-trash-o bigger-120"></i>
-					</button>
+					</button> -->
 					
 				</div>
 

@@ -65,7 +65,7 @@
                                     </tr>
                                     <tr>
                                         <td width="15%" class="right-color"><span>状态:</span></td>
-                                        <td width="35%" colspan="3">{if condition="$data.status==1"}未确认{else}已确认{/if}</td>
+                                        <td width="35%" colspan="3">{if condition="$data.status==1"}已发送{else}未发送{/if}</td>
                                     </tr>
                                     <tr>
                                         <td width="15%" class="right-color"><span>备注信息:</span></td>
@@ -113,55 +113,59 @@
                                 <table class="table table-condensed" style="margin-top:0;">
                                     <thead>
                                     <tr>
-                                        <th colspan="9">
+                                        <th colspan="20">
                                             <div class="pull-left">
                                                 <div class="bs-callout bs-callout-warning">
-                                                    <span>下单记录</span>
+                                                    <span>报价记录</span>
                                                 </div>
                                             </div>
                                         </th>
                                     </tr>
-                                    <tr>
-                                        <th>订单编号</th>
-                                        <th>订单数量</th>
-                                        <th>订单金额</th>
-                                        <th>已收订金</th>
-                                        <th>已收余款</th>
-                                        <th>客户确认</th>
-                                        <th>订单状况</th>
-                                        <th>销售日期</th>
-                                        <th>发货日期</th>
-                                    </tr>
+                            <tr>
+                                <th>ID编号</th>
+                                <th>报价单号</th>
+                                <th>报价日期</th>
+                                <th>简称</th>
+                                <th>客户名称</th>
+                                <th>联系人</th>
+                                <th>传真号码</th>
+                                <th>电子邮箱</th>
+                                <th>创建人</th>
+                                <th>创建时间</th>
+                                <!--<th>状态</th>
+                                 <th>操作</th> -->
+                            </tr>
                                     </thead>
                                     <tbody>
-                                    {volist name="lsdd" id="vo" empty="$empty"}
-                                    <tr>
-                                        <td>
-                                            <a href="{:url('orders/view',['pid'=>$vo.pnumber])}" target="_blank">{$vo.pnumber}</a>
-                                        </td>
-                                        <td>{$vo.pcount}</td>
-                                        <td>￥{$vo.pamount|number_format=2}</td>
-                                        <td>{$vo.amo_dj}</td>
-                                        <td>{$vo.amo_yk}</td>
-                                        <td>
-                                            {eq name="$vo.affirm" value="0"}
-                                            <span class="label label-sm label-default">未确认</span>
-                                            {else/}
-                                            <span class="label label-sm label-success">已确认</span>
-                                            {/eq}
-                                        </td>
-                                        <td>{:purchase_status($vo.status)}</td>
-                                        <td>{$vo.pstart_date}</td>
-                                        <td>{$vo.pend_date}</td>
-                                    </tr>
-                                    {/volist}
+                                    {volist name="$list" id="vo" empty="$empty"}
+                            <tr>
+                                <td>{$vo.id}</td>
+                                <td>{$vo.order_sn}</td>
+                                <td>{$vo.create_time|date='Y-m-d',###}</td>
+                                <td>{$vo.company_short}</td>
+                                <td>{$vo.company_name}</td>
+                                <td>{$vo.contacts}</td>
+                                <td>{$vo.fax}</td>
+                                <td>{$vo.email}</td>
+                                <td>{$vo.user_nick}</td>
+                                <td>{$vo.create_time|date='Y-m-d H:i:s',###}</td>
+                                <!--<td>{if condition="$vo.status==1"}未确认{else}已确认{/if}</td>
+                                 <td>
+                                	<a href="{:url('info',['gid'=>$vo.id])}">详情</a>
+                                	<span class="text-explode">|</span>
+                                    <a href="{:url('edit',['gid'=>$vo.id])}">修改</a>
+                                    <span class="text-explode">|</span>
+                                    <a href="javascript:void(0);" onclick="deleteOne('{$vo.id}');">删除</a>
+                                </td> -->
+                            </tr>
+                            {/volist}
                                     </tbody>
                                     <tfoot>
-                                    <tr>
-                                        <td colspan="9">
+                                    <!-- <tr>
+                                        <td colspan="20">
                                             <div class="pull-right page-box">{$page_l}</div>
                                         </td>
-                                    </tr>
+                                    </tr> -->
                                     </tfoot>
                                 </table>
                             </div>
@@ -175,7 +179,7 @@
                                     <span class="spans1">{$client.cus_name}</span>
                                 </li>
                                 <li class="active"><a href="#jibenxinxi" data-toggle="tab">基本信息</a></li>
-                                <li class=""><a href="#lishidingdan" data-toggle="tab">下单记录</a></li>
+                                <li class=""><a href="#lishidingdan" data-toggle="tab">报价记录</a></li>
                             </ul>
                         </div>
                     </div>

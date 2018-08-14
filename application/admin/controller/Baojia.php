@@ -4,6 +4,7 @@ use app\admin\model\Customers;
 use think\Request;
 use think\Validate;
 use mpdf\mPDF;
+use PHPMailer\PHPMailer;
 
 class Baojia extends Base {
 	
@@ -28,7 +29,7 @@ class Baojia extends Base {
 	    $start_time = $this->request->param('start_time'); // 企业名称查询
 	    $end_time = $this->request->param('end_time'); // 企业名称查询
 	    $db = db('baojia');
-	    $where = ['status' => 1];
+	    $where = ['status' => ['neq','-1']];
 	    if ($company_short != ''){
 	        $where['company_short'] = ['like',"%{$company_short}%"];
 	        $where['company_name'] = ['like',"%{$company_short}%"];
@@ -54,6 +55,7 @@ class Baojia extends Base {
 	public function add(){
 		if ($this->request->isAjax()){
 		    $data = [
+		        'create_uid' => $this->userinfo['id'],
 		        'cus_id' => $this->request->post('cus_id'),
 		        'order_sn' => $this->request->post('order_sn'),
 		        'company_name' => $this->request->post('company_name'),
@@ -88,6 +90,9 @@ class Baojia extends Base {
 		                'create_time' => time()
 		            ]);
 		        }
+		        if ($_POST['type'] != 'save'){
+		            $this->_send_pdf($baojia_id);
+		        }
 		        $this->success('新增成功',url('index'));
 		    }else{
 		        $this->error('新增失败请重试');
@@ -98,6 +103,8 @@ class Baojia extends Base {
 		if (!empty($order_handle)){
 		    $order_handle = $order_handle['params_value'];
 		}
+		$order_remark = getTextParams(13);
+		$this->assign('order_remark',$order_remark);
 		$this->assign('order_handle',$order_handle);
 		$this->assign('title','新增报价单');
 		return $this->fetch();
@@ -138,7 +145,6 @@ class Baojia extends Base {
 	               $postIds[] = $value['id'];
 	            }
 	        }
-	        
 	        $affected = db('baojia')->update($data);
 	        if ($affected){
 	            $tempArr = array_count_values(array_merge($ids,$postIds));
@@ -167,6 +173,9 @@ class Baojia extends Base {
 	                        'remark' => $val['remark']
 	                    ]);
 	                }
+	            }
+	            if ($_POST['type'] != 'save'){
+	                $this->_send_pdf($data['id']);
 	            }
 	            $this->success('修改成功',url('index'));
 	        }else{
@@ -206,17 +215,175 @@ class Baojia extends Base {
 	    $this->assign('client',$cus);
 	    $this->assign('data',$order);
 	    $this->assign('goodsList',$goodsInfo);
-	    $this->assign('lsdd',[]);
+	    $list = db('baojia')->where(['cus_id' => $order['cus_id']])->order('create_time desc')->limit(10)->select();
+	    foreach ($list as $key => $value){
+	        $list[$key]['user_nick'] = db('users')->where(['id' => $value['create_uid']])->value('user_nick');
+	    }
+	    $this->assign('list',$list);
 	    $this->assign('page_l','');
 	    $this->assign('title','报价单详情');
 	    return $this->fetch();
 	}
 	
+	private $send_email = '';
+	
+	private function _createPDF($id,$type=0){
+	    $order = db('baojia')->where(['id' => $id,'status' => ['neq','-1']])->find();
+	    if (empty($order)) $this->error('报价单不存在');
+	    $goodsInfo = db('baojia_goods')->where(['baojia_id' => $order['id']])->order('goods_id asc')->select();
+	    $cus = db('customers')->where(['cus_id' => $order['cus_id']])->find();
+	    $this->assign('client',$cus);
+	    $this->assign('data',$order);
+	    $this->send_email = $order['email'];
+	    $this->assign('goodsList',$goodsInfo);
+	    $list = db('baojia')->where(['cus_id' => $order['cus_id']])->order('create_time desc')->limit(10)->select();
+	    foreach ($list as $key => $value){
+	        $list[$key]['user_nick'] = db('users')->where(['id' => $value['create_uid']])->value('user_nick');
+	    }
+	    $this->assign('list',$list);
+	    $this->assign('page_l','');
+	    $this->assign('title','报价单详情');
+	    
+	    $mpdf = new mPDF('zh-CN/utf-8','A4', 0, '宋体', 0, 0);
+	    $mpdf->SetWatermarkText(getTextParams(14),0.1);
+	    $logo = getFileParams(12);
+	    if (empty($logo)) {
+	        $logo = './assets/img/crm_logo.png';
+	    }
+	    $strContent = '<div style="width:90%;margin:0 auto;height:90px;background:#fff url('.$logo.') no-repeat top 20px;">';
+	    $strContent .= '<h1 style="padding-top:10px;text-align:center;font-size:32px;">'.getTextParams(14).'</h1>';
+	    $strContent .= '<p class="entitle" style="font-size:22px;">'.getTextParams(15).'</p>';
+	    $strContent .= '</div>';
+	    $strContent .= '<h2 style="text-align:center;padding:20px 0;">报价单</h2>';
+	    
+	    $strContent .= '<table class="noborder">
+<tbody>
+    <tr>
+    <td style="width:70%;">致：'.$cus['cus_name'].'</td>
+    <td>日期：'.date('Y.m.d',$order['create_time']).'</td>
+    </tr>
+    <tr>
+    <td style="width:70%;">收：'.$order['contacts'].'</td>
+    <td>编号：'.$order['order_sn'].'</td>
+    </tr>
+    <tr>
+    <td style="width:70%;">传真：'.$order['fax'].'</td>
+    <td>邮箱：'.$order['email'].'</td>
+    </tr>
+</tbody>
+</table>';
+	    
+	    $strContent .= '<table class="table">
+        <tbody>
+            <tr>
+            <td width="10%">序号</td>
+            <td width="60%">产品名称</td>
+            <td width="10%">单位</td>
+            <td width="20%">含税单价(RMB)</td>
+            </tr>
+        ';
+	    foreach ($goodsInfo as $k => $val){
+	        $strContent .= '<tr>
+        <td>'.($k+1).'</td>
+    <td>'.$val['goods_name'].'</td>
+    <td>'.$val['unit'].'</td>
+<td>'.$val['goods_price'].'</td>
+    </tr>
+    ';
+	    }
+	    $strContent .= '</tbody></table>';
+	    $strContent .= '<p style="width:90%;margin:30px auto 0 auto;">备注：</p>';
+	    $strContent .= 	'<p style="width:87%;margin:10px auto 0 auto;">'.$order['order_remark'].'</p>';
+	    
+	    $img = getFileParams(11);
+	    
+	    $strContentFooter = '<table class="noborder" style="height:100px;">
+<tbody>
+    <tr>
+    <td width="27%">客户回签：</td>
+    <td width="10%"align="right">审核：</td>
+    <td width="23%"align="left"><img src="'.$img.'" alt="" width="100px"/></td>
+    <td width="40%"align="center">业务：'.$cus['cus_business'].'<br />'.$cus['cus_mobile'].'</td>
+    </tr>
+</tbody>
+</table>';
+	    
+	    $mpdf->showWatermarkText = true;
+	    $mpdf->SetTitle("报价单");
+	    // 	   $mpdf->SetHTMLHeader( '头部' );
+	    $mpdf->SetHTMLFooter( $strContentFooter );
+	    $stylesheet='
+body{padding:0;margin:0;}
+h1,h2,h3,p,div,span{padding:0;margin:0;}
+.entitle{text-align:center;}
+.noborder{font-size: 13px;background: #FFF;width:95%;margin: 0 auto;border-spacing: 0;border-collapse: collapse;}
+.noborder tbody tr td{padding:5px 0;}
+.table{
+    width:95%;
+    margin: 0 auto;
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+.table{
+    background: #FFF;
+    font-size: 13px;
+    border-top: 1px solid #000;
+    margin-top: 8px;
+    border: 1px solid #000;
+}
+.table tbody tr td{
+    padding: 12px 8px;
+    border-top: 0px;
+    border-bottom: 1px solid #000;
+    border-right: 1px solid #000;
+    vertical-align: middle;
+}
+';
+	    $mpdf->WriteHTML($stylesheet, 1);
+	    // 	   $mpdf->WriteHTML('h1{font-size:106px;}',1);
+	    $mpdf->WriteHTML($strContent);
+	    if ($type == 1){
+	        $savePath = './pdf/B'.str_replace('/', '-', $order['order_sn']).'.pdf';
+	        $mpdf->Output($savePath,'F');
+	        return $savePath;
+	    }
+	    return $mpdf;
+	}
+	
 	public function pdf(){
-	   $pdf = new mPDF('zh-cn','A4', 0, '宋体', 0, 0);
-	   $pdf->WriteHTML('<p>Hallo World</p>');
-	   $pdf->Output();
+	    $id = $this->request->param('gid',0,'intval');
+	    if ($id <= 0) $this->error('参数错误');
+	    $mpdf = $this->_createPDF($id);
+	   //保存ss.pdf文件
+	   //$mpdf->Output('ss.pdf');
+	   //直接浏览器输出pdf
+// 	   $mpdf->Output('报价单.pdf','D');//下载
+// 	   $mpdf->Output('tmp.pdf','d');
+	   //$mpdf->Output('./pdf/B'.str_replace('/', '-', $order['order_sn']).'.pdf','F'); //保存本地
+	   $mpdf->Output();
 	   exit;
+	}
+	
+	private function _send_pdf($id){
+	    $savePath = $this->_createPDF($id,1);
+	    if(send_email($this->send_email,'报价单',$savePath)){
+	        db('baojia')->where(['id' => $id])->setField('status',1);
+	    }
+	}
+	
+	public function send(){
+	    if ($this->request->isAjax()){
+	    $bid = $this->request->param('gid',0,'intval');
+	    if ($bid <= 0){
+	        $this->error('参数错误');
+	    }
+	    $savePath = $this->_createPDF($bid,1);
+	    if(send_email($this->send_email,'报价单',$savePath)){
+	        db('baojia')->where(['id' => $id])->setField('status',1);
+	        $this->success('发送成功');
+	    }
+	    $this->error('发送失败');
+	    }
 	}
 	
 	public function ajaxdel(){
