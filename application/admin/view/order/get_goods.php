@@ -58,7 +58,7 @@
                             </thead>
                             <tbody>
                             {volist name="data" id="vo" empty="$empty"}
-                                <tr style="cursor: pointer;" class="selected_goods" data-market_price="{$vo['market_price']}" data-unit="{$vo['unit']}" data-remark="{$vo['remark']}" data-goods_name="{$vo['goods_name']}" data-goods_id="{$vo['goods_id']}">
+                                <tr style="cursor: pointer;" class="selected_goods" data-shop_price="{$vo['shop_price']}" data-market_price="{$vo['market_price']}" data-unit="{$vo['unit']}" data-remark="{$vo['remark']}" data-goods_name="{$vo['goods_name']}" data-goods_id="{$vo['goods_id']}">
                                     <td>{$vo.category_name}</td>
                                     <td>{$vo.supplier_name}</td>
                                     <td>{$vo.goods_name}</td>
@@ -101,16 +101,18 @@ $(document).ready(function () {
 	$('.selected_goods').click(function(){
 		var goods = {
 			'goods_name': $(this).attr('data-goods_name'),
+			'shop_price': $(this).attr('data-shop_price'),
 			'market_price': $(this).attr('data-market_price'),
 			'unit': $(this).attr('data-unit'),
 			'remark': $(this).attr('data-remark'),
-			'goods_id': $(this).attr('data-goods_id')
+			'goods_id': $(this).attr('data-goods_id'),
+			'goods_num':0,
+			'send_num':0
 		};
 		parent.window.goods(goods);
-		//bDialog.close('');
 	});
 	$('.windowClose').click(function(){
-		bDialog.close();
+
 	});
 });
 </script>

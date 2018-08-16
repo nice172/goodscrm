@@ -473,8 +473,8 @@ class Goods extends Base {
 	        if ($data['brand_id'] <= 0) $this->error('选择品牌不正确');
 	        if ($data['shop_price'] < 0) $this->error('采购价不正确');
 	        if ($data['market_price'] < 0) $this->error('销售价不正确');
+	        $goods_attr = [];
 	        if (!empty($data['attr'])){
-	            $goods_attr = [];
 	            foreach ($data['attr'] as $attr_id => $value){
 	                $attr = db('goods_attr')->where(['goods_attr_id' => $attr_id])->field('attr_name')->find();
 	                if (!empty($attr)) {
@@ -491,7 +491,11 @@ class Goods extends Base {
 	        $data['create_time'] = time();
 	        $data['update_time'] = time();
 	        $data['status'] = 1;
-	        if (db('goods')->insert($data)){
+	        if ($insertId = db('goods')->insert($data)){
+	            foreach ($goods_attr as $attrValue){
+	                $attrValue['goods_id'] = $insertId;
+	                db('goods_attr_val')->insert($attrValue);
+	            }
 	            $this->success('新增成功');
 	        }else{
 	            $this->error('新增失败');
@@ -557,6 +561,11 @@ class Goods extends Base {
 			unset($data['attr']);
 			$data['update_time'] = time();
 			if (db('goods')->update($data)){
+			    db('goods_attr_val')->where(['goods_id' => $data['goods_id']])->delete();
+			    foreach ($goods_attr as $attrValue){
+			        $attrValue['goods_id'] = $data['goods_id'];
+			        db('goods_attr_val')->insert($attrValue);
+			    }
 				$this->success('修改成功');
 			}else{
 				$this->error('修改失败');

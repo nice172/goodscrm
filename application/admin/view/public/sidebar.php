@@ -170,10 +170,16 @@
                         <div class="sidebar-title sidebar-trans">
                             <div class="sidebar-title-inner">
                                 <span class="sidebar-title-icon icon-arrow-right"></span>
-                                <span class="sidebar-title-text">生产管理</span>
+                                <span class="sidebar-title-text">订单管理</span>
                             </div>
                         </div>
                         <ul class="sidebar-trans submenu">
+                            <li class="nav-item" id="order-index">
+                                <a href="{:url('order/index')}" class="sidebar-trans">
+                                    <div class="nav-icon sidebar-trans"><span class="icon-ecs"></span></div>
+                                    <span class="nav-title">订单列表</span>
+                                </a>
+                            </li>
                             <li class="nav-item" id="schedule-paidan">
                                 <a href="{:Url('schedule/index')}" class="sidebar-trans">
                                     <div class="nav-icon sidebar-trans"><span class="icon-ecs"></span></div>
