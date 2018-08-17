@@ -19,7 +19,7 @@
                     </div>
                 </div>           
                 <div class="row">
-                    <div class="col-lg-12">
+                    <div class="col-md-12">
                         <div class="portlet margin-top-3">
  <form class="form-horizontal ajaxForm2" method="post" action="<?php echo url('add');?>" id="form1">
   <ul class="nav nav-tabs" role="tablist">
@@ -30,64 +30,55 @@
   <div class="tab-content">
     <div role="tabpanel" class="tab-pane active" id="home">
     							<input type="hidden" name="cus_id" id="cus_id" />
-								<div class="form-group">
-                                    <label for="order_sn" class="col-sm-2 control-label">报价单号</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control w300" readonly="readonly" value="CS-Q-<?php echo date('m/dH').date('sms');?>" name="order_sn" id="order_sn">
-                                    </div>
-                                </div>
-								<div class="form-group">
-                                    <label for="create_date" class="col-sm-2 control-label">报价日期</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control w300" readonly="readonly" value="<?php echo date('Y-m-d');?>" name="create_date" id="create_date">
-                                    </div>
-                                </div>
-                                  <div class="form-group">
-                                    <label for="company_name" class="col-sm-2 control-label"><span class="text-danger">*</span>公司名称</label>
-                                    <div class="col-sm-8 w300">
-                                        <input type="text" class="form-control w300" name="company_name" id="company_name">
-                                    </div>
-                                    <div class="col-sm-2">
-                                    	<button type="button" class="btn btn-primary search_company">查找</button>
-                                    </div>
-                                </div>
-                                   <div class="form-group">
-                                    <label for="company_short" class="col-sm-2 control-label"><span class="text-danger">*</span>简称</label>
-                                    <div class="col-sm-10">
+								
+                    <table class="table contact-template-form">
+                                <tbody>
+                                <tr>
+                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>订单号码:</span></td>
+                                    <td width="35%">
+                                        <input type="text" class="form-control w300" readonly="readonly" value="SO<?php echo date('Ymdis').date('sms');?>" name="order_sn" id="order_sn">
+                                    </td>
+                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>下单日期:</span></td>
+                                    <td width="35%"><input type="text" class="form-control w300" readonly="readonly" value="<?php echo date('Y-m-d');?>" name="create_date" id="create_date"></td>
+                                </tr>
+                                <tr>
+                                <td width="15%" class="right-color"><span class="text-danger">*</span><span>公司名称:</span></td>
+                                <td width="35%" colspan="3">
+                                	<input type="text" class="form-control w500" style="display:inline-block;" name="company_name" id="company_name">
+                                	<button type="button" class="btn btn-primary search_company" style="margin-top:-4px;">查找</button>
+                                </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>简称:</span></td>
+                                    <td width="35%">
                                         <input type="text" class="form-control w300" name="company_short" id="company_short">
-                                    </div>
-                                </div>
-                               <div class="form-group">
-                                    <label for="contacts" class="col-sm-2 control-label"><span class="text-danger">*</span>联系人</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control w300" name="contacts" id="contacts">
-                                    </div>
-                                </div>
-                                  <div class="form-group">
-                                    <label for="fax" class="col-sm-2 control-label">传真号码</label>
-                                    <div class="col-sm-10">
+                                    </td>
+                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>联系人:</span></td>
+                                    <td width="35%"><input type="text" class="form-control w300" name="contacts" id="contacts"></td>
+                                </tr>
+                                
+                                <tr>
+                                    <td width="15%" class="right-color">传真号码:</span></td>
+                                    <td width="35%">
                                         <input type="text" class="form-control w300" name="fax" id="fax">
-                                    </div>
-                                </div>
-                                  <div class="form-group">
-                                    <label for="email" class="col-sm-2 control-label"><span class="text-danger">*</span>E-Mail</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control w300" name="email" id="email">
-                                    </div>
-                                </div>
-                                  <div class="form-group">
-                                    <label for="email" class="col-sm-2 control-label"><span class="text-danger">*</span>交货日期</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control w300" name="send_date" id="LAY-component-form-group-date">
-                                    </div>
-                                </div>
-                          <div class="form-group">
-                                    <label for="remark" class="col-sm-2 control-label">备注</label>
-                                    <div class="col-sm-10">
-                                        <textarea name="order_remark" id="order_remark" class="form-control w300" style="height: 150px;resize:none;"></textarea>
-                                    </div>
-                                </div>
-
+                                    </td>
+                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>E-Mail:</span></td>
+                                    <td width="35%"><input type="text" class="form-control w300" name="email" id="email"></td>
+                                </tr> 
+                                 <tr>
+                                <td width="15%" class="right-color"><span class="text-danger">*</span><span>交货日期:</span></td>
+                                <td width="35%" colspan="3">
+                                	<input type="text" class="form-control w300" name="require_time" id="LAY-component-form-group-date">
+                                </td>
+                                </tr>
+                                   <tr>
+                                    <td width="15%" class="right"><span>备注:</span></td>
+                                    <td colspan="3"><textarea class="form-control" name="remark" id="remark" rows="6"></textarea> </td>
+                                </tr>
+                                
+                    </tbody>
+                    </table>
     </div>
 
 <div role="tabpanel" class="tab-pane" id="goods">
@@ -260,8 +251,8 @@ function goodsList(goods_info){
 		html += '<td>'+goods_info[j]['unit']+'</td>';
 		html += '<td class="market_price"><input type="text" data-market_price="'+goods_info[j]['market_price']+'" oninput="checkNum(this)" name="market_price" style="width:80px;display:none;" value="'+goods_info[j]['market_price']+'" /><span class="inputspan">'+goods_info[j]['market_price']+'</span></td>';
 		html += '<td class="shop_price"><input type="text" data-shop_price="'+goods_info[j]['shop_price']+'" oninput="checkNum(this)" name="shop_price" style="width:80px;display:none;" value="'+goods_info[j]['shop_price']+'" /><span class="inputspan">'+goods_info[j]['shop_price']+'</span></td>';
-		html += '<td class="goods_num"><input type="text" data-goods_num="'+goods_info[j]['goods_num']+'" oninput="checkNum(this)" name="goods_num" style="width:80px;display:none;" value="'+goods_info[j]['goods_num']+'" /><span class="inputspan">'+goods_info[j]['goods_num']+'</span></td>';
-		html += '<td class="send_num"><input type="text" data-send_num="'+goods_info[j]['send_num']+'" oninput="checkNum(this)" name="send_num" style="width:80px;display:none;" value="'+goods_info[j]['send_num']+'" /><span class="inputspan">'+goods_info[j]['send_num']+'</span></td>';
+		html += '<td class="goods_number"><input type="text" data-goods_number="'+goods_info[j]['goods_number']+'" oninput="checkNum2(this)" name="goods_number" style="width:80px;display:none;" value="'+goods_info[j]['goods_number']+'" /><span class="inputspan">'+goods_info[j]['goods_number']+'</span></td>';
+		html += '<td class="send_num"><input type="text" data-send_num="'+goods_info[j]['send_num']+'" oninput="checkNum2(this)" name="send_num" style="width:80px;display:none;" value="'+goods_info[j]['send_num']+'" /><span class="inputspan">'+goods_info[j]['send_num']+'</span></td>';
 		html += '<td class="remark"><input type="text" name="remark" style="width:200px;display:none;" value="'+goods_info[j]['remark']+'" /><span class="inputspan">'+goods_info[j]['remark']+'</span></td>';
 		html += '<td><a href="javascript:;" onclick="update('+j+')" class="update">修改</a><span class="text-explode">|</span><a href="javascript:;" onclick="_delete('+j+')" class="delete">删除</a></td>';
 		html += '</tr>';
@@ -280,15 +271,15 @@ function update(index){
 		if(shop_price == ''){
 			shop_price = $('.goods_'+index+' input[name=shop_price]').attr('data-shop_price');
 		}
-		var goods_num = $('.goods_'+index+' input[name=goods_num]').val();
-		if(goods_num == ''){
-			goods_num = $('.goods_'+index+' input[name=goods_num]').attr('data-goods_num');
+		var goods_number = $('.goods_'+index+' input[name=goods_number]').val();
+		if(goods_number == ''){
+			goods_number = $('.goods_'+index+' input[name=goods_number]').attr('data-goods_number');
 		}
 		var send_num = $('.goods_'+index+' input[name=send_num]').val();
 		if(send_num == ''){
 			send_num = $('.goods_'+index+' input[name=send_num]').attr('data-send_num');
 		}
-		goods_info[index]['goods_num'] = goods_num;
+		goods_info[index]['goods_number'] = goods_number;
 		goods_info[index]['send_num'] = send_num;
 		goods_info[index]['market_price'] = market_price;
 		goods_info[index]['shop_price'] = shop_price;
@@ -310,6 +301,12 @@ function checkNum(obj){
 	obj.value = obj.value.replace(/^(\-)*(\d+)\.(\d\d).*$/,'$1$2.$3');//只能输入三个小数.(\d\d\d) 修改个数  加\d
 }
 
+function checkNum2(obj){
+	obj.value = obj.value.replace(/[^\d]/g,"");//清除"数字"和"."以外的字符
+	obj.value = obj.value.replace(/^\./g,"");//验证第一个字符是数字而不是
+	obj.value = obj.value.replace(/\.{1}/g,"");//如果有一个. 就清除
+}
+
 function _delete(index){
 	status = 1;
 	var newGoodsList = new Array();
@@ -321,10 +318,10 @@ function _delete(index){
 	goods_info = newGoodsList;
 	goodsList(goods_info);
 }
-$('.ajaxForm2').submit(function(){
-	var send = $('button').attr('send');
-	$(this).ajaxSubmit({
-		data:{goods_info:goods_info,send:send},
+$('button[type=submit]').click(function(){
+	var send = $(this).attr('send');
+	$('.ajaxForm2').ajaxSubmit({
+		data:{goods_info:goods_info,type:send},
 		success: function(res){
 			if(res.code == 1){
 				toastr.success(res.msg);

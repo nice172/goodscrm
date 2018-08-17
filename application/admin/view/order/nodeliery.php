@@ -42,36 +42,9 @@
                                 <div class="form-group">
                                     <input name="end_time" id="end_time" <?php if (isset($_GET['end_time'])):?>value="<?php echo $_GET['end_time'];?>"<?php endif;?> class="ipt form-control">
                                 </div>
-                                
-                                <div class="form-group">
-                                	<label class="control-label" for="">订单状态 :</label>
-                                	<select name="status" id="status" class="ipt form-control">
-                                		<option value="">全部</option>
-                                		<option value="0" {if condition="isset($_GET['status']) && $_GET['status']!='' && $_GET['status']==0"}selected="selected"{/if}>未确认</option>
-                                		<option value="1" {if condition="isset($_GET['status']) && $_GET['status']==1"}selected="selected"{/if}>已确认</option>
-                                		<option value="5" {if condition="isset($_GET['status']) && $_GET['status']==5"}selected="selected"{/if}>已创建</option>
-                                		<option value="2" {if condition="isset($_GET['status']) && $_GET['status']==2"}selected="selected"{/if}>已交货</option>
-                                		<option value="3" {if condition="isset($_GET['status']) && $_GET['status']==3"}selected="selected"{/if}>已完成</option>
-                                		<option value="4" {if condition="isset($_GET['status']) && $_GET['status']==4"}selected="selected"{/if}>已取消</option>
-                                	</select>
-                                </div>
-                                
-                         		<div class="form-group">
-                                	<label class="control-label" for="">商品分类 :</label>
-                                	<select name="categroy_id" id="categroy_id" class="ipt form-control">
-                                		<option value="">全部</option>
-                                        <?php foreach ($category as $key => $value):?>
-                                        <option {if condition="isset($_GET['categroy_id']) && $_GET['categroy_id']==$value['category_id']"}selected="selected"{/if} value="<?php echo $value['category_id'];?>" path="<?php echo $value['path'].'_'.$value['category_id'];?>">
-			              		<?php echo str_repeat('&nbsp;&nbsp;&nbsp;&nbsp;', substr_count($value['path'], '_'));?>
-			              		└<?php echo str_repeat('─', substr_count($value['path'], '_'));?>
-			              		<?php echo $value['category_name'];?>
-			              		</option>
-                                        <?php endforeach;?>
-                                	</select>
-                                </div>
-                                
+
                                 <button type="submit" class="btn btn-primary" id="searchprojectName">查找</button>
-                                <button type="button" class="btn btn-primary">按商品属性查找</button>
+
                                 </form>
                         </div>
                     </div>
@@ -86,13 +59,12 @@
                                 <th>订单号</th>
                                 <th>下单日期</th>
                                 <th>简称</th>
+                                <th>商品分类</th>
                                 <th>商品名称</th>
                                 <th>单位</th>
-                                <th>单价</th>
+                                <th>实际单价</th>
                                 <th>下单数量</th>
                                 <th>要求送货日期</th>
-                                <th>实际送货日期</th>
-                                <th>创建时间</th>
                                 <th>状态</th>
                                 <th>操作</th>
                             </tr>
@@ -104,13 +76,12 @@
                                 <td>{$vo.order_sn}</td>
                                 <td>{$vo.create_time|date='Y-m-d',###}</td>
                                 <td>{$vo.company_short}</td>
+                                <td>{$vo.category_name}</td>
                                 <td>{$vo.goods_name}</td>
                                 <td>{$vo.unit}</td>
                                 <td>{$vo.goods_price}</td>
                                 <td>{$vo.goods_number}</td>
                                 <td>{$vo.require_time|date='Y-m-d',###}</td>
-                                <td>{if condition="$vo['deliver_time']"}{$vo.deliver_time|date='Y-m-d H:i:s',###}{/if}</td>
-                                <td>{$vo.create_time|date='Y-m-d H:i:s',###}</td>
                                 <td>
 								{if condition="$vo['status'] eq -1"}
 								已删除
@@ -160,7 +131,7 @@
     $(document).ready(function() {
         // 当前页面分类高亮
         $("#sidebar-schedule").addClass("sidebar-nav-active"); // 大分类
-        $("#order-index").addClass("active"); // 小分类
+        $("#order-notindex").addClass("active"); // 小分类
         layui.use('laydate', function() {
             var laydate = layui.laydate;
             //日期选择器

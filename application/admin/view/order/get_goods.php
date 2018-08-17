@@ -106,13 +106,13 @@ $(document).ready(function () {
 			'unit': $(this).attr('data-unit'),
 			'remark': $(this).attr('data-remark'),
 			'goods_id': $(this).attr('data-goods_id'),
-			'goods_num':0,
+			'goods_number':0,
 			'send_num':0
 		};
 		parent.window.goods(goods);
 	});
 	$('.windowClose').click(function(){
-
+		bDialog.close();
 	});
 });
 </script>

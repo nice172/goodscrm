@@ -180,10 +180,10 @@
                                     <span class="nav-title">订单列表</span>
                                 </a>
                             </li>
-                            <li class="nav-item" id="schedule-paidan">
-                                <a href="{:Url('schedule/index')}" class="sidebar-trans">
+                            <li class="nav-item" id="order-notindex">
+                                <a href="{:url('order/nodeliery')}" class="sidebar-trans">
                                     <div class="nav-icon sidebar-trans"><span class="icon-ecs"></span></div>
-                                    <span class="nav-title">生产订单</span>
+                                    <span class="nav-title">未交货订单</span>
                                 </a>
                             </li>
                             <li class="nav-item" id="schedule-shengchan">

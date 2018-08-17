@@ -43,7 +43,7 @@ class Baojia extends Base {
 	            $db->where("create_time",'<=',$end_time);
 	        }
 	    }
-	    $data = $db->paginate('', false, ['query' => $this->request->param() ]);
+	    $data = $db->paginate(config('PAGE_SIZE'), false, ['query' => $this->request->param() ]);
 	    // 获取分页显示
 	    $page = $data->render();
 	    $this->assign('page',$page);
@@ -77,7 +77,7 @@ class Baojia extends Base {
 		    if (empty($goodsInfo)){
 		        $this->error('请选择商品');
 		    }
-		    $baojia_id = db('baojia')->insert($data);
+		    $baojia_id = db('baojia')->insertGetId($data);
 		    if ($baojia_id){
 		        foreach ($goodsInfo as $val){
 		            db('baojia_goods')->insert([
@@ -141,7 +141,7 @@ class Baojia extends Base {
 	        }
 	        $postIds = [];
 	        foreach ($goodsInfo as $value){
-	            if (intval($value['id']) > 0){
+	            if (isset($value['id']) && intval($value['id']) > 0){
 	               $postIds[] = $value['id'];
 	            }
 	        }
@@ -154,7 +154,7 @@ class Baojia extends Base {
 	                }
 	            }
 	            foreach ($goodsInfo as $val){
-	                if (intval($val['id']) <= 0){
+	                if (!isset($val['id']) || intval($val['id']) <= 0){
     	                db('baojia_goods')->insert([
     	                    'baojia_id' => $data['id'],
     	                    'goods_id' => $val['goods_id'],

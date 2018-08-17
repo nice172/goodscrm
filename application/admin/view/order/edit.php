@@ -17,11 +17,11 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>           
                 <div class="row">
-                    <div class="col-lg-12">
+                    <div class="col-md-12">
                         <div class="portlet margin-top-3">
- <form class="form-horizontal ajaxForm2" method="post" action="<?php echo url('add');?>" id="form1">
+ <form class="form-horizontal ajaxForm2" method="post" action="<?php echo url('edit');?>" id="form1">
   <ul class="nav nav-tabs" role="tablist">
     <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">基本信息</a></li>
     <li role="presentation"><a href="#goods" aria-controls="goods" role="tab" data-toggle="tab">商品</a></li>
@@ -29,70 +29,57 @@
   <!-- Tab panes -->
   <div class="tab-content">
     <div role="tabpanel" class="tab-pane active" id="home">
-    							<input type="hidden" name="cus_id" id="cus_id" />
-								<div class="form-group">
-                                    <label for="order_sn" class="col-sm-2 control-label">报价单号</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control w300" readonly="readonly" value="CS-Q-<?php echo date('m/dH').date('sms');?>" name="order_sn" id="order_sn">
-                                    </div>
-                                </div>
-								<div class="form-group">
-                                    <label for="create_date" class="col-sm-2 control-label">报价日期</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control w300" readonly="readonly" value="<?php echo date('Y-m-d');?>" name="create_date" id="create_date">
-                                    </div>
-                                </div>
-                                  <div class="form-group">
-                                    <label for="company_name" class="col-sm-2 control-label"><span class="text-danger">*</span>公司名称</label>
-                                    <div class="col-sm-8 w300">
-                                        <input type="text" class="form-control w300" name="company_name" id="company_name">
-                                    </div>
-                                    <div class="col-sm-2">
-                                    	<button type="button" class="btn btn-primary search_company">查找</button>
-                                    </div>
-                                </div>
-                                   <div class="form-group">
-                                    <label for="company_short" class="col-sm-2 control-label"><span class="text-danger">*</span>简称</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control w300" name="company_short" id="company_short">
-                                    </div>
-                                </div>
-                               <div class="form-group">
-                                    <label for="contacts" class="col-sm-2 control-label"><span class="text-danger">*</span>联系人</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control w300" name="contacts" id="contacts">
-                                    </div>
-                                </div>
-                                  <div class="form-group">
-                                    <label for="fax" class="col-sm-2 control-label">传真号码</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control w300" name="fax" id="fax">
-                                    </div>
-                                </div>
-                                  <div class="form-group">
-                                    <label for="email" class="col-sm-2 control-label"><span class="text-danger">*</span>E-Mail</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control w300" name="email" id="email">
-                                    </div>
-                                </div>
-                               <div class="form-group">
-                                    <label for="email" class="col-sm-2 control-label"><span class="text-danger">*</span>跟单员</label>
-                                    <div class="col-sm-10">
-                                        <select name="order_handle" class="form-control w300" id="order_handle">
-                                     <option value="">--请选择跟单员--</option>
-                                            <?php foreach ($order_handle as $val){?>
-                                            <option value="<?php echo $val;?>"><?php echo $val;?></option>
-                                            <?php }?>
-                                    </select>
-                                    </div>
-                                </div>
-                          <div class="form-group">
-                                    <label for="remark" class="col-sm-2 control-label">备注</label>
-                                    <div class="col-sm-10">
-                                        <textarea name="order_remark" id="order_remark" class="form-control w300" style="height: 150px;resize:none;">{$order_remark}</textarea>
-                                    </div>
-                                </div>
-
+    <input type="hidden" name="id" value="{$data.id}"  id="id" />
+    <input type="hidden" name="cus_id" value="{$data.cus_id}"  id="cus_id" />
+								
+                    <table class="table contact-template-form">
+                                <tbody>
+                                <tr>
+                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>订单号:</span></td>
+                                    <td width="35%">
+                                        <input type="text" class="form-control w300" readonly="readonly" value="{$data.order_sn}" name="order_sn" id="order_sn">
+                                    </td>
+                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>下单日期:</span></td>
+                                    <td width="35%"><input type="text" class="form-control w300" readonly="readonly" value="{$data.create_time|date='Y-m-d',###}" name="create_date" id="create_date"></td>
+                                </tr>
+                                <tr>
+                                <td width="15%" class="right-color"><span class="text-danger">*</span><span>公司名称:</span></td>
+                                <td width="35%" colspan="3">
+                                	<input type="text" class="form-control w500" style="display:inline-block;" value="{$data.company_name}" name="company_name" id="company_name">
+                                	<button type="button" class="btn btn-primary search_company" style="margin-top:-4px;">查找</button>
+                                </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>简称:</span></td>
+                                    <td width="35%">
+                                        <input type="text" class="form-control w300" name="company_short" value="{$data.company_short}" id="company_short">
+                                    </td>
+                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>联系人:</span></td>
+                                    <td width="35%"><input type="text" class="form-control w300" name="contacts" value="{$data.contacts}" id="contacts"></td>
+                                </tr>
+                                
+                                <tr>
+                                    <td width="15%" class="right-color">传真号码:</span></td>
+                                    <td width="35%">
+                                        <input type="text" class="form-control w300" value="{$data.fax}" name="fax" id="fax">
+                                    </td>
+                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>E-Mail:</span></td>
+                                    <td width="35%"><input type="text" class="form-control w300" name="email" value="{$data.email}" id="email"></td>
+                                </tr> 
+                                 <tr>
+                                <td width="15%" class="right-color"><span class="text-danger">*</span><span>交货日期:</span></td>
+                                <td width="35%" colspan="3">
+                                	<input type="text" class="form-control w300" name="require_time" value="{$data.require_time|date='Y-m-d',###}" id="LAY-component-form-group-date">
+                                </td>
+                                </tr>
+                                   <tr>
+                                    <td width="15%" class="right"><span>备注:</span></td>
+                                    <td colspan="3"><textarea class="form-control" name="remark" id="remark" rows="6">{$data.order_remark}</textarea> </td>
+                                </tr>
+                                
+                    </tbody>
+                    </table>
     </div>
 
 <div role="tabpanel" class="tab-pane" id="goods">
@@ -106,6 +93,9 @@
                                     <th>商品名称</th>
                                     <th>单位</th>
                                     <th>标准单价</th>
+                                    <th>实际单价</th>
+                                    <th>下单数量</th>
+                                    <th>已送数量</th>
                                     <th>备注</th>
                                     <th>操作</th>
                                 </tr>
@@ -114,7 +104,7 @@
                             <tfoot>
                             	<tr>
                             	<td><a href="javascript:;" class="get_goods">请选择商品</a></td>
-                            	<td colspan="5"></td>
+                            	<td colspan="10"></td>
                             	</tr>
                             </tfoot>
                         </table>
@@ -130,7 +120,8 @@
     <div class="modal-footer">
         <div class="col-md-offset-2 col-md-8 left">
             <button type="submit" send="save" class="btn btn-primary">保 存</button>
-            <button type="submit" send="email" class="btn btn-primary">生成PDF文件并发送</button>
+            <button type="submit" send="confirm" class="btn btn-primary">确 认</button>
+            <button type="submit" send="create" class="btn btn-primary">创建采购单</button>
             <button type="reset" onclick="history.go(-1);" class="btn btn-default">取消</button>
         </div>
     </div>
@@ -164,17 +155,19 @@
 </div>
 
 <script type="text/javascript" src="/assets/plugins/jquery-validation/js/jquery.validate.js"></script>
-<link href="/assets/plugins/fileinput/fileinput.css" rel="stylesheet" type="text/css" />
-<script src="/assets/plugins/fileinput/fileinput.js" type="text/javascript"></script>
-<!--icheck-->
-<link href="/assets/plugins/icheck/skins/all.css" rel="stylesheet" type="text/css" />
-<script src="/assets/plugins/icheck/icheck.min.js" type="text/javascript"></script>
+
 <script type="text/javascript">
     $(document).ready(function() {
+        layui.use('laydate', function() {
+            var laydate = layui.laydate;
+  		  	laydate.render({
+    		    elem: '#LAY-component-form-group-date'
+    		  });
+        });
     	
         // 当前页面分类高亮
-        $("#sidebar-baojia").addClass("sidebar-nav-active"); // 大分类
-        $("#baojia-index").addClass("active"); // 小分类
+        $("#sidebar-schedule").addClass("sidebar-nav-active"); // 大分类
+        $("#order-index").addClass("active"); // 小分类
 
 		$('.attrChange').change(function(){
 			var goods_type_id = $(this).val();
@@ -191,12 +184,6 @@
 			});
 		});
         
-        //料型颜色
-        $('input[type="checkbox"]').iCheck({
-            checkboxClass: 'icheckbox_square-blue', //颜色设置
-            radioClass: 'iradio_square',
-            increaseArea: '20%' // optional
-        });
 
         $(".search_company").click(function () {
             var title = '查找客户';
@@ -238,7 +225,15 @@ function client_info(data){
 	$('#contacts').val(data.user);
 	$('#email').val(data.email);
 }
+
 var goods_info = new Array();
+<?php if(!empty($data['goodsInfo'])){ foreach ($data['goodsInfo'] as $goods){?>
+goods_info.push(<?php echo $goods;?>);
+<?php }}?>
+if(goods_info.length > 0){
+	goodsList(goods_info);
+}
+
 var status = 1;
 function goods(data){
 	var flag = false;
@@ -264,6 +259,9 @@ function goodsList(goods_info){
 		html += '<td>'+goods_info[j]['goods_name']+'</td>';
 		html += '<td>'+goods_info[j]['unit']+'</td>';
 		html += '<td class="market_price"><input type="text" data-market_price="'+goods_info[j]['market_price']+'" oninput="checkNum(this)" name="market_price" style="width:80px;display:none;" value="'+goods_info[j]['market_price']+'" /><span class="inputspan">'+goods_info[j]['market_price']+'</span></td>';
+		html += '<td class="shop_price"><input type="text" data-shop_price="'+goods_info[j]['shop_price']+'" oninput="checkNum(this)" name="shop_price" style="width:80px;display:none;" value="'+goods_info[j]['shop_price']+'" /><span class="inputspan">'+goods_info[j]['shop_price']+'</span></td>';
+		html += '<td class="goods_number"><input type="text" data-goods_number="'+goods_info[j]['goods_number']+'" oninput="checkNum2(this)" name="goods_number" style="width:80px;display:none;" value="'+goods_info[j]['goods_number']+'" /><span class="inputspan">'+goods_info[j]['goods_number']+'</span></td>';
+		html += '<td class="send_num"><input type="text" data-send_num="'+goods_info[j]['send_num']+'" oninput="checkNum2(this)" name="send_num" style="width:80px;display:none;" value="'+goods_info[j]['send_num']+'" /><span class="inputspan">'+goods_info[j]['send_num']+'</span></td>';
 		html += '<td class="remark"><input type="text" name="remark" style="width:200px;display:none;" value="'+goods_info[j]['remark']+'" /><span class="inputspan">'+goods_info[j]['remark']+'</span></td>';
 		html += '<td><a href="javascript:;" onclick="update('+j+')" class="update">修改</a><span class="text-explode">|</span><a href="javascript:;" onclick="_delete('+j+')" class="delete">删除</a></td>';
 		html += '</tr>';
@@ -278,7 +276,22 @@ function update(index){
 		if(market_price == ''){
 			market_price = $('.goods_'+index+' input[name=market_price]').attr('data-market_price');
 		}
+		var shop_price = $('.goods_'+index+' input[name=shop_price]').val();
+		if(shop_price == ''){
+			shop_price = $('.goods_'+index+' input[name=shop_price]').attr('data-shop_price');
+		}
+		var goods_number = $('.goods_'+index+' input[name=goods_number]').val();
+		if(goods_number == ''){
+			goods_number = $('.goods_'+index+' input[name=goods_number]').attr('data-goods_number');
+		}
+		var send_num = $('.goods_'+index+' input[name=send_num]').val();
+		if(send_num == ''){
+			send_num = $('.goods_'+index+' input[name=send_num]').attr('data-send_num');
+		}
+		goods_info[index]['goods_number'] = goods_number;
+		goods_info[index]['send_num'] = send_num;
 		goods_info[index]['market_price'] = market_price;
+		goods_info[index]['shop_price'] = shop_price;
 		goods_info[index]['remark'] = $('.goods_'+index+' input[name=remark]').val();
 		goodsList(goods_info);
 		return;
@@ -295,6 +308,12 @@ function checkNum(obj){
 	obj.value = obj.value.replace(/\.{2,}/g,".");//只保留第一个. 清除多余的
 	obj.value = obj.value.replace(".","$#$").replace(/\./g,"").replace("$#$",".");
 	obj.value = obj.value.replace(/^(\-)*(\d+)\.(\d\d).*$/,'$1$2.$3');//只能输入三个小数.(\d\d\d) 修改个数  加\d
+}
+
+function checkNum2(obj){
+	obj.value = obj.value.replace(/[^\d]/g,"");//清除"数字"和"."以外的字符
+	obj.value = obj.value.replace(/^\./g,"");//验证第一个字符是数字而不是
+	obj.value = obj.value.replace(/\.{1}/g,"");//如果有一个. 就清除
 }
 
 function _delete(index){
