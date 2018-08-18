@@ -186,22 +186,58 @@
                                     <span class="nav-title">未交货订单</span>
                                 </a>
                             </li>
-                            <li class="nav-item" id="schedule-shengchan">
-                                <a href="{:Url('schedule/shengchan')}" class="sidebar-trans">
+                            <li class="nav-item" id="order-finish">
+                                <a href="{:Url('order/finish')}" class="sidebar-trans">
                                     <div class="nav-icon sidebar-trans"><span class="icon-ecs"></span></div>
                                     <span class="nav-title">完成订单</span>
                                 </a>
-                            </li><!--
-                            <li class="nav-item" id="schedule-daichu">
-                                <a href="{:Url('schedule/daichu')}" class="sidebar-trans">
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="sidebar-nav" id="sidebar-purchase">
+                        <div class="sidebar-title sidebar-trans">
+                            <div class="sidebar-title-inner">
+                                <span class="sidebar-title-icon icon-arrow-right"></span>
+                                <span class="sidebar-title-text">采购管理</span>
+                            </div>
+                        </div>
+                        <ul class="sidebar-trans submenu">
+                            <li class="nav-item" id="order-index">
+                                <a href="{:url('purchase/index')}" class="sidebar-trans">
                                     <div class="nav-icon sidebar-trans"><span class="icon-ecs"></span></div>
-                                    <span class="nav-title">确认发货</span>
+                                    <span class="nav-title">采购单</span>
                                 </a>
-                            </li>-->
-                            <li class="nav-item" id="schedule-chuku">
-                                <a href="{:Url('schedule/endck')}" class="sidebar-trans">
+                            </li>
+                        </ul>
+                    </li>
+                   <li class="sidebar-nav" id="sidebar-deliery">
+                        <div class="sidebar-title sidebar-trans">
+                            <div class="sidebar-title-inner">
+                                <span class="sidebar-title-icon icon-arrow-right"></span>
+                                <span class="sidebar-title-text">送货管理</span>
+                            </div>
+                        </div>
+                        <ul class="sidebar-trans submenu">
+                            <li class="nav-item" id="order-index">
+                                <a href="{:url('store/index')}" class="sidebar-trans">
                                     <div class="nav-icon sidebar-trans"><span class="icon-ecs"></span></div>
-                                    <span class="nav-title">已出库单</span>
+                                    <span class="nav-title">送货单</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>                    
+                    <li class="sidebar-nav" id="sidebar-store">
+                        <div class="sidebar-title sidebar-trans">
+                            <div class="sidebar-title-inner">
+                                <span class="sidebar-title-icon icon-arrow-right"></span>
+                                <span class="sidebar-title-text">库存管理</span>
+                            </div>
+                        </div>
+                        <ul class="sidebar-trans submenu">
+                            <li class="nav-item" id="order-index">
+                                <a href="{:url('store/index')}" class="sidebar-trans">
+                                    <div class="nav-icon sidebar-trans"><span class="icon-ecs"></span></div>
+                                    <span class="nav-title">库存盘点</span>
                                 </a>
                             </li>
                         </ul>
@@ -218,7 +254,7 @@
                             <li class="nav-item" id="finance-receivables">
                                 <a href="{:Url('finance/index')}" class="sidebar-trans">
                                     <div class="nav-icon sidebar-trans"><span class="icon-ecs"></span></div>
-                                    <span class="nav-title">应收款项</span>
+                                    <span class="nav-title">应收账款</span>
                                 </a>
                             </li>
                             <li class="nav-item" id="finance-statistics">
@@ -229,41 +265,7 @@
                             </li>
                         </ul>
                     </li>
-                    <!-- 产品管理 -->
-                    <li class="sidebar-nav" id="sidebar-product">
-                        <div class="sidebar-title sidebar-trans">
-                            <div class="sidebar-title-inner">
-                                <span class="sidebar-title-icon icon-arrow-right"></span>
-                                <span class="sidebar-title-text">产品价格</span>
-                            </div>
-                        </div>
-                        <ul class="sidebar-trans submenu">
-                            <li class="nav-item" id="product-color">
-                                <a href="{:Url('product/color')}" class="sidebar-trans">
-                                    <div class="nav-icon sidebar-trans"><span class="icon-ecs"></span></div>
-                                    <span class="nav-title">颜色设置</span>
-                                </a>
-                            </li>
-                            <li class="nav-item" id="product-number">
-                                <a href="{:Url('product/number')}" class="sidebar-trans">
-                                    <div class="nav-icon sidebar-trans"><span class="icon-ecs"></span></div>
-                                    <span class="nav-title">系列价格</span>
-                                </a>
-                            </li>
-                            <li class="nav-item" id="product-lock">
-                                <a href="{:Url('product/suoju')}" class="sidebar-trans">
-                                    <div class="nav-icon sidebar-trans"><span class="icon-ecs"></span></div>
-                                    <span class="nav-title">配件价格</span>
-                                </a>
-                            </li>
-                            <li class="nav-item" id="product-others">
-                                <a href="{:Url('product/others')}" class="sidebar-trans">
-                                    <div class="nav-icon sidebar-trans"><span class="icon-ecs"></span></div>
-                                    <span class="nav-title">包墙价格</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
+                    
                 </ul>
             </div>
         </div>

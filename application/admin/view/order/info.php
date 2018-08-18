@@ -64,8 +64,10 @@
         								已删除
         								{elseif condition="$data['status'] eq 0"}
         								未确认
+        								<button style="margin-left:20px;" onclick="window.location.href='<?php echo url('confirm',['id' => $data['id']]);?>'" type="button" class="btn btn-primary">确认</button>
         								{elseif condition="$data['status'] eq 1"}
         								已确认
+        								<button style="margin-left:20px;" onclick="window.location.href='<?php echo url('create',['id' => $data['id']]);?>'" type="button" class="btn btn-primary">创建采购单</button>
         								{elseif condition="$data['status'] eq 2"}
         								已交货
         								{elseif condition="$data['status'] eq 3"}

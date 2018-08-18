@@ -120,6 +120,59 @@ class Order extends Base {
         return $this->fetch();
     }
     
+    public function finish(){
+    	$company_short = $this->request->param('company_short');
+    	$start_time = $this->request->param('start_time');
+    	$end_time = $this->request->param('end_time');
+    	$status = $this->request->param('status');
+    	$categroy_id = $this->request->param('categroy_id');
+    	$db = db('order o');
+    	$db->field('o.*,g.*,o.id as oid,g.id as gid');
+    	if (empty($status)){
+    		//$where = ['o.status' => ['neq','-1']];
+    	}else{
+    		//$where = ['o.status' => intval($status)];
+    	}
+    	$where = ['o.status' => 3];
+    	if ($company_short != ''){
+    		$where['o.company_short'] = ['like',"%{$company_short}%"];
+    		$where['o.company_name'] = ['like',"%{$company_short}%"];
+    	}
+    	$db->where($where);
+    	if ($start_time != '' && $end_time != ''){
+    		$start_time = strtotime($start_time);
+    		$end_time = strtotime($end_time.' 23:59:59');
+    		if ($start_time && $end_time){
+    			$db->where("o.create_time",'>=',$start_time);
+    			$db->where("o.create_time",'<=',$end_time);
+    		}
+    	}
+    	$db->join('__ORDER_GOODS__ g','o.id=g.order_id');
+    	
+    	if (!empty($categroy_id)){
+    		$db->join('__GOODS__ gd','gd.goods_id=g.goods_id');
+    		$db->where(['gd.category_id' => $categroy_id]);
+    	}
+    	$category = db('goods_category')->where(array('status' => 1))->select();
+    	$result = $db->paginate(config('PAGE_SIZE'), false, ['query' => $this->request->param() ]);
+    	$data = $result->all();
+    	foreach ($data as $key => $value){
+    		$category_id = db('goods')->where(['goods_id' => $value['goods_id']])->value('category_id');
+    		foreach ($category as $val){
+    			if ($val['category_id'] == $category_id){
+    				$data[$key]['category_name'] = $val['category_name'];
+    				break;
+    			}
+    		}
+    	}
+    	$page = $result->render();
+    	$this->assign('page',$page);
+    	$this->assign('list',$data);
+    	$this->assign('title','完成订单');
+    	//      $this->assign('category',$category);
+    	return $this->fetch();
+    }
+    
     public function cancel(){
         if ($this->request->isAjax()){
             $id = $this->request->param('id',0,'intval');
@@ -218,7 +271,127 @@ class Order extends Base {
         return $this->fetch();
         
     }
+
+    public function confirm(){
+    	$id = $this->request->param('id',0,'intval');
+    	if ($id <= 0) $this->error('参数错误');
+    	$order = db('order')->where(['id' => $id,'status' => ['neq','-1']])->find();
+    	if (empty($order)) $this->error('订单不存在');
+    	if (!db('order')->where(['id' => $id])->setField('status',1)){
+    		$this->error('确认失败');
+    	}
+    	$this->redirect(url('info',['id' => $id]));
+    }
     
+    protected $create_rule = [
+    	'order_id' => 'require',
+    	'order_sn' => 'require',
+    	'po_sn' => 'require',
+    	'supplier_id' => 'require',
+    	'cus_phome' => 'require',
+    	'transaction_type' => 'require',
+    	'payment' => 'require',
+    	'delivery_type' => 'require',
+    	'delivery_company' => 'require',
+    	'tax' => 'require',
+    	'delivery_address' => 'require',
+    	'email' => 'require|email',
+    	'contacts' => 'require',
+    ];
+    protected $create_message = [
+    	'order_id.require' => '订单ID参数错误',
+    	'order_sn.require' => '关联订单号错误',
+    	'po_sn.require' => 'PO号码不能为空',
+    	'supplier_id.require' => '请选择供应商',
+    	'contacts.require' => '联系人不能为空',
+    	'email.require' => 'E-Mail不能为空',
+    	'email.email' => 'E-Mail格式不正确',
+    	'cus_phome.require' => '电话号码不能为空',
+    	'transaction_type.require' => '请选择交易类别',
+    	'payment.require' => '请选择付款条件',
+    	'delivery_type.require' => '请选择交货方式',
+    	'delivery_company.require' => '送货公司不能为空',
+    	'tax.require' => '请选择税率',
+    	'delivery_address.require' => '送货地址不能为空'
+    ];
+    
+    public function create_do(){
+    	if ($this->request->isAjax()){
+    		$type = $this->request->param('type');
+    		$data = [
+    				'order_id' => $this->request->post('order_id'),
+    				'cus_id' => $this->request->post('cus_id'),
+    				'po_sn' => $this->request->post('po_sn'),
+    				'supplier_id' => $this->request->post('supplier_id'),
+    				'cus_phome' => $this->request->post('cus_phome'),
+    				'transaction_type' => $this->request->post('transaction_type'),
+    				'payment' => $this->request->post('payment'),
+    				'delivery_type' => $this->request->post('delivery_type'),
+    				'delivery_company' => $this->request->post('delivery_company'),
+    				'tax' => $this->request->post('tax'),
+    				'delivery_address' => $this->request->post('delivery_address'),
+    				'order_sn' => $this->request->post('order_sn'),
+    				'fax' => $this->request->post('fax'),
+    				'email' => $this->request->post('email'),
+    				'contacts' => $this->request->post('contacts'),
+    				'status' => $type == 'confirm' ? 1 : 0,
+    				'create_time' => time(),
+    				'update_time' => time()
+    		];
+    	}
+    }
+    
+    public function create(){
+    	$id = $this->request->param('id',0,'intval');
+    	if ($id <= 0) $this->error('参数错误');
+    	$order = db('order')->where(['id' => $id,'status' => ['neq','-1']])->find();
+    	if (empty($order)) $this->error('订单不存在');
+    	$goodsInfo = db('order_goods')->where(['order_id' => $order['id']])->select();
+    	if (!empty($goodsInfo)){
+    		foreach ($goodsInfo as $key => $value){
+    			$value['shop_price'] = $value['goods_price']; //实际价格
+    			$value['purchase_number'] = 0;
+    			$value['store_number'] = db('goods')->where(['goods_id' => $value['goods_id']])->value('store_number');
+    			$value['totalMoney'] = _formatMoney($value['goods_price']*$value['purchase_number']);
+    			$goodsInfo[$key] = json_encode($value);
+    		}
+    	}
+    	$order['goodsInfo'] = $goodsInfo;
+    	$this->assign('data',$order);
+    	
+    	$client = db('customers')->where(['cus_id' => $order['cus_id']])->find();
+    	$contacts = db('customers_contact')->where(['con_cus_id' => $client['cus_id']])->select();
+    	$this->assign('client',$client);
+    	$this->assign('contacts',$contacts);
+    	$supplier = db('supplier')->where(['supplier_status' => ['neq','-1']])->select();
+    	$this->assign('supplier',$supplier);
+    	
+    	$trans_type = getParams(5);
+    	if (!empty($trans_type)){
+    		$trans_type = $trans_type['params_value'];
+    	}
+    	$this->assign('trans_type',$trans_type);
+    	$payment = getParams(1);
+    	if (!empty($payment)){
+    		$payment = $payment['params_value'];
+    	}
+    	$this->assign('payment',$payment);
+    	
+    	$tax = getParams(17);
+    	if (!empty($tax)){
+    		$tax = $tax['params_value'];
+    	}
+    	$this->assign('tax',$tax);
+    	$delivery_type = getParams(16);
+    	if (!empty($delivery_type)){
+    		$delivery_type = $delivery_type['params_value'];
+    	}
+    	$this->assign('delivery_type',$delivery_type);
+    	
+    	$this->assign('title','创建采购单');
+    	$this->assign('po_sn','PO'.date('Ymdis').date('sms'));
+    	return $this->fetch();
+    }
     
     public function edit(){
         if ($this->request->isAjax()){
@@ -248,6 +421,10 @@ class Order extends Base {
             foreach ($goodsInfo as $val){
                 if ($val['goods_number'] <= 0){
                     $this->error('下单数量不能小于1');
+                }
+                $store_number = db('goods')->where(['goods_id' => $val['goods_id']])->value('store_number');
+                if ($store_number < $val['goods_number']){
+                	$this->error('“'.$val['goods_name'].'”下单数量不能大于库存量');
                 }
                 if ($val['send_num'] < 0){
                     $this->error('已送数量不能小于0');
@@ -320,6 +497,7 @@ class Order extends Base {
         if (!empty($goodsInfo)){
             foreach ($goodsInfo as $key => $value){
                 $value['shop_price'] = $value['goods_price']; //实际价格
+                $value['store_number'] = db('goods')->where(['goods_id' => $value['goods_id']])->value('store_number');
                 $goodsInfo[$key] = json_encode($value);
             }
         }

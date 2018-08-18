@@ -58,7 +58,7 @@
                             </thead>
                             <tbody>
                             {volist name="data" id="vo" empty="$empty"}
-                                <tr style="cursor: pointer;" class="selected_goods" data-shop_price="{$vo['shop_price']}" data-market_price="{$vo['market_price']}" data-unit="{$vo['unit']}" data-remark="{$vo['remark']}" data-goods_name="{$vo['goods_name']}" data-goods_id="{$vo['goods_id']}">
+                                <tr style="cursor: pointer;" class="selected_goods" data-store_number="{$vo['store_number']}" data-shop_price="{$vo['shop_price']}" data-market_price="{$vo['market_price']}" data-unit="{$vo['unit']}" data-remark="{$vo['remark']}" data-goods_name="{$vo['goods_name']}" data-goods_id="{$vo['goods_id']}">
                                     <td>{$vo.category_name}</td>
                                     <td>{$vo.supplier_name}</td>
                                     <td>{$vo.goods_name}</td>
@@ -106,6 +106,7 @@ $(document).ready(function () {
 			'unit': $(this).attr('data-unit'),
 			'remark': $(this).attr('data-remark'),
 			'goods_id': $(this).attr('data-goods_id'),
+			'store_number': $(this).attr('data-store_number'),
 			'goods_number':0,
 			'send_num':0
 		};

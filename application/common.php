@@ -25,6 +25,11 @@ define("HASH_SALT_INDEX", 2);
 define("HASH_PBKDF2_INDEX", 3);
 define('ENCODE_KEY', '|}+——--JFIEOAJFP()#*@&&!&@^$%":?>,,');
 
+//格式金额
+function _formatMoney($MoenyCount){
+	return substr(sprintf("%.3f",$MoenyCount),0,-1);
+}
+
 /*加密解密 ENCODE 加密   DECODE 解密*/
 function _encrypt($string, $operation = 'ENCODE', $key = '', $expiry = 0){
 	if($operation == 'DECODE') {

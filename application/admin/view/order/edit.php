@@ -284,6 +284,11 @@ function update(index){
 		if(goods_number == ''){
 			goods_number = $('.goods_'+index+' input[name=goods_number]').attr('data-goods_number');
 		}
+		if(goods_number > goods_info[index]['store_number']){
+			alert('下单数量不能大于库存量');
+			status = 2;
+			return;
+		}
 		var send_num = $('.goods_'+index+' input[name=send_num]').val();
 		if(send_num == ''){
 			send_num = $('.goods_'+index+' input[name=send_num]').attr('data-send_num');
