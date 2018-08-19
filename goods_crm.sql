@@ -1,16 +1,16 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : localhost
+Source Server         : localhost3306
 Source Server Version : 50714
-Source Host           : 127.0.0.1:3306
+Source Host           : localhost:3306
 Source Database       : goods_crm
 
 Target Server Type    : MYSQL
 Target Server Version : 50714
 File Encoding         : 65001
 
-Date: 2018-08-17 17:58:26
+Date: 2018-08-19 23:21:14
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -189,7 +189,8 @@ CREATE TABLE `syc_baojia` (
   `status` tinyint(1) NOT NULL DEFAULT '0',
   `create_time` int(10) unsigned NOT NULL DEFAULT '0',
   `update_time` int(10) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `order_sn` (`order_sn`,`company_name`,`company_short`,`status`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -210,7 +211,8 @@ CREATE TABLE `syc_baojia_goods` (
   `goods_price` decimal(10,2) NOT NULL DEFAULT '0.00',
   `remark` varchar(255) NOT NULL DEFAULT '',
   `create_time` int(10) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `baojia_id` (`baojia_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -234,23 +236,27 @@ CREATE TABLE `syc_config` (
   `value` text COMMENT '配置值',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COMMENT='基本配置表';
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8 COMMENT='基本配置表';
 
 -- ----------------------------
 -- Records of syc_config
 -- ----------------------------
 INSERT INTO `syc_config` VALUES ('1', 'syc_basehost', 'CRM站点', 'string', 'http://www.testgoodscrm.com');
-INSERT INTO `syc_config` VALUES ('2', 'syc_webname', '企业名称', 'string', '进销传系统');
+INSERT INTO `syc_config` VALUES ('2', 'syc_webname', '企业名称', 'string', '广州市进销传系统有限公司');
 INSERT INTO `syc_config` VALUES ('3', 'syc_webtel', '电话', 'string', '0757-88888888');
 INSERT INTO `syc_config` VALUES ('4', 'syc_webfax', '传真', 'string', '0757-88888888');
-INSERT INTO `syc_config` VALUES ('5', 'syc_tousu', '投诉电话', 'string', '0757-88888888');
-INSERT INTO `syc_config` VALUES ('6', 'syc_webemail', '邮件', 'string', 'hyzwd@outlook.com');
-INSERT INTO `syc_config` VALUES ('7', 'syc_webqq', 'QQ', 'string', '316262448');
-INSERT INTO `syc_config` VALUES ('8', 'syc_address', '地址', 'string', '广东省广州市天河区');
-INSERT INTO `syc_config` VALUES ('9', 'syc_keywords', '关键词', 'bstring', '广东省广州市天河区');
-INSERT INTO `syc_config` VALUES ('10', 'syc_description', '描述', 'bstring', '佛山市三叶草网络有限公司');
+INSERT INTO `syc_config` VALUES ('5', 'syc_contacts', '联系人', 'string', '管理员');
+INSERT INTO `syc_config` VALUES ('6', 'syc_webemail', '邮件', 'string', 'nice172@126.com');
+INSERT INTO `syc_config` VALUES ('7', 'syc_email_pwd', '验证密码', 'string', 'nice172');
+INSERT INTO `syc_config` VALUES ('8', 'syc_port', 'SMTP端口', 'string', '25');
+INSERT INTO `syc_config` VALUES ('10', 'syc_email_smtp', 'SMTP服务器', 'string', 'smtp.126.com');
 INSERT INTO `syc_config` VALUES ('11', 'syc_powerby', '版权信息', 'bstring', 'Copyright © 2010-2017 <a href=\"http://www.sycit.cn\">广东省广州市天河区</a> 版权所有');
 INSERT INTO `syc_config` VALUES ('12', 'syc_beian', '备案信息', 'string', '');
+INSERT INTO `syc_config` VALUES ('13', 'syc_tousu', '投诉电话', 'string', '0757-88888888');
+INSERT INTO `syc_config` VALUES ('14', 'syc_address', '地址', 'string', '广东省广州市天河区');
+INSERT INTO `syc_config` VALUES ('15', 'syc_webqq', 'QQ', 'string', '316262448');
+INSERT INTO `syc_config` VALUES ('16', 'syc_keywords', '关键词', 'bstring', '广东省广州市天河区');
+INSERT INTO `syc_config` VALUES ('17', 'syc_description', '描述', 'bstring', '佛山市三叶草网络有限公司');
 
 -- ----------------------------
 -- Table structure for syc_customers
@@ -738,17 +744,18 @@ CREATE TABLE `syc_order` (
   `deliver_time` int(10) unsigned NOT NULL DEFAULT '0',
   `create_time` int(10) unsigned NOT NULL DEFAULT '0',
   `update_time` int(10) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `order_sn` (`order_sn`,`company_name`,`company_short`,`status`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of syc_order
 -- ----------------------------
-INSERT INTO `syc_order` VALUES ('3', '2', '1686', 'SO201808175224240824', '广州市进销传系统有限公司', '进销传系统', 'nice172', '020-89898989', '354575573@qq.com', '小米手机iPhone6s 32G备注', '0', '1534521600', '0', '1534478095', '1534478095');
+INSERT INTO `syc_order` VALUES ('3', '2', '1686', 'SO201808175224240824', '广州市进销传系统有限公司', '进销传系统', 'nice172', '020-89898989', '354575573@qq.com', '小米手机iPhone6s 32G备注', '5', '1534521600', '0', '1534478095', '1534478095');
 INSERT INTO `syc_order` VALUES ('4', '2', '1686', 'SO201808175810100810', '广州市进销传系统有限公司', '进销传系统', 'nice172', '020-89898989', '354575573@qq.com', '测试商品备注', '4', '1534694400', '0', '1534478315', '1534478315');
 INSERT INTO `syc_order` VALUES ('5', '2', '1686', 'SO201808173345450845', '广州市进销传系统有限公司', '进销传系统', 'nice172', '020-89898989', '354575573@qq.com', '备注备注备注备注备注备注备注备注', '1', '1535558400', '0', '1534487649', '1534498451');
 INSERT INTO `syc_order` VALUES ('6', '2', '1686', 'SO201808173919190819', '广州市进销传系统有限公司', '进销传系统', 'nice172', '020-89898989', '354575573@qq.com', '测试商品备注', '1', '1535385600', '0', '1534487978', '1534498476');
-INSERT INTO `syc_order` VALUES ('7', '2', '1686', 'SO201808172553530853', '广州市进销传系统有限公司', '进销传系统', 'nice172', '020-89898989', '354575573@qq.com', '小米手机iPhone6s 32G备注', '0', '1535299200', '0', '1534494392', '1534496643');
+INSERT INTO `syc_order` VALUES ('7', '2', '1686', 'SO201808172553530853', '广州市进销传系统有限公司', '进销传系统', 'nice172', '020-89898989', '354575573@qq.com', '小米手机iPhone6s 32G备注', '1', '1535299200', '0', '1534494392', '1534496643');
 
 -- ----------------------------
 -- Table structure for syc_order_goods
@@ -767,16 +774,17 @@ CREATE TABLE `syc_order_goods` (
   `goods_attr` text,
   `remark` varchar(255) NOT NULL DEFAULT '',
   `create_time` int(10) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `order_id` (`order_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of syc_order_goods
 -- ----------------------------
 INSERT INTO `syc_order_goods` VALUES ('10', '3', '4', '小米手机iPhone6s 32G', '台', '10', '0', '2199.00', '2199.00', '[{\"goods_attr_id\":12,\"attr_name\":\"\\u989c\\u8272\",\"attr_value\":\"\\u767d\\u8272\"},{\"goods_attr_id\":13,\"attr_name\":\"\\u7f51\\u7edc\\u5236\\u5f0f\",\"attr_value\":\"\\u79fb\\u52a84G\\/\\u8054\\u901a4G\\/\\u7535\\u4fe14G\"},{\"goods_attr_id\":14,\"attr_name\":\"\\u5957\\u9910\",\"attr_value\":\"\\u5957\\u9910\\u4e8c\"},{\"goods_attr_id\":16,\"attr_name\":\"ab\",\"attr_value\":\"php\"}]', '小米手机iPhone6s 32G备注', '1534478095');
-INSERT INTO `syc_order_goods` VALUES ('11', '3', '4', '小米手机iPhone6s 32G', '台', '0', '0', '1999.00', '2199.00', '[{\"goods_attr_id\":12,\"attr_name\":\"\\u989c\\u8272\",\"attr_value\":\"\\u767d\\u8272\"},{\"goods_attr_id\":13,\"attr_name\":\"\\u7f51\\u7edc\\u5236\\u5f0f\",\"attr_value\":\"\\u79fb\\u52a84G\\/\\u8054\\u901a4G\\/\\u7535\\u4fe14G\"},{\"goods_attr_id\":14,\"attr_name\":\"\\u5957\\u9910\",\"attr_value\":\"\\u5957\\u9910\\u4e8c\"},{\"goods_attr_id\":16,\"attr_name\":\"ab\",\"attr_value\":\"php\"}]', '小米手机iPhone6s 32G备注', '1534478315');
-INSERT INTO `syc_order_goods` VALUES ('12', '4', '6', '测试商品2', '台', '0', '0', '3899.00', '3999.00', '[]', '备注备注备注备注备注备注备注备注', '1534478315');
-INSERT INTO `syc_order_goods` VALUES ('13', '4', '1', '测试商品', '台', '0', '0', '2999.00', '3399.00', '[{\"goods_attr_id\":12,\"attr_name\":\"\\u989c\\u8272\",\"attr_value\":\"\\u9ed1\\u8272\"},{\"goods_attr_id\":13,\"attr_name\":\"\\u7f51\\u7edc\\u5236\\u5f0f\",\"attr_value\":\"\\u79fb\\u52a84G+\"},{\"goods_attr_id\":14,\"attr_name\":\"\\u5957\\u9910\",\"attr_value\":\"\\u5957\\u9910\\u4e09\"},{\"goods_attr_id\":16,\"attr_name\":\"ab\",\"attr_value\":\"php\"}]', '测试商品备注', '1534478315');
+INSERT INTO `syc_order_goods` VALUES ('11', '3', '4', '小米手机iPhone6s 32G', '台', '1', '0', '1999.00', '2199.00', '[{\"goods_attr_id\":12,\"attr_name\":\"\\u989c\\u8272\",\"attr_value\":\"\\u767d\\u8272\"},{\"goods_attr_id\":13,\"attr_name\":\"\\u7f51\\u7edc\\u5236\\u5f0f\",\"attr_value\":\"\\u79fb\\u52a84G\\/\\u8054\\u901a4G\\/\\u7535\\u4fe14G\"},{\"goods_attr_id\":14,\"attr_name\":\"\\u5957\\u9910\",\"attr_value\":\"\\u5957\\u9910\\u4e8c\"},{\"goods_attr_id\":16,\"attr_name\":\"ab\",\"attr_value\":\"php\"}]', '小米手机iPhone6s 32G备注', '1534478315');
+INSERT INTO `syc_order_goods` VALUES ('12', '4', '6', '测试商品2', '台', '1', '0', '3899.00', '3999.00', '[]', '备注备注备注备注备注备注备注备注', '1534478315');
+INSERT INTO `syc_order_goods` VALUES ('13', '4', '1', '测试商品', '台', '1', '0', '2999.00', '3399.00', '[{\"goods_attr_id\":12,\"attr_name\":\"\\u989c\\u8272\",\"attr_value\":\"\\u9ed1\\u8272\"},{\"goods_attr_id\":13,\"attr_name\":\"\\u7f51\\u7edc\\u5236\\u5f0f\",\"attr_value\":\"\\u79fb\\u52a84G+\"},{\"goods_attr_id\":14,\"attr_name\":\"\\u5957\\u9910\",\"attr_value\":\"\\u5957\\u9910\\u4e09\"},{\"goods_attr_id\":16,\"attr_name\":\"ab\",\"attr_value\":\"php\"}]', '测试商品备注', '1534478315');
 INSERT INTO `syc_order_goods` VALUES ('14', '5', '6', '测试商品2', '台', '10', '0', '3899.00', '3999.00', '[]', '备注备注备注备注备注备注备注备注', '1534487649');
 INSERT INTO `syc_order_goods` VALUES ('15', '6', '1', '测试商品', '台', '2', '0', '2999.00', '3399.00', '[{\"goods_attr_id\":12,\"attr_name\":\"\\u989c\\u8272\",\"attr_value\":\"\\u9ed1\\u8272\"},{\"goods_attr_id\":13,\"attr_name\":\"\\u7f51\\u7edc\\u5236\\u5f0f\",\"attr_value\":\"\\u79fb\\u52a84G+\"},{\"goods_attr_id\":14,\"attr_name\":\"\\u5957\\u9910\",\"attr_value\":\"\\u5957\\u9910\\u4e09\"},{\"goods_attr_id\":16,\"attr_name\":\"ab\",\"attr_value\":\"php\"}]', '测试商品备注', '1534487978');
 INSERT INTO `syc_order_goods` VALUES ('16', '7', '1', '测试商品', '台', '2', '0', '2999.00', '3399.00', '[{\"goods_attr_id\":12,\"attr_name\":\"\\u989c\\u8272\",\"attr_value\":\"\\u9ed1\\u8272\"},{\"goods_attr_id\":13,\"attr_name\":\"\\u7f51\\u7edc\\u5236\\u5f0f\",\"attr_value\":\"\\u79fb\\u52a84G+\"},{\"goods_attr_id\":14,\"attr_name\":\"\\u5957\\u9910\",\"attr_value\":\"\\u5957\\u9910\\u4e09\"},{\"goods_attr_id\":16,\"attr_name\":\"ab\",\"attr_value\":\"php\"}]', '测试商品备注', '1534494392');
@@ -840,13 +848,13 @@ CREATE TABLE `syc_params` (
   `type` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '1文本显示',
   `file` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of syc_params
 -- ----------------------------
 INSERT INTO `syc_params` VALUES ('1', '付款方式', '付款方式', '10', '现金交易\n月结30天\n月结60天\n月结90天\n月结180天', '0', '');
-INSERT INTO `syc_params` VALUES ('5', 'admin', 'gsaf', '50', 'fsafaffa', '0', '');
+INSERT INTO `syc_params` VALUES ('5', '交易类别', '交易类别', '50', '内销\n外销', '0', '');
 INSERT INTO `syc_params` VALUES ('7', '部门', '部门', '50', '销售部\n采购部\n工作部\n生产部\n仓储物流部', '0', '');
 INSERT INTO `syc_params` VALUES ('8', '业务经理', '业务经理', '50', '彭立新', '0', '');
 INSERT INTO `syc_params` VALUES ('9', '单位', '单位', '50', '张\n件\n个\n条\n包\n只\n台', '0', '');
@@ -856,6 +864,9 @@ INSERT INTO `syc_params` VALUES ('12', 'PDF文件LOGO', 'PDF文件LOGO', '50', '
 INSERT INTO `syc_params` VALUES ('13', '报价单备注', '报价单备注', '50', '报价单备注报价单备注报价单备注报价单备注\n报价单备注报价单备注报价单备注报价单备注\n报价单备注报价单备注报价单备注报价单备注\n报价单备注\n报价单备注\n报价单备注', '1', '');
 INSERT INTO `syc_params` VALUES ('14', 'PDF文件标题', 'PDF文件标题', '50', '众山化工有限公司', '1', '');
 INSERT INTO `syc_params` VALUES ('15', 'PDF文件英文标题', 'PDF文件英文标题', '50', 'CSUN(SICHUAN) CHEMICAL CO.,LTD', '1', '');
+INSERT INTO `syc_params` VALUES ('16', '交货方式', '交货方式', '50', '货运\n快递', '0', '');
+INSERT INTO `syc_params` VALUES ('17', '税率', '税率', '50', '0%\n16%\n20%', '0', '');
+INSERT INTO `syc_params` VALUES ('18', '采购单备注', '采购单备注', '50', '采购单备注采购单备注采购单备注采购单备注', '1', '');
 
 -- ----------------------------
 -- Table structure for syc_product_color
@@ -917,29 +928,36 @@ INSERT INTO `syc_product_number` VALUES ('5', 's', '380.00', '包边A类', '1', 
 -- ----------------------------
 DROP TABLE IF EXISTS `syc_purchase`;
 CREATE TABLE `syc_purchase` (
-  `pid` int(10) NOT NULL AUTO_INCREMENT COMMENT 'ID',
-  `pnumber` char(20) NOT NULL COMMENT '订单号',
-  `pcus_id` int(12) NOT NULL COMMENT '企业ID',
-  `pbname` char(80) NOT NULL COMMENT '企业名称',
-  `pcsname` char(20) NOT NULL COMMENT '客户名称',
-  `pyouhui` tinyint(4) NOT NULL DEFAULT '100' COMMENT '订单优惠',
-  `pamount` decimal(12,2) NOT NULL DEFAULT '0.00' COMMENT '订单金额',
-  `pcount` tinyint(4) NOT NULL DEFAULT '0' COMMENT '订单数量',
-  `pstart_date` date NOT NULL COMMENT '销售日期',
-  `pend_date` date NOT NULL COMMENT '发货日期',
-  `create_time` int(16) NOT NULL DEFAULT '0' COMMENT '添加时间',
-  `update_time` int(16) NOT NULL DEFAULT '0' COMMENT '更新时间',
-  `affirm` tinyint(4) NOT NULL DEFAULT '0' COMMENT '确认1为确认',
-  `pshengcwc` tinyint(4) NOT NULL DEFAULT '0' COMMENT '1生产完成',
-  `pshoudj` tinyint(4) NOT NULL DEFAULT '0' COMMENT '定金1为定金',
-  `status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '状态',
-  PRIMARY KEY (`pid`),
-  UNIQUE KEY `pnumber` (`pnumber`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='销售订单表';
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `admin_uid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '管理员ID',
+  `order_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `order_sn` varchar(100) NOT NULL DEFAULT '',
+  `cus_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `po_sn` varchar(100) NOT NULL DEFAULT '',
+  `supplier_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `cus_phome` varchar(50) NOT NULL DEFAULT '',
+  `transaction_type` varchar(100) NOT NULL DEFAULT '',
+  `payment` varchar(100) NOT NULL DEFAULT '',
+  `delivery_type` varchar(100) NOT NULL DEFAULT '',
+  `delivery_company` varchar(255) NOT NULL DEFAULT '',
+  `tax` varchar(20) NOT NULL DEFAULT '',
+  `delivery_address` varchar(255) NOT NULL DEFAULT '',
+  `fax` varchar(50) NOT NULL DEFAULT '',
+  `email` varchar(50) NOT NULL DEFAULT '',
+  `contacts` varchar(50) NOT NULL DEFAULT '',
+  `total_money` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '-1已删除，0保存，1已确认，2确认已发送',
+  `remark` text,
+  `create_time` int(10) unsigned NOT NULL DEFAULT '0',
+  `update_time` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `order_id` (`order_id`,`order_sn`,`po_sn`,`supplier_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of syc_purchase
 -- ----------------------------
+INSERT INTO `syc_purchase` VALUES ('5', '2', '3', 'SO201808175224240824', '1686', 'PO201808192023230823', '1', '020-89898989', '内销', '月结30天', '货运', '送货公司送货公司', '16%', '广东省广州市天河区中山大道西1025号', '020-89898989', '354575573@qq.com', 'nice172', '23989.00', '2', 'faf', '1534648851', '1534648851');
 
 -- ----------------------------
 -- Table structure for syc_purchase_affirm
@@ -961,6 +979,60 @@ CREATE TABLE `syc_purchase_affirm` (
 -- ----------------------------
 -- Records of syc_purchase_affirm
 -- ----------------------------
+
+-- ----------------------------
+-- Table structure for syc_purchase_bak
+-- ----------------------------
+DROP TABLE IF EXISTS `syc_purchase_bak`;
+CREATE TABLE `syc_purchase_bak` (
+  `pid` int(10) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `pnumber` char(20) NOT NULL COMMENT '订单号',
+  `pcus_id` int(12) NOT NULL COMMENT '企业ID',
+  `pbname` char(80) NOT NULL COMMENT '企业名称',
+  `pcsname` char(20) NOT NULL COMMENT '客户名称',
+  `pyouhui` tinyint(4) NOT NULL DEFAULT '100' COMMENT '订单优惠',
+  `pamount` decimal(12,2) NOT NULL DEFAULT '0.00' COMMENT '订单金额',
+  `pcount` tinyint(4) NOT NULL DEFAULT '0' COMMENT '订单数量',
+  `pstart_date` date NOT NULL COMMENT '销售日期',
+  `pend_date` date NOT NULL COMMENT '发货日期',
+  `create_time` int(16) NOT NULL DEFAULT '0' COMMENT '添加时间',
+  `update_time` int(16) NOT NULL DEFAULT '0' COMMENT '更新时间',
+  `affirm` tinyint(4) NOT NULL DEFAULT '0' COMMENT '确认1为确认',
+  `pshengcwc` tinyint(4) NOT NULL DEFAULT '0' COMMENT '1生产完成',
+  `pshoudj` tinyint(4) NOT NULL DEFAULT '0' COMMENT '定金1为定金',
+  `status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '状态',
+  PRIMARY KEY (`pid`),
+  UNIQUE KEY `pnumber` (`pnumber`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='销售订单表';
+
+-- ----------------------------
+-- Records of syc_purchase_bak
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for syc_purchase_goods
+-- ----------------------------
+DROP TABLE IF EXISTS `syc_purchase_goods`;
+CREATE TABLE `syc_purchase_goods` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `purchase_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `goods_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `goods_name` varchar(255) NOT NULL DEFAULT '',
+  `unit` varchar(50) NOT NULL DEFAULT '',
+  `goods_number` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '采购数量',
+  `goods_price` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '实际单价',
+  `count_money` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `goods_attr` text,
+  `create_time` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `purchase_id` (`purchase_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of syc_purchase_goods
+-- ----------------------------
+INSERT INTO `syc_purchase_goods` VALUES ('23', '5', '4', '小米手机iPhone6s 32G', '台', '2', '2199.00', '21990.00', '[{\"goods_attr_id\":12,\"attr_name\":\"\\u989c\\u8272\",\"attr_value\":\"\\u767d\\u8272\"},{\"goods_attr_id\":13,\"attr_name\":\"\\u7f51\\u7edc\\u5236\\u5f0f\",\"attr_value\":\"\\u79fb\\u52a84G\\/\\u8054\\u901a4G\\/\\u7535\\u4fe14G\"},{\"goods_attr_id\":14,\"attr_name\":\"\\u5957\\u9910\",\"attr_value\":\"\\u5957\\u9910\\u4e8c\"},{\"goods_attr_id\":16,\"attr_name\":\"ab\",\"attr_value\":\"php\"}]', '1534648851');
+INSERT INTO `syc_purchase_goods` VALUES ('24', '5', '4', '小米手机iPhone6s 32G', '台', '3', '1999.00', '1999.00', '[{\"goods_attr_id\":12,\"attr_name\":\"\\u989c\\u8272\",\"attr_value\":\"\\u767d\\u8272\"},{\"goods_attr_id\":13,\"attr_name\":\"\\u7f51\\u7edc\\u5236\\u5f0f\",\"attr_value\":\"\\u79fb\\u52a84G\\/\\u8054\\u901a4G\\/\\u7535\\u4fe14G\"},{\"goods_attr_id\":14,\"attr_name\":\"\\u5957\\u9910\",\"attr_value\":\"\\u5957\\u9910\\u4e8c\"},{\"goods_attr_id\":16,\"attr_name\":\"ab\",\"attr_value\":\"php\"}]', '1534648851');
 
 -- ----------------------------
 -- Table structure for syc_purchase_orders
@@ -1199,10 +1271,7 @@ CREATE TABLE `syc_supplier_contacts` (
 -- Records of syc_supplier_contacts
 -- ----------------------------
 INSERT INTO `syc_supplier_contacts` VALUES ('5', '1', 'nice172', '1', '开发者', '销售部', '13800138000', '354575573', '354575573@qq.com', '广东省广州市天河区中山大道西1025号', '客户备注内容', '1533614328', '1533614328', '1');
-INSERT INTO `syc_supplier_contacts` VALUES ('6', '1', '蜡笔小新', '1', '仓管', '仓储物流部', '13800138001', '354575575', '354575575@qq.com', '广州市天河区中山大道西1025号', '备注蜡笔小新', '1533622131', '1533622131', '1');
-INSERT INTO `syc_supplier_contacts` VALUES ('7', '1', 'fdsafa', '1', 'fdsafsaf', '采购部', '13800138000', 'fsafdsadf', 'fsdafa', 'fdsafsa', 'fsadf', '1533623950', '1533624036', '-1');
-INSERT INTO `syc_supplier_contacts` VALUES ('8', '1', 'fsaf', '1', 'fdsaf', '采购部', '13800138002', 'fdsaf', 'fdsaf@126.com', 'fdsafs', 'fdsaff', '0', '0', '-1');
-INSERT INTO `syc_supplier_contacts` VALUES ('9', '1', 'nice1721', '1', 'fdsfaf', '采购部', '13800138005', 'fsafaf', '23213131@126.com', 'fsafff', 'fsafsfsaf', '0', '1533711596', '1');
+INSERT INTO `syc_supplier_contacts` VALUES ('6', '1', '蜡笔小新', '1', '仓管', '仓储物流部', '13800138001', '354575575', '354575573@qq.com', '广州市天河区中山大道西1025号', '备注蜡笔小新', '1533622131', '1533622131', '1');
 
 -- ----------------------------
 -- Table structure for syc_users
@@ -1233,5 +1302,5 @@ CREATE TABLE `syc_users` (
 -- Records of syc_users
 -- ----------------------------
 INSERT INTO `syc_users` VALUES ('1', 'asdasd', 'sha256:1000:X2vbzkCcKSScvZZ5ZUDs7DvTmergIc5u:fQt8UQynrp5psap5MoOq4scNMLNhcjIl', '开发者', '1', '354575573@qq.com', '/uploads/avatar/582d3a26a3369.jpg', '2017-01-01', '161', '1451577600', '1497704499', '127.0.0.1', '127.0.0.1', '16', '1');
-INSERT INTO `syc_users` VALUES ('2', 'admin', 'sha256:1000:bb+qr8kui4m4JriYM/aLnznOODBwZfbi:30utxhFU7cxebnazg8Xh5TEkAmzR6ymJ', '管理员', '1', 'nice172@126.com', '', '2018-08-05', '14', '1533480247', '1533480247', '192.168.1.225', '', '16', '1');
+INSERT INTO `syc_users` VALUES ('2', 'admin', 'sha256:1000:bb+qr8kui4m4JriYM/aLnznOODBwZfbi:30utxhFU7cxebnazg8Xh5TEkAmzR6ymJ', '管理员', '1', 'nice172@126.com', '', '2018-08-05', '15', '1533480247', '1533480247', '192.168.1.225', '', '16', '1');
 INSERT INTO `syc_users` VALUES ('3', 'nice172', 'sha256:1000:GM0kcPbE+QNRSpmsG58qckJUkekhvpwi:XwmDtVMPAfE8DDYUdVW5DF5AOLljRm8q', '测试号', '1', 'nice172@163.com', '', '2018-08-06', '0', '1533526543', '1533526543', '10.10.0.99', '', '14', '1');

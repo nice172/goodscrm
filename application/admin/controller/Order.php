@@ -231,6 +231,10 @@ class Order extends Base {
                 if ($val['goods_number'] <= 0){
                     $this->error('下单数量不能小于1');
                 }
+                $store_number = db('goods')->where(['goods_id' => $val['goods_id']])->value('store_number');
+                if ($store_number < $val['goods_number']){
+                	$this->error('“'.$val['goods_name'].'”下单数量不能大于库存量');
+                }
                 if ($val['send_num'] < 0){
                     $this->error('已送数量不能小于0');
                 }
@@ -286,7 +290,7 @@ class Order extends Base {
     protected $create_rule = [
     	'order_id' => 'require',
     	'order_sn' => 'require',
-    	'po_sn' => 'require',
+    	'po_sn' => 'require|checkPosn:1',
     	'supplier_id' => 'require',
     	'cus_phome' => 'require',
     	'transaction_type' => 'require',
@@ -312,13 +316,15 @@ class Order extends Base {
     	'delivery_type.require' => '请选择交货方式',
     	'delivery_company.require' => '送货公司不能为空',
     	'tax.require' => '请选择税率',
-    	'delivery_address.require' => '送货地址不能为空'
+    	'delivery_address.require' => '送货地址不能为空',
+    	'po_sn.checkPosn' => 'PO号码已存在请刷新'
     ];
     
     public function create_do(){
     	if ($this->request->isAjax()){
     		$type = $this->request->param('type');
     		$data = [
+    				'admin_uid' => $this->userinfo['id'],
     				'order_id' => $this->request->post('order_id'),
     				'cus_id' => $this->request->post('cus_id'),
     				'po_sn' => $this->request->post('po_sn'),
@@ -335,9 +341,61 @@ class Order extends Base {
     				'email' => $this->request->post('email'),
     				'contacts' => $this->request->post('contacts'),
     				'status' => $type == 'confirm' ? 1 : 0,
+    				'remark' => $this->request->post('remark'),
     				'create_time' => time(),
     				'update_time' => time()
     		];
+    		$validate = new Validate($this->create_rule,$this->create_message);
+    		$validate->extend('checkPosn',function($value,$rule,$data){
+    			$find = db('purchase')->where(['po_sn' => $value])->find();
+    			return empty($find);
+    		});
+    		if (!$validate->check($data)){
+    			$this->error($validate->getError());
+    		}
+    		$goodsInfo = $this->request->post('goods_info/a');
+    		if (empty($goodsInfo)){
+    			$this->error('商品信息不能为空');
+    		}
+    		$purchseGoods = [];
+    		$totalMoney = 0;
+    		foreach ($goodsInfo as $key => $value){
+    			$store_number = db('goods')->where(['goods_id' => $value['goods_id']])->value('store_number');
+    			if ($store_number < $value['goods_number']){
+    				$this->error('“'.$value['goods_name'].'”采购数量不能大于库存量');
+    			}
+    			$goods_price = db('order_goods')->where(['order_id' => $data['order_id'],'goods_id' => $value['goods_id']])->value('goods_price');
+    			if ($goods_price < $value['shop_price']){
+    				$this->error('“'.$value['goods_name'].'”采购单价不能高于关联订单价');
+    			}
+    			if ($value['purchase_number'] <= 0){
+    				$this->error('采购数量不能小于1');
+    			}
+    			$countMoney = _formatMoney($value['goods_number']*$value['shop_price']);
+    			$purchseGoods[] = [
+    				'goods_id' => $value['goods_id'],
+    				'goods_name' => $value['goods_name'],
+    				'unit' => $value['unit'],
+    				'goods_number' => $value['purchase_number'],
+    				'goods_price' => $value['shop_price'],
+    				'count_money' => $countMoney,
+    				'goods_attr' => $value['goods_attr'],
+    				'create_time' => time()
+    			];
+    			$totalMoney += $countMoney;
+    		}
+    		$data['total_money'] = _formatMoney($totalMoney);
+    		$purchase_id = db('purchase')->insertGetId($data);
+    		if ($purchase_id){
+    			db('order')->where(['id' => $data['order_id']])->setField('status',5);
+    			foreach ($purchseGoods as $value){
+    				$value['purchase_id'] = $purchase_id;
+    				db('purchase_goods')->insert($value);
+    			}
+    			$this->success('保存采购单成功',url('purchase/confirm',['id' => $purchase_id]));
+    		}else{
+    			$this->error('保存采购单失败');
+    		}
     	}
     }
     
@@ -387,6 +445,9 @@ class Order extends Base {
     		$delivery_type = $delivery_type['params_value'];
     	}
     	$this->assign('delivery_type',$delivery_type);
+    	
+    	$remark = getTextParams(18);
+    	$this->assign('remark',$remark);
     	
     	$this->assign('title','创建采购单');
     	$this->assign('po_sn','PO'.date('Ymdis').date('sms'));

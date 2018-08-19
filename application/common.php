@@ -30,6 +30,72 @@ function _formatMoney($MoenyCount){
 	return substr(sprintf("%.3f",$MoenyCount),0,-1);
 }
 
+/**
+ *数字金额转换成中文大写金额的函数
+ *String Int $num 要转换的小写数字或小写字符串
+ *return 大写字母
+ *小数位为两位
+ **/
+function _formatMoneyChinese($num){
+	$c1 = "零壹贰叁肆伍陆柒捌玖";
+	$c2 = "分角元拾佰仟万拾佰仟亿";
+	$num = round($num, 2);
+	//将数字转化为整数
+	$num = $num * 100;
+	if (strlen($num) > 10) {
+		return "金额太大，请检查";
+	}
+	$i = 0;
+	$c = "";
+	while (1) {
+		if ($i == 0) {
+			//获取最后一位数字
+			$n = substr($num, strlen($num)-1, 1);
+		} else {
+			$n = $num % 10;
+		}
+		//每次将最后一位数字转化为中文
+		$p1 = substr($c1, 3 * $n, 3);
+		$p2 = substr($c2, 3 * $i, 3);
+		if ($n != '0' || ($n == '0' && ($p2 == '亿' || $p2 == '万' || $p2 == '元'))) {
+			$c = $p1 . $p2 . $c;
+		} else {
+			$c = $p1 . $c;
+		}
+		$i = $i + 1;
+		//去掉数字最后一位了
+		$num = $num / 10;
+		$num = (int)$num;
+		//结束循环
+		if ($num == 0) {
+			break;
+		}
+	}
+	$j = 0;
+	$slen = strlen($c);
+	while ($j < $slen) {
+		//utf8一个汉字相当3个字符
+		$m = substr($c, $j, 6);
+		//处理数字中很多0的情况,每次循环去掉一个汉字“零”
+		if ($m == '零元' || $m == '零万' || $m == '零亿' || $m == '零零') {
+			$left = substr($c, 0, $j);
+			$right = substr($c, $j + 3);
+			$c = $left . $right;
+			$j = $j-3;
+			$slen = $slen-3;
+		}
+		$j = $j + 3;
+	}
+	if (substr($c, strlen($c)-3, 3) == '零') {
+		$c = substr($c, 0, strlen($c)-3);
+	}
+	if (empty($c)) {
+		return "零元整";
+	}else{
+		return $c . "整";
+	}
+}
+
 /*加密解密 ENCODE 加密   DECODE 解密*/
 function _encrypt($string, $operation = 'ENCODE', $key = '', $expiry = 0){
 	if($operation == 'DECODE') {
@@ -211,15 +277,15 @@ function send_email($user,$Subject='',$file='',$Body='',$AltBody=''){
         //Server settings
         $mail->SMTPDebug = false;                                 // Enable verbose debug output
         $mail->isSMTP();                                      // Set mailer to use SMTP
-        $mail->Host = 'smtp.126.com';  // Specify main and backup SMTP servers
+        $mail->Host = config('syc_email_smtp');  // Specify main and backup SMTP servers
         $mail->SMTPAuth = true;                               // Enable SMTP authentication
-        $mail->Username = 'nice172@126.com';                 // SMTP username
-        $mail->Password = 'nice172';                           // SMTP password
+        $mail->Username = config('syc_webemail');                 // SMTP username
+        $mail->Password = config('syc_email_pwd');                           // SMTP password
         $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
-        $mail->Port = 25;                                    // TCP port to connect to
+        $mail->Port = config('syc_port');                                    // TCP port to connect to
         
         //Recipients
-        $mail->setFrom('nice172@126.com', 'Admin');
+        $mail->setFrom(config('syc_webemail'), 'Admin');
         if (empty($user)) return false;
         if (is_array($user)){
             foreach ($user as $val){
@@ -244,13 +310,13 @@ function send_email($user,$Subject='',$file='',$Body='',$AltBody=''){
             }
         }
         
-        // 	        $mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
+        //$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
         
         //Content
         $mail->isHTML(true);                                  // Set email format to HTML
         $mail->Subject = $Subject?:'Here is the subject';
-        $mail->Body    = 'This is the HTML message body <b>in bold!</b>';
-        $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+        $mail->Body    = $Body?:$Subject;
+        $mail->AltBody = $AltBody?:'alt';
         
         $mail->send();
         //echo 'Message has been sent';

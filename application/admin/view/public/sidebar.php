@@ -202,7 +202,7 @@
                             </div>
                         </div>
                         <ul class="sidebar-trans submenu">
-                            <li class="nav-item" id="order-index">
+                            <li class="nav-item" id="purchase-index">
                                 <a href="{:url('purchase/index')}" class="sidebar-trans">
                                     <div class="nav-icon sidebar-trans"><span class="icon-ecs"></span></div>
                                     <span class="nav-title">采购单</span>

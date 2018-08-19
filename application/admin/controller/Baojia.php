@@ -4,7 +4,6 @@ use app\admin\model\Customers;
 use think\Request;
 use think\Validate;
 use mpdf\mPDF;
-use PHPMailer\PHPMailer;
 
 class Baojia extends Base {
 	
@@ -279,7 +278,7 @@ class Baojia extends Base {
             <td width="10%">序号</td>
             <td width="60%">产品名称</td>
             <td width="10%">单位</td>
-            <td width="20%">含税单价(RMB)</td>
+            <td width="20%" style="border-right:none;">含税单价(RMB)</td>
             </tr>
         ';
 	    foreach ($goodsInfo as $k => $val){
@@ -287,7 +286,7 @@ class Baojia extends Base {
         <td>'.($k+1).'</td>
     <td>'.$val['goods_name'].'</td>
     <td>'.$val['unit'].'</td>
-<td>'.$val['goods_price'].'</td>
+<td style="border-right:none;">'.$val['goods_price'].'</td>
     </tr>
     ';
 	    }
@@ -303,7 +302,7 @@ class Baojia extends Base {
     <td width="27%">客户回签：</td>
     <td width="10%"align="right">审核：</td>
     <td width="23%"align="left"><img src="'.$img.'" alt="" width="100px"/></td>
-    <td width="40%"align="center">业务：'.$cus['cus_business'].'<br />'.$cus['cus_mobile'].'</td>
+    <td width="40%"align="center" style="border-right:none;">业务：'.$cus['cus_business'].'<br />'.$cus['cus_mobile'].'</td>
     </tr>
 </tbody>
 </table>';

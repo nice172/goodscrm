@@ -21,7 +21,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="portlet margin-top-3">
- <form class="form-horizontal ajaxForm2" method="post" action="<?php echo url('create_do');?>" id="form1">
+ <form class="form-horizontal ajaxForm2" method="post" action="<?php echo url('confirm');?>" id="form1">
   <ul class="nav nav-tabs" role="tablist">
     <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">基本信息</a></li>
     <li role="presentation"><a href="#goods" aria-controls="goods" role="tab" data-toggle="tab">商品信息</a></li>
@@ -29,115 +29,83 @@
   <!-- Tab panes -->
   <div class="tab-content">
     <div role="tabpanel" class="tab-pane active" id="home">
-    <input type="hidden" name="order_id" value="{$data.id}"  id="id" />
+    <input type="hidden" name="id" value="{$data.id}"  id="id" />
     <input type="hidden" name="cus_id" value="{$data.cus_id}"  id="cus_id" />
 								
                     <table class="table contact-template-form">
                                 <tbody>
                                 <tr>
-                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>PO号码:</span></td>
+                                    <td width="15%" class="right-color"><span>PO号码:</span></td>
                                     <td width="35%">
-                                        <input type="hidden" class="form-control w300" readonly="readonly" value="{$po_sn}" name="po_sn" id="po_sn">
-                                        <span>{$po_sn}</span>
+                                        <span>{$data.po_sn}</span>
                                     </td>
-                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>订购日期:</span></td>
+                                    <td width="15%" class="right-color"><span>订购日期:</span></td>
                                     <td width="35%"><input type="text" class="form-control w300" readonly="readonly" value="{$data.create_time|date='Y-m-d',###}" name="create_date" id="create_date"></td>
                                 </tr>
                                 <tr>
-                                <td width="15%" class="right-color"><span class="text-danger">*</span><span>供应商:</span></td>
+                                <td width="15%" class="right-color"><span>供应商:</span></td>
                                 <td width="35%" colspan="3">
-                                	<select class="form-control" name="supplier_id" id="">
-                                		<option value="">请选择供应商</option>
-                                		{foreach name="$supplier" item="v"}
-                                		<option value="{$v.id}">{$v.supplier_name}</option>
-                                		{/foreach}
-                                	</select>
+                                	<span>{$data.supplier_name}</span>
                                 </td>
                                 </tr>
                                 
                                 <tr>
-                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>联系人:</span></td>
-                                    <td width="35%"><input type="text" class="form-control w300" name="contacts" value="{$data.contacts}" id="contacts"></td>
-                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>电话号码:</span></td>
+                                    <td width="15%" class="right-color"><span>联系人:</span></td>
+                                    <td width="35%">{$data.contacts}</td>
+                                    <td width="15%" class="right-color"><span>电话号码:</span></td>
                                     <td width="35%">
-                                        <input type="text" class="form-control w300" name="cus_phome" value="{$client.cus_phome}" id="cus_phome">
+                                        {$data.cus_phome}
                                     </td>
                                 </tr>
                                 
                                 <tr>
                                     <td width="15%" class="right-color">传真号码:</span></td>
                                     <td width="35%">
-                                        <input type="text" class="form-control w300" value="{$data.fax}" name="fax" id="fax">
+                                        {$data.fax}
                                     </td>
-                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>E-Mail:</span></td>
-                                    <td width="35%"><input type="text" class="form-control w300" name="email" value="{$data.email}" id="email"></td>
+                                    <td width="15%" class="right-color"><span>E-Mail:</span></td>
+                                    <td width="35%">{$data.email}</td>
                                 </tr> 
                                <tr>
-                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>交易类别:</span></td>
+                                    <td width="15%" class="right-color"><span>交易类别:</span></td>
                                     <td width="35%">
-                                        <select name="transaction_type" class="form-control w300" id="">
-                                        	<option value="">请选择交易类别</option>
-                                  		{foreach name="$trans_type" item="v"}
-                                		<option value="{$v}">{$v}</option>
-                                		{/foreach}
-                                        </select>
+                                       {$data.transaction_type}
                                     </td>
-                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>付款条件:</span></td>
+                                    <td width="15%" class="right-color"><span>付款条件:</span></td>
                                     <td width="35%">
-                                      <select name="payment" class="form-control w300" id="">
-                                        	<option value="">请选择付款条件</option>
-                                  		{foreach name="$payment" item="v"}
-                                		<option value="{$v}">{$v}</option>
-                                		{/foreach}
-                                        </select>
+                                      {$data.payment}
                                     </td>
                                 </tr> 
                                  <tr>
                                 <td width="15%" class="right-color"><span class="text-danger"></span><span>关联订单:</span></td>
                                     <td width="35%">
-                                        <input type="hidden" class="form-control w300" readonly="readonly" value="{$data.order_sn}" name="order_sn" id="order_sn">
                                         <span>{$data.order_sn}</span>
                                     </td>
-                                <td width="15%" class="right-color"><span class="text-danger">*</span><span>交货方式:</span></td>
+                                <td width="15%" class="right-color"><span>交货方式:</span></td>
                                 <td width="35%">
-                                	<select class="form-control w300" name="delivery_type" id="">
-                                	<option value="">请选择交货方式</option>
-                                  		{foreach name="$delivery_type" item="v"}
-                                		<option value="{$v}">{$v}</option>
-                                		{/foreach}
-                                        </select>
+                                	{$data.delivery_type}
                                 </td>
                                 
                            <tr>
-                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>送货公司:</span></td>
+                                    <td width="15%" class="right-color"><span>送货公司:</span></td>
                                     <td width="35%">
-                                        <input type="text" class="form-control w300" value="" name="delivery_company" id="delivery_company">
+                                        {$data.delivery_company}
                                     </td>
-                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>税率:</span></td>
+                                    <td width="15%" class="right-color"><span>税率:</span></td>
                                     <td width="35%">
-                                    <select class="form-control w300" name="tax" id="">
-                                	<option value="">请选择税率</option>
-                                  		{foreach name="$tax" item="v"}
-                                		<option value="{$v}">{$v}</option>
-                                		{/foreach}
-                                        </select>
+                                    {$data.tax}
                                     </td>
                                 </tr> 
                                 
                                    <tr>
-                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>送货地址:</span></td>
+                                    <td width="15%" class="right-color"><span>送货地址:</span></td>
                                     <td colspan="3">
-                                    	 <select class="form-control" name="delivery_address" id="">
-                                	<option value="">请选择送货地址</option>
-                                  		{foreach name="$contacts" item="v"}
-                                		<option value="{$v.con_address}">{$v.con_address}</option>
-                                		{/foreach}
-                                        </select>
+                                    	 {$data.delivery_address}
                                     </td>
                                 </tr>
                                  <tr>
                                     <td width="15%" class="right-color"><span>备注:</span></td>
-                                    <td colspan="3"><textarea class="form-control" name="remark" id="remark" rows="6">{$remark}</textarea> </td>
+                                    <td colspan="3">{$data.remark}</td>
                                 </tr>
                                 
                     </tbody>
@@ -159,7 +127,7 @@
                                     <th>采购数量</th>
                                     <th>库存数量</th>
                                     <th>总金额</th>
-                                    <th>操作</th>
+                                    <!-- <th>操作</th> -->
                                 </tr>
                             </thead>
                             <tbody class="goodsList"></tbody>
@@ -175,12 +143,18 @@
                 
     <div class="modal-footer">
         <div class="col-md-offset-5 col-md-12 left">
-            <button type="submit" send="save" class="btn btn-primary">保 存</button>
-<!--
+            
+            {if condition="$data['status']==1"}
+            <button type="submit" send="send" class="btn btn-primary">生成PDF并发送</button>
+            {else}
             <button type="submit" send="confirm" class="btn btn-primary">确认采购单</button>
-            <button type="submit" send="create" class="btn btn-primary">生成PDF并发送</button>
--->
+            {/if}
+            
+<!--
+            
             <button type="reset" onclick="history.go(-1);" class="btn btn-default">取消</button>
+-->
+            
         </div>
     </div>
 </form>
@@ -192,21 +166,42 @@
 {/block}
 {block name="footer"}
 <!-- Modal -->
-<div class="modal fade" id="search_company_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal fade" id="contacts_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">查找客户</h4>
+        <h4 class="modal-title" id="myModalLabel">选择联系人</h4>
       </div>
       <div class="modal-body">
-		<form class="form-horizontal search_account" method="post" action="<?php echo url('search_account');?>" id="form1">
-			
-		</form>
+      		                <div class="row">
+                    <div class="col-lg-12">
+                        <table class="table table-hover syc-table">
+                            <thead>
+                            <tr>
+                                <th>选择</th>
+                                <th>联系人</th>
+                                <th>职务</th>
+                                <th>电子邮箱</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {foreach name="$supplier" item="v"}
+                            <tr>
+                            	<td><input type="checkbox" name="send_email_list" value="{$v.con_email}"/></td>
+                            	<td>{$v.con_name}</td>
+                            	<td>{$v.con_post}</td>
+                            	<td>{$v.con_email}</td>
+                            </tr>
+                            {/foreach}
+                            </tbody>
+                            </table>
+                            </div>
+                            </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-<!--         <button type="button" class="btn btn-primary">确认</button> -->
+        <button type="button" class="btn btn-primary confirmSend">确认生成并发送</button>
       </div>
     </div>
   </div>
@@ -241,8 +236,8 @@ function _formatMoney(num){
         });
         
         // 当前页面分类高亮
-        $("#sidebar-schedule").addClass("sidebar-nav-active"); // 大分类
-        $("#order-index").addClass("active"); // 小分类
+        $("#sidebar-purchase").addClass("sidebar-nav-active"); // 大分类
+        $("#purchase-index").addClass("active"); // 小分类
 
 		$('.attrChange').change(function(){
 			var goods_type_id = $(this).val();
@@ -339,7 +334,7 @@ function goodsList(goods_info){
 		html += '<td class="purchase_number"><input type="text" data-purchase_number="'+goods_info[j]['purchase_number']+'" oninput="checkNum2(this)" name="purchase_number" style="width:80px;display:none;" value="'+goods_info[j]['purchase_number']+'" /><span class="inputspan">'+goods_info[j]['purchase_number']+'</span></td>';
 		html += '<td class="store_number"><span class="span">'+goods_info[j]['store_number']+'</span></td>';
 		html += '<td class="totalMoney"><span class="span">'+goods_info[j]['totalMoney']+'</span></td>';
-		html += '<td><a href="javascript:;" onclick="update('+j+')" class="update">修改</a><span class="text-explode">|</span><a href="javascript:;" onclick="_delete('+j+')" class="delete">删除</a></td>';
+		//html += '<td><a href="javascript:;" onclick="update('+j+')" class="update">修改</a><span class="text-explode">|</span><a href="javascript:;" onclick="_delete('+j+')" class="delete">删除</a></td>';
 		html += '</tr>';
 	}
 	$('.goodsList').html(html);
@@ -408,10 +403,26 @@ function _delete(index){
 	goods_info = newGoodsList;
 	goodsList(goods_info);
 }
-$('button[type=submit]').click(function(){
-	var send = $(this).attr('send');
+
+$('.confirmSend').click(function(){
+	var send_email_list = '';
+	var input = $('input[name=send_email_list]');
+	input.each(function(index){
+		if($(input).eq(index).is(':checked')){
+			send_email_list += $(input).eq(index).val()+',';
+		}
+	});
+	if(send_email_list == '' || send_email_list.split(',').length == 0){
+		alert('请至少选择一个联系人');
+		return false;
+	}
+	_ajaxSubmit('send',send_email_list);
+});
+
+function _ajaxSubmit(send,send_email_list){
+	if(!send_email_list) send_email_list = '';
 	$('.ajaxForm2').ajaxSubmit({
-		data:{goods_info:goods_info,type:send},
+		data:{send_email_list:send_email_list,type:send},
 		success: function(res){
 			if(res.code == 1){
 				toastr.success(res.msg);
@@ -425,6 +436,20 @@ $('button[type=submit]').click(function(){
 				}
 		}
 	});
+}
+
+$('button[type=submit]').click(function(){
+	var send = $(this).attr('send');
+	{if condition="$data['status']==1"}
+	$('#contacts_modal').modal({
+		show : true,
+		keyboard : false,
+		backdrop:'static'
+	});
+	return false;
+	{else}
+	_ajaxSubmit(send);
+	{/if}
 	return false;});
 </script>
 {/block}
