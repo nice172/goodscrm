@@ -21,10 +21,10 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="portlet margin-top-3">
- <form class="form-horizontal ajaxForm2" method="post" action="<?php echo url('confirm');?>" id="form1">
+ <form class="form-horizontal ajaxForm2" method="post" action="<?php echo url('edit_do');?>" id="form1">
   <ul class="nav nav-tabs" role="tablist">
-    <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">采购单</a></li>
-    <li><a href="{:url('record',['id' => $data['id'],'sid' => $data['supplier_id']])}">采购记录</a></li>
+    <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">基本信息</a></li>
+    <li role="presentation"><a href="#goods" aria-controls="goods" role="tab" data-toggle="tab">商品信息</a></li>
   </ul>
   <!-- Tab panes -->
   <div class="tab-content">
@@ -35,96 +35,120 @@
                     <table class="table contact-template-form">
                                 <tbody>
                                 <tr>
-                                    <td width="15%" class="right-color"><span>PO号码:</span></td>
+                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>PO号码:</span></td>
                                     <td width="35%">
                                         <span>{$data.po_sn}</span>
                                     </td>
-                                    <td width="15%" class="right-color"><span>订购日期:</span></td>
+                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>订购日期:</span></td>
                                     <td width="35%"><input type="text" class="form-control w300" readonly="readonly" value="{$data.create_time|date='Y-m-d',###}" name="create_date" id="create_date"></td>
                                 </tr>
                                 <tr>
-                                <td width="15%" class="right-color"><span>供应商:</span></td>
+                                <td width="15%" class="right-color"><span class="text-danger">*</span><span>供应商:</span></td>
                                 <td width="35%" colspan="3">
-                                	<span>{$data.supplier_name}</span>
+                                	<select class="form-control" name="supplier_id" id="">
+                                		<option value="">请选择供应商</option>
+                                		{foreach name="$supplier" item="v"}
+                                		<option value="{$v.id}" {if condition="$v['id'] eq $data['supplier_id']"}selected="selected"{/if}>{$v.supplier_name}</option>
+                                		{/foreach}
+                                	</select>
                                 </td>
                                 </tr>
                                 
                                 <tr>
-                                    <td width="15%" class="right-color"><span>联系人:</span></td>
-                                    <td width="35%">{$data.contacts}</td>
-                                    <td width="15%" class="right-color"><span>电话号码:</span></td>
+                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>联系人:</span></td>
+                                    <td width="35%"><input type="text" class="form-control w300" name="contacts" value="{$data.contacts}" id="contacts"></td>
+                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>电话号码:</span></td>
                                     <td width="35%">
-                                        {$data.cus_phome}
+                                        <input type="text" class="form-control w300" name="cus_phome" value="{$client.cus_phome}" id="cus_phome">
                                     </td>
                                 </tr>
                                 
                                 <tr>
                                     <td width="15%" class="right-color">传真号码:</span></td>
                                     <td width="35%">
-                                        {$data.fax}
+                                        <input type="text" class="form-control w300" value="{$data.fax}" name="fax" id="fax">
                                     </td>
-                                    <td width="15%" class="right-color"><span>E-Mail:</span></td>
-                                    <td width="35%">{$data.email}</td>
+                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>E-Mail:</span></td>
+                                    <td width="35%"><input type="text" class="form-control w300" name="email" value="{$data.email}" id="email"></td>
                                 </tr> 
                                <tr>
-                                    <td width="15%" class="right-color"><span>交易类别:</span></td>
+                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>交易类别:</span></td>
                                     <td width="35%">
-                                       {$data.transaction_type}
+                                        <select name="transaction_type" class="form-control w300" id="">
+                                        	<option value="">请选择交易类别</option>
+                                  		{foreach name="$trans_type" item="v"}
+                                		<option value="{$v}" {if condition="$v==$data['transaction_type']"}selected="selected"{/if}>{$v}</option>
+                                		{/foreach}
+                                        </select>
                                     </td>
-                                    <td width="15%" class="right-color"><span>付款条件:</span></td>
+                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>付款条件:</span></td>
                                     <td width="35%">
-                                      {$data.payment}
+                                      <select name="payment" class="form-control w300" id="">
+                                        	<option value="">请选择付款条件</option>
+                                  		{foreach name="$payment" item="v"}
+                                		<option value="{$v}" {if condition="$v==$data['payment']"}selected="selected"{/if}>{$v}</option>
+                                		{/foreach}
+                                        </select>
                                     </td>
                                 </tr> 
                                  <tr>
                                 <td width="15%" class="right-color"><span class="text-danger"></span><span>关联订单:</span></td>
                                     <td width="35%">
+                                        <input type="hidden" class="form-control w300" readonly="readonly" value="{$data.order_sn}" name="order_sn" id="order_sn">
                                         <span>{$data.order_sn}</span>
                                     </td>
-                                <td width="15%" class="right-color"><span>交货方式:</span></td>
+                                <td width="15%" class="right-color"><span class="text-danger">*</span><span>交货方式:</span></td>
                                 <td width="35%">
-                                	{$data.delivery_type}
+                                	<select class="form-control w300" name="delivery_type" id="">
+                                	<option value="">请选择交货方式</option>
+                                  		{foreach name="$delivery_type" item="v"}
+                                		<option value="{$v}" {if condition="$v==$data['delivery_type']"}selected="selected"{/if}>{$v}</option>
+                                		{/foreach}
+                                        </select>
                                 </td>
                                 
                            <tr>
-                                    <td width="15%" class="right-color"><span>送货公司:</span></td>
+                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>送货公司:</span></td>
                                     <td width="35%">
-                                        {$data.delivery_company}
+                                        <input type="text" class="form-control w300" value="{$data.delivery_company}" name="delivery_company" id="delivery_company">
                                     </td>
-                                    <td width="15%" class="right-color"><span>税率:</span></td>
+                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>税率:</span></td>
                                     <td width="35%">
-                                    {$data.tax}
+                                    <select class="form-control w300" name="tax" id="">
+                                	<option value="">请选择税率</option>
+                                  		{foreach name="$tax" item="v"}
+                                		<option value="{$v}" {if condition="$v==$data['tax']"}selected="selected"{/if}>{$v}</option>
+                                		{/foreach}
+                                        </select>
                                     </td>
                                 </tr> 
                                 
                                    <tr>
-                                    <td width="15%" class="right-color"><span>送货地址:</span></td>
+                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>送货地址:</span></td>
                                     <td colspan="3">
-                                    	 {$data.delivery_address}
+                                    	 <select class="form-control" name="delivery_address" id="">
+                                	<option value="">请选择送货地址</option>
+                                  		{foreach name="$contacts" item="v"}
+                                		<option value="{$v.con_address}" {if condition="$v['con_address']==$data['delivery_address']"}selected="selected"{/if}>{$v.con_address}</option>
+                                		{/foreach}
+                                        </select>
                                     </td>
                                 </tr>
                                  <tr>
                                     <td width="15%" class="right-color"><span>备注:</span></td>
-                                    <td colspan="3">{$data.remark}</td>
+                                    <td colspan="3"><textarea class="form-control" name="remark" id="remark" rows="6">{$data.remark}</textarea> </td>
                                 </tr>
                                 
                     </tbody>
                     </table>
+    </div>
 
+<div role="tabpanel" class="tab-pane" id="goods">
 
 		<div class="row">
                     <div class="col-lg-12">
-                        <table class="table table-hover" style="margin-top:0px;">
+                        <table class="table table-hover">
                             <thead>
-                            <tr>
-                                        <th colspan="20">
-                                            <div class="pull-left">
-                                                <div class="bs-callout bs-callout-warning">
-                                                    <span>商品信息</span>
-                                                </div>
-                                            </div>
-                                        </th>
-                                    </tr>
                                 <tr>
                                     <th>序号</th>
                                     <th>商品名称</th>
@@ -134,7 +158,7 @@
                                     <th>采购数量</th>
                                     <th>库存数量</th>
                                     <th>总金额</th>
-                                    <!-- <th>操作</th> -->
+                                    <th>操作</th>
                                 </tr>
                             </thead>
                             <tbody class="goodsList"></tbody>
@@ -148,26 +172,16 @@
 
   </div>
                 
-    {if condition="$data['status']==0 || $data['status']==1"}
-    <div class="modal-footer" style="border-top: none;">
+    <div class="modal-footer">
         <div class="col-md-offset-5 col-md-12 left">
-            
-            {if condition="$data['status']==1"}
-            <button type="submit" send="send" class="btn btn-primary">生成PDF并发送</button>
-            {elseif condition="$data['status']==0"}
-            <button type="submit" send="confirm" class="btn btn-primary">确认采购单</button>
-            {else}
-            
-            {/if}
-            
+            <button type="submit" send="save" class="btn btn-primary">保 存</button>
 <!--
-            
-            <button type="reset" onclick="history.go(-1);" class="btn btn-default">取消</button>
+            <button type="submit" send="confirm" class="btn btn-primary">确认采购单</button>
+            <button type="submit" send="create" class="btn btn-primary">生成PDF并发送</button>
 -->
-            
+            <button type="reset" onclick="history.go(-1);" class="btn btn-default">取消</button>
         </div>
     </div>
-    {/if}
 </form>
                         </div>
                     </div>
@@ -177,42 +191,21 @@
 {/block}
 {block name="footer"}
 <!-- Modal -->
-<div class="modal fade" id="contacts_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal fade" id="search_company_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">选择联系人</h4>
+        <h4 class="modal-title" id="myModalLabel">查找客户</h4>
       </div>
       <div class="modal-body">
-      		                <div class="row">
-                    <div class="col-lg-12">
-                        <table class="table table-hover syc-table">
-                            <thead>
-                            <tr>
-                                <th>选择</th>
-                                <th>联系人</th>
-                                <th>职务</th>
-                                <th>电子邮箱</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {foreach name="$supplier" item="v"}
-                            <tr>
-                            	<td><input type="checkbox" name="send_email_list" value="{$v.con_email}"/></td>
-                            	<td>{$v.con_name}</td>
-                            	<td>{$v.con_post}</td>
-                            	<td>{$v.con_email}</td>
-                            </tr>
-                            {/foreach}
-                            </tbody>
-                            </table>
-                            </div>
-                            </div>
+		<form class="form-horizontal search_account" method="post" action="<?php echo url('search_account');?>" id="form1">
+			
+		</form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-        <button type="button" class="btn btn-primary confirmSend">确认生成并发送</button>
+<!--         <button type="button" class="btn btn-primary">确认</button> -->
       </div>
     </div>
   </div>
@@ -345,7 +338,7 @@ function goodsList(goods_info){
 		html += '<td class="purchase_number"><input type="text" data-purchase_number="'+goods_info[j]['purchase_number']+'" oninput="checkNum2(this)" name="purchase_number" style="width:80px;display:none;" value="'+goods_info[j]['purchase_number']+'" /><span class="inputspan">'+goods_info[j]['purchase_number']+'</span></td>';
 		html += '<td class="store_number"><span class="span">'+goods_info[j]['store_number']+'</span></td>';
 		html += '<td class="totalMoney"><span class="span">'+goods_info[j]['totalMoney']+'</span></td>';
-		//html += '<td><a href="javascript:;" onclick="update('+j+')" class="update">修改</a><span class="text-explode">|</span><a href="javascript:;" onclick="_delete('+j+')" class="delete">删除</a></td>';
+		html += '<td><a href="javascript:;" onclick="update('+j+')" class="update">修改</a><span class="text-explode">|</span><a href="javascript:;" onclick="_delete('+j+')" class="delete">删除</a></td>';
 		html += '</tr>';
 	}
 	$('.goodsList').html(html);
@@ -414,26 +407,10 @@ function _delete(index){
 	goods_info = newGoodsList;
 	goodsList(goods_info);
 }
-
-$('.confirmSend').click(function(){
-	var send_email_list = '';
-	var input = $('input[name=send_email_list]');
-	input.each(function(index){
-		if($(input).eq(index).is(':checked')){
-			send_email_list += $(input).eq(index).val()+',';
-		}
-	});
-	if(send_email_list == '' || send_email_list.split(',').length == 0){
-		alert('请至少选择一个联系人');
-		return false;
-	}
-	_ajaxSubmit('send',send_email_list);
-});
-
-function _ajaxSubmit(send,send_email_list){
-	if(!send_email_list) send_email_list = '';
+$('button[type=submit]').click(function(){
+	var send = $(this).attr('send');
 	$('.ajaxForm2').ajaxSubmit({
-		data:{send_email_list:send_email_list,type:send},
+		data:{goods_info:goods_info,type:send},
 		success: function(res){
 			if(res.code == 1){
 				toastr.success(res.msg);
@@ -447,20 +424,6 @@ function _ajaxSubmit(send,send_email_list){
 				}
 		}
 	});
-}
-
-$('button[type=submit]').click(function(){
-	var send = $(this).attr('send');
-	{if condition="$data['status']==1"}
-	$('#contacts_modal').modal({
-		show : true,
-		keyboard : false,
-		backdrop:'static'
-	});
-	return false;
-	{else}
-	_ajaxSubmit(send);
-	{/if}
 	return false;});
 </script>
 {/block}

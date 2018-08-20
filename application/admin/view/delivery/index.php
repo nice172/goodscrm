@@ -13,7 +13,7 @@
                                 <h5><span>{$title}</span></h5>
                             </div>
                             <div class="pull-right">
-                                <!--<a class="btn btn-primary" href="{:url('order/add')}">新建订单</a>-->
+                                <a class="btn btn-primary" href="{:url('add')}">新建送货单</a>
                                 <a href="javascript:window.location.reload();" class="btn btn-default">
                                     <span class="glyphicon glyphicon-refresh"></span>
                                     <span>刷新</span></a>
@@ -55,13 +55,13 @@
                             <thead>
                             <tr>
                                 <th>ID编号</th>
-                                <th>采购单号</th>
-                                <th>定购日期</th>
-                                <th>供应商</th>
+                                <th>送货单号</th>
+                                <th>送货日期</th>
+                                <th>客户名称</th>
                                 <th>关联订单号</th>
-                                <th>采购金额</th>
-                                <th>要求送货日期</th>
-                                <th>付款条件</th>
+                                <th>商品</th>
+                                <th>单位</th>
+                                <th>数量</th>
                                 <th>创建时间</th>
                                 <th>状态</th>
                                 <th>操作</th>
@@ -127,8 +127,8 @@
 <script type="text/javascript">
     $(document).ready(function() {
         // 当前页面分类高亮
-        $("#sidebar-purchase").addClass("sidebar-nav-active"); // 大分类
-        $("#purchase-index").addClass("active"); // 小分类
+        $("#sidebar-delivery").addClass("sidebar-nav-active"); // 大分类
+        $("#delivery-index").addClass("active"); // 小分类
         layui.use('laydate', function() {
             var laydate = layui.laydate;
             //日期选择器

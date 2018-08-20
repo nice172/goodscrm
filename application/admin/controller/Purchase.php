@@ -1,6 +1,7 @@
 <?php
 namespace app\admin\controller;
 use mpdf\mPDF;
+use think\Validate;
 
 class Purchase extends Base {
 	
@@ -70,8 +71,178 @@ class Purchase extends Base {
 		return $this->fetch();
 	}
 	
+	protected $create_rule = [
+	    //'order_id' => 'require',
+	    //'order_sn' => 'require',
+	    //'po_sn' => 'require|checkPosn:1',
+	    'supplier_id' => 'require',
+	    'cus_phome' => 'require',
+	    'transaction_type' => 'require',
+	    'payment' => 'require',
+	    'delivery_type' => 'require',
+	    'delivery_company' => 'require',
+	    'tax' => 'require',
+	    'delivery_address' => 'require',
+	    'email' => 'require|email',
+	    'contacts' => 'require',
+	];
+	protected $create_message = [
+	    'order_id.require' => '订单ID参数错误',
+	    'order_sn.require' => '关联订单号错误',
+	    'po_sn.require' => 'PO号码不能为空',
+	    'supplier_id.require' => '请选择供应商',
+	    'contacts.require' => '联系人不能为空',
+	    'email.require' => 'E-Mail不能为空',
+	    'email.email' => 'E-Mail格式不正确',
+	    'cus_phome.require' => '电话号码不能为空',
+	    'transaction_type.require' => '请选择交易类别',
+	    'payment.require' => '请选择付款条件',
+	    'delivery_type.require' => '请选择交货方式',
+	    'delivery_company.require' => '送货公司不能为空',
+	    'tax.require' => '请选择税率',
+	    'delivery_address.require' => '送货地址不能为空',
+	    'po_sn.checkPosn' => 'PO号码已存在请刷新'
+	];
+	
+	public function edit_do(){
+	    if ($this->request->isAjax()){
+	        $data = [
+	            'id' => $this->request->post('id',0,'intval'),
+	            'supplier_id' => $this->request->post('supplier_id'),
+	            'cus_phome' => $this->request->post('cus_phome'),
+	            'transaction_type' => $this->request->post('transaction_type'),
+	            'payment' => $this->request->post('payment'),
+	            'delivery_type' => $this->request->post('delivery_type'),
+	            'delivery_company' => $this->request->post('delivery_company'),
+	            'tax' => $this->request->post('tax'),
+	            'delivery_address' => $this->request->post('delivery_address'),
+	            'fax' => $this->request->post('fax'),
+	            'email' => $this->request->post('email'),
+	            'contacts' => $this->request->post('contacts'),
+	            'status' => 0,
+	            'remark' => $this->request->post('remark'),
+	            'update_time' => time()
+	        ];
+	           if ($data['id'] <= 0) $this->error('保存采购单失败');
+	           $validate = new Validate($this->create_rule,$this->create_message);
+	            if (!$validate->check($data)){
+	                $this->error($validate->getError());
+	            }
+	            $goodsInfo = $this->request->post('goods_info/a');
+	            if (empty($goodsInfo)){
+	                $this->error('商品信息不能为空');
+	            }
+	            $purchseGoods = [];
+	            $totalMoney = 0;
+	            foreach ($goodsInfo as $key => $value){
+	                $countMoney = _formatMoney($value['purchase_number']*$value['shop_price']);
+	                $purchseGoods[] = [
+	                    'id' => isset($value['id']) ? intval($value['id']) : 0,
+	                    'purchase_id' => isset($value['purchase_id']) ? intval($value['purchase_id']) : 0,
+	                    'goods_id' => $value['goods_id'],
+	                    'goods_name' => $value['goods_name'],
+	                    'unit' => $value['unit'],
+	                    'goods_number' => $value['purchase_number'],
+	                    'goods_price' => $value['shop_price'],
+	                    'count_money' => $countMoney,
+	                    'goods_attr' => $value['goods_attr'],
+	                    'create_time' => time()
+	                ];
+	                $totalMoney += $countMoney;
+	            }
+	            $data['total_money'] = _formatMoney($totalMoney);
+	            if (db('purchase')->update($data)){
+	                $purchase_id = $data['id'];
+	                foreach ($purchseGoods as $value){
+	                    $value['purchase_id'] = $purchase_id;
+	                    if (!$value['id']){
+	                        unset($value['id']);
+	                        db('purchase_goods')->insert($value);
+	                    }else{
+	                        $pogoods_id = $value['id'];
+	                        unset($value['create_time'],$value['id'],$value['purchase_id']);
+	                        db('purchase_goods')->where(['id' => $pogoods_id,'purchase_id' => $purchase_id])->update($value);
+	                    }
+	                }
+	                $this->success('保存采购单成功',url('purchase/info',['id' => $purchase_id]));
+	            }else{
+	                $this->error('保存采购单失败');
+	            }
+	    }
+	}
+	
+	public function record(){
+	    $id = $this->request->param('id',0,'intval');
+	    $sid = $this->request->param('sid',0,'intval');
+	    if ($id <= 0 || $sid <= 0) $this->error('参数错误');
+	    
+	    $list = db('purchase p')->join('__SUPPLIER__ s','p.supplier_id=s.id')
+	    ->join('__USERS__ u','p.admin_uid=u.id')
+	    ->field('p.*,s.supplier_name,u.user_nick')->order('p.id desc')->paginate(config('PAGE_SIZE'));
+	    
+	    $this->assign('id',$id);
+	    $this->assign('client',[]);
+	    $this->assign('data',[]);
+	    $this->assign('page',$list->render());
+	    $this->assign('list',$list);
+	    $this->assign('title','采购记录');
+	    return $this->fetch();
+	}
+	
 	public function edit(){
-		
+	    $id = $this->request->param('id',0,'intval');
+	    if ($id <= 0) $this->error('参数错误');
+	    $purchase = db('purchase')->where(['id' => $id,'status' => ['neq','-1']])->find();
+	    if (empty($purchase)) $this->error('采购单不存在');
+	    $goodsInfo = db('purchase_goods')->where(['purchase_id' => $purchase['id']])->select();
+	    if (!empty($goodsInfo)){
+	        foreach ($goodsInfo as $key => $value){
+	            $value['shop_price'] = $value['goods_price']; //实际价格
+	            $value['purchase_number'] = $value['goods_number'];
+	            $value['store_number'] = db('goods')->where(['goods_id' => $value['goods_id']])->value('store_number');
+	            $value['totalMoney'] = _formatMoney($value['goods_price']*$value['purchase_number']);
+	            $value['goods_number'] = db('order_goods')->where(['order_id' => $purchase['order_id'],'goods_id' => $value['goods_id']])->value('goods_number');
+	            $goodsInfo[$key] = json_encode($value);
+	        }
+	    }
+	    $purchase['goodsInfo'] = $goodsInfo;
+	    $this->assign('data',$purchase);
+	    
+	    $client = db('customers')->where(['cus_id' => $purchase['cus_id']])->find();
+	    $contacts = db('customers_contact')->where(['con_cus_id' => $client['cus_id']])->select();
+	    $this->assign('client',$client);
+	    $this->assign('contacts',$contacts);
+	    $supplier = db('supplier')->where(['supplier_status' => ['neq','-1']])->select();
+	    $this->assign('supplier',$supplier);
+	    
+	    $trans_type = getParams(5);
+	    if (!empty($trans_type)){
+	        $trans_type = $trans_type['params_value'];
+	    }
+	    $this->assign('trans_type',$trans_type);
+	    $payment = getParams(1);
+	    if (!empty($payment)){
+	        $payment = $payment['params_value'];
+	    }
+	    $this->assign('payment',$payment);
+	    
+	    $tax = getParams(17);
+	    if (!empty($tax)){
+	        $tax = $tax['params_value'];
+	    }
+	    $this->assign('tax',$tax);
+	    $delivery_type = getParams(16);
+	    if (!empty($delivery_type)){
+	        $delivery_type = $delivery_type['params_value'];
+	    }
+	    $this->assign('delivery_type',$delivery_type);
+	    
+	    $remark = getTextParams(18);
+	    $this->assign('remark',$remark);
+	    
+	    $this->assign('title','编辑采购单');
+	    $this->assign('po_sn','PO'.date('Ymdis').date('sms'));
+	    return $this->fetch();
 	}
 	
 	public function view(){
@@ -176,13 +347,13 @@ class Purchase extends Base {
 		$strContent .= '<p style="width:90%;margin:30px auto 0 auto;">备注：</p>';
 		$strContent .= 	'<p style="width:87%;margin:10px auto 0 auto;">'.$purchase['remark'].'</p>';
 		$img = getFileParams(11);
-		
+		//<td width="10%" align="left"><img src="'.$img.'" alt="" width="100px"/></td>
 		$strContentFooter = '<table class="noborder" style="height:100px;">
 <tbody>
     <tr>
     <td width="10%" align="right">供货方签署：</td>
-    <td width="10%" align="left"><img src="'.$img.'" alt="" width="100px"/></td>
-    <td width="80%"align="center">购货方签署：'.$purchase['contacts'].'（'.$purchase['cus_phome'].'）</td>
+    <td width="40%" align="left"></td>
+    <td width="50%"align="center">购货方签署：'.$purchase['contacts'].'（'.$purchase['cus_phome'].'）</td>
     </tr>
 </tbody>
 </table>';
@@ -250,6 +421,22 @@ h1,h2,h3,p,div,span{padding:0;margin:0;}
 				}
 				$this->error('生成PDF失败');
 				return;
+			}
+			
+			$goodsInfo = db('purchase_goods')->where(['purchase_id' => $purchase['id']])->select();
+			
+			foreach ($goodsInfo as $key => $value){
+    			$store_number = db('goods')->where(['goods_id' => $value['goods_id']])->value('store_number');
+    			if ($store_number < $value['goods_number']){
+    			    $this->error('“'.$value['goods_name'].'”采购数量不能大于库存量');
+    			}
+    			$goods_price = db('order_goods')->where(['order_id' => $purchase['order_id'],'goods_id' => $value['goods_id']])->value('goods_price');
+    			if ($goods_price < $value['goods_price']){
+    			    $this->error('“'.$value['goods_name'].'”采购单价不能高于关联订单价');
+    			}
+    			if ($value['goods_number'] <= 0){
+    			    $this->error('采购数量不能小于1');
+    			}
 			}
 			if (db('purchase')->where(['id' => $purchase['id']])->setField('status',1)){
 				$this->success('确认采购单成功');

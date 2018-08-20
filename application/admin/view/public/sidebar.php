@@ -15,51 +15,45 @@
                         </div>
                         <ul class="sidebar-trans submenu">
                             <li class="nav-item" id="config-index">
-                                <a href="{:Url('config/index')}" class="sidebar-trans">
+                                <a href="{:url('config/index')}" class="sidebar-trans">
                                     <div class="nav-icon sidebar-trans"><span class="icon-ecs"></span></div>
                                     <span class="nav-title">基本配置</span>
                                 </a>
                             </li>
                             <li class="nav-item" id="config-role">
-                                <a href="{:Url('Role/index')}" class="sidebar-trans">
+                                <a href="{:url('Role/index')}" class="sidebar-trans">
                                     <div class="nav-icon sidebar-trans"><span class="icon-ecs"></span></div>
                                     <span class="nav-title">角色管理</span>
                                 </a>
                             </li>
                             <li class="nav-item" id="config-users">
-                                <a href="{:Url('users/index')}" class="sidebar-trans">
+                                <a href="{:url('users/index')}" class="sidebar-trans">
                                     <div class="nav-icon sidebar-trans"><span class="icon-topbar-certify"></span></div>
                                     <span class="nav-title">用户管理</span>
                                 </a>
                             </li>
                             <li class="nav-item" id="config-auth">
-                                <a href="{:Url('Auth/index')}" class="sidebar-trans">
+                                <a href="{:url('Auth/index')}" class="sidebar-trans">
                                     <div class="nav-icon sidebar-trans"><span class="icon-topbar-certify"></span></div>
                                     <span class="nav-title">权限管理</span>
                                 </a>
                             </li>
                             <li class="nav-item" id="config-goods_type">
-                                <a href="{:Url('Goods/goods_type')}" class="sidebar-trans">
+                                <a href="{:url('Goods/goods_type')}" class="sidebar-trans">
                                     <div class="nav-icon sidebar-trans"><span class="icon-topbar-certify"></span></div>
                                     <span class="nav-title">商品类型管理</span>
                                 </a>
                             </li>
 <!--                             <li class="nav-item" id="config-goods_attr">
-                                <a href="{:Url('Goods/goods_attr')}" class="sidebar-trans">
+                                <a href="{:url('Goods/goods_attr')}" class="sidebar-trans">
                                     <div class="nav-icon sidebar-trans"><span class="icon-topbar-certify"></span></div>
                                     <span class="nav-title">商品属性管理</span>
                                 </a>
                             </li> -->
                             <li class="nav-item" id="config-params">
-                                <a href="{:Url('Params/index')}" class="sidebar-trans">
+                                <a href="{:url('Params/index')}" class="sidebar-trans">
                                     <div class="nav-icon sidebar-trans"><span class="icon-topbar-certify"></span></div>
                                     <span class="nav-title">系统参数管理</span>
-                                </a>
-                            </li>
-                            <li class="nav-item" id="config-shengchan">
-                                <a href="{:Url('config/produce')}" class="sidebar-trans">
-                                    <div class="nav-icon sidebar-trans"><span class="icon-ecs"></span></div>
-                                    <span class="nav-title">原料设定</span>
                                 </a>
                             </li>
                         </ul>
@@ -75,7 +69,7 @@
                         </div>
                         <ul class="sidebar-trans submenu">
                             <li class="nav-item" id="supplier-index">
-                                <a href="{:Url('supplier/index')}" class="sidebar-trans">
+                                <a href="{:url('supplier/index')}" class="sidebar-trans">
                                     <div class="nav-icon sidebar-trans"><span class="icon-ecs"></span></div>
                                     <span class="nav-title">供应商列表</span>
                                 </a>
@@ -99,7 +93,7 @@
                         </div>
                         <ul class="sidebar-trans submenu">
                             <li class="nav-item" id="baojia-index">
-                                <a href="{:Url('baojia/index')}" class="sidebar-trans">
+                                <a href="{:url('baojia/index')}" class="sidebar-trans">
                                     <div class="nav-icon sidebar-trans"><span class="icon-ecs"></span></div>
                                     <span class="nav-title">报价列表</span>
                                 </a>
@@ -117,19 +111,19 @@
                         </div>
                         <ul class="sidebar-trans submenu">
                             <li class="nav-item" id="storage-index">
-                                <a href="{:Url('storage/index')}" class="sidebar-trans">
+                                <a href="{:url('storage/index')}" class="sidebar-trans">
                                     <div class="nav-icon sidebar-trans"><span class="icon-ecs"></span></div>
                                     <span class="nav-title">原料仓库</span>
                                 </a>
                             </li>
                             <li class="nav-item" id="storage-xingcai">
-                                <a href="{:Url('storage/charge')}" class="sidebar-trans">
+                                <a href="{:url('storage/charge')}" class="sidebar-trans">
                                     <div class="nav-icon sidebar-trans"><span class="icon-ecs"></span></div>
                                     <span class="nav-title">型材管理</span>
                                 </a>
                             </li>
                             <li class="nav-item" id="storage-jinliao">
-                                <a href="{:Url('storage/numlc')}" class="sidebar-trans">
+                                <a href="{:url('storage/numlc')}" class="sidebar-trans">
                                     <div class="nav-icon sidebar-trans"><span class="icon-ecs"></span></div>
                                     <span class="nav-title">新增进料</span>
                                 </a>
@@ -146,19 +140,19 @@
                         </div>
                         <ul class="sidebar-trans submenu">
                             <li class="nav-item" id="sidebar-customers">
-                                <a href="{:Url('customers/index')}" class="sidebar-trans">
+                                <a href="{:url('customers/index')}" class="sidebar-trans">
                                     <div class="nav-icon sidebar-trans"><span class="icon-ecs"></span></div>
                                     <span class="nav-title">客户信息</span>
                                 </a>
                             </li>
                             <li class="nav-item" id="sidebar-orders">
-                                <a href="{:Url('orders/index')}" class="sidebar-trans">
+                                <a href="{:url('orders/index')}" class="sidebar-trans">
                                     <div class="nav-icon sidebar-trans"><span class="icon-ecs"></span></div>
                                     <span class="nav-title">销售订单</span>
                                 </a>
                             </li>
                             <li class="nav-item" id="logis-index">
-                                <a href="{:Url('logistics/index')}" class="sidebar-trans">
+                                <a href="{:url('logistics/index')}" class="sidebar-trans">
                                     <div class="nav-icon sidebar-trans"><span class="icon-ecs"></span></div>
                                     <span class="nav-title">物流信息</span>
                                 </a>
@@ -187,7 +181,7 @@
                                 </a>
                             </li>
                             <li class="nav-item" id="order-finish">
-                                <a href="{:Url('order/finish')}" class="sidebar-trans">
+                                <a href="{:url('order/finish')}" class="sidebar-trans">
                                     <div class="nav-icon sidebar-trans"><span class="icon-ecs"></span></div>
                                     <span class="nav-title">完成订单</span>
                                 </a>
@@ -210,7 +204,7 @@
                             </li>
                         </ul>
                     </li>
-                   <li class="sidebar-nav" id="sidebar-deliery">
+                   <li class="sidebar-nav" id="sidebar-delivery">
                         <div class="sidebar-title sidebar-trans">
                             <div class="sidebar-title-inner">
                                 <span class="sidebar-title-icon icon-arrow-right"></span>
@@ -218,8 +212,8 @@
                             </div>
                         </div>
                         <ul class="sidebar-trans submenu">
-                            <li class="nav-item" id="order-index">
-                                <a href="{:url('store/index')}" class="sidebar-trans">
+                            <li class="nav-item" id="delivery-index">
+                                <a href="{:url('delivery/index')}" class="sidebar-trans">
                                     <div class="nav-icon sidebar-trans"><span class="icon-ecs"></span></div>
                                     <span class="nav-title">送货单</span>
                                 </a>
@@ -252,13 +246,13 @@
                         </div>
                         <ul class="sidebar-trans submenu">
                             <li class="nav-item" id="finance-receivables">
-                                <a href="{:Url('finance/index')}" class="sidebar-trans">
+                                <a href="{:url('finance/index')}" class="sidebar-trans">
                                     <div class="nav-icon sidebar-trans"><span class="icon-ecs"></span></div>
                                     <span class="nav-title">应收账款</span>
                                 </a>
                             </li>
                             <li class="nav-item" id="finance-statistics">
-                                <a href="{:Url('finance/statistics')}" class="sidebar-statistics">
+                                <a href="{:url('finance/statistics')}" class="sidebar-statistics">
                                     <div class="nav-icon sidebar-trans"><span class="icon-ecs"></span></div>
                                     <span class="nav-title">销售统计</span>
                                 </a>

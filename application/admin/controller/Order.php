@@ -360,6 +360,7 @@ class Order extends Base {
     		$purchseGoods = [];
     		$totalMoney = 0;
     		foreach ($goodsInfo as $key => $value){
+    		    /*
     			$store_number = db('goods')->where(['goods_id' => $value['goods_id']])->value('store_number');
     			if ($store_number < $value['goods_number']){
     				$this->error('“'.$value['goods_name'].'”采购数量不能大于库存量');
@@ -371,7 +372,8 @@ class Order extends Base {
     			if ($value['purchase_number'] <= 0){
     				$this->error('采购数量不能小于1');
     			}
-    			$countMoney = _formatMoney($value['goods_number']*$value['shop_price']);
+    			*/
+    			$countMoney = _formatMoney($value['purchase_number']*$value['shop_price']);
     			$purchseGoods[] = [
     				'goods_id' => $value['goods_id'],
     				'goods_name' => $value['goods_name'],
@@ -392,7 +394,7 @@ class Order extends Base {
     				$value['purchase_id'] = $purchase_id;
     				db('purchase_goods')->insert($value);
     			}
-    			$this->success('保存采购单成功',url('purchase/confirm',['id' => $purchase_id]));
+    			$this->success('保存采购单成功',url('purchase/info',['id' => $purchase_id]));
     		}else{
     			$this->error('保存采购单失败');
     		}
