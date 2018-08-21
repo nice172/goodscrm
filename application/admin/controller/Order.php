@@ -56,6 +56,7 @@ class Order extends Base {
             $db->join('__GOODS__ gd','gd.goods_id=g.goods_id');
             $db->where(['gd.category_id' => $categroy_id]);
         }
+        $db->order('o.id desc');
         $data = $db->paginate(config('PAGE_SIZE'), false, ['query' => $this->request->param() ]);
         // 获取分页显示
         $page = $data->render();
@@ -95,7 +96,7 @@ class Order extends Base {
             }
         }
         $db->join('__ORDER_GOODS__ g','o.id=g.order_id');
-        
+        $db->order('o.id desc');
         if (!empty($categroy_id)){
             $db->join('__GOODS__ gd','gd.goods_id=g.goods_id');
             $db->where(['gd.category_id' => $categroy_id]);
@@ -154,6 +155,7 @@ class Order extends Base {
     		$db->where(['gd.category_id' => $categroy_id]);
     	}
     	$category = db('goods_category')->where(array('status' => 1))->select();
+    	$db->order('o.id desc');
     	$result = $db->paginate(config('PAGE_SIZE'), false, ['query' => $this->request->param() ]);
     	$data = $result->all();
     	foreach ($data as $key => $value){
@@ -516,7 +518,7 @@ class Order extends Base {
                     $goods_attr = db('goods_attr_val')->where(['goods_id' => $val['goods_id']])
                     ->field(['goods_attr_id','attr_name','attr_value'])->select();
                     
-                    if (!isset($value['id']) || intval($val['id']) <= 0){
+                    if (!isset($val['id']) || intval($val['id']) <= 0){
                         db('order_goods')->insert([
                             'order_id' => $data['id'],
                             'goods_id' => $val['goods_id'],

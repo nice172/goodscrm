@@ -30,8 +30,9 @@ class Baojia extends Base {
 	    $db = db('baojia');
 	    $where = ['status' => ['neq','-1']];
 	    if ($company_short != ''){
-	        $where['company_short'] = ['like',"%{$company_short}%"];
-	        $where['company_name'] = ['like',"%{$company_short}%"];
+	        //$where['company_short'] = ['like',"%{$company_short}%"];
+	        //$where['company_name'] = ['like',"%{$company_short}%"];
+	        $db->where('company_short|company_name','like',"%{$company_short}%");
 	    }
 	    $db->where($where);
 	    if ($start_time != '' && $end_time != ''){

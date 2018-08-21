@@ -20,69 +20,86 @@
                 </div>           
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="portlet margin-top-3">
- <form class="form-horizontal ajaxForm2" method="post" action="<?php echo url('edit');?>" id="form1">
-  <ul class="nav nav-tabs" role="tablist">
-    <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">基本信息</a></li>
-    <li role="presentation"><a href="#goods" aria-controls="goods" role="tab" data-toggle="tab">商品</a></li>
-  </ul>
+                        <div class="portlet">
+ <form class="form-horizontal ajaxForm2" method="post" action="<?php echo url('add');?>" id="form1">
   <!-- Tab panes -->
   <div class="tab-content">
-    <div role="tabpanel" class="tab-pane active" id="home">
-    <input type="hidden" name="id" value="{$data.id}"  id="id" />
-    <input type="hidden" name="cus_id" value="{$data.cus_id}"  id="cus_id" />
+
+    							<input type="hidden" name="cus_id" id="cus_id" />
 								
-                    <table class="table contact-template-form">
+                    <table class="table contact-template-form" style="margin-bottom: 10px;">
                                 <tbody>
                                 <tr>
-                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>订单号:</span></td>
+                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>送货单号:</span></td>
                                     <td width="35%">
-                                        <input type="text" class="form-control w300" readonly="readonly" value="{$data.order_sn}" name="order_sn" id="order_sn">
+                                        <input type="text" class="form-control w300" readonly="readonly" value="DN<?php echo date('Ymdis').date('sms');?>" name="order_sn" id="order_sn">
                                     </td>
-                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>下单日期:</span></td>
-                                    <td width="35%"><input type="text" class="form-control w300" readonly="readonly" value="{$data.create_time|date='Y-m-d',###}" name="create_date" id="create_date"></td>
+                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>送货日期:</span></td>
+                                    <td width="35%"><input type="text" class="form-control w300" name="delivery_date" id="delivery_date"></td>
                                 </tr>
                                 <tr>
-                                <td width="15%" class="right-color"><span class="text-danger">*</span><span>公司名称:</span></td>
+                                <td width="15%" class="right-color"><span class="text-danger">*</span><span>采购单:</span></td>
                                 <td width="35%" colspan="3">
-                                	<input type="text" class="form-control w500" style="display:inline-block;" value="{$data.company_name}" name="company_name" id="company_name">
-                                	<button type="button" class="btn btn-primary search_company" style="margin-top:-4px;">查找</button>
+                                	<input type="text" class="form-control w300" style="display:inline-block;" name="po_sn" id="po_sn">
+                                	<button type="button" class="btn btn-primary search_purchase" style="margin-top:-4px;">查找</button>
+                                </td>
+                                </tr>
+                                <tr>
+                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>采购日期:</span></td>
+                                    <td width="35%">
+                                        <input type="text" class="form-control w300" name="purchase_date" id="purchase_date">
+                                    </td>
+                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>采购金额:</span></td>
+                                    <td width="35%"><input type="text" class="form-control w300" name="purchase_money" id="purchase_money"></td>
+                                </tr>
+                                
+                                <tr>
+                                <td width="15%" class="right-color"><span class="text-danger">*</span><span>关联订单:</span></td>
+                                <td width="35%" colspan="3">
+                                	<input type="text" class="form-control w300" style="display:inline-block;" name="order_sn" id="order_sn">
+                                	<button type="button" class="btn btn-primary relation_order" style="margin-top:-4px;">查找</button>
                                 </td>
                                 </tr>
                                 
                                 <tr>
-                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>简称:</span></td>
-                                    <td width="35%">
-                                        <input type="text" class="form-control w300" name="company_short" value="{$data.company_short}" id="company_short">
-                                    </td>
+                                <td width="15%" class="right-color"><span class="text-danger">*</span><span>客户名称:</span></td>
+                                <td width="35%" colspan="3">
+                                	<input type="text" class="form-control w300" style="display:inline-block;" name="cus_name" id="cus_name">
+                                </td>
+                                </tr>
+                                
+                                <tr>
                                     <td width="15%" class="right-color"><span class="text-danger">*</span><span>联系人:</span></td>
-                                    <td width="35%"><input type="text" class="form-control w300" name="contacts" value="{$data.contacts}" id="contacts"></td>
-                                </tr>
-                                
-                                <tr>
-                                    <td width="15%" class="right-color">传真号码:</span></td>
+                                    <td width="35%"><input type="text" class="form-control w300" name="contacts" id="contacts"></td>
+                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>电话号码:</span></td>
                                     <td width="35%">
-                                        <input type="text" class="form-control w300" value="{$data.fax}" name="fax" id="fax">
+                                        <input type="text" class="form-control w300" name="contacts_tel" id="contacts_tel">
                                     </td>
-                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>E-Mail:</span></td>
-                                    <td width="35%"><input type="text" class="form-control w300" name="email" value="{$data.email}" id="email"></td>
-                                </tr> 
+                                </tr>
                                  <tr>
-                                <td width="15%" class="right-color"><span class="text-danger">*</span><span>交货日期:</span></td>
+                                <td width="15%" class="right-color"><span class="text-danger">*</span><span>送货地址:</span></td>
                                 <td width="35%" colspan="3">
-                                	<input type="text" class="form-control w300" name="require_time" value="{$data.require_time|date='Y-m-d',###}" id="LAY-component-form-group-date">
+                                	<input type="text" class="form-control w300" name="delivery_address" id="delivery_address">
                                 </td>
                                 </tr>
-                                   <tr>
-                                    <td width="15%" class="right"><span>备注:</span></td>
-                                    <td colspan="3"><textarea class="form-control" name="remark" id="remark" rows="6">{$data.order_remark}</textarea> </td>
+                                <tr>
+                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>送货单号:</span></td>
+                                    <td width="35%">
+                                        <input type="text" class="form-control w300" name="delivery_sn" id="delivery_sn">
+                                    </td>
+                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>交货方式:</span></td>
+                                    <td width="35%"><input type="text" class="form-control w300" name="delivery_way" id="delivery_way"></td>
                                 </tr>
-                                
+                                <tr>
+                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>司机:</span></td>
+                                    <td width="35%">
+                                        <input type="text" class="form-control w300" name="delivery_driver" id="delivery_driver">
+                                    </td>
+                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>司机电话:</span></td>
+                                    <td width="35%"><input type="text" class="form-control w300" name="driver_tel" id="driver_tel"></td>
+                                </tr>
                     </tbody>
                     </table>
-    </div>
-
-<div role="tabpanel" class="tab-pane" id="goods">
 
 		<div class="row">
                     <div class="col-lg-12">
@@ -101,27 +118,20 @@
                                 </tr>
                             </thead>
                             <tbody class="goodsList"></tbody>
-                            <tfoot>
-                            	<tr>
-                            	<td><a href="javascript:;" class="get_goods">请选择商品</a></td>
-                            	<td colspan="10"></td>
-                            	</tr>
-                            </tfoot>
+                            
                         </table>
 
                 <!--内容结束-->
             </div>
         </div>
 
-</div>
 
   </div>
                 
-    <div class="modal-footer">
-        <div class="col-md-offset-2 col-md-8 left">
+    <div class="modal-footer" style="border-top:none;">
+        <div class="col-md-offset-4 col-md-12 left">
             <button type="submit" send="save" class="btn btn-primary">保 存</button>
-            <button type="submit" send="confirm" class="btn btn-primary">确 认</button>
-            <button type="submit" send="create" class="btn btn-primary">创建采购单</button>
+            <button type="submit" send="confirm" class="btn btn-primary">打印送货单</button>
             <button type="reset" onclick="history.go(-1);" class="btn btn-default">取消</button>
         </div>
     </div>
@@ -161,14 +171,14 @@
         layui.use('laydate', function() {
             var laydate = layui.laydate;
   		  	laydate.render({
-    		    elem: '#LAY-component-form-group-date'
+    		    elem: '#delivery_date'
     		  });
         });
     	
         // 当前页面分类高亮
-        $("#sidebar-schedule").addClass("sidebar-nav-active"); // 大分类
-        $("#order-index").addClass("active"); // 小分类
-
+        $("#sidebar-delivery").addClass("sidebar-nav-active"); // 大分类
+        $("#delivery-index").addClass("active"); // 小分类
+        
 		$('.attrChange').change(function(){
 			var goods_type_id = $(this).val();
 			$.get('<?php echo url('change_type');?>',{goods_type_id:goods_type_id},function(res){
@@ -185,13 +195,13 @@
 		});
         
 
-        $(".search_company").click(function () {
-            var title = '查找客户';
+        $(".search_purchase").click(function () {
+            var title = '查找采购单';
             bDialog.open({
                 title : title,
                 height: 560,
-                width:960,
-                url : '{:url(\'search_company\')}',
+                width:"90%",
+                url : '{:url(\'search_purchase\')}',
                 callback:function(data){
                     if(data && data.results && data.results.length > 0 ) {
                         window.location.reload();
@@ -225,15 +235,7 @@ function client_info(data){
 	$('#contacts').val(data.user);
 	$('#email').val(data.email);
 }
-
 var goods_info = new Array();
-<?php if(!empty($data['goodsInfo'])){ foreach ($data['goodsInfo'] as $goods){?>
-goods_info.push(<?php echo $goods;?>);
-<?php }}?>
-if(goods_info.length > 0){
-	goodsList(goods_info);
-}
-
 var status = 1;
 function goods(data){
 	var flag = false;

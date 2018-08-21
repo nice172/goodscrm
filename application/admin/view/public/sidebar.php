@@ -228,7 +228,13 @@
                             </div>
                         </div>
                         <ul class="sidebar-trans submenu">
-                            <li class="nav-item" id="order-index">
+                            <li class="nav-item" id="relation-index">
+                                <a href="{:url('store/relation')}" class="sidebar-trans">
+                                    <div class="nav-icon sidebar-trans"><span class="icon-ecs"></span></div>
+                                    <span class="nav-title">关联库存</span>
+                                </a>
+                            </li>
+                            <li class="nav-item" id="store-index">
                                 <a href="{:url('store/index')}" class="sidebar-trans">
                                     <div class="nav-icon sidebar-trans"><span class="icon-ecs"></span></div>
                                     <span class="nav-title">库存盘点</span>

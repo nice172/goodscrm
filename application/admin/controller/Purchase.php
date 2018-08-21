@@ -14,11 +14,13 @@ class Purchase extends Base {
 		$status = $this->request->param('status');
 		$categroy_id = $this->request->param('categroy_id');
 		$db = db('purchase p');
+		$db->order('p.create_time desc');
 		$db->field('p.*,s.supplier_name,o.order_sn,o.require_time');
 		$where = ['p.status' => ['neq','-1']];
 		if ($supplier_name != ''){
-			$where['s.supplier_short'] = ['like',"%{$supplier_name}%"];
-			$where['s.supplier_name'] = ['like',"%{$supplier_name}%"];
+			//$where['s.supplier_short'] = ['like',"%{$supplier_name}%"];
+			//$where['s.supplier_name'] = ['like',"%{$supplier_name}%"];
+		    $db->where('s.supplier_short|s.supplier_name','like',"%{$supplier_name}%");
 		}
 		$db->where($where);
 		if ($start_time != '' && $end_time != ''){
@@ -32,7 +34,7 @@ class Purchase extends Base {
 		$db->join('__SUPPLIER__ s','p.supplier_id=s.id');
 		$db->join('__ORDER__ o','o.id=p.order_id');
 		$data = $db->paginate(config('PAGE_SIZE'), false, ['query' => $this->request->param() ]);
-		// 获取分页显示
+		
 		$page = $data->render();
 		$this->assign('page',$page);
 		$this->assign('list',$data);

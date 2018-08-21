@@ -153,9 +153,9 @@
                                     <th>序号</th>
                                     <th>商品名称</th>
                                     <th>单位</th>
-                                    <th>单价</th>
+                                    <th style="width:100px;">单价</th>
                                     <th>订单数量</th>
-                                    <th>采购数量</th>
+                                    <th style="width:100px;">采购数量</th>
                                     <th>库存数量</th>
                                     <th>总金额</th>
                                     <th>操作</th>

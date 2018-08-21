@@ -19,13 +19,13 @@ class Index extends Base {
 
         $pchuhuo = Db::name('purchase')->where('status', '=', 5)->count();//完成订单
 
-        $pqueren = Db::name('purchase')->where('affirm', '=', 0)->where('status', '=',0)->count();//待确认订单
+        $pqueren = Db::name('purchase')->where('status', '=', 0)->where('status', '=',0)->count();//待确认订单
 
-        $pqrdjin = Db::name('purchase')->where('affirm', '=',1)->where('status', '=',0)->count();//待确认订金
+        $pqrdjin = Db::name('purchase')->where('status', '=',1)->where('status', '=',0)->count();//待确认订金
 
-        $pqrweikuan = Db::name('purchase')->where('affirm', '=', 1)->where('status', '=',3)->count();//待确认尾款
+        $pqrweikuan = Db::name('purchase')->where('status', '=', 1)->where('status', '=',3)->count();//待确认尾款
 
-        $pqrchuku = Db::name('purchase')->where('affirm', '=', 1)->where('status', '=',4)->count();//待确认出库
+        $pqrchuku = Db::name('purchase')->where('status', '=', 1)->where('status', '=',4)->count();//待确认出库
 
         //获取当前年份
         $dateD = date('Y');
@@ -37,7 +37,7 @@ class Index extends Base {
             $dqy1 = $dqy.'-01 0:0:0'; //月份第一天
             $dqy2 = $dqy.'-'. date('t',strtotime($dqy)) .' 23:59:59'; //月份最后一天
             $dateArr[] = Db::name('purchase')
-                ->where('affirm',1)
+                ->where('status',1)
                 ->where('create_time', '>=',strtotime($dqy1))
                 ->where('create_time', '<=', strtotime($dqy2))
                 ->count();

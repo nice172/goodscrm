@@ -91,11 +91,11 @@
                                     <th>序号</th>
                                     <th>商品名称</th>
                                     <th>单位</th>
-                                    <th>标准单价</th>
-                                    <th>实际单价</th>
-                                    <th>下单数量</th>
-                                    <th>已送数量</th>
-                                    <th>备注</th>
+                                    <th style="width:100px;">标准单价</th>
+                                    <th style="width:100px;">实际单价</th>
+                                    <th style="width:100px;">下单数量</th>
+                                    <th style="width:100px;">已送数量</th>
+                                    <th style="width:200px;">备注</th>
                                     <th>操作</th>
                                 </tr>
                             </thead>
