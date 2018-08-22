@@ -101,35 +101,6 @@
                         </ul>
                     </li>
                     
-                    <!-- 仓库管理 -->
-                    <li class="sidebar-nav" id="sidebar-storage">
-                        <div class="sidebar-title sidebar-trans">
-                            <div class="sidebar-title-inner">
-                                <span class="sidebar-title-icon icon-arrow-right"></span>
-                                <span class="sidebar-title-text">库存管理</span>
-                            </div>
-                        </div>
-                        <ul class="sidebar-trans submenu">
-                            <li class="nav-item" id="storage-index">
-                                <a href="{:url('storage/index')}" class="sidebar-trans">
-                                    <div class="nav-icon sidebar-trans"><span class="icon-ecs"></span></div>
-                                    <span class="nav-title">原料仓库</span>
-                                </a>
-                            </li>
-                            <li class="nav-item" id="storage-xingcai">
-                                <a href="{:url('storage/charge')}" class="sidebar-trans">
-                                    <div class="nav-icon sidebar-trans"><span class="icon-ecs"></span></div>
-                                    <span class="nav-title">型材管理</span>
-                                </a>
-                            </li>
-                            <li class="nav-item" id="storage-jinliao">
-                                <a href="{:url('storage/numlc')}" class="sidebar-trans">
-                                    <div class="nav-icon sidebar-trans"><span class="icon-ecs"></span></div>
-                                    <span class="nav-title">新增进料</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
                     <!-- 销售管理 -->
                     <li class="sidebar-nav" id="sidebar-sales">
                         <div class="sidebar-title sidebar-trans">
@@ -143,18 +114,6 @@
                                 <a href="{:url('customers/index')}" class="sidebar-trans">
                                     <div class="nav-icon sidebar-trans"><span class="icon-ecs"></span></div>
                                     <span class="nav-title">客户信息</span>
-                                </a>
-                            </li>
-                            <li class="nav-item" id="sidebar-orders">
-                                <a href="{:url('orders/index')}" class="sidebar-trans">
-                                    <div class="nav-icon sidebar-trans"><span class="icon-ecs"></span></div>
-                                    <span class="nav-title">销售订单</span>
-                                </a>
-                            </li>
-                            <li class="nav-item" id="logis-index">
-                                <a href="{:url('logistics/index')}" class="sidebar-trans">
-                                    <div class="nav-icon sidebar-trans"><span class="icon-ecs"></span></div>
-                                    <span class="nav-title">物流信息</span>
                                 </a>
                             </li>
                         </ul>

@@ -24,15 +24,16 @@
  <form class="form-horizontal ajaxForm2" method="post" action="<?php echo url('add');?>" id="form1">
   <!-- Tab panes -->
   <div class="tab-content">
-
-    							<input type="hidden" name="cus_id" id="cus_id" />
+								<input type="hidden" name="cus_id" id="cus_id" />
+    							<input type="hidden" name="purchase_id" id="purchase_id" />
+    							<input type="hidden" name="order_id" id="order_id" />
 								
                     <table class="table contact-template-form" style="margin-bottom: 10px;">
                                 <tbody>
                                 <tr>
                                     <td width="15%" class="right-color"><span class="text-danger">*</span><span>送货单号:</span></td>
                                     <td width="35%">
-                                        <input type="text" class="form-control w300" readonly="readonly" value="DN<?php echo date('Ymdis').date('sms');?>" name="order_sn" id="order_sn">
+                                        <input type="text" class="form-control w300" readonly="readonly" value="DN<?php echo date('Ymdis').date('sms');?>" name="order_dn" id="order_dn">
                                     </td>
                                     <td width="15%" class="right-color"><span class="text-danger">*</span><span>送货日期:</span></td>
                                     <td width="35%"><input type="text" class="form-control w300" name="delivery_date" id="delivery_date"></td>
@@ -40,7 +41,7 @@
                                 <tr>
                                 <td width="15%" class="right-color"><span class="text-danger">*</span><span>采购单:</span></td>
                                 <td width="35%" colspan="3">
-                                	<input type="text" class="form-control w300" style="display:inline-block;" name="po_sn" id="po_sn">
+                                	<input type="text" class="form-control w300" readonly="readonly" style="display:inline-block;" name="po_sn" id="po_sn">
                                 	<button type="button" class="btn btn-primary search_purchase" style="margin-top:-4px;">查找</button>
                                 </td>
                                 </tr>
@@ -56,8 +57,8 @@
                                 <tr>
                                 <td width="15%" class="right-color"><span class="text-danger">*</span><span>关联订单:</span></td>
                                 <td width="35%" colspan="3">
-                                	<input type="text" class="form-control w300" style="display:inline-block;" name="order_sn" id="order_sn">
-                                	<button type="button" class="btn btn-primary relation_order" style="margin-top:-4px;">查找</button>
+                                	<input type="text" class="form-control w300" readonly="readonly" style="display:inline-block;" name="order_sn" id="order_sn">
+                                	<button type="button" style="display: none;" class="btn btn-primary relation_order" style="margin-top:-4px;">查找</button>
                                 </td>
                                 </tr>
                                 
@@ -107,12 +108,13 @@
                             <thead>
                                 <tr>
                                     <th>序号</th>
+                                    <th>商品分类</th>
                                     <th>商品名称</th>
                                     <th>单位</th>
-                                    <th style="width:100px;">标准单价</th>
-                                    <th style="width:100px;">实际单价</th>
-                                    <th style="width:100px;">下单数量</th>
-                                    <th style="width:100px;">已送数量</th>
+                                    <th>未交数量</th>
+                                    <th>库存数量</th>
+                                    <th>本次送货数量</th>
+                                    <th>入库数量</th>
                                     <th style="width:200px;">备注</th>
                                     <th>操作</th>
                                 </tr>
@@ -129,9 +131,9 @@
   </div>
                 
     <div class="modal-footer" style="border-top:none;">
-        <div class="col-md-offset-4 col-md-12 left">
+        <div class="col-md-offset-5 col-md-12 left">
             <button type="submit" send="save" class="btn btn-primary">保 存</button>
-            <button type="submit" send="confirm" class="btn btn-primary">打印送货单</button>
+<!--             <button type="submit" send="confirm" class="btn btn-primary">打印送货单</button> -->
             <button type="reset" onclick="history.go(-1);" class="btn btn-default">取消</button>
         </div>
     </div>
@@ -210,6 +212,21 @@
             });
         });
 
+        $(".relation_order").click(function () {
+            var title = '查找订单';
+            bDialog.open({
+                title : title,
+                height: 560,
+                width:"90%",
+                url : '{:url(\'relation_order\')}',
+                callback:function(data){
+                    if(data && data.results && data.results.length > 0 ) {
+                        window.location.reload();
+                    }
+                }
+            });
+        });
+
         $('.get_goods').click(function(){
         	var title = '选择商品';
             bDialog.open({
@@ -227,16 +244,87 @@
 
     });
 
-function client_info(data){
-	$('#cus_id').val(data.id);
-	$('#company_name').val(data.company_name);
-	$('#company_short').val(data.company_short);
-	$('#fax').val(data.fax);
-	$('#contacts').val(data.user);
-	$('#email').val(data.email);
-}
 var goods_info = new Array();
 var status = 1;
+var relation_type = 1; //默认关联订单
+
+function client_info(data){
+	relation_type = 1;
+	goods_info = [];
+	$('#po_sn').val(data.po_sn);
+	$('#purchase_date').val(data.purchase_date);
+	$('#purchase_money').val(data.total_money);
+	if(data.is_cancel == 0){
+    	$('#order_sn').val(data.order_sn);
+    	$('#order_id').val(data.order_id);
+    	$('#purchase_id').val(data.purchase_id);
+    	$('#delivery_address').val(data.delivery_address);
+    	$('#contacts').val(data.contacts);
+    	$('#contacts_tel').val(data.cus_phome);
+	}else{
+		$('#cus_name').val('');
+		$('#order_id').val('');
+		$('#purchase_id').val('');
+    	$('#order_sn').val('');
+    	$('#delivery_address').val('');
+    	$('#contacts').val('');
+    	$('#contacts_tel').val('');
+    	$('#cus_id').val('');
+		$('.relation_order').show();
+	}
+	$.get('<?php echo url('order');?>?purchase_id='+data.purchase_id,{},function(res){
+		if(res.code == 1){
+			$('#cus_name').val(res.data.cus_name);
+			$('#cus_id').val(res.data.cus_id);
+			goods_info = res.data.goodslist;
+			goodsList(goods_info);
+		}else{
+			$('#cus_name').val('');
+			$('#order_id').val('');
+			$('#purchase_id').val('');
+	    	$('#order_sn').val('');
+	    	$('#delivery_address').val('');
+	    	$('#contacts').val('');
+	    	$('#contacts_tel').val('');
+	    	$('#cus_id').val('');
+	    	goodsList(goods_info);
+			toastr.error(res.msg);
+		}
+	});
+}
+
+function relation_order(data){
+	relation_type = 0;
+	goods_info = [];
+	$('#purchase_date').val(data.purchase_date);
+	$('#order_sn').val(data.order_sn);
+	$('#order_id').val(data.orderid);
+	$.get('<?php echo url('rel_order');?>?order_id='+data.orderid,{},function(res){
+		if(res.code == 1){
+			$('#cus_name').val(res.data.cus_name);
+			$('#cus_id').val(res.data.cus_id);
+	    	$('#order_sn').val(res.data.order_sn);
+	    	$('#delivery_address').val(res.data.delivery_address);
+	    	$('#contacts').val(res.data.contacts);
+	    	$('#contacts_tel').val(res.data.cus_phome);
+	    	$('#purchase_money').val(res.data.total_money);
+			goods_info = res.data.goodslist;
+			goodsList(goods_info);
+		}else{
+			$('#cus_name').val('');
+			$('#order_id').val('');
+			$('#purchase_id').val('');
+	    	$('#order_sn').val('');
+	    	$('#delivery_address').val('');
+	    	$('#contacts').val('');
+	    	$('#contacts_tel').val('');
+	    	$('#cus_id').val('');
+	    	goodsList(goods_info);
+			toastr.error(res.msg);
+		}
+	});
+}
+
 function goods(data){
 	var flag = false;
 	for(var i in goods_info){
@@ -258,12 +346,13 @@ function goodsList(goods_info){
 		var num = parseInt(j)+1;
 		html += '<tr data-index="'+j+'" data-goods_id="'+goods_info[j]['goods_id']+'" class="goods_'+j+'">';
 		html += '<td>'+num+'</td>';
+		html += '<td>'+goods_info[j]['category_name']+'</td>';
 		html += '<td>'+goods_info[j]['goods_name']+'</td>';
 		html += '<td>'+goods_info[j]['unit']+'</td>';
-		html += '<td class="market_price"><input type="text" data-market_price="'+goods_info[j]['market_price']+'" oninput="checkNum(this)" name="market_price" style="width:80px;display:none;" value="'+goods_info[j]['market_price']+'" /><span class="inputspan">'+goods_info[j]['market_price']+'</span></td>';
-		html += '<td class="shop_price"><input type="text" data-shop_price="'+goods_info[j]['shop_price']+'" oninput="checkNum(this)" name="shop_price" style="width:80px;display:none;" value="'+goods_info[j]['shop_price']+'" /><span class="inputspan">'+goods_info[j]['shop_price']+'</span></td>';
-		html += '<td class="goods_number"><input type="text" data-goods_number="'+goods_info[j]['goods_number']+'" oninput="checkNum2(this)" name="goods_number" style="width:80px;display:none;" value="'+goods_info[j]['goods_number']+'" /><span class="inputspan">'+goods_info[j]['goods_number']+'</span></td>';
-		html += '<td class="send_num"><input type="text" data-send_num="'+goods_info[j]['send_num']+'" oninput="checkNum2(this)" name="send_num" style="width:80px;display:none;" value="'+goods_info[j]['send_num']+'" /><span class="inputspan">'+goods_info[j]['send_num']+'</span></td>';
+		html += '<td>'+goods_info[j]['diff_number']+'</td>';
+		html += '<td class="store_number"><span class="">'+goods_info[j]['store_number']+'</span></td>';
+		html += '<td class="current_send_number"><input type="text" data-current_send_number="'+goods_info[j]['current_send_number']+'" oninput="checkNum2(this)" name="current_send_number" style="width:80px;display:none;" value="'+goods_info[j]['current_send_number']+'" /><span class="inputspan">'+goods_info[j]['current_send_number']+'</span></td>';
+		html += '<td class="add_number"><input type="text" data-add_number="'+goods_info[j]['add_number']+'" oninput="checkNum2(this)" name="add_number" style="width:80px;display:none;" value="'+goods_info[j]['add_number']+'" /><span class="inputspan">'+goods_info[j]['add_number']+'</span></td>';
 		html += '<td class="remark"><input type="text" name="remark" style="width:200px;display:none;" value="'+goods_info[j]['remark']+'" /><span class="inputspan">'+goods_info[j]['remark']+'</span></td>';
 		html += '<td><a href="javascript:;" onclick="update('+j+')" class="update">修改</a><span class="text-explode">|</span><a href="javascript:;" onclick="_delete('+j+')" class="delete">删除</a></td>';
 		html += '</tr>';
@@ -274,31 +363,22 @@ function goodsList(goods_info){
 function update(index){
 	if(status == 2){
 		status = 1;
-		var market_price = $('.goods_'+index+' input[name=market_price]').val();
-		if(market_price == ''){
-			market_price = $('.goods_'+index+' input[name=market_price]').attr('data-market_price');
+		var current_send_number = $('.goods_'+index+' input[name=current_send_number]').val();
+		if(current_send_number == ''){
+			current_send_number = $('.goods_'+index+' input[name=current_send_number]').attr('data-current_send_number');
 		}
-		var shop_price = $('.goods_'+index+' input[name=shop_price]').val();
-		if(shop_price == ''){
-			shop_price = $('.goods_'+index+' input[name=shop_price]').attr('data-shop_price');
+		var add_number = $('.goods_'+index+' input[name=add_number]').val();
+		if(add_number == ''){
+			add_number = $('.goods_'+index+' input[name=add_number]').attr('data-add_number');
 		}
-		var goods_number = $('.goods_'+index+' input[name=goods_number]').val();
-		if(goods_number == ''){
-			goods_number = $('.goods_'+index+' input[name=goods_number]').attr('data-goods_number');
-		}
-		if(goods_number > goods_info[index]['store_number']){
-			alert('下单数量不能大于库存量');
+		
+		if(current_send_number > goods_info[index]['store_number']){
+			alert('本次送货数量不能大于库存量');
 			status = 2;
 			return;
 		}
-		var send_num = $('.goods_'+index+' input[name=send_num]').val();
-		if(send_num == ''){
-			send_num = $('.goods_'+index+' input[name=send_num]').attr('data-send_num');
-		}
-		goods_info[index]['goods_number'] = goods_number;
-		goods_info[index]['send_num'] = send_num;
-		goods_info[index]['market_price'] = market_price;
-		goods_info[index]['shop_price'] = shop_price;
+		goods_info[index]['current_send_number'] = current_send_number;
+		goods_info[index]['add_number'] = add_number;
 		goods_info[index]['remark'] = $('.goods_'+index+' input[name=remark]').val();
 		goodsList(goods_info);
 		return;
@@ -337,7 +417,7 @@ function _delete(index){
 $('button[type=submit]').click(function(){
 	var send = $(this).attr('send');
 	$('.ajaxForm2').ajaxSubmit({
-		data:{goods_info:goods_info,type:send},
+		data:{goods_info:goods_info,relation_type:relation_type,type:send},
 		success: function(res){
 			if(res.code == 1){
 				toastr.success(res.msg);

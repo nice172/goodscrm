@@ -15,11 +15,11 @@
 							<div class="sub-button-line form-inline">
                             <form class="pull-left" method="get" action="?">
                                 <div class="form-group">
-                                    <label class="control-label" for="cus_short">供应商 :</label>
+                                    <label class="control-label" for="cus_short">客户名称 :</label>
                                     <input name="supplier_name" id="supplier_name" class="ipt form-control" <?php if (isset($_GET['supplier_name'])):?>value="<?php echo $_GET['supplier_name'];?>"<?php endif;?> />
                                 </div>
                             	<div class="form-group">
-                                    <label class="control-label">创建时间 :</label>
+                                    <label class="control-label">送货日期 :</label>
                                     <input name="start_date" id="start_date" <?php if (isset($_GET['start_date'])):?>value="<?php echo $_GET['start_date'];?>"<?php endif;?> class="ipt form-control">
                                     <span>到</span>
                                 </div>
@@ -40,35 +40,30 @@
                         <table class="table table-hover">
                             <thead>
                                 <tr>
-                                    <th>序号</th>
-                                    <th>采购单号</th>
-                                    <th>采购日期</th>
-                                    <th>供应商</th>
-                                    <th>分类名称</th>
+                                    
+                                    <th>订单号码</th>
+                                    <th>下单时间</th>
+                                    <th>送货日期</th>
+                                    <th>客户名称</th>
+                                    <th>商品分类</th>
                                     <th>商品名称</th>
                                     <th>单位</th>
-                                    <th>采购数量</th>
-                                    <th>已送数量</th>
-                                    <th>要求送货日期</th>
-                                    <th>状态</th>
-                                    <th>创建时间</th>
+                                    <th>下单数量</th>
+                                    <th>未交数量</th>
                                 </tr>
                             </thead>
                             <tbody>
                             {volist name="data" id="vo" empty="$empty"}
                                 <tr style="cursor: pointer;" index="{$key}" class="selected_po">
-                                	<td>{$key+1}</td>
-                                    <td>{$vo.po_sn}</td>
-                                    <td>{$vo.create_time|date='Y-m-d',###}</td>
-                                    <td>{$vo.supplier_name}</td>
+                                    <td>{$vo.order_sn}</td>
+                                    <td>{$vo.create_time|date='Y-m-d H:i:s',###}</td>
+                                    <td>{$vo.require_time}</td>
+                                    <td>{$vo.company_short}</td>
                                     <td>{$vo.category_name}</td>
                                     <td>{$vo.goods_name}</td>
                                     <td>{$vo.unit}</td>
                                     <td>{$vo.goods_number}</td>
-                                    <td>{$vo.send_num}</td>
-                                    <td>{$vo.require_time}</td>
-                                    <td>{if condition="$vo['send_num']"}部分送货{else}未送货{/if}</td>
-                                    <td>{$vo.create_time|date='Y-m-d H:i:s',###}</td>
+                                    <td><?php echo $vo['goods_number']-$vo['send_num'];?></td>
                                 </tr>
                             {/volist}
                             </tbody>
@@ -113,7 +108,7 @@ $(document).ready(function () {
     });
     var polist = <?php echo $pojson;?>;
 	$('.selected_po').click(function(){
-		parent.window.client_info(polist[$(this).attr('index')]);
+		parent.window.relation_order(polist[$(this).attr('index')]);
 		bDialog.close('');
 	});
 });
