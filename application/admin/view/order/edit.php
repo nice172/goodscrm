@@ -31,7 +31,7 @@
     <div role="tabpanel" class="tab-pane active" id="home">
     <input type="hidden" name="id" value="{$data.id}"  id="id" />
     <input type="hidden" name="cus_id" value="{$data.cus_id}"  id="cus_id" />
-								
+	<input type="hidden" name="con_id" value="{$data.con_id}"  id="con_id"/>
                     <table class="table contact-template-form">
                                 <tbody>
                                 <tr>
@@ -224,6 +224,7 @@ function client_info(data){
 	$('#fax').val(data.fax);
 	$('#contacts').val(data.user);
 	$('#email').val(data.email);
+	$('#con_id').val(data.con_id);
 }
 
 var goods_info = new Array();

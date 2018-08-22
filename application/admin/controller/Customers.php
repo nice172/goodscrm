@@ -237,11 +237,14 @@ class Customers extends Base{
     public function view() {
         $Request = Request::instance();
         $id = $Request->param('id');
+        $record = $Request->param('r');
         if (!is_numeric($id) || empty($id)) {
             $this->error('参数错误！');
         }
+        $this->assign('record',$record);
         $Customers = new CustomersModel();
         $data = $Customers->where('cus_id', $id)->find();
+        if (empty($data)) $this->error('客户信息不存在！');
         //备注信息
         $message = Db::name('customers_message')->where('msg_cus_id', $id)->find();
         //联系人
@@ -249,30 +252,41 @@ class Customers extends Base{
         //默认收货信息
         //$premises = CustomersPremises::where('pre_cus_id', $id)->find();
         //历史订单
-        $purchase = new Purchase();
-        $lsdd = $purchase->where('pcus_id', $id)->order('pstart_date','deas')->paginate();
-
-        //遍历获取订金金额
-        foreach ($lsdd AS $key=>$val) {
-            //订单订金
-            $amo_dj = FinanceModel::where('fpnumber',$val['pnumber'])->where('sort',1)->sum('amount');
-            $lsdd[$key]['amo_dj'] = '￥'.number_format($amo_dj,2);
-            //订单余款
-            $amo_yk = FinanceModel::where('fpnumber',$val['pnumber'])->where('sort',2)->sum('amount');
-            $lsdd[$key]['amo_yk'] = '￥'.number_format($amo_yk,2);
-        }
+//         $purchase = new Purchase();
+//         $lsdd = $purchase->where('pcus_id', $id)->order('pstart_date','deas')->paginate();
+//         //遍历获取订金金额
+//         foreach ($lsdd AS $key=>$val) {
+//             //订单订金
+//             $amo_dj = FinanceModel::where('fpnumber',$val['pnumber'])->where('sort',1)->sum('amount');
+//             $lsdd[$key]['amo_dj'] = '￥'.number_format($amo_dj,2);
+//             //订单余款
+//             $amo_yk = FinanceModel::where('fpnumber',$val['pnumber'])->where('sort',2)->sum('amount');
+//             $lsdd[$key]['amo_yk'] = '￥'.number_format($amo_yk,2);
+//         }
 
         // 历史订单分页
-        $page_l = $lsdd->render();
+        //$page_l = $lsdd->render();
 
+        if ($record=='list'){
+	        $result = Db::name('order o')->join('__CUSTOMERS_CONTACT__ c','o.con_id=c.con_id')
+	        ->field('o.*,c.con_name,c.con_mobile,u.user_nick')
+	        ->where(['o.cus_id' => $id])
+	        ->join('__USERS__ u','o.create_uid=u.id')->order('o.create_time desc')->paginate(config('PAGE_SIZE'));
+	        
+	        $this->assign('lsdd',$result);
+	        $this->assign('page_l',$result->render());
+        
+        }else{
+        	$this->assign('lsdd',[]);
+        	$this->assign('page_l','');
+        }
+        
         $assign = array(
             'title' => '查看信息',
             'data' => $data,
             'msg' => $message,
             'contact' => $contact,
             //'premises' => $premises,
-            'lsdd' => $lsdd,
-            'page_l' => $page_l,
             'empty_con' => '<tr><td colspan="8" align="center">当前条件没有查到数据</td></tr>',
             'empty_lsdd' => '<tr><td colspan="9" align="center">当前客户还没有订单</td></tr>',
         );
@@ -291,6 +305,12 @@ class Customers extends Base{
             }
             $result = Db::name('customers')->where('cus_id', $cusid)->update(['cus_con_id'=>$conid]);
             if ($result) {
+            	$contacts = db('customers_contact')->where(['con_id' => $conid])->find();
+            	Db::name('customers')->where('cus_id', $cusid)->update([
+            		'cus_duty' => $contacts['con_name'],
+            		'cus_mobile' => $contacts['con_mobile'],
+            		'cus_email' => $contacts['con_email']
+            	]);
                 $this->success('设定默认联系人成功');
             } else {
                 $this->error('设定错误！');

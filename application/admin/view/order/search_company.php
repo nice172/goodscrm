@@ -55,7 +55,7 @@
                             </thead>
                             <tbody>
                             {volist name="data" id="vo" empty="$empty"}
-                                <tr style="cursor: pointer;" class="selected_contacts" data-fax="{$vo.cus_fax}" data-email="{$vo.cus_email}" data-user="{$vo.cus_duty}" data-short="{$vo.cus_short}" data-name="{$vo.cus_name}" data-id="{$vo['cus_id']}">
+                                <tr style="cursor: pointer;" class="selected_contacts" data-fax="{$vo.cus_fax}" data-email="{$vo.cus_email}" data-user="{$vo.cus_duty}" data-short="{$vo.cus_short}" data-con_id="{$vo.cus_con_id}" data-name="{$vo.cus_name}" data-id="{$vo['cus_id']}">
                                     <td>{$vo.cus_id}</td>
                                     <td>{$vo.cus_short}</td>
                                     <td>{$vo.cus_name}</td>
@@ -105,7 +105,8 @@ $(document).ready(function () {
 			'fax': $(this).attr('data-fax'),
 			'email': $(this).attr('data-email'),
 			'user': $(this).attr('data-user'),
-			'id': $(this).attr('data-id')
+			'id': $(this).attr('data-id'),
+			'con_id': $(this).attr('data-con_id')
 		};
 		parent.window.client_info(contacts);
 		bDialog.close('');

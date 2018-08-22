@@ -207,6 +207,7 @@ class Order extends Base {
             $type = $this->request->param('type');
             $data = [
                 'create_uid' => $this->userinfo['id'],
+            	'con_id' => $this->request->post('con_id'),
                 'cus_id' => $this->request->post('cus_id'),
                 'order_sn' => $this->request->post('order_sn'),
                 'company_name' => $this->request->post('company_name'),
@@ -243,11 +244,12 @@ class Order extends Base {
             }
             $order_id = db('order')->insertGetId($data);
             if ($order_id){
+            	$total_money = 0;
                 foreach ($goodsInfo as $val){
                     
                     $goods_attr = db('goods_attr_val')->where(['goods_id' => $val['goods_id']])
                     ->field(['goods_attr_id','attr_name','attr_value'])->select();
-                    
+                    $total_money += $val['shop_price']*$val['goods_number'];
                     db('order_goods')->insert([
                         'order_id' => $order_id,
                         'goods_id' => $val['goods_id'],
@@ -262,6 +264,7 @@ class Order extends Base {
                         'create_time' => time()
                     ]);
                 }
+                db('order')->where(['id' => $order_id])->setField('total_money',_formatMoney($total_money));
                 $this->success('新增成功',url('index'));
             }else{
                 $this->error('新增失败请重试');
@@ -463,6 +466,7 @@ class Order extends Base {
             $type = $this->request->param('type');
             $data = [
                 'id' => $this->request->post('id'),
+            	'con_id' => $this->request->post('con_id'),
                 'cus_id' => $this->request->post('cus_id'),
                 'order_sn' => $this->request->post('order_sn'),
                 'company_name' => $this->request->post('company_name'),
@@ -514,10 +518,11 @@ class Order extends Base {
                         db('order_goods')->where(['id' => $key,'order_id' => $data['id']])->delete();
                     }
                 }
+                $total_money = 0;
                 foreach ($goodsInfo as $val){
                     $goods_attr = db('goods_attr_val')->where(['goods_id' => $val['goods_id']])
                     ->field(['goods_attr_id','attr_name','attr_value'])->select();
-                    
+                    $total_money += $val['shop_price']*$val['goods_number'];
                     if (!isset($val['id']) || intval($val['id']) <= 0){
                         db('order_goods')->insert([
                             'order_id' => $data['id'],
@@ -547,7 +552,7 @@ class Order extends Base {
                         ]);
                     }
                 }
-                
+                db('order')->where(['id' => $data['id']])->setField('total_money',_formatMoney($total_money));
                 $this->success('编辑成功',url('index'));
             }else{
                 $this->error('编辑失败请重试');

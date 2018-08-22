@@ -27,7 +27,7 @@
                     <div class="section-left">
                         <div class="tab-content section-wrap">
                             <!--基本信息-->
-                            <div class="tab-pane active" id="jibenxinxi">
+                            <div class="tab-pane <?php if (!$record){?>active<?php }?>" id="jibenxinxi">
                                 <table class="table table-condensed" style="margin-top:0;">
                                     <tbody>
                                     <tr>
@@ -105,6 +105,9 @@
                                         <td>{$vo.con_qq}</td>
                                         <td>{$vo.con_email}</td>
                                         <td class="text-right">
+                                        	{neq name="$data.cus_con_id" value="$vo.con_id"}
+                                        	<a href="javascript:void(0);" onclick="setHandle.adduser('{$vo.con_id}')">默认联系人</a>
+                                        	<span class="text-explode">|</span>{/neq}
                                             <a href="javascript:void(0);" onclick="setHandle.edituser('{$vo.con_id}')">查看</a>
                                             {neq name="$data.cus_con_id" value="$vo.con_id"}
                                             <span class="text-explode">|</span>
@@ -116,7 +119,7 @@
                                 </table>
                             </div>
                             <!--历史订单-->
-                            <div class="tab-pane" id="lishidingdan">
+                            <div class="tab-pane <?php if ($record){?>active<?php }?>" id="lishidingdan">
                                 <table class="table table-condensed" style="margin-top:0;">
                                     <thead>
                                     <tr>
@@ -129,43 +132,33 @@
                                         </th>
                                     </tr>
                                     <tr>
-                                        <th>订单编号</th>
-                                        <th>订单数量</th>
-                                        <th>订单金额</th>
-                                        <th>已收订金</th>
-                                        <th>已收余款</th>
-                                        <th>客户确认</th>
-                                        <th>订单状况</th>
-                                        <th>销售日期</th>
-                                        <th>发货日期</th>
+                                        <th>下单日期</th>
+                                        <th>订单号码</th>
+                                        <th>联系人</th>
+                                        <th>手机号码</th>
+                                        <th>下单金额</th>
+                                        <th>创建人</th>
+                                        <th>创建时间</th>
+                                        <th>详情</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     {volist name="lsdd" id="vo" empty="$empty_lsdd"}
                                     <tr>
-                                        <td>
-                                            <a href="{:url('orders/view',['pid'=>$vo.pnumber])}" target="_blank">{$vo.pnumber}</a>
-                                        </td>
-                                        <td>{$vo.pcount}</td>
-                                        <td>￥{$vo.pamount|number_format=2}</td>
-                                        <td>{$vo.amo_dj}</td>
-                                        <td>{$vo.amo_yk}</td>
-                                        <td>
-                                            {eq name="$vo.affirm" value="0"}
-                                            <span class="label label-sm label-default">未确认</span>
-                                            {else/}
-                                            <span class="label label-sm label-success">已确认</span>
-                                            {/eq}
-                                        </td>
-                                        <td>{:purchase_status($vo.status)}</td>
-                                        <td>{$vo.pstart_date}</td>
-                                        <td>{$vo.pend_date}</td>
+                                        <td>{$vo.id}</td>
+                                        <td>{$vo.order_sn}</td>
+                                        <td>{$vo.con_name}</td>
+                                        <td>{$vo.con_mobile}</td>
+                                        <td>{$vo.total_money}</td>
+                                        <td>{$vo.user_nick}</td>
+                                        <td>{$vo.create_time|date='Y-m-d H:i:s',###}</td>
+                                        <td><a href="{:url('order/info',['id' => $vo['id']])}">详情</a></td>
                                     </tr>
                                     {/volist}
                                     </tbody>
                                     <tfoot>
                                     <tr>
-                                        <td colspan="9">
+                                        <td colspan="10">
                                             <div class="pull-right page-box">{$page_l}</div>
                                         </td>
                                     </tr>
@@ -181,8 +174,8 @@
                                     <i class="fa fa-list"></i>
                                     <span class="spans1">{$data.cus_name}</span>
                                 </li>
-                                <li class="active"><a href="#jibenxinxi" data-toggle="tab">基本信息</a></li>
-                                <li class=""><a href="#lishidingdan" data-toggle="tab">下单记录</a></li>
+                                <li <?php if ($record!='list'){?>class="active"<?php }?>><a href="{:url('view',['id' => $data['cus_id']])}">基本信息</a></li>
+                                <li <?php if ($record=='list'){?>class="active"<?php }?>><a href="{:url('view',['id' => $data['cus_id'],'r' => 'list'])}">下单记录</a></li>
                             </ul>
                         </div>
                     </div>
