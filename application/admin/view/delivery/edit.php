@@ -21,43 +21,44 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="portlet">
- <form class="form-horizontal ajaxForm2" method="post" action="<?php echo url('add');?>" id="form1">
+ <form class="form-horizontal ajaxForm2" method="post" action="<?php echo url('edit');?>" id="form1">
   <!-- Tab panes -->
   <div class="tab-content">
-								<input type="hidden" name="cus_id" id="cus_id" />
-    							<input type="hidden" name="purchase_id" id="purchase_id" />
-    							<input type="hidden" name="order_id" id="order_id" />
+  	<input type="hidden" name="id" id="id" value="{$delivery.id}" />
+								<input type="hidden" name="cus_id" id="cus_id" value="{$delivery.cus_id}" />
+    							<input type="hidden" name="purchase_id" id="purchase_id" value="{$delivery.purchase_id}" />
+    							<input type="hidden" name="order_id" id="order_id" value="{$delivery.order_id}" />
 								
                     <table class="table contact-template-form" style="margin-bottom: 10px;">
                                 <tbody>
                                 <tr>
                                     <td width="15%" class="right-color"><span class="text-danger">*</span><span>送货单号:</span></td>
                                     <td width="35%">
-                                        <input type="text" class="form-control w300" readonly="readonly" value="DN<?php echo date('Ymdis').date('sms');?>" name="order_dn" id="order_dn">
+                                        <input type="text" class="form-control w300" readonly="readonly" value="{$delivery.order_dn}" name="order_dn" id="order_dn">
                                     </td>
                                     <td width="15%" class="right-color"><span class="text-danger">*</span><span>送货日期:</span></td>
-                                    <td width="35%"><input type="text" class="form-control w300" name="delivery_date" id="delivery_date"></td>
+                                    <td width="35%"><input type="text" class="form-control w300" value="{$delivery.delivery_date}" name="delivery_date" id="delivery_date"></td>
                                 </tr>
                                 <tr>
                                 <td width="15%" class="right-color"><span class="text-danger">*</span><span>采购单:</span></td>
                                 <td width="35%" colspan="3">
-                                	<input type="text" class="form-control w300" readonly="readonly" style="display:inline-block;" name="po_sn" id="po_sn">
-                                	<button type="button" class="btn btn-primary search_purchase" style="margin-top:-4px;">查找</button>
+                                	<input type="text" class="form-control w300" readonly="readonly" style="display:inline-block;" value="{$delivery.po_sn}" name="po_sn" id="po_sn">
+                                	<!-- <button type="button" class="btn btn-primary search_purchase" style="margin-top:-4px;">查找</button> -->
                                 </td>
                                 </tr>
                                 <tr>
                                     <td width="15%" class="right-color"><span class="text-danger">*</span><span>采购日期:</span></td>
                                     <td width="35%">
-                                        <input type="text" class="form-control w300" name="purchase_date" id="purchase_date">
+                                        <input type="text" class="form-control w300" readonly="readonly" name="purchase_date" value="{$delivery.purchase_date}" id="purchase_date">
                                     </td>
                                     <td width="15%" class="right-color"><span class="text-danger">*</span><span>采购金额:</span></td>
-                                    <td width="35%"><input type="text" class="form-control w300" name="purchase_money" id="purchase_money"></td>
+                                    <td width="35%"><input type="text" class="form-control w300" name="purchase_money" value="{$delivery.purchase_money}" id="purchase_money"></td>
                                 </tr>
                                 
                                 <tr>
                                 <td width="15%" class="right-color"><span class="text-danger">*</span><span>关联订单:</span></td>
                                 <td width="35%" colspan="3">
-                                	<input type="text" class="form-control w300" readonly="readonly" style="display:inline-block;" name="order_sn" id="order_sn">
+                                	<input type="text" class="form-control w300" readonly="readonly" value="{$delivery.order_sn}" style="display:inline-block;" name="order_sn" id="order_sn">
                                 	<button type="button" style="display: none;" class="btn btn-primary relation_order" style="margin-top:-4px;">查找</button>
                                 </td>
                                 </tr>
@@ -65,39 +66,39 @@
                                 <tr>
                                 <td width="15%" class="right-color"><span class="text-danger">*</span><span>客户名称:</span></td>
                                 <td width="35%" colspan="3">
-                                	<input type="text" class="form-control w300" style="display:inline-block;" name="cus_name" id="cus_name">
+                                	<input type="text" class="form-control w300" style="display:inline-block;" value="{$delivery.cus_name}" name="cus_name" id="cus_name">
                                 </td>
                                 </tr>
                                 
                                 <tr>
                                     <td width="15%" class="right-color"><span class="text-danger">*</span><span>联系人:</span></td>
-                                    <td width="35%"><input type="text" class="form-control w300" name="contacts" id="contacts"></td>
+                                    <td width="35%"><input type="text" class="form-control w300" name="contacts" value="{$delivery.contacts}" id="contacts"></td>
                                     <td width="15%" class="right-color"><span class="text-danger">*</span><span>电话号码:</span></td>
                                     <td width="35%">
-                                        <input type="text" class="form-control w300" name="contacts_tel" id="contacts_tel">
+                                        <input type="text" class="form-control w300" name="contacts_tel" value="{$delivery.contacts_tel}" id="contacts_tel">
                                     </td>
                                 </tr>
                                  <tr>
                                 <td width="15%" class="right-color"><span class="text-danger">*</span><span>送货地址:</span></td>
                                 <td width="35%" colspan="3">
-                                	<input type="text" class="form-control w300" name="delivery_address" id="delivery_address">
+                                	<input type="text" class="form-control w300" name="delivery_address" value="{$delivery.delivery_address}" id="delivery_address">
                                 </td>
                                 </tr>
                                 <tr>
                                     <td width="15%" class="right-color"><span class="text-danger">*</span><span>送货单号:</span></td>
                                     <td width="35%">
-                                        <input type="text" class="form-control w300" name="delivery_sn" id="delivery_sn">
+                                        <input type="text" class="form-control w300" name="delivery_sn" value="{$delivery.delivery_sn}" id="delivery_sn">
                                     </td>
                                     <td width="15%" class="right-color"><span class="text-danger">*</span><span>交货方式:</span></td>
-                                    <td width="35%"><input type="text" class="form-control w300" name="delivery_way" id="delivery_way"></td>
+                                    <td width="35%"><input type="text" class="form-control w300" name="delivery_way" value="{$delivery.delivery_way}" id="delivery_way"></td>
                                 </tr>
                                 <tr>
                                     <td width="15%" class="right-color"><span class="text-danger">*</span><span>司机:</span></td>
                                     <td width="35%">
-                                        <input type="text" class="form-control w300" name="delivery_driver" id="delivery_driver">
+                                        <input type="text" class="form-control w300" name="delivery_driver" value="{$delivery.delivery_driver}" id="delivery_driver">
                                     </td>
                                     <td width="15%" class="right-color"><span class="text-danger">*</span><span>司机电话:</span></td>
-                                    <td width="35%"><input type="text" class="form-control w300" name="driver_tel" id="driver_tel"></td>
+                                    <td width="35%"><input type="text" class="form-control w300" name="driver_tel" value="{$delivery.driver_tel}" id="driver_tel"></td>
                                 </tr>
                     </tbody>
                     </table>
@@ -132,8 +133,11 @@
                 
     <div class="modal-footer" style="border-top:none;">
         <div class="col-md-offset-5 col-md-12 left">
+            {if condition="$delivery['is_confirm']"}
+            <button type="button" class="btn btn-default" disabled="disabled">已确认</button>
+            {else}
             <button type="submit" send="save" class="btn btn-primary">保 存</button>
-<!--             <button type="submit" send="confirm" class="btn btn-primary">打印送货单</button> -->
+            {/if}
             <button type="button" onclick="history.go(-1);" class="btn btn-default">取消</button>
         </div>
     </div>
@@ -245,6 +249,11 @@
     });
 
 var goods_info = new Array();
+<?php if (!empty($goodslist)){?>
+goods_info = <?php echo $goodslist;?>;
+goodsList(goods_info);
+<?php }?>
+
 var status = 1;
 var relation_type = 1; //默认关联订单
 

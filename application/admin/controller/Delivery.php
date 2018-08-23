@@ -22,6 +22,7 @@ class Delivery extends Base {
         'delivery_driver' => 'require',
         'driver_tel' => 'require',
     ];
+    
     protected $message = [
         'order_id.require' => '订单ID不能为空',
         'order_dn.require' => '送货单号不能为空',
@@ -38,6 +39,14 @@ class Delivery extends Base {
         'delivery_way.require' => '交货方式不能为空',
         'delivery_driver.require' => '司机不能为空',
         'driver_tel.require' => '司机电话不能为空',
+    ];
+    
+    protected $scene = [
+        'add' => [],
+        'edit' => ['delivery_date','purchase_money',
+            'cus_name','contacts','contacts_tel',
+            'delivery_address','delivery_sn','delivery_way',
+            'delivery_driver','driver_tel']
     ];
     
     public function index(){
@@ -64,14 +73,161 @@ class Delivery extends Base {
     }
     
     public function info(){
+        $id = $this->request->param('id',0,'intval');
+        if ($id <= 0) $this->error('参数错误');
+        $delivery_order = db('delivery_order')->where(['id' => $id])->find();
+        if (empty($delivery_order)) $this->error('送货单不存在');
         
+//         $goods_info = db('delivery_order d')->where(['d.delivery_id' => $id])
+//         ->join('__DELIVERY_GOODS__ dg','d.id=dg.delivery_id')
+//         ->join('__GOODS__ g','dg.goods_id=g.goods_id')
+//         ->join('__GOODS_CATEGORY__ gc','g.category_id=gc.category_id')
+//         ->field($field)->paginate(config('page_size'));
+        
+        $goods_info = db('delivery_goods')->where(['delivery_id' => $id])->select();
+        
+        $db = db('order_goods og');
+        $db->where(['og.order_id' => $delivery_order['order_id']]);
+        $db->join('__GOODS__ g','og.goods_id=g.goods_id');
+        $db->join('__GOODS_CATEGORY__ gc','g.category_id=gc.category_id');
+        $goodslist = $db->field('og.*,g.store_number,gc.category_name')->select();
+        
+        $totalMoney = 0;
+        foreach ($goodslist as $key => $value){
+            $goodslist[$key]['diff_number'] = $value['goods_number'] - $value['send_num']; //未交数量
+            foreach ($goods_info as $val){
+                if ($value['goods_id'] == $val['goods_id']){
+                    $goodslist[$key]['current_send_number'] = $val['current_send_number']; //本次送货数量
+                    $goodslist[$key]['add_number'] = $val['add_number']; //入库数量
+                }
+            }
+            $totalMoney += $value['goods_number']*$value['goods_price'];
+        }
+        $this->assign('goodslist',json_encode($goodslist));
+        $this->assign('delivery',$delivery_order);
+        $this->assign('title','送货单详情');
+        return $this->fetch();
+    }
+    
+    public function delete(){
+        if ($this->request->isAjax()){
+            $id = $this->request->param('id',0,'intval');
+            if ($id <= 0) $this->error('参数错误');
+            if (db('delivery_order')->where(['id' => $id])->delete()){
+                db('delivery_goods')->where(['delivery_id' => $id])->delete();
+                $this->success('删除成功');
+            }
+            $this->error('删除失败');
+        }
+    }
+    
+    public function confirm(){
+        if ($this->request->isAjax()){
+            $id = $this->request->param('id',0,'intval');
+            if ($id <= 0) $this->error('参数错误');
+            if (db('delivery_order')->where(['id' => $id])->setField('is_confirm',1)){
+                $this->success('确认成功');
+            }
+            $this->error('确认失败');
+        }
     }
     
     public function edit(){
+        if ($this->request->isAjax()){
+            $data = $this->request->param();
+            $validate = new Validate($this->rule,$this->message);
+            $validate->scene('edit',$this->scene['edit']);
+            if (!$validate->scene('edit')->check($data)){
+                $this->error($validate->getError());
+            }
+            $update = [
+                'id' => $data['id'],
+                'delivery_date' => $data['delivery_date'],
+                'purchase_money' => $data['purchase_money'],
+                'cus_name' => $data['cus_name'],
+                'contacts' => $data['contacts'],
+                'contacts_tel' => $data['contacts_tel'],
+                'delivery_address' => $data['delivery_address'],
+                'delivery_sn' => $data['delivery_sn'],
+                'delivery_way' => $data['delivery_way'],
+                'delivery_driver' => $data['delivery_driver'],
+                'driver_tel' => $data['driver_tel'],
+                'update_time' => time()
+            ];
+            if (db('delivery_order')->where(['id' => ['neq',$data['id']],'delivery_sn' => $data['delivery_sn']])->find()){
+                $this->error('送货单号已存在');
+            }
+            $goods_info = $this->request->param('goods_info/a');
+            if (empty($goods_info)) $this->error('商品信息不能为空');
+            if (db('delivery_order')->update($update)){
+                $delivery_id = $data['id'];
+                $in = db('delivery_goods')->where(['delivery_id' => $delivery_id])->field('id')->select();
+                $ids = [];
+                foreach ($in as $val){
+                    $ids[] = $val['id'];
+                }
+                $postIds = [];
+                foreach ($goods_info as $value){
+                    if (isset($value['id']) && intval($value['id']) > 0){
+                        $postIds[] = $value['id'];
+                    }
+                }
+                $tempArr = array_count_values(array_merge($ids,$postIds));
+                foreach ($tempArr as $key => $count){
+                    if ($count == 1){
+                        db('delivery_goods')->where(['id' => $key,'delivery_id' => $delivery_id])->delete();
+                    }
+                }
+                
+                foreach ($goods_info as $key => $value){
+                    db('delivery_goods')->where(['id' => $value['id'],'delivery_id' => $delivery_id])->update([
+                        'goods_id' => $value['goods_id'],
+                        'goods_name' => $value['goods_name'],
+                        'unit' => $value['unit'],
+                        'goods_attr' => $value['goods_attr'],
+                        'current_send_number' => $value['current_send_number'],
+                        'add_number' => $value['add_number'],
+                        'remark' => $value['remark']
+                    ]);
+                }
+                $this->success('保存成功',url('index'));
+            }
+            $this->error('保存失败');
+            return;
+        }
+        $id = $this->request->param('id',0,'intval');
+        if ($id <= 0) $this->error('参数错误');
+        $delivery_order = db('delivery_order')->where(['id' => $id])->find();
+        if (empty($delivery_order)) $this->error('送货单不存在');
         
+        $goods_info = db('delivery_goods')->where(['delivery_id' => $id])->select();
+        
+        $db = db('order_goods og');
+        $db->where(['og.order_id' => $delivery_order['order_id']]);
+        $db->join('__GOODS__ g','og.goods_id=g.goods_id');
+        $db->join('__GOODS_CATEGORY__ gc','g.category_id=gc.category_id');
+        $goodslist = $db->field('og.*,g.store_number,gc.category_name')->select();
+        
+        $totalMoney = 0;
+        foreach ($goodslist as $key => $value){
+            $goodslist[$key]['diff_number'] = $value['goods_number'] - $value['send_num']; //未交数量
+            foreach ($goods_info as $val){
+                if ($value['goods_id'] == $val['goods_id']){
+                    $goodslist[$key]['current_send_number'] = $val['current_send_number']; //本次送货数量
+                    $goodslist[$key]['add_number'] = $val['add_number']; //入库数量
+                    $goodslist[$key]['id'] = $val['id'];
+                }
+            }
+            $totalMoney += $value['goods_number']*$value['goods_price'];
+        }
+        $this->assign('goodslist',json_encode($goodslist));
+        $this->assign('delivery',$delivery_order);
+        $this->assign('title','编辑送货单');
+        return $this->fetch();
     }
     
     private $send_email = '';
+    
     public function prints(){
             $id = $this->request->param('id',0,'intval');
             if ($id <= 0) $this->error('参数错误');
@@ -226,6 +382,9 @@ h1,h2,h3,p,div,span{padding:0;margin:0;}
             $data['admin_uid'] = $this->userinfo['id'];
             $data['create_time'] = time();
             $data['update_time'] = time();
+            if (db('delivery_order')->where(['delivery_sn' => $data['delivery_sn']])->find()){
+                $this->error('送货单号已存在');
+            }
             $delivery_id = db('delivery_order')->insertGetId($data);
             if ($delivery_id){
                 foreach ($goods_info as $key => $value){
@@ -240,7 +399,7 @@ h1,h2,h3,p,div,span{padding:0;margin:0;}
                         'remark' => $value['remark']
                     ]);
                 }
-                $this->success('保存成功');
+                $this->success('保存成功',url('index'));
             }
             $this->error('保存失败');
             return;

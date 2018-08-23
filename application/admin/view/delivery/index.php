@@ -89,9 +89,13 @@
                                 <td>
                                 	<a href="{:url('info',['id' => $vo['id']])}">详情</a>
                                 	<span class="text-explode">|</span>
-                                	<a href="{:url('edit',['id' => $vo['id']])}">编辑</a>
-                                	<span class="text-explode">|</span>
                                 	<a href="{:url('prints',['id' => $vo['id']])}" target="_blank">打印送货单</a>
+                                	{if condition="!$vo['is_confirm']"}
+                                	<span class="text-explode">|</span>
+                                	<a href="{:url('edit',['id' => $vo['id']])}">编辑</a>
+                                	{/if}
+                                	<span class="text-explode">|</span>
+                                	<a href="javascript:;" onclick="deleteOrdersOne({$vo['id']})">删除</a>
                                 </td>
                                 </tr>
                             {/volist}
@@ -180,7 +184,7 @@
         if(confirm("确定恢复此订单？")){
             if (!isNaN(e) && e !== null && e !== '') {
                 var data={name:'scrap',pid:e};
-                $.sycToAjax("{:Url('orders/huifu')}", data);
+                $.sycToAjax("{:url('orders/huifu')}", data);
             }
         };
         return false;
@@ -188,10 +192,10 @@
 
     //单条删除订单操作
     function deleteOrdersOne(e) {
-        if(confirm("确定删除订单？")){
+        if(confirm("确定删除？")){
             if (!isNaN(e) && e !== null && e !== '') {
-                var data={name:'scrap',pid:e};
-                $.sycToAjax("{:Url('orders/delete')}", data);
+                var data={name:'scrap',id:e};
+                $.sycToAjax("{:url('delete')}", data);
             }
         };
         return false;
