@@ -29,12 +29,12 @@
                         	<form action="" method="get">
                         
                             <div class="form-group">
-                                <label class="control-label" for="supplier_name">供应商 :</label>
-                                <input name="supplier_name" id=supplier_name class="ipt form-control" value="<?php if(isset($_GET['supplier_name'])){echo $_GET['supplier_name'];}?>" data-toggle="tooltip" data-placement="top" title="供应商">
+                                <label class="control-label" for="cus_name">客户名称 :</label>
+                                <input name="cus_name" id="cus_name" class="ipt form-control" value="<?php if(isset($_GET['cus_name'])){echo $_GET['cus_name'];}?>" data-toggle="tooltip" data-placement="top" title="客户名称">
                                 
                             </div>
                             	<div class="form-group">
-                                    <label class="control-label" for="projectNameInput">创建时间 :</label>
+                                    <label class="control-label" for="start_time">创建时间 :</label>
                                     <input name="start_time" id="start_time" <?php if (isset($_GET['start_time'])):?>value="<?php echo $_GET['start_time'];?>"<?php endif;?> class="ipt form-control">
                                     <span>到</span>
                                 </div>
@@ -71,29 +71,19 @@
                             {volist name="list" id="vo" empty="$empty"}
                                 <tr>
                                 <td>{$vo.id}</td>
-                                <td>{$vo.po_sn}</td>
-                                <td>{$vo.create_time|date='Y-m-d',###}</td>
-                                <td>{$vo.supplier_name}</td>
+                                <td>{$vo.order_dn}</td>
+                                <td>{$vo.delivery_date}</td>
+                                <td>{$vo.cus_name}</td>
                                 <td>{$vo.order_sn}</td>
-                                <td>{$vo.total_money}</td>
-                                <td>{$vo.require_time|date='Y-m-d',###}</td>
-                                <td>{$vo.payment}</td>
+                                <td>{$vo.goods_name}</td>
+                                <td>{$vo.unit}</td>
+                                <td>{$vo.current_send_number}</td>
                                 <td>{$vo.create_time|date='Y-m-d H:i:s',###}</td>
                                 <td>
-								{if condition="$vo['status'] eq -1"}
-								已删除
-								{elseif condition="$vo['status'] eq 0"}
-								未确认
-								{elseif condition="$vo['status'] eq 1"}
-								已确认
-								{elseif condition="$vo['status'] eq 2"}
-								已发送
-								{elseif condition="$vo['status'] eq 3"}
-								已完成
-								{elseif condition="$vo['status'] eq 4"}
-								已取消
-								{elseif condition="$vo['status'] eq 5"}
-								已创建
+								{if condition="$vo['is_print'] eq 1"}
+								已打印
+								{else}
+								未打印
 								{/if}
 								</td>
                                 <td>
@@ -101,7 +91,7 @@
                                 	<span class="text-explode">|</span>
                                 	<a href="{:url('edit',['id' => $vo['id']])}">编辑</a>
                                 	<span class="text-explode">|</span>
-                                	<a href="{:url('view',['id' => $vo['id']])}" target="_blank">查看文件</a>
+                                	<a href="{:url('prints',['id' => $vo['id']])}" target="_blank">打印送货单</a>
                                 </td>
                                 </tr>
                             {/volist}

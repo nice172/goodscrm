@@ -58,7 +58,7 @@
                                         <td width="35%"><span>{$data.supplier_name}</span></td>
                                     </tr>
                                     <tr>
-                                        <td width="15%" class="right-color"><span>商品属性:</span></td>
+                                        <td width="15%" class="right-color"><span>属性规格:</span></td>
                                         <td width="35%" colspan="3">
 										{foreach name="data.goods_attr" item="v"}
 											{$v.attr_name}：{$v.attr_value}<br/>

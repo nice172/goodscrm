@@ -123,7 +123,7 @@
                                 <table class="table table-condensed" style="margin-top:0;">
                                     <thead>
                                     <tr>
-                                        <th colspan="9">
+                                        <th colspan="20">
                                             <div class="pull-left">
                                                 <div class="bs-callout bs-callout-warning">
                                                     <span>采购记录</span>
@@ -132,43 +132,37 @@
                                         </th>
                                     </tr>
                                     <tr>
-                                        <th>订单编号</th>
-                                        <th>订单数量</th>
-                                        <th>订单金额</th>
-                                        <th>已收订金</th>
-                                        <th>已收余款</th>
-                                        <th>客户确认</th>
-                                        <th>订单状况</th>
-                                        <th>销售日期</th>
-                                        <th>发货日期</th>
+                                        <th>ID</th>
+                                        <th>采购日期</th>
+                                        <th>采购单号</th>
+                                        <th>联系人</th>
+                                        <th>联系电话</th>
+                                        <th>采购金额</th>
+                                        <th>创建人</th>
+                                        <th>创建时间</th>
+                                        <th>更新时间</th>
+                                        <th>操作</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     {volist name="lsdd" id="vo" empty="$empty"}
                                     <tr>
-                                        <td>
-                                            <a href="{:url('orders/view',['pid'=>$vo.pnumber])}" target="_blank">{$vo.pnumber}</a>
-                                        </td>
-                                        <td>{$vo.pcount}</td>
-                                        <td>￥{$vo.pamount|number_format=2}</td>
-                                        <td>{$vo.amo_dj}</td>
-                                        <td>{$vo.amo_yk}</td>
-                                        <td>
-                                            {eq name="$vo.affirm" value="0"}
-                                            <span class="label label-sm label-default">未确认</span>
-                                            {else/}
-                                            <span class="label label-sm label-success">已确认</span>
-                                            {/eq}
-                                        </td>
-                                        <td>{:purchase_status($vo.status)}</td>
-                                        <td>{$vo.pstart_date}</td>
-                                        <td>{$vo.pend_date}</td>
+                                        <td>{$vo.id}</td>
+                                        <td>{$vo.create_time|date='Y-m-d',###}</td>
+                                        <td>{$vo.po_sn}</td>
+                                        <td>{$vo.contacts}</td>
+                                        <td>{$vo.cus_phome}</td>
+                                        <td>{$vo.total_money}</td>
+                                        <td>{$vo.user_nick}</td>
+                                        <td>{$vo.create_time|date='Y-m-d H:i:s',###}</td>
+                                        <td>{$vo.update_time|date='Y-m-d H:i:s',###}</td>
+                                        <td><a href="{:url('purchase/info',['id' => $vo['id']])}">详情</a></td>
                                     </tr>
                                     {/volist}
                                     </tbody>
                                     <tfoot>
                                     <tr>
-                                        <td colspan="9">
+                                        <td colspan="20">
                                             <div class="pull-right page-box">{$page_l}</div>
                                         </td>
                                     </tr>

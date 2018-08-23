@@ -171,7 +171,7 @@ class Order extends Base {
     	$this->assign('page',$page);
     	$this->assign('list',$data);
     	$this->assign('title','完成订单');
-    	//      $this->assign('category',$category);
+    	//$this->assign('category',$category);
     	return $this->fetch();
     }
     

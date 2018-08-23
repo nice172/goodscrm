@@ -52,22 +52,19 @@
                                     {volist name="lsdd" id="vo" empty="$empty"}
                                     <tr>
                                         <td>
-                                            <a href="{:url('orders/view',['pid'=>$vo.pnumber])}" target="_blank">{$vo.pnumber}</a>
+                                            {$vo.goods_id}
                                         </td>
-                                        <td>{$vo.pcount}</td>
-                                        <td>￥{$vo.pamount|number_format=2}</td>
-                                        <td>{$vo.amo_dj}</td>
-                                        <td>{$vo.amo_yk}</td>
+                                        <td>{$vo.goods_name}</td>
                                         <td>
-                                            {eq name="$vo.affirm" value="0"}
-                                            <span class="label label-sm label-default">未确认</span>
-                                            {else/}
-                                            <span class="label label-sm label-success">已确认</span>
-                                            {/eq}
-                                        </td>
-                                        <td>{:purchase_status($vo.status)}</td>
-                                        <td>{$vo.pstart_date}</td>
-                                        <td>{$vo.pend_date}</td>
+										{foreach name="vo.goods_attr" item="v"}
+											{$v.attr_value}&nbsp;
+										{/foreach}
+										</td>
+                                        <td>{$vo.unit}</td>
+                                        <td>{$vo.shop_price}</td>
+                                        <td>{$vo.create_time|date='Y-m-d H:i:s',###}</td>
+                                        <td>{$vo.update_time|date='Y-m-d H:i:s',###}</td>
+                                        <td><a href="{:url('goods/goodsinfo',['gid' => $vo['goods_id']])}">详情</a></td>
                                     </tr>
                                     {/volist}
                                     </tbody>

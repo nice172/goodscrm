@@ -202,7 +202,7 @@
                         </ul>
                     </li>
                     <!-- 财务管理 -->
-                    <li class="sidebar-nav" id="sidebar-finance">
+                    <li class="sidebar-nav" id="sidebar-account">
                         <div class="sidebar-title sidebar-trans">
                             <div class="sidebar-title-inner">
                                 <span class="sidebar-title-icon icon-arrow-right"></span>
@@ -210,16 +210,16 @@
                             </div>
                         </div>
                         <ul class="sidebar-trans submenu">
-                            <li class="nav-item" id="finance-receivables">
-                                <a href="{:url('finance/index')}" class="sidebar-trans">
+                            <li class="nav-item" id="account-index">
+                                <a href="{:url('account/index')}" class="sidebar-trans">
                                     <div class="nav-icon sidebar-trans"><span class="icon-ecs"></span></div>
                                     <span class="nav-title">应收账款</span>
                                 </a>
                             </li>
-                            <li class="nav-item" id="finance-statistics">
-                                <a href="{:url('finance/statistics')}" class="sidebar-statistics">
+                            <li class="nav-item" id="account-payment">
+                                <a href="{:url('account/payment')}" class="sidebar-statistics">
                                     <div class="nav-icon sidebar-trans"><span class="icon-ecs"></span></div>
-                                    <span class="nav-title">销售统计</span>
+                                    <span class="nav-title">应付账款</span>
                                 </a>
                             </li>
                         </ul>

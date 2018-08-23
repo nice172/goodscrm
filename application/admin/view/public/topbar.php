@@ -38,14 +38,14 @@
             </div>
             <!----><!--右边-->
             <div class="topbar-info topbar-right topbar-clearfix">
-                <!-- 搜索 -->
+                <!-- 搜索
                 <div class="topbar-search topbar-left topbar-info-dropdown">
                     <a href="javascript:;" class="topbar-btn topbar-hover-dark"><span class="icon-search"></span><span>搜索</span></a>
                     <div class="topbar-search-dropdown topbar-info-dropdown-memu">
                         <input class="topbar-search-ask" type="text" name="input" placeholder="搜索">
                         <a target="_blank" class="topbar-search-mark icon-enter" href="javascript:;"></a>
                     </div>
-                </div>
+                </div> -->
                 <!--账户-->
                 <div class="topbar-left topbar-user">
                     <div class="topbar-info-dropdown topbar-info-item">
@@ -85,20 +85,20 @@
                                 </a>-->
                             </div>
                             <div class="user-btn-list">
-                                <a class="user-btn-link" href="{:Url('login/logout')}"><span>退出管理控制台</span></a>
+                                <a class="user-btn-link" href="{:url('login/logout')}"><span>退出管理控制台</span></a>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!--支持-->
+                <!--支持
                 <div class="topbar-left topbar-info-item topbar-info-dropdown">
                     <a href="" target="_blank" class="topbar-btn topbar-info-dropdown-toggle"><span>支持</span></a>
                     <ul class="topbar-info-dropdown-memu topbar-info-dropdown-memu-list">
                         <li class="topbar-info-btn">
-                            <a href="http://www.sycit.cn" target="_blank"><span>三叶草网络支持</span></a>
+                            
                         </li>
                     </ul>
-                </div>
+                </div>-->
             </div>
         </div>
     </div>

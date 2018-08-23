@@ -1,6 +1,7 @@
 <?php
 namespace app\admin\controller;
 use think\Validate;
+use mpdf\mPDF;
 
 class Delivery extends Base {
     
@@ -40,10 +41,176 @@ class Delivery extends Base {
     ];
     
     public function index(){
-        $this->assign('page','');
-        $this->assign('list',[]);
+        $cus_name = $this->request->param('cus_name');
+        $start_time = strtotime($this->request->param('start_time'));
+        $end_time = strtotime($this->request->param('end_time'));
+        $db = db('delivery_order do');
+        if (!empty($cus_name)) {
+            $db->where(['do.cus_name' => ['like',"%{$cus_name}%"]]);
+        }
+        if ($start_time && $end_time){
+            $end_time = strtotime($this->request->param('end_time').' 23:59:59');
+            $db->where(['do.create_time' => ['>=',$start_time]]);
+            $db->where(['do.create_time' => ['<=',$end_time]]);
+        }
+        $result = $db->join('__DELIVERY_GOODS__ dg','do.id=dg.delivery_id')
+        ->field('do.*,dg.goods_name,dg.unit,dg.current_send_number,dg.add_number')
+        ->paginate(config('page_size'),FALSE,['query' => $this->request->param()]);
+        
+        $this->assign('page',$result->render());
+        $this->assign('list',$result);
         $this->assign('title','送货单');
         return $this->fetch();
+    }
+    
+    public function info(){
+        
+    }
+    
+    public function edit(){
+        
+    }
+    
+    private $send_email = '';
+    public function prints(){
+            $id = $this->request->param('id',0,'intval');
+            if ($id <= 0) $this->error('参数错误');
+            $delivery = db('delivery_order')->where(['id' => $id,'status' => ['neq','-1']])->find();
+            if (empty($delivery)) $this->error('送货单不存在');
+            $title = '送货单';
+            $goodsInfo = db('delivery_goods')->where(['delivery_id' => $delivery['id']])->order('goods_id asc')->select();
+            $cus = db('customers')->where(['cus_id' => $delivery['cus_id']])->find();
+            $this->assign('client',$cus);
+            $this->assign('data',$delivery);
+            
+            //$this->send_email = $delivery['email'];
+            
+            if (!$delivery['is_print']){
+                db('delivery_order')->where(['id' => $id])->setField('is_print',1);
+            }
+            $order = db('order')->where(['id' => $delivery['order_id']])->find();
+            
+            $mpdf = new mPDF('zh-CN/utf-8','A4', 0, '宋体', 0, 0);
+            $mpdf->SetWatermarkText(getTextParams(14),0.1);
+            $logo = getFileParams(12);
+            if (empty($logo)) {
+                $logo = './assets/img/crm_logo.png';
+            }
+            $strContent = '<div style="width:90%;margin:0 auto;height:90px;background:#fff url('.$logo.') no-repeat top 20px;">';
+            $strContent .= '<h1 style="padding-top:10px;text-align:center;font-size:32px;">'.getTextParams(14).'</h1>';
+            $strContent .= '<p class="entitle" style="font-size:22px;">'.getTextParams(15).'</p>';
+            $strContent .= '</div>';
+            $strContent .= '<h2 style="text-align:center;padding:20px 0;">'.$title.'</h2>';
+            
+            $strContent .= '<table class="noborder">
+<tbody>
+    <tr>
+    <td colspan="2">订单号：'.$delivery['order_dn'].'</td>
+    </tr>
+    <tr>
+    <td style="width:50%;">下单时间：'.date('Y-m-d',$order['create_time']).'</td>
+    <td>送货时间：'.$delivery['delivery_date'].'</td>
+    </tr>
+    <tr>
+    <td style="width:50%">收货单位：'.$delivery['cus_name'].'</td>
+    <td>收货人：'.$delivery['contacts'].'</td>
+    </tr>
+    <tr>
+    <td style="width:50%;">联系电话：'.$delivery['contacts_tel'].'</td>
+    <td>收货地址：'.$delivery['delivery_address'].'</td>
+    </tr>
+    <tr>
+    <td style="width:50%;">送货司机：'.$delivery['delivery_driver'].'</td>
+    <td>司机电话：'.$delivery['driver_tel'].'</td>
+    </tr>
+</tbody>
+</table>';
+            
+            $strContent .= '<table class="table">
+        <tbody>
+            <tr>
+            <td width="5%">序号</td>
+            <td width="30%">产品名称</td>
+			<td width="30%">产品规格</td>
+            <td width="5%">单位</td>
+			<td width="5%">数量</td>
+            <td width="25%">备注</td>
+            </tr>';
+            $count_goods = 0;
+            foreach ($goodsInfo as $k => $val){
+                $count_goods += $val['current_send_number'];
+                $goods_attr_text = '';
+                $goods_attr = json_decode($val['goods_attr'],true);
+                if (!empty($goods_attr)){
+                    foreach ($goods_attr as $attr){
+                        $goods_attr_text .= $attr['attr_value'].'&nbsp;';
+                    }
+                }
+                $strContent .= '<tr>
+        <td>'.($k+1).'</td>
+    <td>'.$val['goods_name'].'</td>
+	<td>'.$goods_attr_text.'</td>
+    <td>'.$val['unit'].'</td>
+<td>'.$val['current_send_number'].'</td>
+<td>'.$val['remark'].'</td>
+    </tr>
+    ';
+            }
+            
+            $strContent .= '</tbody></table>';
+            $img = getFileParams(11);
+            //<td width="10%" align="left"><img src="'.$img.'" alt="" width="100px"/></td>
+            $strContentFooter = '<table class="noborder" style="height:100px;">
+<tbody>
+    <tr>
+    <td width="33%" align="left">发货人签章：</td>
+    <td width="33%" align="left">承运人：</td>
+    <td width="33%" align="left">客户签章：</td>
+    </tr>
+</tbody>
+</table>';
+            
+            $mpdf->showWatermarkText = true;
+            $mpdf->SetTitle($title);
+            // 	   $mpdf->SetHTMLHeader( '头部' );
+            $mpdf->SetHTMLFooter( $strContentFooter );
+            $stylesheet='
+body{padding:0;margin:0;font-family:"宋体";}
+h1,h2,h3,p,div,span{padding:0;margin:0;}
+.entitle{text-align:center;}
+.noborder{font-size: 13px;background: #FFF;width:95%;margin: 0 auto;border-spacing: 0;border-collapse: collapse;}
+.noborder tbody tr td{padding:5px 0;}
+.table{
+    width:95%;
+    margin: 0 auto;
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+.table{
+    background: #FFF;
+    font-size: 13px;
+    border-top: 1px solid #000;
+    margin-top: 8px;
+    border: 1px solid #000;
+}
+.table tbody tr td{
+    padding: 12px 8px;
+    border-top: 0px;
+    border-bottom: 1px solid #000;
+    border-right: 1px solid #000;
+    vertical-align: middle;
+}
+';
+            $mpdf->WriteHTML($stylesheet, 1);
+            $mpdf->WriteHTML($strContent);
+            $type = 0;
+            if ($type == 1){
+                $savePath = './pdf/P'.str_replace('/', '-', $order['order_sn']).'.pdf';
+                $mpdf->Output($savePath,'F');
+                return $savePath;
+            }
+         $mpdf->Output();
+         exit;
     }
     
     public function add(){
@@ -67,6 +234,7 @@ class Delivery extends Base {
                         'goods_id' => $value['goods_id'],
                         'goods_name' => $value['goods_name'],
                         'unit' => $value['unit'],
+                        'goods_attr' => $value['goods_attr'],
                         'current_send_number' => $value['current_send_number'],
                         'add_number' => $value['add_number'],
                         'remark' => $value['remark']

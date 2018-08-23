@@ -47,8 +47,10 @@ class Supplier extends Base {
         $where = "supplier_status=1";
         if ($start_time != '' && $end_time != ''){
             $start_time = strtotime($start_time);
-            $end_time = strtotime($end_time);
-            $where .= " and create_time >= '{$start_time}' and create_time <= '{$end_time}'";
+            $end_time = strtotime($end_time.' 23:59:59');
+            if ($start_time && $end_time){
+                $where .= " and create_time >= '{$start_time}' and create_time <= '{$end_time}'";
+            }
         }
         if ($cus_short != ''){
             $where .= " and supplier_short like '%{$cus_short}%'";
@@ -79,8 +81,14 @@ class Supplier extends Base {
         $this->assign('data', $supplier);
         $contact = Db::name('supplier_contacts')->where('supplier_id', $supplier_id)->where('status','>=','1')->select();
         $this->assign('contact',$contact);
-        $this->assign('lsdd',[]);
-        $this->assign('page_l','');
+        
+        $result = Db::name('purchase p')->where(['p.supplier_id' => $supplier_id])
+        ->field('p.*,c.con_name,c.con_mobile,u.user_nick')
+        ->join('__ORDER__ o','p.order_id=o.id')->join('__CUSTOMERS_CONTACT__ c','c.con_id=o.con_id')
+        ->join('__USERS__ u','o.create_uid=u.id')->order('p.create_time desc')->paginate(config('page_size'),false,['query' => $this->request->param()]);
+        
+        $this->assign('lsdd',$result->all());
+        $this->assign('page_l',$result->render());
         $this->assign('empty', '<tr><td colspan="19" align="center">当前条件没有查到数据</td></tr>');
         return $this->fetch();
     }
@@ -404,10 +412,14 @@ class Supplier extends Base {
         }
         $this->assign('data',$supplier);
         $this->assign('title','产品列表');
-        //$page = $result->render();
-        $page = '';
-        $this->assign('lsdd',[]);
-        $this->assign('page_l','');
+        $result = db('goods')->where(['supplier_id' => $supplier_id])->paginate(config('PAGE_SIZE'));
+        $page = $result->render();
+        $list = $result->all();
+        foreach ($list as $key=>$value){
+            $list[$key]['goods_attr'] = json_decode($value['goods_attr'],true);
+        }
+        $this->assign('lsdd',$list);
+        $this->assign('page_l',$page);
         $this->assign('empty', '<tr><td colspan="19" align="center">当前条件没有查到数据</td></tr>');
         return $this->fetch();
     }

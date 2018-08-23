@@ -454,7 +454,6 @@ function Setting_Config(){
     $_fp = @fopen(APP_PATH.'Setting.php','w') or die ("Unable to open file!"); //文件地址 W表示可写
     flock($_fp, LOCK_EX); //锁定文件
     fwrite($_fp, "<"."?php\r\n");
-    fwrite($_fp,"// 佛山市三叶草IT工作室 技术支持\r\n// www.sycit.cn\r\n// 更新时间：" . Date('Y-m-d H:i:s', Time()) . "\r\n");
     fwrite($_fp,"return array(\r\n");
     $result = array_change_key_case($config,CASE_LOWER);//将数组中的键值转换为小写
     foreach ($result AS $k => $v){

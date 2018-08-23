@@ -17,9 +17,9 @@
 <div class="login-2017">
     <!--顶部 开始-->
     <div class="login-2017-topbar">
-        <a class="login-2017-topbar-logo" href="javascript:;">
-            <img class="black" style="z-index: 2;" src="/assets/admin/img/login-bj.png">
-        </a>
+        <span class="login-2017-topbar-logo" style="font-size:22px;color:#fff;line-height:60px;padding-left:10px;">
+            {:Config('syc_webname')}
+        </span>
         <ul class="login-2017-link">
             <li>
                 <a href="javascript:;">返回首页</a>

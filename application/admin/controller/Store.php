@@ -32,6 +32,10 @@ class Store extends Base {
         return $this->fetch();
     }
     
+    public function info(){
+        
+    }
+    
     public function relation(){
         $cate_lists = db('goods_category')->select();
         $this->assign('lists',$cate_lists);
