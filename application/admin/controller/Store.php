@@ -32,8 +32,18 @@ class Store extends Base {
         return $this->fetch();
     }
     
-    public function info(){
-        
+    public function log(){
+        //1入库，2出库，3报溢，4报损
+        $goods_id = $this->request->param('goods_id',0,'intval');
+        $order_id = $this->request->param('order_id',0,'intval');
+        $delivery_order = db('delivery_order')->where(['order_id' => $order_id])->find();
+        $result = db('store_log l')->where(['l.order_id' => $order_id,'l.goods_id' => $goods_id])
+        ->join('__GOODS__ g','l.goods_id=g.goods_id')
+        ->join('__GOODS_CATEGORY__ gc','g.category_id=gc.category_id')
+        ->field('l.*,gc.category_name')->paginate(config('page_size'));
+        $this->assign('page',$result->render());
+        $this->assign('data',$result->all());
+        return $this->fetch();
     }
     
     public function relation(){

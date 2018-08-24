@@ -135,6 +135,7 @@ class Delivery extends Base {
                         'goods_id' => $value['goods_id'],
                         'goods_name' => $value['goods_name'],
                         'delivery_id' => $id,
+                        'order_id' => $delivery_order['order_id'],
                         'type' => 2,
                         'number' => $value['current_send_number'],
                         'create_time' => time()
@@ -143,6 +144,7 @@ class Delivery extends Base {
                         'goods_id' => $value['goods_id'],
                         'goods_name' => $value['goods_name'],
                         'delivery_id' => $id,
+                        'order_id' => $delivery_order['order_id'],
                         'type' => 1,
                         'number' => $value['add_number'],
                         'create_time' => time()

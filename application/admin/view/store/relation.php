@@ -35,7 +35,7 @@
                             </div>
                             	<div class="form-group">
                                     <label class="control-label" for="goods_name">商品名称 :</label>
-                                    <input name="goods_name" id="goods_name" <?php if (isset($_GET['goods_name'])):?>value="<?php echo $_GET['goods_name'];?>"<?php endif;?> class="ipt form-control">
+                                    <input name="goods_name" id="goods_name" <?php if (isset($_GET['goods_name'])):?>value="<?php echo htmlspecialchars($_GET['goods_name']);?>"<?php endif;?> class="ipt form-control">
                                 </div>
                                 
                                 <div class="form-group">
@@ -87,7 +87,7 @@
                                 <td>{$vo.store_number}</td>
                                 <td>{$vo.order_sn}</td>
                                 <td>{$vo.po_sn}</td>
-                                <td><a href="{:url('info',['id' => $vo['id']])}">查看</a></td>
+                                <td><a href="javascript:;" onclick="viewLog({$vo['goods_id']},{$vo.order_id})">查看</a></td>
                                 <td>
                                 	{if condition="$vo['is_cancel']==1"}
                                 	<span>已取消关联</span>
@@ -117,6 +117,22 @@
 {/block}
 {block name="footer"}
 <script type="text/javascript">
+
+function viewLog(goods_id,order_id){
+    var title = '变动记录';
+    bDialog.open({
+        title : title,
+        height: 630,
+        width:'85%',
+        url : '{:url(\'log\')}?goods_id='+goods_id+'&order_id='+order_id,
+        callback:function(data){
+            if(data && data.results && data.results.length > 0 ) {
+                window.location.reload();
+            }
+        }
+    });
+}
+
     $(document).ready(function() {
         // 当前页面分类高亮
         $("#sidebar-store").addClass("sidebar-nav-active"); // 大分类

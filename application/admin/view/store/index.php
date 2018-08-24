@@ -35,7 +35,7 @@
                             </div>
                             	<div class="form-group">
                                     <label class="control-label" for="goods_name">商品名称 :</label>
-                                    <input name="goods_name" id="goods_name" <?php if (isset($_GET['goods_name'])):?>value="<?php echo $_GET['goods_name'];?>"<?php endif;?> class="ipt form-control">
+                                    <input name="goods_name" id="goods_name" <?php if (isset($_GET['goods_name'])):?>value="<?php echo htmlspecialchars($_GET['goods_name']);?>"<?php endif;?> class="ipt form-control">
                                 </div>
                                 
                                 <div class="form-group">
