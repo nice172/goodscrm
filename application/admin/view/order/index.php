@@ -53,6 +53,7 @@
                                 		<option value="2" {if condition="isset($_GET['status']) && $_GET['status']==2"}selected="selected"{/if}>已送货</option>
                                 		<option value="3" {if condition="isset($_GET['status']) && $_GET['status']==3"}selected="selected"{/if}>已完成</option>
                                 		<option value="4" {if condition="isset($_GET['status']) && $_GET['status']==4"}selected="selected"{/if}>已取消</option>
+                                		<option value="6" {if condition="isset($_GET['status']) && $_GET['status']==6"}selected="selected"{/if}>部分已送货</option>
                                 	</select>
                                 </div>
                                 
@@ -126,6 +127,8 @@
 								已取消
 								{elseif condition="$vo['status'] eq 5"}
 								已创建
+								{elseif condition="$vo['status'] eq 6"}
+								部分已送货
 								{/if}
 								</td>
                                 <td>

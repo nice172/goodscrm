@@ -42,7 +42,7 @@
 						<div class="form-group">
                                     <label for="goods_name" class="col-sm-2 control-label"><span class="text-danger">*</span>商品名称</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control w300" name="goods_name" value="{$goods.goods_name}" id="goods_name" placeholder="输入商品名称">
+                                        <input type="text" class="form-control w300" name="goods_name" value="<?php echo htmlspecialchars($goods['goods_name']);?>" id="goods_name" placeholder="输入商品名称">
                                     </div>
                                 </div>
                                  <div class="form-group">
@@ -175,7 +175,7 @@
     <div class="modal-footer">
         <div class="col-md-offset-2 col-md-8 left">
             <button type="submit" class="btn btn-primary">保 存</button>
-            <button type="reset" class="btn btn-default">重 置</button>
+            <button type="reset" onclick="history.go(-1);" class="btn btn-default">取 消</button>
         </div>
     </div>
 </form>

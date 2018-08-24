@@ -77,7 +77,6 @@ class Delivery extends Base {
         if ($id <= 0) $this->error('参数错误');
         $delivery_order = db('delivery_order')->where(['id' => $id])->find();
         if (empty($delivery_order)) $this->error('送货单不存在');
-        
 //         $goods_info = db('delivery_order d')->where(['d.delivery_id' => $id])
 //         ->join('__DELIVERY_GOODS__ dg','d.id=dg.delivery_id')
 //         ->join('__GOODS__ g','dg.goods_id=g.goods_id')
@@ -125,7 +124,47 @@ class Delivery extends Base {
         if ($this->request->isAjax()){
             $id = $this->request->param('id',0,'intval');
             if ($id <= 0) $this->error('参数错误');
+            $delivery_order = db('delivery_order')->where(['id' => $id])->find();
+            if (empty($delivery_order)) $this->error('送货单不存在');
+            $order = db('order')->where(['id' => $delivery_order['order_id']])->find();
             if (db('delivery_order')->where(['id' => $id])->setField('is_confirm',1)){
+                $delivery_goods = db('delivery_goods')->where(['delivery_id' => $id])->select();
+                //1入库，2出库，3报溢，4报损
+                foreach ($delivery_goods as $key => $value){
+                    db('store_log')->insert([
+                        'goods_id' => $value['goods_id'],
+                        'goods_name' => $value['goods_name'],
+                        'delivery_id' => $id,
+                        'type' => 2,
+                        'number' => $value['current_send_number'],
+                        'create_time' => time()
+                    ]);
+                    db('store_log')->insert([
+                        'goods_id' => $value['goods_id'],
+                        'goods_name' => $value['goods_name'],
+                        'delivery_id' => $id,
+                        'type' => 1,
+                        'number' => $value['add_number'],
+                        'create_time' => time()
+                    ]);
+                    db('order_goods')->where(['order_id' => $delivery_order['order_id'],'goods_id' => $value['goods_id']])->setInc('send_num',$value['current_send_number']);
+                }
+                $order_goods = db('order_goods')->where(['order_id' => $delivery_order['order_id']])->select();
+                $count = 0;
+                foreach ($order_goods as $value){
+                    if ($value['goods_number'] == $value['send_num']){
+                        $count += 1;
+                    }
+                }
+                if ($count == count($order_goods)){
+                    db('order')->where(['id' => $delivery_order['order_id']])->setField('status',2); //已送货
+                }else{
+                    db('order')->where(['id' => $delivery_order['order_id']])->setField('status',6); //部分送货
+                }
+                if (empty($order['deliver_time'])){
+                    //strtotime($delivery_order['delivery_date'])
+                    db('order')->where(['id' => $delivery_order['order_id']])->setField('deliver_time',time());
+                }
                 $this->success('确认成功');
             }
             $this->error('确认失败');

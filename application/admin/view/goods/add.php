@@ -174,7 +174,7 @@
     <div class="modal-footer">
         <div class="col-md-offset-2 col-md-8 left">
             <button type="submit" class="btn btn-primary">保 存</button>
-            <button type="reset" class="btn btn-default">重 置</button>
+            <button type="reset" onclick="history.go(-1);" class="btn btn-default">取 消</button>
         </div>
     </div>
 </form>
