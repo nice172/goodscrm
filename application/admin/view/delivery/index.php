@@ -88,8 +88,10 @@
 								</td>
                                 <td>
                                 	<a href="{:url('info',['id' => $vo['id']])}">详情</a>
+                                	{if condition="$vo['is_confirm']"}
                                 	<span class="text-explode">|</span>
                                 	<a href="{:url('prints',['id' => $vo['id']])}" target="_blank">打印送货单</a>
+                                	{/if}
                                 	{if condition="!$vo['is_confirm']"}
                                 	<span class="text-explode">|</span>
                                 	<a href="{:url('edit',['id' => $vo['id']])}">编辑</a>

@@ -84,7 +84,7 @@
                                 </td>
                                 </tr>
                                 <tr>
-                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>送货单号:</span></td>
+                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>物流单号:</span></td>
                                     <td width="35%">
                                         <input type="text" class="form-control w300" name="delivery_sn" id="delivery_sn">
                                     </td>

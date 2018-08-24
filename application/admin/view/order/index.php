@@ -50,7 +50,7 @@
                                 		<option value="0" {if condition="isset($_GET['status']) && $_GET['status']!='' && $_GET['status']==0"}selected="selected"{/if}>未确认</option>
                                 		<option value="1" {if condition="isset($_GET['status']) && $_GET['status']==1"}selected="selected"{/if}>已确认</option>
                                 		<option value="5" {if condition="isset($_GET['status']) && $_GET['status']==5"}selected="selected"{/if}>已创建</option>
-                                		<option value="2" {if condition="isset($_GET['status']) && $_GET['status']==2"}selected="selected"{/if}>已交货</option>
+                                		<option value="2" {if condition="isset($_GET['status']) && $_GET['status']==2"}selected="selected"{/if}>已送货</option>
                                 		<option value="3" {if condition="isset($_GET['status']) && $_GET['status']==3"}selected="selected"{/if}>已完成</option>
                                 		<option value="4" {if condition="isset($_GET['status']) && $_GET['status']==4"}selected="selected"{/if}>已取消</option>
                                 	</select>
@@ -119,7 +119,7 @@
 								{elseif condition="$vo['status'] eq 1"}
 								已确认
 								{elseif condition="$vo['status'] eq 2"}
-								已交货
+								已送货
 								{elseif condition="$vo['status'] eq 3"}
 								已完成
 								{elseif condition="$vo['status'] eq 4"}

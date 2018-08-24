@@ -100,8 +100,10 @@
                                 	<a href="{:url('info',['id' => $vo['id']])}">详情</a>
                                 	<span class="text-explode">|</span>
                                 	<a href="{:url('edit',['id' => $vo['id']])}">编辑</a>
+                                	{if condition="$vo['status']>=1"}
                                 	<span class="text-explode">|</span>
                                 	<a href="{:url('view',['id' => $vo['id']])}" target="_blank">查看文件</a>
+                                	{/if}
                                 </td>
                                 </tr>
                             {/volist}

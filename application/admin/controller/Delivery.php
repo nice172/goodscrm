@@ -414,7 +414,7 @@ h1,h2,h3,p,div,span{padding:0;margin:0;}
         $end_time = $this->request->param('end_date');
         $db = db('purchase p');
         $db->field('p.*,p.id as purchase_id,og.send_num,s.supplier_name,pg.unit,pg.goods_price,pg.goods_id,pg.goods_number,pg.goods_name,o.order_sn,o.require_time');
-        $where = ['p.status' => ['neq','-1']];
+        $where = ['p.status' => ['>=','1']];
         if ($supplier_name != ''){
             //$where['s.supplier_short'] = ['like',"%{$supplier_name}%"];
             //$where['s.supplier_name'] = ['like',"%{$supplier_name}%"];

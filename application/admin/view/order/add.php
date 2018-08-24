@@ -117,11 +117,11 @@
   </div>
                 
     <div class="modal-footer">
-        <div class="col-md-offset-2 col-md-8 left">
+        <div class="col-md-offset-4 col-md-8 left">
             <button type="submit" send="save" class="btn btn-primary">保 存</button>
             <button type="submit" send="confirm" class="btn btn-primary">确 认</button>
             <button type="submit" send="create" class="btn btn-primary">创建采购单</button>
-            <button type="reset" onclick="history.go(-1);" class="btn btn-default">取消</button>
+            <button type="button" onclick="history.go(-1);" class="btn btn-default">取消</button>
         </div>
     </div>
 </form>

@@ -265,7 +265,12 @@ class Order extends Base {
                     ]);
                 }
                 db('order')->where(['id' => $order_id])->setField('total_money',_formatMoney($total_money));
-                $this->success('新增成功',url('index'));
+                
+                if ($type == 'create'){
+                    $this->success('新增成功',url('create',['id' => $order_id]));
+                }else{
+                    $this->success('新增成功',url('index'));
+                }
             }else{
                 $this->error('新增失败请重试');
             }
