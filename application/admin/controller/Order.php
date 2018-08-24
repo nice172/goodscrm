@@ -106,6 +106,7 @@ class Order extends Base {
         $data = $result->all();
         foreach ($data as $key => $value){
             $category_id = db('goods')->where(['goods_id' => $value['goods_id']])->value('category_id');
+            $data[$key]['category_name'] = '';
             foreach ($category as $val){
                 if ($val['category_id'] == $category_id){
                     $data[$key]['category_name'] = $val['category_name'];
@@ -160,6 +161,7 @@ class Order extends Base {
     	$data = $result->all();
     	foreach ($data as $key => $value){
     		$category_id = db('goods')->where(['goods_id' => $value['goods_id']])->value('category_id');
+    		$data[$key]['category_name'] = '';
     		foreach ($category as $val){
     			if ($val['category_id'] == $category_id){
     				$data[$key]['category_name'] = $val['category_name'];
