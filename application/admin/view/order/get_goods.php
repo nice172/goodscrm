@@ -58,7 +58,7 @@
                             </thead>
                             <tbody>
                             {volist name="data" id="vo" empty="$empty"}
-                                <tr style="cursor: pointer;" class="selected_goods" data-store_number="{$vo['store_number']}" data-shop_price="{$vo['shop_price']}" data-market_price="{$vo['market_price']}" data-unit="{$vo['unit']}" data-remark="{$vo['remark']}" data-goods_name="{$vo['goods_name']}" data-goods_id="{$vo['goods_id']}">
+                                <tr style="cursor: pointer;" class="selected_goods" data-store_number="{$vo['store_number']}" data-shop_price="{$vo['shop_price']}" data-market_price="{$vo['market_price']}" data-unit="{$vo['unit']}" data-remark="<?php echo htmlspecialchars($vo['remark']);?>" data-goods_name="<?php echo htmlspecialchars($vo['goods_name']);?>" data-goods_id="{$vo['goods_id']}">
                                     <td>{$vo.category_name}</td>
                                     <td>{$vo.supplier_name}</td>
                                     <td>{$vo.goods_name}</td>
