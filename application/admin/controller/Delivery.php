@@ -149,6 +149,9 @@ class Delivery extends Base {
                         'number' => $value['add_number'],
                         'create_time' => time()
                     ]);
+                    if ($value['add_number'] > 0){
+                    	db('goods')->where(['goods_id' => $value['goods_id']])->setInc('store_number',$value['add_number']);
+                    }
                     db('order_goods')->where(['order_id' => $delivery_order['order_id'],'goods_id' => $value['goods_id']])->setInc('send_num',$value['current_send_number']);
                 }
                 $order_goods = db('order_goods')->where(['order_id' => $delivery_order['order_id']])->select();
@@ -224,7 +227,8 @@ class Delivery extends Base {
                     db('delivery_goods')->where(['id' => $value['id'],'delivery_id' => $delivery_id])->update([
                         'goods_id' => $value['goods_id'],
                         'goods_name' => $value['goods_name'],
-                        'unit' => $value['unit'],
+                        'goods_price' => $value['goods_price'],
+                    	'unit' => $value['unit'],
                         'goods_attr' => $value['goods_attr'],
                         'current_send_number' => $value['current_send_number'],
                         'add_number' => $value['add_number'],
@@ -433,6 +437,7 @@ h1,h2,h3,p,div,span{padding:0;margin:0;}
                         'delivery_id' => $delivery_id,
                         'goods_id' => $value['goods_id'],
                         'goods_name' => $value['goods_name'],
+                    	'goods_price' => $value['goods_price'],
                         'unit' => $value['unit'],
                         'goods_attr' => $value['goods_attr'],
                         'current_send_number' => $value['current_send_number'],

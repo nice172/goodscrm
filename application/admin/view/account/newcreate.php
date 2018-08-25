@@ -11,9 +11,11 @@
                         <div class="console-title console-title-border clearfix">
                             <div class="pull-left">
                                 <h5><span>{$title}</span></h5>
+                                <a href="javascript:history.go(-1);" class="btn btn-default">
+                                    <span class="icon-goback"></span><span>返回</span>
+                                </a>
                             </div>
                             <div class="pull-right">
-                                <a class="btn btn-primary" href="{:url('newcreate')}">新建</a>
                                 <a href="javascript:window.location.reload();" class="btn btn-default">
                                     <span class="glyphicon glyphicon-refresh"></span>
                                     <span>刷新</span></a>
@@ -31,10 +33,13 @@
                             <div class="form-group">
                                 <label class="control-label" for="cus_name">客户名称 :</label>
                                 <input name="cus_name" id="cus_name" class="ipt form-control" value="<?php if(isset($_GET['cus_name'])){echo $_GET['cus_name'];}?>" data-toggle="tooltip" data-placement="top" title="客户名称">
-                                
                             </div>
+                                <div class="form-group">
+                                	<label class="control-label" for="order_sn">订单号码 :</label>
+                                	<input name="order_sn" id="order_sn" class="ipt form-control" value="<?php if(isset($_GET['order_sn'])){echo $_GET['order_sn'];}?>" data-toggle="tooltip" data-placement="top" title="订单号码">
+                                </div>
                             	<div class="form-group">
-                                    <label class="control-label" for="start_time">开票日期 :</label>
+                                    <label class="control-label" for="start_time">送货日期 :</label>
                                     <input name="start_time" id="start_time" <?php if (isset($_GET['start_time'])):?>value="<?php echo $_GET['start_time'];?>"<?php endif;?> class="ipt form-control">
                                     <span>到</span>
                                 </div>
@@ -42,24 +47,7 @@
                                 <div class="form-group">
                                     <input name="end_time" id="end_time" <?php if (isset($_GET['end_time'])):?>value="<?php echo $_GET['end_time'];?>"<?php endif;?> class="ipt form-control">
                                 </div>
-                                
-                                <div class="form-group">
-                                	<label class="control-label" for="open_status">开票状态 :</label>
-                                	<select name="open_status" id="open_status" class="form-control">
-                                		<option value="">全部</option>
-                                		<option value="0">未开票</option>
-                                		<option value="1">已开票</option>
-                                	</select>
-                                </div>
-                                <div class="form-group">
-                                	<label class="control-label" for="invoice_status">发票状态 :</label>
-                                	<select name="invoice_status" id="invoice_status" class="form-control">
-                                		<option value="">全部</option>
-                                		<option value="0">待核销</option>
-                                		<option value="1">已核销</option>
-                                		<option value="2">已关闭</option>
-                                	</select>
-                                </div>
+                                                                
                                 <button type="submit" class="btn btn-primary">查找</button>
                                 </form>
                         </div>
@@ -71,51 +59,35 @@
                         <table class="table table-hover syc-table">
                             <thead>
                             <tr>
-                                <th>发票状态</th>
+                                <th>选择</th>
                                 <th>客户名称</th>
-                                <th>发票号码</th>
-                                <th>发票日期</th>
-                                <th>金额</th>
-                                <th>已付金额</th>
-                                <th>冲减金额</th>
-                                <th>已开票</th>
-                                <th>出货单号</th>
-                                <th>销售/订单号</th>
-                                <th>操作</th>
+                                <th>商品分类</th>
+                                <th>商品名称</th>
+                                <th>送货单号</th>
+                                <th>送货日期</th>
+                                <th>订单号</th>
+                                <th>下单日期</th>
+                                <th>单位</th>
+                                <th>单价</th>
+                                <th>税率</th>
+                                <th>交货数量</th>
                             </tr>
                             </thead>
                             <tbody>
                             {volist name="list" id="vo" empty="$empty"}
                                 <tr>
                                 <td>{$vo.id}</td>
+                                <td>{$vo.cus_name}</td>
+                                <td>{$vo.category_name}</td>
+                                <td>{$vo.goods_name}</td>
                                 <td>{$vo.order_dn}</td>
                                 <td>{$vo.delivery_date}</td>
-                                <td>{$vo.cus_name}</td>
                                 <td>{$vo.order_sn}</td>
-                                <td>{$vo.goods_name}</td>
+                                <td>{$vo.order_create_time|date='Y-m-d H:i:s',###}</td>
                                 <td>{$vo.unit}</td>
+                                <td>{$vo.goods_price}</td>
+                                <td>{$vo.tax}</td>
                                 <td>{$vo.current_send_number}</td>
-                                <td>{$vo.create_time|date='Y-m-d H:i:s',###}</td>
-                                <td>
-								{if condition="$vo['is_print'] eq 1"}
-								已打印
-								{else}
-								未打印
-								{/if}
-								</td>
-                                <td>
-                                	<a href="{:url('info',['id' => $vo['id']])}">详情</a>
-                                	{if condition="$vo['is_confirm']"}
-                                	<span class="text-explode">|</span>
-                                	<a href="{:url('prints',['id' => $vo['id']])}" target="_blank">打印送货单</a>
-                                	{/if}
-                                	{if condition="!$vo['is_confirm']"}
-                                	<span class="text-explode">|</span>
-                                	<a href="{:url('edit',['id' => $vo['id']])}">编辑</a>
-                                	{/if}
-                                	<span class="text-explode">|</span>
-                                	<a href="javascript:;" onclick="deleteOrdersOne({$vo['id']})">删除</a>
-                                </td>
                                 </tr>
                             {/volist}
                             </tbody>
