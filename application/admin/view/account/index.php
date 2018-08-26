@@ -78,41 +78,35 @@
                                 <th>金额</th>
                                 <th>已付金额</th>
                                 <th>冲减金额</th>
-                                <th>已开票</th>
-                                <th>出货单号</th>
-                                <th>销售/订单号</th>
+                                <th>是否开票</th>
+                                <!--<th>出货单号</th>
+                                <th>销售/订单号</th>-->
                                 <th>操作</th>
                             </tr>
                             </thead>
                             <tbody>
                             {volist name="list" id="vo" empty="$empty"}
                                 <tr>
-                                <td>{$vo.id}</td>
-                                <td>{$vo.order_dn}</td>
-                                <td>{$vo.delivery_date}</td>
-                                <td>{$vo.cus_name}</td>
-                                <td>{$vo.order_sn}</td>
-                                <td>{$vo.goods_name}</td>
-                                <td>{$vo.unit}</td>
-                                <td>{$vo.current_send_number}</td>
-                                <td>{$vo.create_time|date='Y-m-d H:i:s',###}</td>
                                 <td>
-								{if condition="$vo['is_print'] eq 1"}
-								已打印
-								{else}
-								未打印
-								{/if}
-								</td>
+                                {if condition="$vo['status']==1"}待核销{elseif condition="$vo['status']==2"}已核销{else}已关闭{/if}
+                                </td>
+                                <td>{$vo.cus_name}</td>
+                                <td>{$vo.invoice_sn}</td>
+                                <td>{$vo.invoice_date}</td>
+                                <td>{$vo.total_money}</td>
+                                <td>{$vo.pay_money}</td>
+                                <td>{$vo.diff_money}</td>
+                                <td>{if condition="$vo['is_open']"}已开票{else}未开票{/if}</td>
                                 <td>
                                 	<a href="{:url('info',['id' => $vo['id']])}">详情</a>
-                                	{if condition="$vo['is_confirm']"}
                                 	<span class="text-explode">|</span>
-                                	<a href="{:url('prints',['id' => $vo['id']])}" target="_blank">打印送货单</a>
-                                	{/if}
-                                	{if condition="!$vo['is_confirm']"}
+                                	<a href="{:url('prints',['id' => $vo['id']])}" target="_blank">已开票</a>
+                                	<span class="text-explode">|</span>
+                                	<a href="{:url('prints',['id' => $vo['id']])}" target="_blank">已核销</a>
+                                	<span class="text-explode">|</span>
+                                	<a href="{:url('prints',['id' => $vo['id']])}" target="_blank">关闭</a>
                                 	<span class="text-explode">|</span>
                                 	<a href="{:url('edit',['id' => $vo['id']])}">编辑</a>
-                                	{/if}
                                 	<span class="text-explode">|</span>
                                 	<a href="javascript:;" onclick="deleteOrdersOne({$vo['id']})">删除</a>
                                 </td>

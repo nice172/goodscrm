@@ -3,9 +3,28 @@ namespace app\admin\controller;
 class Account extends Base {
     
     public function index(){
-        
-        $this->assign('page','');
-        $this->assign('list',[]);
+    	$cus_name = $this->request->param('cus_name');
+    	$open_status = $this->request->param('open_status');
+    	$start_time = $this->request->param('start_time');
+    	$end_time = $this->request->param('end_time');
+    	$invoice_status = $this->request->param('invoice_status');
+    	$db = db('receivables');
+    	if ($cus_name != ''){
+    		$db->where('cus_name','like',"%{$cus_name}%");
+    	}
+    	if (strtotime($start_time) && strtotime($end_time)){
+    		$db->where(['invoice_date' => ['>=', $start_time]]);
+    		$db->where(['invoice_date' => ['<=', $end_time]]);
+    	}
+    	if ($open_status != ''){
+    		$db->where(['is_open' => $open_status]);
+    	}
+    	if ($invoice_status != ''){
+    		$db->where(['status' => $invoice_status]);
+    	}
+        $result = $db->paginate(config('page_size'),false,['query' => $this->request->param()]);
+        $this->assign('page',$result->render());
+        $this->assign('list',$result->all());
         $this->assign('title','应收账款');
         return $this->fetch();
     }
