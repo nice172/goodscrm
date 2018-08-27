@@ -98,7 +98,7 @@
 								</td>
                                 <td>
                                 	<a href="{:url('info',['id' => $vo['id']])}">详情</a>
-                                	{if condition="$vo['status']=0"}
+                                	{if condition="$vo['status']==0"}
                                 	<span class="text-explode">|</span>
                                 	<a href="{:url('edit',['id' => $vo['id']])}">编辑</a>
                                 	{/if}
