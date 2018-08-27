@@ -422,7 +422,8 @@ class Order extends Base {
     	if (!empty($goodsInfo)){
     		foreach ($goodsInfo as $key => $value){
     			$value['shop_price'] = $value['goods_price']; //实际价格
-    			$value['purchase_number'] = 0;
+    			//$value['purchase_number'] = 0;
+    			$value['purchase_number'] = $value['goods_number'];
     			$value['store_number'] = db('goods')->where(['goods_id' => $value['goods_id']])->value('store_number');
     			$value['totalMoney'] = _formatMoney($value['goods_price']*$value['purchase_number']);
     			$goodsInfo[$key] = json_encode($value);

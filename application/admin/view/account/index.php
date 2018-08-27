@@ -99,12 +99,20 @@
                                 <td>{if condition="$vo['is_open']"}已开票{else}未开票{/if}</td>
                                 <td>
                                 	<a href="{:url('info',['id' => $vo['id']])}">详情</a>
-                                	<span class="text-explode">|</span>
-                                	<a href="{:url('prints',['id' => $vo['id']])}" target="_blank">已开票</a>
-                                	<span class="text-explode">|</span>
-                                	<a href="{:url('prints',['id' => $vo['id']])}" target="_blank">已核销</a>
-                                	<span class="text-explode">|</span>
-                                	<a href="{:url('prints',['id' => $vo['id']])}" target="_blank">关闭</a>
+                                	{if condition="$vo['status']!=0"}
+                                		{if condition="!$vo['is_open'] && $vo['status']==2"}
+                                		<span class="text-explode">|</span>
+                                		<a href="javascript:;" onclick="_open({$vo['id']})">已开票</a>
+                                		{/if}
+                                		{if condition="$vo['status']==1"}
+                                    	<span class="text-explode">|</span>
+                                    	<a href="javascript:;" onclick="_status({$vo['id']})">已核销</a>
+                                    	{/if}
+                                		{if condition="$vo['status']==1 || !$vo['is_open']"}
+                                		<span class="text-explode">|</span>
+                                		<a href="javascript:;" onclick="_close({$vo['id']})">关闭</a>
+                                		{/if}
+                                	{/if}
                                 	<span class="text-explode">|</span>
                                 	<a href="{:url('edit',['id' => $vo['id']])}">编辑</a>
                                 	<span class="text-explode">|</span>
@@ -182,16 +190,33 @@
         });
     });
     //单条订单操作
-    function cancel(e) {
-        if(confirm("是否取消此订单？")){
+    function _open(e) {
+        if(confirm("确认操作？")){
             if (!isNaN(e) && e !== null && e !== '') {
                 var data={name:'scrap',id:e};
-                $.sycToAjax("{:url('cancel')}", data);
+                $.sycToAjax("{:url('open')}", data);
             }
         };
         return false;
     }
-    
+    function _status(e) {
+        if(confirm("确认操作？")){
+            if (!isNaN(e) && e !== null && e !== '') {
+                var data={name:'scrap',id:e};
+                $.sycToAjax("{:url('status')}", data);
+            }
+        };
+        return false;
+    }
+    function _close(e) {
+        if(confirm("确认操作？")){
+            if (!isNaN(e) && e !== null && e !== '') {
+                var data={name:'scrap',id:e};
+                $.sycToAjax("{:url('close')}", data);
+            }
+        };
+        return false;
+    }
     //单条恢复订单操作
     function huifuLogisticsOne(e) {
         if(confirm("确定恢复此订单？")){

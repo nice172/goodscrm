@@ -9,6 +9,7 @@ class Account extends Base {
     	$end_time = $this->request->param('end_time');
     	$invoice_status = $this->request->param('invoice_status');
     	$db = db('receivables');
+    	$db->where(['is_delete' => 0]);
     	if ($cus_name != ''){
     		$db->where('cus_name','like',"%{$cus_name}%");
     	}
@@ -25,6 +26,119 @@ class Account extends Base {
         $result = $db->paginate(config('page_size'),false,['query' => $this->request->param()]);
         $this->assign('page',$result->render());
         $this->assign('list',$result->all());
+        $this->assign('title','应收账款');
+        return $this->fetch();
+    }
+    
+    public function delete(){
+        if ($this->request->isAjax()){
+            $id = $this->request->param('id',0,'intval');
+            if ($id <= 0) $this->error('参数错误');
+            if (db('receivables')->where(['id' => $id])->setField('is_delete',1)){
+                $this->success('操作成功');
+            }
+            $this->error('操作失败');
+        }
+    }
+    
+    public function close(){
+        if ($this->request->isAjax()){
+            $id = $this->request->param('id',0,'intval');
+            if ($id <= 0) $this->error('参数错误');
+            if (db('receivables')->where(['id' => $id])->setField('status',0)){
+                $this->success('操作成功');
+            }
+            $this->error('操作失败');
+        }
+    }
+    
+    public function open(){
+        if ($this->request->isAjax()){
+            $id = $this->request->param('id',0,'intval');
+            if ($id <= 0) $this->error('参数错误');
+            if (db('receivables')->where(['id' => $id])->setField('is_open',1)){
+                $this->success('操作成功');
+            }
+            $this->error('操作失败');
+        }
+    }
+    
+    public function status(){
+        if ($this->request->isAjax()){
+            $id = $this->request->param('id',0,'intval');
+            if ($id <= 0) $this->error('参数错误');
+            if (db('receivables')->where(['id' => $id])->setField('status',2)){
+                $this->success('操作成功');
+            }
+            $this->error('操作失败');
+        }
+    }
+    
+    public function info(){
+        $id = $this->request->param('id',0,'intval');
+        if (empty($id)) $this->error('参数错误');
+        $receivables = db('receivables')->where(['id' => $id,'is_delete' => 0])->find();
+        if (empty($receivables)) $this->error('数据信息不存在');
+        $this->assign('receivables',$receivables);
+        $ids = $receivables['delivery_ids'];
+        $db = db('delivery_order do');
+        //$db->where(['do.is_invoice' => 0]);
+        $result = $db->join('__DELIVERY_GOODS__ gd','gd.delivery_id=do.id')
+        ->join('__ORDER__ o','o.id=do.order_id')
+        ->field('do.*,o.total_money,o.create_time as order_create_time,gd.goods_price,gd.goods_id,gd.unit,gd.goods_name,gd.add_number,gd.current_send_number')
+        ->where(['do.cus_id' => $receivables['cus_id'],'do.id' => ['in',$ids]])->select();
+        foreach ($result as $key => $value){
+            $category_name = db('goods g')->join('__GOODS_CATEGORY__ gc','gc.category_id=g.category_id')
+            ->where(['g.goods_id' => $value['goods_id']])->value('gc.category_name');
+            $result[$key]['category_name'] = $category_name;
+        }
+        $this->assign('page','');
+        $this->assign('list',$result);
+        $this->assign('title','应收账款');
+        return $this->fetch();
+    }
+    
+    public function edit(){
+        $id = $this->request->param('id',0,'intval');
+        if (empty($id)) $this->error('参数错误');
+        $receivables = db('receivables')->where(['id' => $id,'is_delete' => 0])->find();
+        if (empty($receivables)) $this->error('数据信息不存在');
+        if ($this->request->isAjax()){
+            $invoice_sn = $this->request->post('invoice_sn');
+            $invoice_date = $this->request->post('invoice_date');
+            $id = $this->request->post('id');
+            if (empty($invoice_sn)) $this->error('发票号码不能为空');
+            if (empty($invoice_date)) $this->error('开票日期不能为空');
+            $data = [
+                'id' => intval($id),
+                'invoice_sn' => $invoice_sn,
+                'invoice_date' => $invoice_date,
+                'update_time' => time()
+            ];
+            if (db('receivables')->where(['id' => ['neq',$data['id']],'invoice_sn' => $invoice_sn])->find()){
+                $this->error('发票号码已存在');
+            }
+            if (db('receivables')->update($data)){
+                $this->success('保存成功',url('index'));
+            }
+            $this->error('保存失败');
+            return;
+        }
+        $this->assign('receivables',$receivables);
+        $ids = $receivables['delivery_ids'];
+        $db = db('delivery_order do');
+        //$db->where(['do.is_invoice' => 0]);
+        $result = $db->join('__DELIVERY_GOODS__ gd','gd.delivery_id=do.id')
+        ->join('__ORDER__ o','o.id=do.order_id')
+        ->field('do.*,o.total_money,o.create_time as order_create_time,gd.goods_price,gd.goods_id,gd.unit,gd.goods_name,gd.add_number,gd.current_send_number')
+        ->where(['do.cus_id' => $receivables['cus_id'],'do.id' => ['in',$ids]])->select();
+        foreach ($result as $key => $value){
+            $category_name = db('goods g')->join('__GOODS_CATEGORY__ gc','gc.category_id=g.category_id')
+            ->where(['g.goods_id' => $value['goods_id']])->value('gc.category_name');
+            $result[$key]['category_name'] = $category_name;
+        }
+        $this->assign('page','');
+        $this->assign('list',$result);
         $this->assign('title','应收账款');
         return $this->fetch();
     }
@@ -82,6 +196,24 @@ class Account extends Base {
     	}
     }
     
+    public function setsupplier(){
+        if ($this->request->isAjax()){
+            $data = $this->request->param();
+            if (empty($data)) {
+                cookie('setsupplier',null);
+                $this->success('ok');
+                return;
+            }
+            if (count(array_unique($data)) >= 2){
+                $this->error('供应商不相同的不能创建对账单');
+            }
+            if (count(array_unique($data)) == 1){
+                cookie('setsupplier',$data);
+                $this->success('ok');
+            }
+        }
+    }
+    
     public function create(){
     	$checked = cookie('soset');
     	if (empty($checked) || empty($checked['checked'])) $this->error('请选择销售单');
@@ -121,9 +253,12 @@ class Account extends Base {
     		if ($this->request->isAjax()){
     			$invoice_sn = $this->request->post('invoice_sn');
     			$invoice_date = $this->request->post('invoice_date');
-    			$delivery_ids = $this->request->post('delivery_ids');
+    			//$delivery_ids = $this->request->post('delivery_ids');
     			if (empty($invoice_sn)) $this->error('发票号码不能为空');
     			if (empty($invoice_date)) $this->error('开票日期不能为空');
+    			if (db('receivables')->where(['invoice_sn' => $invoice_sn])->find()){
+    			    $this->error('发票号码已存在');
+    			}
     			$delivery_ids = [];
     			foreach ($result as $key => $value){
     				$delivery_ids[] = $value['id'];
@@ -133,7 +268,7 @@ class Account extends Base {
     				'admin_uid' => $this->userinfo['id'],
     				'cus_id' => $cus_id,
     				'cus_name' => $company_name,
-    				'delivery_ids' => implode('_', $delivery_ids),
+    				'delivery_ids' => implode(',', $delivery_ids),
     				'invoice_sn' => $invoice_sn,
     				'invoice_date' => $invoice_date,
     				'total_money' => _formatMoney($total_money),
@@ -169,15 +304,60 @@ class Account extends Base {
     }
     
     public function wait(){
-        $this->assign('page','');
-        $this->assign('list',[]);
+        $supplier_name = $this->request->param('supplier_name');
+        $order_dn = $this->request->param('order_dn');
+        $po_sn = $this->request->param('po_sn');
+        $start_time = $this->request->param('start_time');
+        $end_time = $this->request->param('end_time');
+        $db = db('delivery_order do');
+        if ($supplier_name != '') {
+            $db->where(['s.supplier_name|s.supplier_short','like',"%{$supplier_name}%"]);
+        }
+        if (strtotime($start_time) && strtotime($end_time)){
+            $db->where(['do.delivery_date' => ['>=', $start_time]]);
+            $db->where(['do.delivery_date' => ['<=', $end_time]]);
+        }
+        if ($po_sn != ''){
+            $db->where(['p.po_sn' => $po_sn]);
+        }
+        if ($order_dn != ''){
+            $db->where(['do.order_dn' => $order_dn]);
+        }
+        $result = $db->join('__PURCHASE__ p','do.purchase_id=p.id')
+        ->join('__SUPPLIER__ s','p.supplier_id=s.id')
+        ->field(['do.order_dn,do.id,do.delivery_date,p.supplier_id,p.po_sn,s.supplier_name,s.supplier_short'])
+        ->paginate(config('page_size'),false,['query' => $this->request->param()]);
+        $this->assign('page',$result->render());
+        $this->assign('list',$result->all());
         $this->assign('title','采购发票待处理');
         $this->assign('sub_class','viewFramework-product-col-1');
+        //cookie('setsupplier',null);
+        $this->assign('soset',cookie('setsupplier'));
         return $this->fetch();
     }
     
-    public function add_payment(){
+    public function view(){
+        $id = $this->request->param('id',0,'intval');
+        if (!$id) $this->error('参数错误');
+        $delivery_order = db('delivery_order')->where(['id' => $id])->find();
+        $data = db('delivery_goods gd')->join('__GOODS__ g','g.goods_id=gd.goods_id')
+        ->join('__GOODS_CATEGORY__ gc','g.category_id=gc.category_id')
+        ->field('gd.*,gc.category_name')->select();
+        $this->assign('data',$data);
+        $this->assign('page','');
+        return $this->fetch();
+    }
+    
+    public function create_payment(){
+        $checked = cookie('setsupplier');
+        if (empty($checked) || empty($checked['checked'])) $this->error('请选择供应商');
+        list($supplier_id,$delivery_id) = explode('_', array_unique($checked['checked'])[0]);
+        
+        $this->assign('page','');
+        $this->assign('list',[]);
+        $this->assign('title','应付账款');
         $this->assign('sub_class','viewFramework-product-col-1');
+        return $this->fetch();
     }
     
 }

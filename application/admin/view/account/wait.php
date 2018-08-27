@@ -80,34 +80,13 @@
                             <tbody>
                             {volist name="list" id="vo" empty="$empty"}
                                 <tr>
-                                <td>{$vo.id}</td>
+                                <td><input type="checkbox" {if condition="isset($soset['checked']) && in_array($vo['supplier_id'].'_'.$vo['id'],$soset['checked'])"}checked="checked"{/if} name="cus_delivery[]" data-cus_id="{$vo.supplier_id}" value="{$vo.supplier_id}_{$vo.id}"/></td>
+                                <td>{$vo.supplier_short}</td>
                                 <td>{$vo.order_dn}</td>
                                 <td>{$vo.delivery_date}</td>
-                                <td>{$vo.cus_name}</td>
-                                <td>{$vo.order_sn}</td>
-                                <td>{$vo.goods_name}</td>
-                                <td>{$vo.unit}</td>
-                                <td>{$vo.current_send_number}</td>
-                                <td>{$vo.create_time|date='Y-m-d H:i:s',###}</td>
+                                <td>{$vo.po_sn}</td>
                                 <td>
-								{if condition="$vo['is_print'] eq 1"}
-								已打印
-								{else}
-								未打印
-								{/if}
-								</td>
-                                <td>
-                                	<a href="{:url('info',['id' => $vo['id']])}">详情</a>
-                                	{if condition="$vo['is_confirm']"}
-                                	<span class="text-explode">|</span>
-                                	<a href="{:url('prints',['id' => $vo['id']])}" target="_blank">打印送货单</a>
-                                	{/if}
-                                	{if condition="!$vo['is_confirm']"}
-                                	<span class="text-explode">|</span>
-                                	<a href="{:url('edit',['id' => $vo['id']])}">编辑</a>
-                                	{/if}
-                                	<span class="text-explode">|</span>
-                                	<a href="javascript:;" onclick="deleteOrdersOne({$vo['id']})">删除</a>
+                                	<a href="javascript:;" onclick="viewlist({$vo.id})">查看</a>
                                 </td>
                                 </tr>
                             {/volist}
@@ -123,9 +102,16 @@
                             </tr>
                             </tfoot>
                         </table>
+                        
+    <div class="modal-footer" style="border-top:none;">
+        <div class="col-md-offset-5 col-md-12 left">
+            <button type="submit" class="btn btn-primary confirm">确认</button>
+            <button type="button" class="btn btn-default cancel">取消</button>
+        </div>
+    </div>
+                        
                     </div>
                 </div>
-
                 <!--内容结束-->
             </div>
 {/block}
@@ -149,6 +135,51 @@
         });
         $('[data-toggle="tooltip"]').tooltip(); //工具提示
 
+		var checkedArr = new Array();
+		var current_cus = 0;
+		<?php if (isset($soset['checked'])){ foreach ($soset['checked'] as $val){?>
+		checkedArr.push('<?php echo $val;?>');
+		<?php }}?>
+		$('.confirm').click(function(){
+			if(checkedArr.length == 0){
+				alert('请选择供应商');
+				return;
+			}
+			window.location.href='<?php echo url('create_payment');?>';
+		});
+        
+		$("input[name='cus_delivery[]']").click(function(){
+			var cus_id = $(this).attr('data-cus_id');
+			var val = $(this).val();
+			if(current_cus != 0 && current_cus != cus_id){
+				$(this).attr('checked',false);
+				alert('供应商不相同的不能创建对账单');
+				return;
+			}
+			if(current_cus == 0){
+				current_cus = cus_id;
+			}
+			if($(this).is(':checked')){
+				checkedArr.push(val);
+			}else{
+				var newArr = new Array();
+				for(var i in checkedArr){
+					if(val != checkedArr[i]){
+						newArr.push(checkedArr[i]);
+					}
+				}
+				checkedArr = newArr;
+			}
+			$.ajax({
+				method:'POST',
+				url:'<?php echo url('setsupplier');?>',
+				data:{checked:checkedArr},success:function(res){
+					if(res.code != 1){
+					alert(res.msg);}
+				}});
+		});
+        
+        
         // 使用prop实现全选和反选
         $("#ckSelectAll").on('click', function () {
             $("input[name='ckbox[]']").prop("checked", $(this).prop("checked"));
@@ -179,7 +210,25 @@
                 });
             });
         });
+
     });
+
+	function viewlist(e){
+		var title = '明细列表';
+        bDialog.open({
+            title : title,
+            height: 560,
+            width:'80%',
+            url : '{:url(\'view\')}?id='+e,
+            callback:function(data){
+                if(data && data.results && data.results.length > 0 ) {
+                    window.location.reload();
+                }
+            }
+        });
+
+	}
+    
     //单条订单操作
     function cancel(e) {
         if(confirm("是否取消此订单？")){
@@ -212,5 +261,6 @@
         };
         return false;
     }
+
 </script>
 {/block}

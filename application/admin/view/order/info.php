@@ -69,13 +69,15 @@
         								已确认
         								<button style="margin-left:20px;" onclick="window.location.href='<?php echo url('create',['id' => $data['id']]);?>'" type="button" class="btn btn-primary">创建采购单</button>
         								{elseif condition="$data['status'] eq 2"}
-        								已交货
+        								已送货
         								{elseif condition="$data['status'] eq 3"}
         								已完成
         								{elseif condition="$data['status'] eq 4"}
         								已取消
         								{elseif condition="$data['status'] eq 5"}
         								已创建
+        								{elseif condition="$data['status'] eq 6"}
+        								部分已送货
         								{/if}
                                         </td>
                                         <td width="15%" class="right-color"><span>实际送货日期:</span></td>
