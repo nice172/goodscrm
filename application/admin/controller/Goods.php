@@ -430,7 +430,7 @@ class Goods extends Base {
 		'goods_name' => 'require',
 		'supplier_id' => 'require',
 		'category_id' => 'require',
-		'brand_id' => 'require',
+		//'brand_id' => 'require',
 		'unit' => 'require',
 		'shop_price' => 'require|number',
 		'market_price' => 'require|number',
@@ -444,7 +444,7 @@ class Goods extends Base {
 		'goods_name.require' => '商品名称不能为空',
 		'supplier_id.require' => '请选择供应商',
 		'category_id.require' => '请选择商品分类',
-		'brand_id.require' => '请选择商品品牌',
+		//'brand_id.require' => '请选择商品品牌',
 		'unit.require' => '请选择单位',
 		'shop_price.require' => '采购价不能为空',
 		'shop_price.number' => '采购价不正确',
@@ -469,8 +469,8 @@ class Goods extends Base {
 	        if ($data['supplier_id'] <= 0) $this->error('选择供应商不正确');
 	        $data['category_id'] = intval($data['category_id']);
 	        if ($data['category_id'] <= 0) $this->error('选择商品分类不正确');
-	        $data['brand_id'] = intval($data['brand_id']);
-	        if ($data['brand_id'] <= 0) $this->error('选择品牌不正确');
+	        //$data['brand_id'] = intval($data['brand_id']);
+	        //if ($data['brand_id'] <= 0) $this->error('选择品牌不正确');
 	        if ($data['shop_price'] < 0) $this->error('采购价不正确');
 	        if ($data['market_price'] < 0) $this->error('销售价不正确');
 	        $goods_attr = [];
@@ -536,8 +536,8 @@ class Goods extends Base {
 			if ($data['supplier_id'] <= 0) $this->error('选择供应商不正确');
 			$data['category_id'] = intval($data['category_id']);
 			if ($data['category_id'] <= 0) $this->error('选择商品分类不正确');
-			$data['brand_id'] = intval($data['brand_id']);
-			if ($data['brand_id'] <= 0) $this->error('选择品牌不正确');
+			//$data['brand_id'] = intval($data['brand_id']);
+			//if ($data['brand_id'] <= 0) $this->error('选择品牌不正确');
 			if ($data['shop_price'] < 0) $this->error('采购价不正确');
 			if ($data['market_price'] < 0) $this->error('销售价不正确');
 			$goods_attr = [];

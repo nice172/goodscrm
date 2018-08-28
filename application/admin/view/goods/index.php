@@ -59,7 +59,7 @@
                                 <th>商品名称</th>
                                 <th>商品分类</th>
                                 <th>供应商</th>
-                                <th>商品品牌</th>
+                                <!--<th>商品品牌</th>-->
                                 <th>单位</th>
                                 <th>采购价</th>
                                 <th>销售价</th>
@@ -73,7 +73,7 @@
                                 <td>{$vo.goods_name}</td>
                                 <td>{$vo.category_name}</td>
                                 <td>{$vo.supplier_name}</td>
-                                <td>{$vo.brand_name}</td>
+                                <!--<td>{$vo.brand_name}</td>-->
                                 <td>{$vo.unit}</td>
                                 <td>{$vo.shop_price}</td>
                                 <td>{$vo.market_price}</td>

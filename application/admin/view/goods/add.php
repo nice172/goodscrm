@@ -70,6 +70,7 @@
                                         </select>
                                     </div>
                                 </div>
+                                <!--
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label"><span class="text-danger">*</span>商品品牌</label>
                                     <div class="col-sm-10">
@@ -80,7 +81,7 @@
                                         <?php endforeach;?>
                                         </select>
                                     </div>
-                                </div>
+                                </div>-->
                                 <div class="form-group">
                                     <label for="unit" class="col-sm-2 control-label"><span class="text-danger">*</span>单位</label>
                                     <div class="col-sm-10">

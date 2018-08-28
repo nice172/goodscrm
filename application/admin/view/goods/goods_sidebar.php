@@ -10,11 +10,11 @@
                                     <div class="nav-icon"></div><div class="nav-title">商品分类</div>
                                 </a>
                             </li>
-                            <li {if condition="ACTION_NAME=='brand'"}class="active"{/if}>
+                            <!-- <li {if condition="ACTION_NAME=='brand'"}class="active"{/if}>
                                 <a href="{:url('goods/brand')}">
                                     <div class="nav-icon"></div><div class="nav-title">品牌管理</div>
                                 </a>
-                            </li>
+                            </li> -->
                             <li {if condition="ACTION_NAME=='index' or ACTION_NAME=='add' or ACTION_NAME=='goodsinfo' or ACTION_NAME=='goods_edit'"}class="active"{/if}>
                                 <a href="{:url('goods/index')}">
                                     <div class="nav-icon"></div><div class="nav-title">商品列表</div>
