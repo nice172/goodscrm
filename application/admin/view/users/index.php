@@ -42,6 +42,7 @@
                             <tr>
                                 <th>&nbsp;</th>
                                 <th>编号</th>
+                                <th>用户名</th>
                                 <th>姓名</th>
                                 <th>性别</th>
                                 <th>所属角色</th>
@@ -82,6 +83,7 @@
                             <tr>
                                 <td><input type="checkbox" name="ckbox[]" value="{$vo.id}"></td>
                                 <td>{$vo.id}</td>
+                                <td>{$vo.user_name}</td>
                                 <td>{$vo.user_nick}</td>
                                 <td>{switch $vo.user_sex}{case 1}男{/case}{case 2}女{/case}{default}未知{/switch}</td>
                                 <td>{$vo.group.title}</td>
