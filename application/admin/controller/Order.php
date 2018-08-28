@@ -561,9 +561,9 @@ class Order extends Base {
                     }
                 }
                 db('order')->where(['id' => $data['id']])->setField('total_money',_formatMoney($total_money));
-                $this->success('编辑成功',url('index'));
+                $this->success('保存成功',url('index'));
             }else{
-                $this->error('编辑失败请重试');
+                $this->error('保存失败请重试');
             }
             return;
         }
