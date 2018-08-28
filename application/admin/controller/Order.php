@@ -24,12 +24,26 @@ class Order extends Base {
     ];
     
     public function index(){
+        $catename = '';
+        $attr_val = [];
+        if ($this->request->isPost()){
+            $params = $this->request->param();
+            
+            if (isset($params['check_cate'])){
+                $catename = $params['cate'];
+            }
+            foreach ($params['check_attr'] as $key => $v){
+                if (isset($params['attr_val'][$key]) && !empty($params['attr_val'][$key])){
+                    $attr_val[] = $params['attr_val'][$key];
+                }
+            }
+        }
         $company_short = $this->request->param('company_short');
         $start_time = $this->request->param('start_time');
         $end_time = $this->request->param('end_time');
         $status = $this->request->param('status');
         $categroy_id = $this->request->param('categroy_id');
-        $db = db('order o');
+        $db = db('order o');        
         $db->field('o.*,g.*,o.id as oid,g.id as gid');
         if (empty($status)){
             $where = ['o.status' => ['neq','-1']];
@@ -51,18 +65,69 @@ class Order extends Base {
             }
         }
         $db->join('__ORDER_GOODS__ g','o.id=g.order_id');
-        
+        $flag = true;
         if (!empty($categroy_id)){
             $db->join('__GOODS__ gd','gd.goods_id=g.goods_id');
             $db->where(['gd.category_id' => $categroy_id]);
+            $flag = false;
         }
+
+        if (!empty($attr_val)){
+            $attr_sql_or = '';
+            foreach ($attr_val as $val){
+                $valArr = explode(',', $val);
+                foreach ($valArr as $str){
+                    $attr_sql_or .= "t.attr_value='{$str}' OR ";
+                }
+            }
+            $attr_sql_or = mb_substr($attr_sql_or, 0,-4);
+            if (!empty($attr_sql_or)){
+                if ($flag){
+                    $flag = false;
+                    $db->join('__GOODS__ gd','gd.goods_id=g.goods_id');
+                    $db->join('__GOODS_ATTR_VAL__ t','gd.goods_id=t.goods_id');
+                    $db->where($attr_sql_or);
+                }else{
+                    $db->join('__GOODS_ATTR_VAL__ t','gd.goods_id=t.goods_id');
+                    $db->where($attr_sql_or);
+                }
+            }
+        }
+        
+        if ($catename != ''){
+            $sqlOR = '';
+            $catename = explode(',', $catename);
+            foreach ($catename as $str){
+                $sqlOR .= "gc.category_name='{$str}' OR ";
+            }
+            $sqlOR = mb_substr($sqlOR, 0,-4);
+            if (!empty($sqlOR)){
+                if ($flag){
+                    $db->join('__GOODS__ gd','gd.goods_id=g.goods_id');
+                    $db->join('__GOODS_CATEGORY__ gc','gc.category_id=gd.category_id');
+                    $db->where($sqlOR);
+                }else{
+                    $db->join('__GOODS_CATEGORY__ gc','gc.category_id=gd.category_id');
+                    $db->where($sqlOR);
+                }
+            }
+        }
+
         $db->order('o.id desc');
         $data = $db->paginate(config('PAGE_SIZE'), false, ['query' => $this->request->param() ]);
-        // 获取分页显示
+//         echo $db->getLastSql();exit;
+        //获取分页显示
         $page = $data->render();
         $this->assign('page',$page);
         $this->assign('list',$data);
         $this->assign('title','订单列表');
+        
+        $attr = getParams(19); //查询属性
+        if (!empty($attr)){
+            $attr = $attr['params_value'];
+        }
+        $this->assign('attr',$attr);
+        
         $category = db('goods_category')->where(array('status' => 1))->select();
         $this->assign('category',$category);
         return $this->fetch();

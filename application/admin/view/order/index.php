@@ -72,7 +72,7 @@
                                 </div>
                                 
                                 <button type="submit" class="btn btn-primary" id="searchprojectName">查找</button>
-                                <button type="button" class="btn btn-primary">按商品属性查找</button>
+                                <button type="button" class="btn btn-primary goods_attr_btn">按商品属性查找</button>
                                 </form>
                         </div>
                     </div>
@@ -163,6 +163,47 @@
             </div>
 {/block}
 {block name="footer"}
+<style>.modal .form-control{width:250px !important;}.check_box{margin-top:10px;}.span_input{width:100px;display:block;float:left;margin-top:5px;}</style>
+<div class="modal fade" aria-hidden="true" data-backdrop="static" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog" style="width:400px;" role="document">
+      <div class="modal-content">
+      <form method="post" enctype="multipart/form-data" action="<?php echo url('index');?>">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            <span class="sr-only">关闭</span>
+          </button>
+          <h4 class="modal-title" id="exampleModalLabel">产品属性</h4>
+        </div>
+        <div class="modal-body">
+        
+        	<div class="tabbable">
+
+				<div class="tab-content">
+					<div id="home" class="tab-pane fade in active">
+					
+			            <div class="form-group form-inline">
+			              <span class="span_input"><label for="check_cate"><input type="checkbox" id="check_cate" name="check_cate" value="1" class="check_box"/> 分类</label></span>
+			              <input type="text" name="cate" class="form-control" id="cate" />
+			            </div>           
+           				<?php foreach ($attr as $key => $value){?>
+           				<div class="form-group form-inline">
+			              <span class="span_input"><label for="check_attr<?php echo $key;?>"><input type="checkbox" id="check_attr<?php echo $key;?>" value="1" name="check_attr[<?php echo $key;?>]" class="check_box"/> <?php echo $value;?></label></span>
+			              <input type="text" name="attr_val[]" class="form-control" />
+			            </div>
+            			<?php }?>
+				</div>
+			</div>
+ 		</div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+          <button type="submit" class="btn btn-primary">确认</button>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
 <script type="text/javascript">
     $(document).ready(function() {
         // 当前页面分类高亮
@@ -182,6 +223,13 @@
         });
         $('[data-toggle="tooltip"]').tooltip(); //工具提示
 
+		$('.goods_attr_btn').click(function(){
+			$('#exampleModal').modal({
+				show : true,
+				keyboard : false,
+			});
+		});
+        
         // 使用prop实现全选和反选
         $("#ckSelectAll").on('click', function () {
             $("input[name='ckbox[]']").prop("checked", $(this).prop("checked"));
