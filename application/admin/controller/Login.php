@@ -75,7 +75,7 @@ use app\admin\model\Users As UserModel;
                  $passwordBy = validate_password($password, $userDb["user_password"]);
                  if ($passwordBy === true) {
                      // 密码正确
-                     UserModel::where("user_name", $username)->update(["user_count"=> ['exp', 'user_count+1']]);
+                     UserModel::where("user_name", $username)->update(['update_time' => time(),"user_count"=> ['exp', 'user_count+1']]);
                      // 将用户信息写入 Session
                      Session::set('user_id', $userDb['id']); // 用户ID
                      Session::set('user_name', $userDb['user_name']); // 登录名

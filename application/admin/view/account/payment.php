@@ -48,20 +48,19 @@
                                 </div>
                                 
                                 <div class="form-group">
-                                	<label class="control-label" for="open_status">对账状态 :</label>
-                                	<select name="open_status" id="open_status" class="form-control">
+                                	<label class="control-label" for="status">对账状态 :</label>
+                                	<select name="status" id="status" class="form-control">
                                 		<option value="">全部</option>
-                                		<option value="0">未开票</option>
-                                		<option value="1">已开票</option>
+                                		<option value="1">未对账</option>
+                                		<option value="2">已对账</option>
                                 	</select>
                                 </div>
                                 <div class="form-group">
-                                	<label class="control-label" for="invoice_status">发票状态 :</label>
-                                	<select name="invoice_status" id="invoice_status" class="form-control">
+                                	<label class="control-label" for="is_open">发票状态 :</label>
+                                	<select name="is_open" id="is_open" class="form-control">
                                 		<option value="">全部</option>
-                                		<option value="0">待核销</option>
-                                		<option value="1">已核销</option>
-                                		<option value="2">已关闭</option>
+                                		<option value="0">未开票</option>
+                                		<option value="1">已开票</option>
                                 	</select>
                                 </div>
                                 <button type="submit" class="btn btn-primary">查找</button>
@@ -91,30 +90,29 @@
                             {volist name="list" id="vo" empty="$empty"}
                                 <tr>
                                 <td>{$vo.id}</td>
-                                <td>{$vo.order_dn}</td>
-                                <td>{$vo.delivery_date}</td>
-                                <td>{$vo.cus_name}</td>
-                                <td>{$vo.order_sn}</td>
-                                <td>{$vo.goods_name}</td>
-                                <td>{$vo.unit}</td>
-                                <td>{$vo.current_send_number}</td>
-                                <td>{$vo.create_time|date='Y-m-d H:i:s',###}</td>
+                                <td>{$vo.supplier_name}</td>
+                                <td>{$vo.invoice_sn}</td>
+                                <td>{$vo.invoice_date}</td>
+                                <td>{if condition="$vo['status']==1"}未对账{elseif condition="$vo['status']==2"}已对账{else}已关闭{/if}</td>
+                                <td>{if condition="$vo['is_open']"}已开票{else}未开票{/if}</td>
+                                <td>{$vo.total_money}</td>
+                                <td>{$vo.pay_money}</td>
+                                <td>{$vo.diff_money}</td>
                                 <td>
-								{if condition="$vo['is_print'] eq 1"}
-								已打印
-								{else}
-								未打印
-								{/if}
-								</td>
-                                <td>
-                                	<a href="{:url('info',['id' => $vo['id']])}">详情</a>
-                                	{if condition="$vo['is_confirm']"}
-                                	<span class="text-explode">|</span>
-                                	<a href="{:url('prints',['id' => $vo['id']])}" target="_blank">打印送货单</a>
+									<a href="{:url('payment_info',['id' => $vo['id']])}">详情</a>
+                                	{if condition="$vo['status']!=0"}
+                                		{if condition="!$vo['is_open'] && $vo['status']==2"}
+                                		<span class="text-explode">|</span>
+                                		<a href="javascript:;" onclick="_open({$vo['id']})">已开票</a>
+                                		{/if}
+                                		{if condition="$vo['status']==1"}
+                                    	<span class="text-explode">|</span>
+                                    	<a href="javascript:;" onclick="_status({$vo['id']})">已对账</a>
+                                    	{/if}
                                 	{/if}
-                                	{if condition="!$vo['is_confirm']"}
+                                	{if condition="!$vo['is_open'] || $vo['status']==1"}
                                 	<span class="text-explode">|</span>
-                                	<a href="{:url('edit',['id' => $vo['id']])}">编辑</a>
+                                	<a href="{:url('payment_edit',['id' => $vo['id']])}">编辑</a>
                                 	{/if}
                                 	<span class="text-explode">|</span>
                                 	<a href="javascript:;" onclick="deleteOrdersOne({$vo['id']})">删除</a>
@@ -191,33 +189,30 @@
         });
     });
     //单条订单操作
-    function cancel(e) {
-        if(confirm("是否取消此订单？")){
+    function _open(e) {
+        if(confirm("确认操作？")){
             if (!isNaN(e) && e !== null && e !== '') {
                 var data={name:'scrap',id:e};
-                $.sycToAjax("{:url('cancel')}", data);
+                $.sycToAjax("{:url('payment_open')}", data);
             }
         };
         return false;
     }
-    
-    //单条恢复订单操作
-    function huifuLogisticsOne(e) {
-        if(confirm("确定恢复此订单？")){
+    function _status(e) {
+        if(confirm("确认操作？")){
             if (!isNaN(e) && e !== null && e !== '') {
-                var data={name:'scrap',pid:e};
-                $.sycToAjax("{:url('orders/huifu')}", data);
+                var data={name:'scrap',id:e};
+                $.sycToAjax("{:url('payment_status')}", data);
             }
         };
         return false;
     }
 
-    //单条删除订单操作
     function deleteOrdersOne(e) {
         if(confirm("确定删除？")){
             if (!isNaN(e) && e !== null && e !== '') {
                 var data={name:'scrap',id:e};
-                $.sycToAjax("{:url('delete')}", data);
+                $.sycToAjax("{:url('payment_delete')}", data);
             }
         };
         return false;

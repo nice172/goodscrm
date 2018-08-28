@@ -26,13 +26,14 @@
                     </div>
                 </div>
 <form class="ajaxForm" action="" method="post">
+				<input type="hidden" name="id" value="{$info.id}" />
                 <div class="row">
                     <div class="form-inline marginTop10">
                         <div class="col-lg-12">
                         
                             <div class="form-group">
                                 <label class="control-label" for="cus_name">供应商 :</label>
-                                <input name="cus_name" id="cus_name" disabled="disabled" value="{$supplier.supplier_name}" class="ipt form-control" style="width: 200px;" />
+                                <input name="cus_name" id="cus_name" disabled="disabled" value="{$info.supplier_name}" class="ipt form-control" style="width: 200px;" />
                             </div>
                                 <div class="form-group">
                                 	<label class="control-label" for="total_money">金额总计 :</label>
@@ -40,7 +41,7 @@
                                 </div>
                                   <div class="form-group">
                                 	<label class="control-label" for="total_money">付款期 :</label>
-                                	<input name="total_money" id="total_money" disabled="disabled" value="{$supplier.supplier_payment}" class="ipt form-control" />
+                                	<input name="total_money" id="total_money" disabled="disabled" value="{$info.payment_date}" class="ipt form-control" />
                                 </div>
 
                                  
@@ -48,15 +49,15 @@
                         <div class="col-lg-12">
                               <div class="form-group">
                                 	<label class="control-label" for="invoice_sn">发票号码 :</label>
-                                	<input name="invoice_sn" id="invoice_sn" class="ipt form-control" style="width: 188px;"  data-toggle="tooltip" data-placement="top" title="发票号码">
+                                	<input name="invoice_sn" id="invoice_sn" value="{$info.invoice_sn}" class="ipt form-control" style="width: 188px;"  data-toggle="tooltip" data-placement="top" title="发票号码">
                                 </div>
                             	<div class="form-group">
                                     <label class="control-label" for="invoice_date">发票日期 :</label>
-                                    <input name="invoice_date" id="invoice_date" class="ipt form-control">
+                                    <input name="invoice_date" id="invoice_date" value="{$info.invoice_date}" class="ipt form-control">
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label" for="last_date">到期日期 :</label>
-                                    <input name="last_date" id="last_date" class="ipt form-control" style="width: 145px;">
+                                    <input name="last_date" id="last_date" value="{$info.last_date}" class="ipt form-control" style="width: 145px;">
                                 </div>
                         </div>
                         
@@ -86,14 +87,14 @@
                                 <tr>
                                 <td>{$vo.po_sn}</td>
                                 <td>{$vo.delivery_date}</td>
-                                <td>{$vo.order_dn}</td>
+                                <td>{$vo.delivery_dn}</td>
                                 <td>{$vo.category_name}</td>
                                 <td>{$vo.goods_name}</td>
                                 <td>{$vo.unit}</td>
                                 <td>{$vo.goods_price}</td>
-                                <td>{$vo['current_send_number']+$vo['add_number']}</td>
-                                <td>{$vo['current_send_number']+$vo['add_number']}</td>
-                                <td>0</td>
+                                <td>{$vo['rec_number']}</td>
+                                <td>{$vo['open_number']}</td>
+                                <td>{$vo['open_number']}</td>
                                 <td>{$vo['count_money']}</td>
                                 </tr>
                             {/volist}

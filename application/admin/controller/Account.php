@@ -35,6 +35,8 @@ class Account extends Base {
             $id = $this->request->param('id',0,'intval');
             if ($id <= 0) $this->error('参数错误');
             if (db('receivables')->where(['id' => $id])->setField('is_delete',1)){
+                $delivery_ids = db('receivables')->where(['id' => $id])->value('delivery_ids');
+                db('delivery_order')->where(['id' => ['in',$delivery_ids]])->setField('is_invoice',0);
                 $this->success('操作成功');
             }
             $this->error('操作失败');
@@ -296,8 +298,88 @@ class Account extends Base {
     }
     
     public function payment(){
+        $supplier_name = $this->request->param('supplier_name');
+        $status = $this->request->param('status');
+        $start_time = $this->request->param('start_time');
+        $end_time = $this->request->param('end_time');
+        $is_open = $this->request->param('is_open');
+        $db = db('payment_order')->where(['is_delete' => 0]);
+        if ($supplier_name != ''){
+            $db->where('supplier_name','like',"%{$supplier_name}%");
+        }
+        if (strtotime($start_time) && strtotime($end_time)){
+            $db->where(['invoice_date' => ['>=', $start_time]]);
+            $db->where(['invoice_date' => ['<=', $end_time]]);
+        }
+        if ($is_open != ''){
+            $db->where(['is_open' => $is_open]);
+        }
+        if ($status != ''){
+            $db->where(['status' => $status]);
+        }
+        $result = $db->order('id desc')->paginate(config('page_size'),false,['query' => $this->request->param()]);
+        $this->assign('page',$result->render());
+        $this->assign('list',$result->all());
+        $this->assign('title','应付账款');
+        $this->assign('sub_class','viewFramework-product-col-1');
+        return $this->fetch();
+    }
+    
+    public function payment_info(){
+        $id = $this->request->param('id',0,'intval');
+        if (!$id) $this->error('参数错误');
+        $payment_order = db('payment_order')->where(['id' => $id])->find();
+        if (empty($payment_order)) $this->error('应付账款信息不存在');
+        $list = db('payment_goods pg')->where(['pg.payment_order_id' => $id])
+        ->join('__GOODS__ g','pg.goods_id=g.goods_id')
+        ->join('__GOODS_CATEGORY__ gc','g.category_id=gc.category_id')
+        ->field('pg.*,gc.category_name')->select();
+        $this->assign('total_money',$payment_order['total_money']);
         $this->assign('page','');
-        $this->assign('list',[]);
+        $this->assign('info',$payment_order);
+        $this->assign('list',$list);
+        $this->assign('title','应付账款');
+        $this->assign('sub_class','viewFramework-product-col-1');
+        return $this->fetch();
+    }
+    
+    public function payment_edit(){
+        $id = $this->request->param('id',0,'intval');
+        if (!$id) $this->error('参数错误');
+        $payment_order = db('payment_order')->where(['id' => $id])->find();
+        if (empty($payment_order)) $this->error('应付账款信息不存在');
+        if ($this->request->isAjax()){
+            $invoice_sn = $this->request->post('invoice_sn');
+            $invoice_date = $this->request->post('invoice_date');
+            $last_date = $this->request->post('last_date');
+            if (empty($invoice_sn)) $this->error('发票号码不能为空');
+            if (empty($invoice_date)) $this->error('开票日期不能为空');
+            if (empty($last_date)) $this->error('到期日期不能为空');
+            $id = $this->request->post('id');
+            $data = [
+                'id' => intval($id),
+                'invoice_sn' => $invoice_sn,
+                'invoice_date' => $invoice_date,
+                'last_date' => $last_date,
+                'update_time' => time()
+            ];
+            if (db('payment_order')->where(['id' => ['neq',$data['id']],'invoice_sn' => $invoice_sn])->find()){
+                $this->error('发票号码已存在');
+            }
+            if (db('payment_order')->update($data)){
+                $this->success('保存成功',url('payment'));
+            }
+            $this->error('保存失败');
+            return;
+        }
+        $list = db('payment_goods pg')->where(['pg.payment_order_id' => $id])
+        ->join('__GOODS__ g','pg.goods_id=g.goods_id')
+        ->join('__GOODS_CATEGORY__ gc','g.category_id=gc.category_id')
+        ->field('pg.*,gc.category_name')->select();
+        $this->assign('total_money',$payment_order['total_money']);
+        $this->assign('page','');
+        $this->assign('info',$payment_order);
+        $this->assign('list',$list);
         $this->assign('title','应付账款');
         $this->assign('sub_class','viewFramework-product-col-1');
         return $this->fetch();
@@ -310,6 +392,7 @@ class Account extends Base {
         $start_time = $this->request->param('start_time');
         $end_time = $this->request->param('end_time');
         $db = db('delivery_order do');
+        $db->where(['do.is_payment' => 0]);
         if ($supplier_name != '') {
             $db->where(['s.supplier_name|s.supplier_short','like',"%{$supplier_name}%"]);
         }
@@ -353,11 +436,119 @@ class Account extends Base {
         if (empty($checked) || empty($checked['checked'])) $this->error('请选择供应商');
         list($supplier_id,$delivery_id) = explode('_', array_unique($checked['checked'])[0]);
         
+        $supplier = db('supplier')->where(['id' => $supplier_id])->find();
+        if (empty($supplier)) $this->error('供应商不存在');
+        $this->assign('supplier',$supplier);
+        
+        $result = db('delivery_order do')->join('__DELIVERY_GOODS__ gd','gd.delivery_id=do.id')
+        ->join('__GOODS__ g','gd.goods_id=g.goods_id')->join('__GOODS_CATEGORY__ gc','gc.category_id=g.category_id')
+        ->field('do.*,gd.goods_id,gd.goods_name,gd.goods_price,gd.unit,gd.current_send_number,gd.add_number,gc.category_name')->select();
+        $totalMoney = 0;
+        foreach ($result as $key => $value){
+            $result[$key]['count_money'] = _formatMoney($value['goods_price']*($value['current_send_number']+$value['add_number']));   
+            $totalMoney += $result[$key]['count_money'];
+        }
+        
+        if ($this->request->isAjax()){
+            $invoice_sn = $this->request->post('invoice_sn');
+            $invoice_date = $this->request->post('invoice_date');
+            $last_date = $this->request->post('last_date');
+            if (empty($invoice_sn)) $this->error('发票号码不能为空');
+            if (empty($invoice_date)) $this->error('开票日期不能为空');
+            if (empty($last_date)) $this->error('到期日期不能为空');
+            if (db('payment_order')->where(['invoice_sn' => $invoice_sn])->find()){
+                $this->error('发票号码已存在');
+            }
+            $delivery_ids = [];
+            foreach ($result as $key => $value){
+                $delivery_ids[] = $value['id'];
+            }
+            $delivery_ids = array_unique($delivery_ids);
+            $data = [
+                'admin_uid' => $this->userinfo['id'],
+                'supplier_id' => $supplier_id,
+                'supplier_name' => $supplier['supplier_name'],
+                'delivery_ids' => implode(',', $delivery_ids),
+                'invoice_sn' => $invoice_sn,
+                'invoice_date' => $invoice_date,
+                'total_money' => _formatMoney($totalMoney),
+                'pay_money' => _formatMoney($totalMoney),'diff_money' => 0,
+                'is_open' => 0,'status' => 1,
+                'payment_date' => $supplier['supplier_payment'],
+                'last_date' => $last_date,
+                'update_time' => time(),'create_time' => time()
+            ];
+            if (db('payment_order')->insert($data)){
+                $payment_order_id = db('payment_order')->getLastInsID();
+                db('delivery_order')->where(['id' => ['in',$delivery_ids]])->setField('is_payment',1);
+                foreach ($result as $key => $value){
+                    db('payment_goods')->insert([
+                        'payment_order_id' => $payment_order_id,
+                        'order_id' => $value['order_id'],
+                        'order_sn' => $value['order_sn'],
+                        'purchase_id' => $value['purchase_id'],
+                        'po_sn' => $value['po_sn'],
+                        'delivery_date' => $value['delivery_date'],
+                        'delivery_dn' => $value['order_dn'], //送货单号
+                        'goods_id' => $value['goods_id'],
+                        'goods_name' => $value['goods_name'],
+                        'unit' => $value['unit'],
+                        'goods_price' => $value['goods_price'],
+                        'rec_number' => $value['current_send_number']+$value['add_number'], //收货数量
+                        'open_number' => $value['current_send_number']+$value['add_number'], //开票数量
+                        'count_money' => _formatMoney(($value['current_send_number']+$value['add_number'])*$value['goods_price'])
+                    ]);
+                }
+                cookie('setsupplier',null);
+                $this->success('保存成功',url('payment'));
+            }else{
+                $this->error('保存失败请重试');
+            }
+            return;
+        }
+        
+        $this->assign('total_money',_formatMoney($totalMoney));
         $this->assign('page','');
-        $this->assign('list',[]);
+        $this->assign('list',$result);
         $this->assign('title','应付账款');
         $this->assign('sub_class','viewFramework-product-col-1');
         return $this->fetch();
+    }
+    
+    public function payment_open(){
+        if ($this->request->isAjax()){
+            $id = $this->request->param('id',0,'intval');
+            if ($id <= 0) $this->error('参数错误');
+            if (db('payment_order')->where(['id' => $id])->setField('is_open',1)){
+                $this->success('操作成功');
+            }
+            $this->error('操作失败');
+        }
+    }
+    
+    public function payment_status(){
+        if ($this->request->isAjax()){
+            $id = $this->request->param('id',0,'intval');
+            if ($id <= 0) $this->error('参数错误');
+            if (db('payment_order')->where(['id' => $id])->setField('status',2)){
+                $this->success('操作成功');
+            }
+            $this->error('操作失败');
+        }
+    }
+    
+    public function payment_delete(){
+        if ($this->request->isAjax()){
+            $id = $this->request->param('id',0,'intval');
+            if ($id <= 0) $this->error('参数错误');
+            if (db('payment_order')->where(['id' => $id])->setField('is_delete',1)){
+                db('payment_goods')->where(['payment_order_id' => $id])->setField('is_delete',1);
+                $delivery_ids = db('payment_order')->where(['id' => $id])->value('delivery_ids');
+                db('delivery_order')->where(['id' => ['in',$delivery_ids]])->setField('is_invoice',0);
+                $this->success('操作成功');
+            }
+            $this->error('操作失败');
+        }
     }
     
 }

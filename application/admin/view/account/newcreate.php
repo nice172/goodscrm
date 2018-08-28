@@ -102,14 +102,14 @@
                             </tr>
                             </tfoot>
                         </table>
-                        
+           {if condition="!empty($list)"}             
     <div class="modal-footer" style="border-top:none;">
         <div class="col-md-offset-5 col-md-12 left">
             <button type="submit" class="btn btn-primary confirm">确认</button>
             <button type="button" class="btn btn-default cancel">取消</button>
         </div>
     </div>
-                        
+            {/if}            
                     </div>
                 </div>
 
