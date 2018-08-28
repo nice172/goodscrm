@@ -641,6 +641,7 @@ class Order extends Base {
             $lists[$key]['category_name'] = $category['category_name'];
             $brand = db('goods_brand')->where(['brand_id' => $value['brand_id']])->find();
             $lists[$key]['brand_name'] = $brand['brand_name'];
+            $lists[$key]['purchase_number'] = 0;
         }
         
         $this->assign('data',$lists);

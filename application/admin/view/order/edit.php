@@ -287,7 +287,7 @@ function update(index){
 		if(goods_number == ''){
 			goods_number = $('.goods_'+index+' input[name=goods_number]').attr('data-goods_number');
 		}
-		if(goods_number > goods_info[index]['store_number']){
+		if(parseInt(goods_number) > goods_info[index]['store_number']){
 			alert('下单数量不能大于库存量');
 			status = 2;
 			return;
@@ -296,10 +296,10 @@ function update(index){
 		if(send_num == ''){
 			send_num = $('.goods_'+index+' input[name=send_num]').attr('data-send_num');
 		}
-		goods_info[index]['goods_number'] = goods_number;
-		goods_info[index]['send_num'] = send_num;
-		goods_info[index]['market_price'] = market_price;
-		goods_info[index]['shop_price'] = shop_price;
+		goods_info[index]['goods_number'] = parseInt(goods_number);
+		goods_info[index]['send_num'] = parseInt(send_num);
+		goods_info[index]['market_price'] = parseFloat(market_price);
+		goods_info[index]['shop_price'] = parseFloat(shop_price);
 		goods_info[index]['remark'] = $('.goods_'+index+' input[name=remark]').val();
 		goodsList(goods_info);
 		return;

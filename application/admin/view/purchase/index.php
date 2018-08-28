@@ -13,7 +13,7 @@
                                 <h5><span>{$title}</span></h5>
                             </div>
                             <div class="pull-right">
-                                <!--<a class="btn btn-primary" href="{:url('order/add')}">新建订单</a>-->
+                                <a class="btn btn-primary" href="{:url('add')}">新建采购单</a>
                                 <a href="javascript:window.location.reload();" class="btn btn-default">
                                     <span class="glyphicon glyphicon-refresh"></span>
                                     <span>刷新</span></a>
@@ -100,7 +100,13 @@
                                 	<a href="{:url('info',['id' => $vo['id']])}">详情</a>
                                 	{if condition="$vo['status']==0"}
                                 	<span class="text-explode">|</span>
+                                	
+                                	{if condition="$vo['create_type']==0"}
                                 	<a href="{:url('edit',['id' => $vo['id']])}">编辑</a>
+                                	{else}
+                                	<a href="{:url('newedit',['id' => $vo['id']])}">编辑</a>
+                                	{/if}
+                                	
                                 	{/if}
                                 	{if condition="$vo['status']>=1"}
                                 	<span class="text-explode">|</span>
