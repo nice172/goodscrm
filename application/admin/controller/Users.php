@@ -38,7 +38,7 @@ class Users extends Base {
         $this->assign('title','账户管理');
         $this->assign('page',$page);
         $this->assign('data', $data);
-        $this->assign('empty', '<tr><td colspan="10" align="center">当前条件没有查到数据</td></tr>');
+        $this->assign('empty', '<tr><td colspan="20" align="center">当前条件没有查到数据</td></tr>');
         return $this->fetch();
     }
 
@@ -196,7 +196,7 @@ class Users extends Base {
 
             if (!empty($group_id)) {
             	$data['group_id'] = $group_id;
-                AuthGroupAccess::where('uid',$uid)->update(['group_id'=>$bumen]);
+            	AuthGroupAccess::where('uid',$uid)->update(['group_id'=>$group_id]);
             }
             if (!empty($ruzhishijian)) {
                 $data['entry_time'] = $ruzhishijian;

@@ -26,13 +26,8 @@
 <table id="sample-table-1" class="table table-striped table-bordered table-hover">
 	<thead>
 		<tr>
-			<th class="center">
-				<label class="position-relative">
-					<input class="ace" id="ckSelectAll" type="checkbox">
-					<span class="lbl"></span>
-				</label>
-			</th>
-			<th>编号ID</th>
+		<th>序号</th>
+			<th class="center">编号ID</th>
 			<th>参数名称</th>
 			<th>参数描述</th>
 			<th>可选值</th>
@@ -43,13 +38,8 @@
 	</thead>
 		{foreach name="list" item="v"}
 		<tr id="tr<?php echo $v['id'];?>">
+			<td>{$key+1}</td>
 			<td class="center">
-				<label class="position-relative">
-					<input class="ace" value="{$v.id}" name="checkbox[]" type="checkbox">
-					<span class="lbl"></span>
-				</label>
-			</td>
-			<td>
 				{$v.id}
 			</td>
 			<td>
@@ -118,7 +108,7 @@
 <tr>
     <td colspan="9">
         <div class="pull-left">
-            <button id="DelAllAttr" type="button" class="btn btn-default">选中删除</button>
+<!--             <button id="DelAllAttr" type="button" class="btn btn-default">选中删除</button> -->
             
         </div>
         <div class="pull-right page-box">

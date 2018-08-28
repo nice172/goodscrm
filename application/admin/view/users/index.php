@@ -37,7 +37,7 @@
                 </div>
                 <div class="row">
                     <div class="col-lg-12">
-                        <table class="table table-hover">
+                        <table class="table syc-table border table-hover">
                             <thead>
                             <tr>
                                 <th>&nbsp;</th>
@@ -75,7 +75,7 @@
                                         </ul>
                                     </div>
                                 </th>
-                                <th class="text-right">操作</th>
+                                <th>操作</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -91,7 +91,7 @@
                                 <td><span class="label label-sm label-warning">{$vo.user_count} 次</span></td>
                                 <td>{$vo.update_time}</td>
                                 <td>{$vo.status}</td>
-                                <td class="text-right">
+                                <td>
                                     {if condition="$userinfo['id']!=1 && $vo['id']==1"}
                                     <a href="javascript:;">修改</a>
                                     {else}
@@ -112,7 +112,7 @@
                                 <td width="10">
                                     <input type="checkbox" class="mydomain-checkbox" id="ckSelectAll" name="ckSelectAll">
                                 </td>
-                                <td colspan="9">
+                                <td colspan="20">
                                     <div class="pull-left">
                                         <button id="DelAllAttr" type="button" class="btn btn-default">选中删除</button>
                                         
