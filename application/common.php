@@ -322,7 +322,7 @@ function send_email($user,$Subject='',$file='',$Body='',$AltBody=''){
         //echo 'Message has been sent';
         return true;
     } catch (\Exception $e) {
-        echo 'Message could not be sent. Mailer Error: ', $mail->ErrorInfo;
+        //echo 'Message could not be sent. Mailer Error: ', $mail->ErrorInfo;
     }
     return false;
 }
