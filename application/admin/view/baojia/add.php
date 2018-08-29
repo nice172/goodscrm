@@ -45,7 +45,7 @@
                                   <div class="form-group">
                                     <label for="company_name" class="col-sm-2 control-label"><span class="text-danger">*</span>公司名称</label>
                                     <div class="col-sm-8 w300">
-                                        <input type="text" class="form-control w300" name="company_name" id="company_name">
+                                        <input type="text" class="form-control w300" readonly="readonly" name="company_name" id="company_name">
                                     </div>
                                     <div class="col-sm-2">
                                     	<button type="button" class="btn btn-primary search_company">查找</button>
@@ -99,22 +99,21 @@
 
 		<div class="row">
                     <div class="col-lg-12">
-                        <table class="table table-hover">
+                        <table class="table syc-table border table-hover">
                             <thead>
                                 <tr>
-                                    <th>序号</th>
-                                    <th>商品名称</th>
-                                    <th>单位</th>
-                                    <th>标准单价</th>
-                                    <th>备注</th>
-                                    <th>操作</th>
+                                    <th width="5%">序号</th>
+                                    <th width="30%">商品名称</th>
+                                    <th width="10%">单位</th>
+                                    <th width="10%">标准单价</th>
+                                    <th width="35%">备注</th>
+                                    <th width="10%">操作</th>
                                 </tr>
                             </thead>
                             <tbody class="goodsList"></tbody>
                             <tfoot>
                             	<tr>
-                            	<td><a href="javascript:;" class="get_goods">请选择商品</a></td>
-                            	<td colspan="5"></td>
+                            	<td colspan="10"><a href="javascript:;" class="get_goods">请选择商品</a></td>
                             	</tr>
                             </tfoot>
                         </table>
@@ -264,7 +263,7 @@ function goodsList(goods_info){
 		html += '<td>'+goods_info[j]['goods_name']+'</td>';
 		html += '<td>'+goods_info[j]['unit']+'</td>';
 		html += '<td class="market_price"><input type="text" data-market_price="'+goods_info[j]['market_price']+'" oninput="checkNum(this)" name="market_price" style="width:80px;display:none;" value="'+goods_info[j]['market_price']+'" /><span class="inputspan">'+goods_info[j]['market_price']+'</span></td>';
-		html += '<td class="remark"><input type="text" name="remark" style="width:200px;display:none;" value="'+goods_info[j]['remark']+'" /><span class="inputspan">'+goods_info[j]['remark']+'</span></td>';
+		html += '<td class="remark"><input type="text" name="remark" style="width:80%;display:none;" value="'+goods_info[j]['remark']+'" /><span class="inputspan">'+goods_info[j]['remark']+'</span></td>';
 		html += '<td><a href="javascript:;" onclick="update('+j+')" class="update">修改</a><span class="text-explode">|</span><a href="javascript:;" onclick="_delete('+j+')" class="delete">删除</a></td>';
 		html += '</tr>';
 	}
@@ -309,10 +308,15 @@ function _delete(index){
 	goodsList(goods_info);
 }
 $('button[type=submit]').click(function(){
+	$('.modal-footer button').attr('disabled','disabled');
 	var send = $(this).attr('send');
+	var _this = $(this);
+	if(send == 'email'){$(this).text('正在发送邮件...');}
 	$('.ajaxForm2').ajaxSubmit({
 		data:{goods_info:goods_info,type:send},
 		success: function(res){
+			$('.modal-footer button').removeAttr('disabled');
+			if(send == 'email'){$(_this).text('生成PDF文件并发送');}
 			if(res.code == 1){
 				toastr.success(res.msg);
 				if(res.url != '' && typeof res.url != 'undefined'){

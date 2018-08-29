@@ -30,7 +30,7 @@
                                         <div class="container-title">个人信息</div>
                                         <div class="sas-open-bg">
                                             <p>欢迎：{$user.user_nick}</p>
-                                            <p>部门：{$user.title}</p>
+                                            <p>角色：{$user.title}</p>
                                         </div>
                                     </div>
                                     <div class="security-right">
@@ -43,7 +43,7 @@
                                                     <span class="item-unit">件</span>
                                                 </a>
                                                 <a class="undo-item home-block-hover">
-                                                    <span class="item-text">生产订单</span>
+                                                    <span class="item-text">未交货订单</span>
                                                     <span class="item-number item-number-grey">{$pshenc}</span>
                                                     <span class="item-unit">件</span>
                                                 </a>
@@ -72,7 +72,7 @@
                                             </div>
                                             <div class="item-horizontal">
                                                 <div class="item-content home-block-hover">
-                                                    <span class="item-text">确认定金</span>
+                                                    <span class="item-text">部分已送货</span>
                                                     <span class="item-unit">件</span>
                                                     <span class="item-number item-number-grey">{$pqrdjin}</span>
                                                 </div>
@@ -85,14 +85,14 @@
                                         <div class="container-body">
                                             <div class="item-horizontal" style="margin-bottom: 10px">
                                                 <div class="item-content home-block-hover">
-                                                    <span class="item-text">确认尾款</span>
+                                                    <span class="item-text">今日下单</span>
                                                     <span class="item-unit">件</span>
                                                     <span class="item-number item-number-grey">{$pqrweikuan}</span>
                                                 </div>
                                             </div>
                                             <div class="item-horizontal">
                                                 <div class="item-content home-block-hover">
-                                                    <span class="item-text">订单出库</span>
+                                                    <span class="item-text">今日下单客户</span>
                                                     <span class="item-unit">件</span>
                                                     <span class="item-number item-number-grey">{$pqrchuku}</span>
                                                 </div>
@@ -103,6 +103,107 @@
                             </div>
                         </div>
                         <!--上 END-->
+                        
+                        <div class="home-section-wrap">
+                        <span>最后5次报价记录 <a href="javascript:;" class="click_list">收起</a></span>
+                        <div class="record_list">
+                        	<table class="table syc-table border marginTop10 show_list">
+                            <thead>
+                            <tr>
+                            <th colspan="5" style="text-align: left;">报价记录</th>
+                            </tr>
+                            <tr>
+                                <th style="width:10%;">创建时间</th>
+                                <th style="width:10%;">发送时间</th>
+                                <th style="width:20%;">客户名称</th>
+                                <th style="width:10%;">业务员</th>
+                                <th style="width:40%;">备注</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+							{volist name="$record_list" id="vo" empty="$empty"}
+                            <tr>
+                                <td>{$vo.create_time|date='Y-m-d',###}</td>
+                                <td>{$vo.send_email_time|date='Y-m-d',###}</td>
+                                <td>{$vo.company_name}</td>
+                                <td>{$vo.order_handle}</td>
+                                <td>{$vo.order_remark}</td>
+                            </tr>
+                            {/volist}
+                            </tbody>
+                            </table>
+                        </div>
+                        </div>
+                        
+                        <div class="home-section-wrap">
+                        <span>最后5次送货记录 <a href="javascript:;" class="click_list">收起</a></span>
+                        <div class="record_list">
+                        	<table class="table syc-table border marginTop10 show_list">
+                            <thead>
+                            <tr>
+                            <th colspan="5" style="text-align: left;">送货记录</th>
+                            </tr>
+                            <tr>
+                                <th style="width:10%;">要求送货时间</th>
+                                <th style="width:10%;">实际送货时间</th>
+                                <th style="width:20%;">客户名称</th>
+                                <th style="width:10%;">业务员</th>
+                                <th style="width:40%;">备注</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+							{volist name="$delivery_list" id="vo" empty="$empty"}
+                            <tr>
+                                <td>{$vo.require_time|date='Y-m-d',###}</td>
+                                <td>{$vo.delivery_date}</td>
+                                <td>{$vo.cus_name}</td>
+                                <td>{$vo.cus_order_ren}</td>
+                                <td>{$vo.order_remark}</td>
+                            </tr>
+                            {/volist}
+                            </tbody>
+                            </table>
+                        </div>
+                        </div>
+                        
+                        <div class="home-section-wrap">
+                        <span>库存记录 <a href="javascript:;" class="click_list">收起</a></span>
+                        <div class="record_list">
+                        	<table class="table syc-table border marginTop10 show_list">
+                            <thead>
+                            <tr>
+                                <th style="width:15%;">商品分类</th>
+                                <th style="width:25%;">供应商</th>
+                                <th style="width:40%;">商品名称</th>
+                                <th style="width:10%;">单位</th>
+                                <th style="width:10%;">库存数量</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {volist name="list" id="vo" key="key" empty="$empty"}
+                                <tr>
+                                <td>{$vo.category_name}</td>
+                                <td>{$vo.supplier_name}</td>
+                                <td style="text-align:left;">{$vo.goods_name}</td>
+                                <td>{$vo.unit}</td>
+                                <td>{$vo.store_number}</td>
+                                </tr>
+                            {/volist}
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td colspan="20">
+                                    <div class="pull-left">
+                                        
+                                    </div>
+                                    <div class="pull-right page-box">{$page}</div>
+                                </td>
+                            </tr>
+                            </tfoot>
+                            </table>
+                        </div>
+                        </div>
+                        
                         <!-- 模块区域 -->
                         <div class="home-section-wrap">
                             <div class="home-section-module home-box-shadow">
@@ -125,6 +226,7 @@
                             </div>
                         </div>
                         <!-- 模块区域 END-->
+                        
                     </div>
                     <!-- 左侧 结束 -->
                     <!-- 右侧 home-section-right-->
@@ -138,6 +240,19 @@
 <script src="/assets/plugins/highcharts/code/highcharts-more.js"></script>
 <script src="/assets/plugins/highcharts/code/modules/exporting.js"></script>
 <script type="text/javascript">
+
+	$('.click_list').click(function(){
+		var parents = $(this).parents('.home-section-wrap');
+		if($(parents).find('.record_list table').hasClass('show_list')){
+			$(parents).find('.record_list table').removeClass('show_list').addClass('hide_list');
+			$(parents).find('.record_list table').hide();
+			$(this).text('展开');
+		}else{
+			$(parents).find('.record_list table').removeClass('hide_list').addClass('show_list');
+			$(parents).find('.record_list table').show();
+			$(parents).find(this).text('收起');
+		}
+	});
 
     var chart = Highcharts.chart('container', {
         //顶部的标题

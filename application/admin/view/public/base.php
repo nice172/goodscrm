@@ -3,6 +3,7 @@
 <head>
 {include file="public/header"}
 {block name="header"}{/block}
+<style>.border-top{border-top:none;}</style>
 </head>
 <body>
 {include file="public/topbar"}

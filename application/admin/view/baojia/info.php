@@ -10,6 +10,7 @@
                         <div class="console-title">
                             <div class="pull-left">
                                 <h5><span>{$title}</span></h5>
+                                <a class="btn btn-primary" href="{:url('add')}">新增报价单</a>
                                 <a href="javascript:history.go(-1);" class="btn btn-default">
                                     <span class="icon-goback"></span><span>返回</span>
                                 </a>
@@ -65,7 +66,7 @@
                                     </tr>
                                     <tr>
                                         <td width="15%" class="right-color"><span>状态:</span></td>
-                                        <td width="35%" colspan="3">{if condition="$data.status==1"}已发送{else}未发送{/if}</td>
+                                        <td width="35%" colspan="3">{if condition="$data.status==1"}已发送{else}未发送&nbsp;&nbsp;<button type="button" onclick="send(this,{$data.id})" class="btn btn-primary">发送邮件</button>{/if}</td>
                                     </tr>
                                     <tr>
                                         <td width="15%" class="right-color"><span>备注信息:</span></td>
@@ -73,7 +74,7 @@
                                     </tr>
                                     </tbody>
                                 </table>
-                                <table class="table table-hover" style="margin-top:0;">
+                                <table class="table syc-table border table-hover" style="margin-top:0;">
                                     <thead>
                                     <tr>
                                         <th colspan="8">
@@ -88,11 +89,11 @@
                                         </th>
                                     </tr>
                                     <tr>
-<!--                                         <th>商品ID</th> -->
-                                        <th>商品名称</th>
-                                        <th>单位</th>
-                                        <th>标准单价</th>
-                                        <th>备注</th>
+                                        <!--<th>商品ID</th> -->
+                                        <th width="35%">商品名称</th>
+                                        <th width="10%">单位</th>
+                                        <th width="10%">标准单价</th>
+                                        <th width="45%">备注</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -110,7 +111,7 @@
                             </div>
                             <!--历史订单-->
                             <div class="tab-pane" id="lishidingdan">
-                                <table class="table table-condensed" style="margin-top:0;">
+                                <table class="table syc-table border table-condensed" style="margin-top:0;">
                                     <thead>
                                     <tr>
                                         <th colspan="20">
@@ -132,8 +133,8 @@
                                 <th>电子邮箱</th>
                                 <th>创建人</th>
                                 <th>创建时间</th>
-                                <!--<th>状态</th>
-                                 <th>操作</th> -->
+                                <!--<th>状态</th> -->
+                                 <th>操作</th>
                             </tr>
                                     </thead>
                                     <tbody>
@@ -142,21 +143,17 @@
                                 <td>{$vo.id}</td>
                                 <td>{$vo.order_sn}</td>
                                 <td>{$vo.create_time|date='Y-m-d',###}</td>
-                                <td>{$vo.company_short}</td>
-                                <td>{$vo.company_name}</td>
+                                <td>{$client.cus_short}</td>
+                                <td>{$client.cus_name}</td>
                                 <td>{$vo.contacts}</td>
                                 <td>{$vo.fax}</td>
                                 <td>{$vo.email}</td>
                                 <td>{$vo.user_nick}</td>
                                 <td>{$vo.create_time|date='Y-m-d H:i:s',###}</td>
-                                <!--<td>{if condition="$vo.status==1"}未确认{else}已确认{/if}</td>
+                                <!--<td>{if condition="$vo.status==1"}未确认{else}已确认{/if}</td>-->
                                  <td>
                                 	<a href="{:url('info',['gid'=>$vo.id])}">详情</a>
-                                	<span class="text-explode">|</span>
-                                    <a href="{:url('edit',['gid'=>$vo.id])}">修改</a>
-                                    <span class="text-explode">|</span>
-                                    <a href="javascript:void(0);" onclick="deleteOne('{$vo.id}');">删除</a>
-                                </td> -->
+                                </td> 
                             </tr>
                             {/volist}
                                     </tbody>
@@ -195,6 +192,18 @@
 <script type="text/javascript" src="/assets/plugins/jquery-validation/js/jquery.validate.js"></script>
 <script type="text/javascript" src="/assets/plugins/city/jquery.cityselect.js"></script>
 <script type="text/javascript">
+function send(_this,e) {
+    if (!isNaN(e) && e !== null && e !== '') {
+        if(confirm("确认发送？")){
+            if (!isNaN(e) && e !== null && e !== '') {
+            	$(_this).attr('disabled','disabled').text('正在发送...');
+                var data={name:'delone',gid:e};
+                $.sycToAjax("{:url('send')}", data);
+            }
+        };
+        return false;
+    }
+}
     $(document).ready(function() {
         // 当前页面分类高亮
         $("#sidebar-baojia").addClass("sidebar-nav-active"); // 大分类
@@ -206,8 +215,7 @@
             $(this).find(".implicit").addClass('hide');
         });
         //premises
-        
-
+                
         //提交收货地址信息
         $("#editPremisesSubmit").click(function () {
             if (JqValidate()) {

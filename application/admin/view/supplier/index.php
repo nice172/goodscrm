@@ -64,7 +64,7 @@
                                     <th>添加时间</th>
                                     <th>更新时间</th>
                                     <th>状态</th>
-                                    <th class="text-right">操作</th>
+                                    <th>操作</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -80,7 +80,7 @@
                                     <td><?php echo $vo['create_time'];?></td>
                                     <td><?php echo $vo['update_time'];?></td>
                                     <td><?php echo $vo['supplier_status']?'正常':'禁用';?></td>
-                                    <td class="text-right">
+                                    <td>
                                         <a href="{:Url('view',['id'=>$vo.id])}">详情</a>
                                         <span class="text-explode">|</span>
                                         <a href="{:Url('edit',['id'=>$vo.id])}">修改</a>

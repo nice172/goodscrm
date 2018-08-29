@@ -54,6 +54,7 @@ class Baojia extends Base {
 	
 	public function add(){
 		if ($this->request->isAjax()){
+		    $send_type = $this->request->post('type');
 		    $data = [
 		        'create_uid' => $this->userinfo['id'],
 		        'cus_id' => $this->request->post('cus_id'),
@@ -64,7 +65,7 @@ class Baojia extends Base {
 		        'email' => $this->request->post('email'),
 		        'contacts' => $this->request->post('contacts'),
 		        'order_remark' => $this->request->post('order_remark'),
-		        'status' => 1,
+		        'status' => $send_type=='save'?0:1,
 		        'order_handle' => $this->request->post('order_handle'),
 		        'create_time' => time(),
 		        'update_time' => time()
@@ -90,12 +91,16 @@ class Baojia extends Base {
 		                'create_time' => time()
 		            ]);
 		        }
-		        if ($_POST['type'] != 'save'){
-		            $this->_send_pdf($baojia_id);
+		        if ($send_type != 'save'){
+		            if ($this->_send_pdf($baojia_id)){
+		                $this->success('生成PDF文件并发送成功',url('index'));
+		            }else{
+		                $this->success('保存成功，邮件发送失败',url('index'));
+		            }
 		        }
-		        $this->success('新增成功',url('index'));
+		        $this->success('保存成功',url('info',['gid' => $baojia_id]));
 		    }else{
-		        $this->error('新增失败请重试');
+		        $this->error('保存失败请重试');
 		    }
 			return;
 		}
@@ -112,6 +117,7 @@ class Baojia extends Base {
 	
 	public function edit(){
 	    if ($this->request->isAjax()){
+	        $send_type = $this->request->post('type');
 	        $data = [
 	            'id' => $this->request->post('id'),
 	            'cus_id' => $this->request->post('cus_id'),
@@ -123,7 +129,7 @@ class Baojia extends Base {
 	            'order_handle' => $this->request->post('order_handle'),
 	            'contacts' => $this->request->post('contacts'),
 	            'order_remark' => $this->request->post('order_remark'),
-	            'status' => 1,
+	            'status' => $send_type=='save'?0:1,
 	            'update_time' => time()
 	        ];
 	        $validate = new Validate($this->rules, $this->message);
@@ -174,12 +180,16 @@ class Baojia extends Base {
 	                    ]);
 	                }
 	            }
-	            if ($_POST['type'] != 'save'){
-	                $this->_send_pdf($data['id']);
+	            if ($send_type != 'save'){
+	                if($this->_send_pdf($data['id'])){
+	                    $this->success('生成PDF文件并发送成功',url('index'));
+	                }else{
+	                    $this->success('保存成功，邮件发送失败',url('index'));
+	                }
 	            }
-	            $this->success('修改成功',url('index'));
+	            $this->success('保存成功',url('index'));
 	        }else{
-	            $this->error('修改失败请重试');
+	            $this->error('保存失败请重试');
 	        }
 	        return;
 	    }
@@ -215,7 +225,8 @@ class Baojia extends Base {
 	    $this->assign('client',$cus);
 	    $this->assign('data',$order);
 	    $this->assign('goodsList',$goodsInfo);
-	    $list = db('baojia')->where(['cus_id' => $order['cus_id']])->order('create_time desc')->limit(10)->select();
+	    $list = db('baojia')->where(['cus_id' => $order['cus_id']])
+	    ->order('create_time desc')->limit(10)->select();
 	    foreach ($list as $key => $value){
 	        $list[$key]['user_nick'] = db('users')->where(['id' => $value['create_uid']])->value('user_nick');
 	    }
@@ -367,8 +378,10 @@ h1,h2,h3,p,div,span{padding:0;margin:0;}
 	private function _send_pdf($id){
 	    $savePath = $this->_createPDF($id,1);
 	    if(send_email($this->send_email,'报价单',$savePath)){
-	        db('baojia')->where(['id' => $id])->setField('status',1);
+	        db('baojia')->where(['id' => $id])->update(['status' => 1,'send_email_time' => time()]);
+	       return true;
 	    }
+	    return false;
 	}
 	
 	public function send(){
@@ -379,7 +392,7 @@ h1,h2,h3,p,div,span{padding:0;margin:0;}
 	    }
 	    $savePath = $this->_createPDF($bid,1);
 	    if(send_email($this->send_email,'报价单',$savePath)){
-	        db('baojia')->where(['id' => $id])->setField('status',1);
+	        db('baojia')->where(['id' => $bid])->update(['status' => 1,'send_email_time' => time()]);
 	        $this->success('发送成功');
 	    }
 	    $this->error('发送失败');

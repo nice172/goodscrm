@@ -201,9 +201,9 @@ class Goods extends Base {
 	        $data = $this->request->post();
 	        if (empty($data)) $this->ajaxReturn(['code' => 0,'msg' => '参数名称不能为空']);
 	        $data['attr_type'] = 1;
-	        if (db('goods_attr')->where(['attr_name' => $data['attr_name']])->find()){
-	            $this->error('属性名称已存在');
-	        }
+	        //if (db('goods_attr')->where(['attr_name' => $data['attr_name']])->find()){
+	        //    $this->error('属性名称已存在');
+	        //}
 	        if (db('goods_attr')->insert($data)){
 	            $this->ajaxReturn(['code' => 1,'msg' => '添加成功']);
 	        }
@@ -226,9 +226,9 @@ class Goods extends Base {
 	    if ($this->request->isAjax()){
 	        $data = $this->request->post();
 	        if (empty($data['attr_name'])) $this->ajaxReturn(['code' => 0,'msg' => '名称不能为空']);
-	        if (db('goods_attr')->where(['goods_attr_id' => ['NEQ',$data['goods_attr_id']],'attr_name' => $data['attr_name']])->find()){
-	            $this->error('属性名称已存在');
-	        }
+	        //if (db('goods_attr')->where(['goods_attr_id' => ['NEQ',$data['goods_attr_id']],'attr_name' => $data['attr_name']])->find()){
+	        //    $this->error('属性名称已存在');
+	        //}
 	        if (db('goods_attr')->update($data)){
 	            $this->ajaxReturn(['code' => 1,'msg' => '修改成功']);
 	        }
