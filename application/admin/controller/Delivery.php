@@ -347,10 +347,12 @@ class Delivery extends Base {
                         $goods_attr_text .= $attr['attr_value'].'&nbsp;';
                     }
                 }
+                $val['type_name'] = db('goods g')->join('__GOODS_TYPE__ gt','g.goods_type_id=gt.goods_type_id')
+                ->where(['g.goods_id' => $val['goods_id']])->value('type_name');
                 $strContent .= '<tr>
         <td>'.($k+1).'</td>
-    <td>'.$val['goods_name'].'</td>
-	<td>'.$goods_attr_text.'</td>
+    <td>'.$val['type_name'].'</td>
+	<td>'.$val['goods_name'].'</td>
     <td>'.$val['unit'].'</td>
 <td>'.$val['current_send_number'].'</td>
 <td>'.$val['remark'].'</td>

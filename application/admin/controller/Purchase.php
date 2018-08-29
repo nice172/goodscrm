@@ -99,9 +99,9 @@ class Purchase extends Base {
 	    'transaction_type' => 'require',
 	    'payment' => 'require',
 	    'delivery_type' => 'require',
-	    'delivery_company' => 'require',
+	    //'delivery_company' => 'require',
 	    'tax' => 'require',
-	    'delivery_address' => 'require',
+	    //'delivery_address' => 'require',
 	    'email' => 'require|email',
 	    'contacts' => 'require',
 	];
@@ -117,9 +117,9 @@ class Purchase extends Base {
 	    'transaction_type.require' => '请选择交易类别',
 	    'payment.require' => '请选择付款条件',
 	    'delivery_type.require' => '请选择交货方式',
-	    'delivery_company.require' => '送货公司不能为空',
+	    //'delivery_company.require' => '送货公司不能为空',
 	    'tax.require' => '请选择税率',
-	    'delivery_address.require' => '送货地址不能为空',
+	    //'delivery_address.require' => '送货地址不能为空',
 	    'po_sn.checkPosn' => 'PO号码已存在请刷新'
 	];
 	
@@ -321,10 +321,12 @@ class Purchase extends Base {
 					$goods_attr_text .= $attr['attr_value'].'&nbsp;';
 				}
 			}
+			$val['type_name'] = db('goods g')->join('__GOODS_TYPE__ gt','g.goods_type_id=gt.goods_type_id')
+			->where(['g.goods_id' => $val['goods_id']])->value('type_name');
 			$strContent .= '<tr>
         <td>'.($k+1).'</td>
-    <td>'.$val['goods_name'].'</td>
-	<td>'.$goods_attr_text.'</td>
+    <td>'.$val['type_name'].'</td>
+	<td>'.$val['goods_name'].'</td>
     <td>'.$val['unit'].'</td>
 <td>'.$val['goods_number'].'</td>
 <td>'.$val['goods_price'].'</td>
@@ -630,6 +632,10 @@ h1,h2,h3,p,div,span{padding:0;margin:0;}
 	    $this->_showParams();
 	    $this->assign('title','编辑采购单');
 	    return $this->fetch();
+	}
+	
+	public function getsupplier(){
+		
 	}
 	
 	public function get_goods(){

@@ -373,9 +373,9 @@ class Order extends Base {
     	'transaction_type' => 'require',
     	'payment' => 'require',
     	'delivery_type' => 'require',
-    	'delivery_company' => 'require',
+    	//'delivery_company' => 'require',
     	'tax' => 'require',
-    	'delivery_address' => 'require',
+    	//'delivery_address' => 'require',
     	'email' => 'require|email',
     	'contacts' => 'require',
     ];
@@ -391,9 +391,9 @@ class Order extends Base {
     	'transaction_type.require' => '请选择交易类别',
     	'payment.require' => '请选择付款条件',
     	'delivery_type.require' => '请选择交货方式',
-    	'delivery_company.require' => '送货公司不能为空',
+    	//'delivery_company.require' => '送货公司不能为空',
     	'tax.require' => '请选择税率',
-    	'delivery_address.require' => '送货地址不能为空',
+    	//'delivery_address.require' => '送货地址不能为空',
     	'po_sn.checkPosn' => 'PO号码已存在请刷新'
     ];
     

@@ -47,7 +47,7 @@
                                 <tr>
                                 <td width="15%" class="right-color"><span class="text-danger">*</span><span>供应商:</span></td>
                                 <td width="35%" colspan="3">
-                                	<select class="form-control" name="supplier_id" id="">
+                                	<select class="form-control w300" name="supplier_id" id="">
                                 		<option value="">请选择供应商</option>
                                 		{foreach name="$supplier" item="v"}
                                 		<option value="{$v.id}" {if condition="$v['id'] eq $data['supplier_id']"}selected="selected"{/if}>{$v.supplier_name}</option>
@@ -94,7 +94,7 @@
                                     </td>
                                 </tr> 
                                  <tr>
-                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>送货公司:</span></td>
+                                    <td width="15%" class="right-color"><span class="text-danger"></span><span>送货公司:</span></td>
                                     <td width="35%">
                                         <input type="text" class="form-control w300" value="{$data.delivery_company}" name="delivery_company" id="delivery_company">
                                     </td>
@@ -109,7 +109,7 @@
                                 </td>
                                 
                            <tr>
-                                	<td width="15%" class="right-color"><span class="text-danger">*</span><span>送货地址:</span></td>
+                                	<td width="15%" class="right-color"><span class="text-danger"></span><span>送货地址:</span></td>
                                     <td width="35%">
                                         <input type="text" class="form-control w300" value="{$data.delivery_address}" name="delivery_address" id="delivery_address">
                                     </td>
