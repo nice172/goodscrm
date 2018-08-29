@@ -42,7 +42,7 @@
                                 </div>
                             </form>
 <!--                             <div class="pull-right"> -->
-<!--                                 <a class="btn btn-primary" href="{:Url('customers/excel')}" target="_blank">导出Excel</a> -->
+<!--                                 <a class="btn btn-primary" href="{:url('customers/excel')}" target="_blank">导出Excel</a> -->
 <!--                             </div> -->
                         </div>
                     </div>
@@ -50,7 +50,7 @@
 
                 <div class="row">
                     <div class="col-lg-12">
-                        <table class="table table-hover">
+                        <table class="table syc-table border table-hover">
                             <thead>
                                 <tr>
                                     
@@ -63,7 +63,7 @@
                                     <th>创建时间</th>
                                     <th>更新时间</th>
                                     <th>状态</th>
-                                    <th class="text-right">操作</th>
+                                    <th>操作</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -78,7 +78,7 @@
                                     <td><?php echo $vo['create_time'];?></td>
                                     <td><?php echo $vo['update_time'];?></td>
                                     <td><?php echo $vo['status']?'正常':'禁用';?></td>
-                                    <td class="text-right">
+                                    <td>
                                         <a href="{:Url('customers/view',['id'=>$vo.cus_id])}">查看</a>
                                         <span class="text-explode">|</span>
                                         <a href="{:Url('customers/edit',['id'=>$vo.cus_id])}">修改</a>

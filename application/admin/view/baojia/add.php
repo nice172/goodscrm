@@ -33,7 +33,7 @@
 								<div class="form-group">
                                     <label for="order_sn" class="col-sm-2 control-label">报价单号</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control w300" readonly="readonly" value="CS-Q-<?php echo date('m/dH').date('sms');?>" name="order_sn" id="order_sn">
+                                        <input type="text" class="form-control w300" readonly="readonly" value="CS-Q-<?php echo date('m/dHis').date('sms');?>" name="order_sn" id="order_sn">
                                     </div>
                                 </div>
 								<div class="form-group">

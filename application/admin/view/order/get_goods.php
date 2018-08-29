@@ -44,14 +44,14 @@
                        
 <div class="row">
                     <div class="col-lg-12">
-                        <table class="table table-hover">
+                        <table class="table syc-table border table-hover">
                             <thead>
                                 <tr>
                                     
                                     <th>商品分类</th>
                                     <th>供应商</th>
                                     <th>商品名称</th>
-                                    <th>品牌</th>
+<!--                                     <th>品牌</th> -->
                                     <th>单位</th>
                                     <th>标准单价</th>
                                 </tr>
@@ -62,7 +62,7 @@
                                     <td>{$vo.category_name}</td>
                                     <td>{$vo.supplier_name}</td>
                                     <td>{$vo.goods_name}</td>
-                                    <td>{$vo.brand_name}</td>
+<!--                                     <td>{$vo.brand_name}</td> -->
                                     <td>{$vo.unit}</td>
                                     <td>{$vo.market_price}</td>
                                 </tr>
@@ -108,7 +108,8 @@ $(document).ready(function () {
 			'goods_id': $(this).attr('data-goods_id'),
 			'store_number': $(this).attr('data-store_number'),
 			'goods_number':0,
-			'send_num':0
+			'send_num':0,
+			'show_input':true
 		};
 		parent.window.goods(goods);
 	});

@@ -86,25 +86,27 @@
 
 		<div class="row">
                     <div class="col-lg-12">
-                        <table class="table table-hover">
+                        <table class="table syc-table border table-hover">
                             <thead>
                                 <tr>
-                                    <th>序号</th>
-                                    <th>商品名称</th>
-                                    <th>单位</th>
-                                    <th style="width:100px;">标准单价</th>
-                                    <th style="width:100px;">实际单价</th>
-                                    <th style="width:100px;">下单数量</th>
-                                    <th style="width:100px;">已送数量</th>
-                                    <th style="width:200px;">备注</th>
-                                    <th>操作</th>
+                                    <th width="5%">序号</th>
+                                    <th width="22%">商品名称</th>
+                                    <th width="5%">单位</th>
+                                    <th width="10%">标准单价</th>
+                                    <th width="10%">实际单价</th>
+                                    <th width="5%">下单数量</th>
+                                    <th width="5%">已送数量</th>
+                                    <th width="28%">备注</th>
+                                    <th width="15%">操作</th>
                                 </tr>
                             </thead>
                             <tbody class="goodsList"></tbody>
                             <tfoot>
                             	<tr>
-                            	<td><a href="javascript:;" class="get_goods">请选择商品</a></td>
-                            	<td colspan="10"></td>
+                            	<td colspan="20">
+                            	<a href="javascript:;" class="get_goods">请选择商品</a>
+                            	<div class="pull-right page-box"><button type="button" class="btn btn-primary saveAll">全部保存</button></div>
+                            	</td>
                             	</tr>
                             </tfoot>
                         </table>
@@ -159,6 +161,18 @@
 <script type="text/javascript" src="/assets/plugins/jquery-validation/js/jquery.validate.js"></script>
 
 <script type="text/javascript">
+function _formatMoney(num){
+	num = num.toString().replace(/\$|\,/g,'');
+	if(isNaN(num))
+	num = "0";
+	sign = (num == (num = Math.abs(num)));
+	num = Math.floor(num*100+0.50000000001);
+	cents = num%100;
+	num = Math.floor(num/100).toString();
+	if(cents<10)
+	cents = "0" + cents;
+	return (((sign)?'':'-') + num + '.' + cents);
+}
     $(document).ready(function() {
         layui.use('laydate', function() {
             var laydate = layui.laydate;
@@ -237,7 +251,7 @@ if(goods_info.length > 0){
 	goodsList(goods_info);
 }
 
-var status = 1;
+//var status = 1;
 function goods(data){
 	var flag = false;
 	for(var i in goods_info){
@@ -249,7 +263,7 @@ function goods(data){
 	if(!flag){
 		goods_info.push(data);
 	}
-	status = 1;
+	//status = 1;
 	goodsList(goods_info);
 }
 
@@ -257,58 +271,71 @@ function goodsList(goods_info){
 	var html = '';
 	for(var j in goods_info){
 		var num = parseInt(j)+1;
+		var show_input = goods_info[j]['show_input']==true?'block':'none';
+		var show_span = goods_info[j]['show_input']==true?'none':'block';
+		var text_update = goods_info[j]['show_input']==true?'保存':'修改';
 		html += '<tr data-index="'+j+'" data-goods_id="'+goods_info[j]['goods_id']+'" class="goods_'+j+'">';
 		html += '<td>'+num+'</td>';
 		html += '<td>'+goods_info[j]['goods_name']+'</td>';
 		html += '<td>'+goods_info[j]['unit']+'</td>';
-		html += '<td class="market_price"><input type="text" data-market_price="'+goods_info[j]['market_price']+'" oninput="checkNum(this)" name="market_price" style="width:80px;display:none;" value="'+goods_info[j]['market_price']+'" /><span class="inputspan">'+goods_info[j]['market_price']+'</span></td>';
-		html += '<td class="shop_price"><input type="text" data-shop_price="'+goods_info[j]['shop_price']+'" oninput="checkNum(this)" name="shop_price" style="width:80px;display:none;" value="'+goods_info[j]['shop_price']+'" /><span class="inputspan">'+goods_info[j]['shop_price']+'</span></td>';
-		html += '<td class="goods_number"><input type="text" data-goods_number="'+goods_info[j]['goods_number']+'" oninput="checkNum2(this)" name="goods_number" style="width:80px;display:none;" value="'+goods_info[j]['goods_number']+'" /><span class="inputspan">'+goods_info[j]['goods_number']+'</span></td>';
-		html += '<td class="send_num"><input type="text" data-send_num="'+goods_info[j]['send_num']+'" oninput="checkNum2(this)" name="send_num" style="width:80px;display:none;" value="'+goods_info[j]['send_num']+'" /><span class="inputspan">'+goods_info[j]['send_num']+'</span></td>';
-		html += '<td class="remark"><input type="text" name="remark" style="width:200px;display:none;" value="'+goods_info[j]['remark']+'" /><span class="inputspan">'+goods_info[j]['remark']+'</span></td>';
-		html += '<td><a href="javascript:;" onclick="update('+j+')" class="update">修改</a><span class="text-explode">|</span><a href="javascript:;" onclick="_delete('+j+')" class="delete">删除</a></td>';
+		html += '<td class="market_price">'+goods_info[j]['market_price']+'</td>';
+		html += '<td class="shop_price"><input type="text" data-shop_price="'+goods_info[j]['shop_price']+'" oninput="checkNum(this)" name="shop_price" style="width:80%;display:'+show_input+';" value="'+goods_info[j]['shop_price']+'" /><span class="inputspan" style="display:'+show_span+';">'+goods_info[j]['shop_price']+'</span></td>';
+		html += '<td class="goods_number"><input type="text" data-goods_number="'+goods_info[j]['goods_number']+'" oninput="checkNum2(this)" name="goods_number" style="width:80%;display:'+show_input+';" value="'+goods_info[j]['goods_number']+'" /><span class="inputspan" style="display:'+show_span+';">'+goods_info[j]['goods_number']+'</span></td>';
+		html += '<td class="send_num">'+goods_info[j]['send_num']+'</td>';
+		html += '<td class="remark"><input type="text" name="remark" style="width:80%;display:'+show_input+';" value="'+goods_info[j]['remark']+'" /><span class="inputspan" style="display:'+show_span+';">'+goods_info[j]['remark']+'</span></td>';
+		html += '<td><a href="javascript:;" onclick="update('+j+')" class="update">'+text_update+'</a><span class="text-explode">|</span><a href="javascript:;" onclick="_delete('+j+')" class="delete">删除</a></td>';
 		html += '</tr>';
 	}
 	$('.goodsList').html(html);
 }
 
 function update(index){
-	if(status == 2){
-		status = 1;
-		var market_price = $('.goods_'+index+' input[name=market_price]').val();
-		if(market_price == ''){
-			market_price = $('.goods_'+index+' input[name=market_price]').attr('data-market_price');
-		}
-		var shop_price = $('.goods_'+index+' input[name=shop_price]').val();
-		if(shop_price == ''){
-			shop_price = $('.goods_'+index+' input[name=shop_price]').attr('data-shop_price');
-		}
-		var goods_number = $('.goods_'+index+' input[name=goods_number]').val();
-		if(goods_number == ''){
-			goods_number = $('.goods_'+index+' input[name=goods_number]').attr('data-goods_number');
-		}
-		if(parseInt(goods_number) > goods_info[index]['store_number']){
-			alert('下单数量不能大于库存量');
-			status = 2;
-			return;
-		}
-		var send_num = $('.goods_'+index+' input[name=send_num]').val();
-		if(send_num == ''){
-			send_num = $('.goods_'+index+' input[name=send_num]').attr('data-send_num');
-		}
-		goods_info[index]['goods_number'] = parseInt(goods_number);
-		goods_info[index]['send_num'] = parseInt(send_num);
-		goods_info[index]['market_price'] = parseFloat(market_price);
-		goods_info[index]['shop_price'] = parseFloat(shop_price);
-		goods_info[index]['remark'] = $('.goods_'+index+' input[name=remark]').val();
-		goodsList(goods_info);
+	if(!goods_info[index]['show_input']){
+		goods_info[index]['show_input'] = true;
+		$('.goods_'+index+' .update').text('保存');
+		$('.goods_'+index+' span.inputspan').hide();
+		$('.goods_'+index+' input').show();
 		return;
 	}
-	status = 2;
-	$('.goods_'+index+' .update').text('保存');
-	$('.goods_'+index+' span.inputspan').hide();
-	$('.goods_'+index+' input').show();
+	var shop_price = $('.goods_'+index+' input[name=shop_price]').val();
+	if(shop_price == ''){
+		shop_price = $('.goods_'+index+' input[name=shop_price]').attr('data-shop_price');
+	}
+	var goods_number = $('.goods_'+index+' input[name=goods_number]').val();
+	if(goods_number == ''){
+		goods_number = $('.goods_'+index+' input[name=goods_number]').attr('data-goods_number');
+	}
+
+	goods_info[index]['goods_number'] = parseInt(goods_number);
+	goods_info[index]['shop_price'] = _formatMoney(parseFloat(shop_price));
+	goods_info[index]['remark'] = $('.goods_'+index+' input[name=remark]').val();
+	goods_info[index]['show_input'] = false;
+	goodsList(goods_info);
+    $('.goods_'+index+' .update').text('修改');
+    $('.goods_'+index+' span.inputspan').show();
+    $('.goods_'+index+' input').hide();
 }
+
+$('.saveAll').click(function(){
+	$('tbody.goodsList tr').each(function(index){
+		var eIndex = $('tbody.goodsList tr').eq(index).attr('data-index');
+		if(goods_info[eIndex]['show_input']){
+    		var shop_price = $('.goods_'+eIndex+' input[name=shop_price]').val();
+    		if(shop_price == ''){
+    			shop_price = $('.goods_'+eIndex+' input[name=shop_price]').attr('data-shop_price');
+    		}
+    		var goods_number = $('.goods_'+eIndex+' input[name=goods_number]').val();
+    		if(goods_number == ''){
+    			goods_number = $('.goods_'+eIndex+' input[name=goods_number]').attr('data-goods_number');
+    		}
+    		goods_info[eIndex]['goods_number'] = parseInt(goods_number);
+    		goods_info[eIndex]['shop_price'] = _formatMoney(parseFloat(shop_price));
+    		goods_info[eIndex]['remark'] = $('.goods_'+eIndex+' input[name=remark]').val();
+    		goods_info[eIndex]['show_input'] = false;
+		}
+	});
+	goodsList(goods_info);
+});
 
 function checkNum(obj){
 	obj.value = obj.value.replace(/[^\d.]/g,"");//清除"数字"和"."以外的字符
@@ -334,6 +361,9 @@ function _delete(index){
 	}
 	goods_info = newGoodsList;
 	goodsList(goods_info);
+	if(goods_info.length <= 0){
+		$('.page-box').hide();
+	}
 }
 $('button[type=submit]').click(function(){
 	var send = $(this).attr('send');

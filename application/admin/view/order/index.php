@@ -110,7 +110,7 @@
                                 <td>{$vo.goods_price}</td>
                                 <td>{$vo.goods_number}</td>
                                 <td>{$vo.require_time|date='Y-m-d',###}</td>
-                                <td>{if condition="$vo['deliver_time']"}{$vo.deliver_time|date='Y-m-d H:i:s',###}{/if}</td>
+                                <td>{if condition="$vo['deliver_time']"}{$vo.deliver_time|date='Y-m-d',###}{else}--{/if}</td>
                                 <td>{$vo.create_time|date='Y-m-d H:i:s',###}</td>
                                 <td>
 								{if condition="$vo['status'] eq -1"}

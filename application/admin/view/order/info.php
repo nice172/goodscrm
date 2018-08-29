@@ -96,7 +96,7 @@
                                     </tr>
                                     </tbody>
                                 </table>
-                                <table class="table table-hover" style="margin-top:0;">
+                                <table class="table syc-table border table-hover" style="margin-top:0;">
                                     <thead>
                                     <tr>
                                         <th colspan="20">
@@ -111,14 +111,14 @@
                                         </th>
                                     </tr>
                                     <tr>
-                                    <th>序号</th>
-                                    <th>商品名称</th>
-                                    <th>单位</th>
-                                    <th>标准单价</th>
-                                    <th>实际单价</th>
-                                    <th>下单数量</th>
-                                    <th>已送数量</th>
-                                    <th>备注</th>
+                                    <th width="5%">序号</th>
+                                    <th width="30%">商品名称</th>
+                                    <th width="5%">单位</th>
+                                    <th width="10%">标准单价</th>
+                                    <th width="10%">实际单价</th>
+                                    <th width="5%">下单数量</th>
+                                    <th width="5%">已送数量</th>
+                                    <th width="30%">备注</th>
                                     </tr>
                                     </thead>
                                     <tbody>

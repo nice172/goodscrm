@@ -67,7 +67,7 @@
                                     </tr>
                                     </tbody>
                                 </table>
-                                <table class="table table-hover" style="margin-top:0;">
+                                <table class="table syc-table border table-hover" style="margin-top:0;">
                                     <thead>
                                     <tr>
                                         <th colspan="8">
@@ -89,7 +89,7 @@
                                         <th>性别</th>
                                         <th>QQ</th>
                                         <th>Email</th>
-                                        <th class="text-right">操作</th>
+                                        <th>操作</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -104,7 +104,7 @@
                                         </td>
                                         <td>{$vo.con_qq}</td>
                                         <td>{$vo.con_email}</td>
-                                        <td class="text-right">
+                                        <td>
                                         	{neq name="$data.cus_con_id" value="$vo.con_id"}
                                         	<a href="javascript:void(0);" onclick="setHandle.adduser('{$vo.con_id}')">默认联系人</a>
                                         	<span class="text-explode">|</span>{/neq}
@@ -120,7 +120,7 @@
                             </div>
                             <!--历史订单-->
                             <div class="tab-pane <?php if ($record){?>active<?php }?>" id="lishidingdan">
-                                <table class="table table-condensed" style="margin-top:0;">
+                                <table class="table syc-table border table-condensed" style="margin-top:0;">
                                     <thead>
                                     <tr>
                                         <th colspan="9">
