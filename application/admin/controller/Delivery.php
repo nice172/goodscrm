@@ -461,7 +461,7 @@ h1,h2,h3,p,div,span{padding:0;margin:0;}
         $start_time = $this->request->param('start_date');
         $end_time = $this->request->param('end_date');
         $db = db('purchase p');
-        $db->field('p.*,p.id as purchase_id,og.send_num,s.supplier_name,pg.unit,pg.goods_price,pg.goods_id,pg.goods_number,pg.goods_name,o.order_sn,o.require_time');
+        $db->field('p.*,p.id as purchase_id,s.supplier_name,pg.unit,pg.goods_price,pg.goods_id,pg.send_num,pg.goods_number,pg.goods_name');
         $where = ['p.status' => ['>=','1']];
         if ($supplier_name != ''){
             //$where['s.supplier_short'] = ['like',"%{$supplier_name}%"];
@@ -478,18 +478,26 @@ h1,h2,h3,p,div,span{padding:0;margin:0;}
             }
         }
         $db->join('__PURCHASE_GOODS__ pg','p.id=pg.purchase_id');
-        $db->join('__ORDER_GOODS__ og','pg.goods_id=og.goods_id AND og.order_id=p.order_id');
-        $db->where("og.order_id=p.order_id and (pg.goods_number-og.send_num) > 0");
+        //$db->join('__ORDER_GOODS__ og','pg.goods_id=og.goods_id AND og.order_id=p.order_id');
+        $db->where("(pg.goods_number-pg.send_num) > 0");
         $db->join('__SUPPLIER__ s','p.supplier_id=s.id');
-        $db->join('__ORDER__ o','o.id=p.order_id');
+        //$db->join('__ORDER__ o','o.id=p.order_id');
         $result = $db->paginate(config('PAGE_SIZE'), false, ['query' => $this->request->param() ]);
         $data = $result->all();
         foreach ($data as $key => $value){
             $category_name = db('goods g')->join('__GOODS_CATEGORY__ gc','gc.category_id=g.category_id')->where(['g.goods_id' => $value['goods_id']])->value('gc.category_name');
             $data[$key]['category_name'] = $category_name;
-            $data[$key]['require_time'] = date('Y-m-d',$value['require_time']);
             $data[$key]['purchase_date'] = date('Y-m-d',$value['create_time']);
+            if (!$value['create_type']){
+                $require_time = db('order')->where(['id' => $value['order_id']])->value('require_time');
+                $data[$key]['require_time'] = date('Y-m-d',$require_time);
+            }else{
+                $data[$key]['require_time'] = '--';
+            }
         }
+        
+        //og.send_num,o.order_sn,o.require_time
+        
         $this->assign('page',$result->render());
         $this->assign('data',$data);
         $this->assign('pojson',json_encode($data));
@@ -571,7 +579,7 @@ h1,h2,h3,p,div,span{padding:0;margin:0;}
         if ($this->request->isAjax()){
             $purchase_id = $this->request->param('purchase_id',0,'intval');
             $purchase = db('purchase')->where(['id' => $purchase_id,'is_cancel' => 0])->find();
-            if (empty($purchase)) $this->error('采购单已取消关联订单');
+            if (empty($purchase)) $this->error('该采购单已取消关联订单');
             $purchase_goods = db('purchase_goods pg')->join('__GOODS__ g','g.goods_id=pg.goods_id')
             ->join('__ORDER_GOODS__ og','og.goods_id=pg.goods_id')->field('pg.*,g.store_number,og.send_num,gc.category_name,og.remark')
             ->join('__GOODS_CATEGORY__ gc','g.category_id=gc.category_id')
@@ -581,6 +589,7 @@ h1,h2,h3,p,div,span{padding:0;margin:0;}
                 $purchase_goods[$key]['diff_number'] = $value['goods_number'] - $value['send_num']; //未交数量
                 $purchase_goods[$key]['current_send_number'] = 0; //本次送货数量
                 $purchase_goods[$key]['add_number'] = 0; //入库数量
+                $purchase_goods[$key]['show_input'] = true;
             }
             
             $data['goodslist'] = $purchase_goods;

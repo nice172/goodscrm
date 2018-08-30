@@ -101,7 +101,8 @@ $(document).ready(function () {
 	$('.selected_goods').click(function(){
 		var goods = {
 			'goods_name': $(this).attr('data-goods_name'),
-			'shop_price': $(this).attr('data-shop_price'),
+			//'shop_price': $(this).attr('data-shop_price'),
+			'shop_price': $(this).attr('data-market_price'),
 			'market_price': $(this).attr('data-market_price'),
 			'unit': $(this).attr('data-unit'),
 			'remark': $(this).attr('data-remark'),

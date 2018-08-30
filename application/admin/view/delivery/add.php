@@ -104,19 +104,19 @@
 
 		<div class="row">
                     <div class="col-lg-12">
-                        <table class="table table-hover">
+                        <table class="table table-hover syc-table border">
                             <thead>
                                 <tr>
-                                    <th>序号</th>
-                                    <th>商品分类</th>
-                                    <th>商品名称</th>
-                                    <th>单位</th>
-                                    <th>未交数量</th>
-                                    <th>库存数量</th>
-                                    <th>本次送货数量</th>
-                                    <th>入库数量</th>
-                                    <th style="width:200px;">备注</th>
-                                    <th>操作</th>
+                                    <th width="5%">序号</th>
+                                    <th width="10%">商品分类</th>
+                                    <th width="20%">商品名称</th>
+                                    <th width="5%">单位</th>
+                                    <th width="5%">未交数量</th>
+                                    <th width="5%">库存数量</th>
+                                    <th width="10%">本次送货数量</th>
+                                    <th width="5%">入库数量</th>
+                                    <th width="25%">备注</th>
+                                    <th width="10%">操作</th>
                                 </tr>
                             </thead>
                             <tbody class="goodsList"></tbody>
@@ -344,6 +344,9 @@ function goodsList(goods_info){
 	var html = '';
 	for(var j in goods_info){
 		var num = parseInt(j)+1;
+		var show_input = goods_info[j]['show_input']==true?'inline':'none';
+		var show_span = goods_info[j]['show_input']==true?'none':'inline';
+		var text_update = goods_info[j]['show_input']==true?'保存':'修改';
 		html += '<tr data-index="'+j+'" data-goods_id="'+goods_info[j]['goods_id']+'" class="goods_'+j+'">';
 		html += '<td>'+num+'</td>';
 		html += '<td>'+goods_info[j]['category_name']+'</td>';
@@ -351,18 +354,23 @@ function goodsList(goods_info){
 		html += '<td>'+goods_info[j]['unit']+'</td>';
 		html += '<td>'+goods_info[j]['diff_number']+'</td>';
 		html += '<td class="store_number"><span class="">'+goods_info[j]['store_number']+'</span></td>';
-		html += '<td class="current_send_number"><input type="text" data-current_send_number="'+goods_info[j]['current_send_number']+'" oninput="checkNum2(this)" name="current_send_number" style="width:80px;display:none;" value="'+goods_info[j]['current_send_number']+'" /><span class="inputspan">'+goods_info[j]['current_send_number']+'</span></td>';
-		html += '<td class="add_number"><input type="text" data-add_number="'+goods_info[j]['add_number']+'" oninput="checkNum2(this)" name="add_number" style="width:80px;display:none;" value="'+goods_info[j]['add_number']+'" /><span class="inputspan">'+goods_info[j]['add_number']+'</span></td>';
-		html += '<td class="remark"><input type="text" name="remark" style="width:200px;display:none;" value="'+goods_info[j]['remark']+'" /><span class="inputspan">'+goods_info[j]['remark']+'</span></td>';
-		html += '<td><a href="javascript:;" onclick="update('+j+')" class="update">修改</a><span class="text-explode">|</span><a href="javascript:;" onclick="_delete('+j+')" class="delete">删除</a></td>';
+		html += '<td class="current_send_number"><input type="text" data-current_send_number="'+goods_info[j]['current_send_number']+'" oninput="checkNum2(this)" name="current_send_number" style="width:80%;display:'+show_input+';" value="'+goods_info[j]['current_send_number']+'" /><span class="inputspan" style="display:'+show_span+';">'+goods_info[j]['current_send_number']+'</span></td>';
+		html += '<td class="add_number"><input type="text" data-add_number="'+goods_info[j]['add_number']+'" oninput="checkNum2(this)" name="add_number" style="width:80%;display:'+show_input+';" value="'+goods_info[j]['add_number']+'" /><span class="inputspan" style="display:'+show_span+';">'+goods_info[j]['add_number']+'</span></td>';
+		html += '<td class="remark"><input type="text" name="remark" style="width:90%;display:'+show_input+';" value="'+goods_info[j]['remark']+'" /><span class="inputspan" style="display:'+show_span+';">'+goods_info[j]['remark']+'</span></td>';
+		html += '<td><a href="javascript:;" onclick="update('+j+')" class="update">'+text_update+'</a><span class="text-explode">|</span><a href="javascript:;" onclick="_delete('+j+')" class="delete">删除</a></td>';
 		html += '</tr>';
 	}
 	$('.goodsList').html(html);
 }
 
 function update(index){
-	if(status == 2){
-		status = 1;
+	if(!goods_info[index]['show_input']){
+		goods_info[index]['show_input'] = true;
+		$('.goods_'+index+' .update').text('保存');
+		$('.goods_'+index+' span.inputspan').hide();
+		$('.goods_'+index+' input').show().css('display','inline');
+		return;
+	}
 		var current_send_number = $('.goods_'+index+' input[name=current_send_number]').val();
 		if(current_send_number == ''){
 			current_send_number = $('.goods_'+index+' input[name=current_send_number]').attr('data-current_send_number');
@@ -371,22 +379,37 @@ function update(index){
 		if(add_number == ''){
 			add_number = $('.goods_'+index+' input[name=add_number]').attr('data-add_number');
 		}
-		
+		/*
 		if(current_send_number > goods_info[index]['store_number']){
 			alert('本次送货数量不能大于库存量');
 			status = 2;
 			return;
 		}
+		*/
 		goods_info[index]['current_send_number'] = current_send_number;
 		goods_info[index]['add_number'] = add_number;
 		goods_info[index]['remark'] = $('.goods_'+index+' input[name=remark]').val();
+		goods_info[index]['show_input'] = false;
+		$('tbody.goodsList tr').each(function(idx){
+			var eIndex = $('tbody.goodsList tr').eq(idx).attr('data-index');
+			if(eIndex != index){
+				var _current_send_number = $('.goods_'+eIndex+' input[name=current_send_number]').val();
+				if(_current_send_number == ''){
+					_current_send_number = $('.goods_'+eIndex+' input[name=current_send_number]').attr('data-current_send_number');
+				}
+				var _add_number = $('.goods_'+eIndex+' input[name=add_number]').val();
+				if(_add_number == ''){
+					_add_number = $('.goods_'+eIndex+' input[name=add_number]').attr('data-add_number');
+				}
+				goods_info[eIndex]['current_send_number'] = _current_send_number;
+				goods_info[eIndex]['add_number'] = _add_number;
+				goods_info[eIndex]['remark'] = $('.goods_'+eIndex+' input[name=remark]').val();
+			}
+		});
+    	$('.goods_'+index+' .update').text('修改');
+    	$('.goods_'+index+' span.inputspan').show().css('display','inline');
+    	$('.goods_'+index+' input').hide();
 		goodsList(goods_info);
-		return;
-	}
-	status = 2;
-	$('.goods_'+index+' .update').text('保存');
-	$('.goods_'+index+' span.inputspan').hide();
-	$('.goods_'+index+' input').show();
 }
 
 function checkNum(obj){

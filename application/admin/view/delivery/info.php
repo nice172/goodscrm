@@ -105,18 +105,18 @@
 
 		<div class="row">
                     <div class="col-lg-12">
-                        <table class="table table-hover">
+                        <table class="table table-hover syc-table border">
                             <thead>
                                 <tr>
-                                    <th>序号</th>
-                                    <th>商品分类</th>
-                                    <th>商品名称</th>
-                                    <th>单位</th>
-                                    <th>未交数量</th>
-                                    <th>库存数量</th>
-                                    <th>本次送货数量</th>
-                                    <th>入库数量</th>
-                                    <th style="width:200px;">备注</th>
+                                    <th width="5%">序号</th>
+                                    <th width="10%">商品分类</th>
+                                    <th width="20%">商品名称</th>
+                                    <th width="5%">单位</th>
+                                    <th width="10%">未交数量</th>
+                                    <th width="10%">库存数量</th>
+                                    <th width="10%">本次送货数量</th>
+                                    <th width="10%">入库数量</th>
+                                    <th width="20%">备注</th>
 <!--                                     <th>操作</th> -->
                                 </tr>
                             </thead>
