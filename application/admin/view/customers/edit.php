@@ -26,7 +26,7 @@
                     <div class="col-lg-12">
                         <form method="post" id="editCustomersForm">
                             <input type="hidden" name="__token__" value="{$Request.token}" />
-                            <input type="hidden" name="cus_id" value="{$data.cus_id}" />
+                            <input type="hidden" name="con_id" value="{$data.cus_id}" />
                             <table class="table contact-template-form">
                                 <tbody>
                                 <tr>
@@ -39,47 +39,47 @@
                                 <tr>
                                     <td width="15%" class="right-color"><span>公司名称:</span></td>
                                     <td width="35%">
-                                        <input type="text" class="form-control w300" name="cus_name"  value="{$data.cus_name}">
+                                        <input type="text" class="form-control w300" name="con_name"  value="{$data.cus_name}">
                                     </td>
                                     <td width="15%" class="right-color"><span class="text-danger">*</span><span>简称:</span></td>
-                                    <td width="35%"><input type="text" class="form-control w300" name="cus_short" value="{$data.cus_short}"></td>
+                                    <td width="35%"><input type="text" class="form-control w300" name="con_short" value="{$data.cus_short}"></td>
                                 </tr>
                                 <tr>
                                     <td width="15%" class="right-color"><span class="text-danger">*</span><span>电话号码:</span></td>
-                                    <td width="35%"><input type="text" class="form-control w300" name="cus_phome" id="phome" value="{$data.cus_phome}"></td>
+                                    <td width="35%"><input type="text" class="form-control w300" name="con_phome" id="phome" value="{$data.cus_phome}"></td>
                                     <td width="15%" class="right-color"><span>传真:</span></td>
-                                    <td width="35%"><input type="text" class="form-control w300" name="cus_fax" id="fax" value="{$data.cus_fax}"></td>
+                                    <td width="35%"><input type="text" class="form-control w300" name="con_fax" id="fax" value="{$data.cus_fax}"></td>
                                 </tr>
                                 <tr>
-                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>手机号码:</span></td>
+                                    <td width="15%" class="right-color"><span class="text-danger"></span><span>手机号码:</span></td>
                                     <td width="35%">
-                                        <input type="text" class="form-control w300" name="cus_mobile" id="cus_mobile" value="{$data.cus_mobile}">
+                                        <input type="text" class="form-control w300" name="con_mobile" id="cus_mobile" value="{$data.cus_mobile}">
                                     </td>
                                     <td width="15%" class="right-color"><span class="text-danger">*</span><span>联系人:</span></td>
-                                    <td width="35%"><input type="text" class="form-control w300" name="cus_duty" id="cus_duty" value="{$data.cus_duty}"></td>
+                                    <td width="35%"><input type="text" class="form-control w300" name="con_duty" id="cus_duty" value="{$data.cus_duty}"></td>
                                 </tr>
                                 <tr>
                                     <td width="15%" class="right-color"><span>E-Mail:</span></td>
-                                    <td width="35%"><input type="text" class="form-control w300" name="cus_email" id="cus_email" value="{$data.cus_email}"></td>
+                                    <td width="35%"><input type="text" class="form-control w300" name="con_email" id="cus_email" value="{$data.cus_email}"></td>
                                     <td width="15%" class="right-color"><span>职务:</span></td>
-                                    <td width="35%"><input type="text" class="form-control w300" name="cus_post" value="{$data.cus_post}"></td>
+                                    <td width="35%"><input type="text" class="form-control w300" name="con_post" value="{$data.cus_post}"></td>
                                 </tr>
                                 <tr>
                                     <td width="15%" class="right-color"><span>性别:</span></td>
                                     <td width="35%">
-                                    <select class="syc-select w300" name="cus_sex">
+                                    <select class="syc-select w300" name="con_sex">
                                             <option value="-1">--请选择性别--</option>
                                             <option value="1" {if condition="$data['cus_sex']"}selected="selected"{/if}>男</option>
                                             <option value="0" {if condition="!$data['cus_sex']"}selected="selected"{/if}>女</option>
                                     </select>
                                     </td>
                                     <td width="15%" class="right-color"><span>QQ:</span></td>
-                                    <td width="35%"><input type="text" class="form-control w300" name="cus_qq" value="{$data.cus_qq}" id="con_qq" placeholder=""></td>
+                                    <td width="35%"><input type="text" class="form-control w300" name="con_qq" value="{$data.cus_qq}" id="con_qq" placeholder=""></td>
                                 </tr>
                                 <tr>
                                     <td width="15%" class="right-color"><span class="text-danger">*</span><span>部门:</span></td>
                                     <td width="35%">
-                                       <select class="syc-select w300" name="cus_section">
+                                       <select class="syc-select w300" name="con_section">
                                             <option value="0">--请选择部门--</option>
                                             <?php foreach ($section as $val){?>
                                             <option value="<?php echo $val;?>" {if condition="$data['cus_section'] eq $val"}selected="selected"{/if}><?php echo $val;?></option>
@@ -88,7 +88,7 @@
                                     </td>
                                     <td width="15%" class="right-color"><span class="text-danger">*</span><span>业务经理:</span></td>
                                     <td width="35%">
-                                            <select class="syc-select w300" name="cus_business">
+                                            <select class="syc-select w300" name="con_business">
                                             <option value="0">--请选择业务经理--</option>
                                             <?php foreach ($business as $val){?>
                                             <option value="<?php echo $val;?>" {if condition="$data['cus_business'] eq $val"}selected="selected"{/if}><?php echo $val;?></option>
@@ -110,14 +110,14 @@
                                 <tr>
                                     <td width="15%" class="right-color"><span>详细地址:</span></td>
                                     <td width="35%" colspan="3" id="city_4">
-                                        <select class="syc-select w150 prov" name="cus_prov" id="selectProvince">
+                                        <select class="syc-select w150 prov" name="con_prov" id="selectProvince">
                                             <option>--请选择省份--</option>
                                         </select>
-                                        <select class="syc-select w150 city" name="cus_city" id="selectCitp">
+                                        <select class="syc-select w150 city" name="con_city" id="selectCitp">
                                         </select>
-                                        <select class="syc-select w150 dist" name="cus_dist" id="selectCounty">
+                                        <select class="syc-select w150 dist" name="con_dist" id="selectCounty">
                                         </select>
-                                        <input type="text" class="form-control" style="margin-top: 10px;width: 50%;" name="cus_street" value="{$data.cus_street}">
+                                        <input type="text" class="form-control" style="margin-top: 10px;width: 50%;" name="con_street" value="{$data.cus_street}">
                                     </td>
                                 </tr>
                                 <!--备注信息-->
@@ -130,7 +130,7 @@
                                 </tr>
                                 <tr>
                                     <td width="15%" class="right"><span>备注内容:</span></td>
-                                    <td colspan="3"><textarea class="form-control" name="cus_content" id="content" rows="6">{$msg.msg_content}</textarea> </td>
+                                    <td colspan="3"><textarea class="form-control" name="con_content" id="content" rows="6">{$msg.msg_content}</textarea> </td>
                                 </tr>
 
                                 <tr class="table-submit">

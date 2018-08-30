@@ -88,10 +88,13 @@ class Customers extends Base{
             $duty = cutstr_html($request->param('con_duty'));
             $Customers = new CustomersModel();
             $validate = Loader::validate('Customers');
-            if (!$validate->scene('add')->check($request->param())) {
+            if (!$validate->check($request->param())) {
                 $this->error($validate->getError());
             }
-            
+            $find = db('customers')->where(['cus_name' => $request->param('con_name')])->find();
+            if (!empty($find)){
+                $this->error('公司名称已存在');
+            }
             $city = $request->param('con_city');
             $dist = $request->param('con_dist');
             $cus_city = !empty($city) ? $city : '';
@@ -155,13 +158,7 @@ class Customers extends Base{
         if (empty($data)) {
             $this->error('参数错误！');
         }
-        // 企业类型
-        //$property=Db::name('customers_type')->order('ty_id', 'asc')->select();
-        // 评估等级
-        //$evaluate=Db::name('customers_evaluate')->order('eva_id', 'asc')->select();
-        //物流信息
-//         $Logistics = new Logistics();
-//         $dataLog = $Logistics::get($data['cus_log_id']);
+
         $dataLog = '';
         //备注信息
         $message = Db::name('customers_message')->where('msg_cus_id', $id)->find();
@@ -195,41 +192,51 @@ class Customers extends Base{
     //提交修改企业信息
     public function edit_do() {
         $request = Request::instance();
-        $id = $request->param('cus_id');
+        $id = $request->param('con_id');
         if (!is_numeric($id) || empty($id)) {
             $this->error('参数错误！');
+        }
+        $validate = Loader::validate('Customers');
+        if (!$validate->check($request->param())) {
+            $this->error($validate->getError());
         }
         $By = Db::name('customers')->where('cus_id', $id)->find();
         if (empty($By)) {
             $this->error('参数错误！');
         }
-        $city = $request->param('cus_city');
-        $dist = $request->param('cus_dist');
+        $find = db('customers')->where(['cus_id' => ['neq',$id],'cus_name' => $request->param('con_name')])->find();
+        if (!empty($find)){
+            $this->error('公司名称已存在');
+        }
+
+        $city = $request->param('con_city');
+        $dist = $request->param('con_dist');
         $cus_city = !empty($city) ? $city : '';
         $cus_dist = !empty($dist) ? $dist : '';
         $dist = $request->param('dist');
         $dist = !empty($dist) ? $dist : '';
         $data = [
-            'cus_name' => $request->param('cus_name'),
-            'cus_duty' => $request->param('cus_duty'),
-            'cus_phome' => $request->param('cus_phome'),
-            'cus_fax' => $request->param('cus_fax'),
+            'cus_name' => $request->param('con_name'),
+            'cus_duty' => $request->param('con_duty'),
+            'cus_phome' => $request->param('con_phome'),
+            'cus_fax' => $request->param('con_fax'),
         	'cus_order_ren' => $request->param('con_order_ren'),
-            'cus_mobile' => $request->param('cus_mobile'),
-            'cus_email' => $request->param('cus_email'),
-            'cus_business' => $request->param('cus_business'),
-            'cus_prov' => $request->param('cus_prov'),
+            'cus_mobile' => $request->param('con_mobile'),
+            'cus_email' => $request->param('con_email'),
+            'cus_business' => $request->param('con_business'),
+            'cus_prov' => $request->param('con_prov'),
             'cus_city' => $cus_city,
             'cus_dist' => $cus_dist,
-            'cus_sex' => $request->param('cus_sex'),
-            'cus_qq' => $request->param('cus_qq'),
-            'cus_section' => $request->param('cus_section'),
-            'cus_post' => $request->post('cus_post'),
-            'cus_short' => $request->param('cus_short'),
-            'cus_street' => $request->param('cus_street')
+            'cus_sex' => $request->param('con_sex'),
+            'cus_qq' => $request->param('con_qq'),
+            'cus_section' => $request->param('con_section'),
+            'cus_post' => $request->post('con_post'),
+            'cus_short' => $request->param('con_short'),
+            'cus_street' => $request->param('con_street')
         ];
+        
         Db::name('customers')->where('cus_id', $id)->update($data);
-        Db::name('customers_message')->where('msg_cus_id', $id)->update(['msg_content'=>cutstr_html($request->param('cus_content'))]);
+        Db::name('customers_message')->where('msg_cus_id', $id)->update(['msg_content'=>cutstr_html($request->param('con_content'))]);
         $this->success('修改成功', Url::build('customers/index'));
     }
 

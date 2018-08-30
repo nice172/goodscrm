@@ -398,6 +398,19 @@ class Goods extends Base {
 	    }
 	}
 	
+	public function change_cate(){
+	    if ($this->request->isAjax()){
+	        $category_id = $this->request->param('category_id',0,'intval');
+	        $goods_type_id = db('goods_category')->where(['category_id' => $category_id])->value('goods_type_id');
+	        if($goods_type_id){
+	           $html = self::getHtml($goods_type_id);
+	           $this->success('','',['attr_id' => $goods_type_id,'html' => $html]);
+	        }else{
+	            $this->error('');
+	        }
+	    }
+	}
+	
 	private function getHtml($goods_type_id,$goods_attr=[]){
 		$attr = db('goods_attr')->where(['goods_type_id' => $goods_type_id,'attr_type' => 1])->select();
 		$html = '';
@@ -434,11 +447,11 @@ class Goods extends Base {
 		'unit' => 'require',
 		'shop_price' => 'require|number',
 		'market_price' => 'require|number',
-		'goods_weight' => 'require',
-		'store_number' => 'require|number',
-		'store_attr' => 'require',
-		'copyright' => 'require',
-		'address' => 'require'
+		//'goods_weight' => 'require',
+		//'store_number' => 'require|number',
+		//'store_attr' => 'require',
+		//'copyright' => 'require',
+		//'address' => 'require'
 	];
 	protected $goods_message = [
 		'goods_name.require' => '商品名称不能为空',
@@ -450,12 +463,12 @@ class Goods extends Base {
 		'shop_price.number' => '采购价不正确',
 		'market_price.require' => '销售价不能为空',
 		'market_price.number' => '销售价不正确',
-		'goods_weight.require' => '商品重量不能为空',
-		'store_number.require' => '商品库存不能为空',
-		'store_number.number' => '商品库存不正确',
-		'store_attr.require' => '库存属性不能为空',
-		'copyright.require' => '所有权不能为空',
-		'address.require' => '具体位置不能为空',
+		//'goods_weight.require' => '商品重量不能为空',
+		//'store_number.require' => '商品库存不能为空',
+		//'store_number.number' => '商品库存不正确',
+		//'store_attr.require' => '库存属性不能为空',
+		//'copyright.require' => '所有权不能为空',
+		//'address.require' => '具体位置不能为空',
 	];
 	
 	public function add(){

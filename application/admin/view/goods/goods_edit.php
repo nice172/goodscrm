@@ -141,31 +141,31 @@
     </div>
     <div role="tabpanel" class="tab-pane" id="messages">
            <div class="form-group">
-            <label for="goods_weight" class="col-sm-2 control-label"><span class="text-danger">*</span>商品重量</label>
+            <label for="goods_weight" class="col-sm-2 control-label"><span class="text-danger"></span>商品重量</label>
             <div class="col-sm-10">
                 <input type="text" class="form-control w300" name="goods_weight" id="goods_weight" value="{$goods.goods_weight}" placeholder="输入商品重量">
             </div>
         </div>
                    <div class="form-group">
-            <label for="store_number" class="col-sm-2 control-label"><span class="text-danger">*</span>商品库存</label>
+            <label for="store_number" class="col-sm-2 control-label"><span class="text-danger"></span>商品库存</label>
             <div class="col-sm-10">
                 <input type="text" class="form-control w300" name="store_number" value="{$goods.store_number}" id="store_number" placeholder="输入商品库存">
             </div>
         </div>
             <div class="form-group">
-            <label for="store_attr" class="col-sm-2 control-label"><span class="text-danger">*</span>库存属性</label>
+            <label for="store_attr" class="col-sm-2 control-label"><span class="text-danger"></span>库存属性</label>
             <div class="col-sm-10">
                 <input type="text" class="form-control w300" name="store_attr" value="{$goods.store_attr}" id="store_attr" placeholder="输入库存属性">
             </div>
             </div>
               <div class="form-group">
-            <label for="copyright" class="col-sm-2 control-label"><span class="text-danger">*</span>所有权</label>
+            <label for="copyright" class="col-sm-2 control-label"><span class="text-danger"></span>所有权</label>
             <div class="col-sm-10">
                 <input type="text" class="form-control w300" name="copyright" value="{$goods.copyright}" id="copyright" placeholder="输入所有权">
             </div>
         </div>
          <div class="form-group">
-            <label for="address" class="col-sm-2 control-label"><span class="text-danger">*</span>具体位置</label>
+            <label for="address" class="col-sm-2 control-label"><span class="text-danger"></span>具体位置</label>
             <div class="col-sm-10">
                 <input type="text" class="form-control w300" value="{$goods.address}" name="address" id="address" placeholder="输入具体位置">
             </div>
@@ -204,6 +204,24 @@
 			var goods_type_id = $(this).val();
 			$.get('<?php echo url('change_type');?>',{goods_type_id:goods_type_id},function(res){
 				$('.appendAttr').html(res);
+			});
+		});
+		
+		$('#category_id').change(function(){
+			var category_id = $(this).val();
+			if(!category_id){
+				$('.attrChange').val(0);
+				$('.appendAttr').html('');
+				return;
+			}
+			$.get('<?php echo url('change_cate');?>',{category_id:category_id},function(res){
+				if(res.code == 1){
+					$('.attrChange').val(res.data.attr_id);
+					$('.appendAttr').html(res.data.html);
+				}else{
+					$('.attrChange').val(0);
+					$('.appendAttr').html('');
+					}
 			});
 		});
         

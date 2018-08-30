@@ -124,7 +124,7 @@
 							{volist name="$record_list" id="vo" empty="$empty"}
                             <tr>
                                 <td>{$vo.create_time|date='Y-m-d',###}</td>
-                                <td>{$vo.send_email_time|date='Y-m-d',###}</td>
+                                <td>{if condition="$vo['send_email_time']"}{$vo.send_email_time|date='Y-m-d',###}{else}--{/if}</td>
                                 <td>{$vo.company_name}</td>
                                 <td>{$vo.order_handle}</td>
                                 <td>{$vo.order_remark}</td>

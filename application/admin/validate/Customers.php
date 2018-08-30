@@ -22,7 +22,7 @@ class Customers extends Validate {
 
     protected $message = [
         'con_name.require' => '公司名称不能为空',
-        'con_name.checkName' => '公司名称已存在',
+        //'con_name.checkName' => '公司名称已存在',
         'con_short.require' => '简称不能为空',
         'con_phome.require' => '电话号码不能为空',
         'con_mobile.require' => '手机号码不能为空',
