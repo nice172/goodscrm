@@ -64,7 +64,7 @@ class Delivery extends Base {
         }
         $result = $db->join('__DELIVERY_GOODS__ dg','do.id=dg.delivery_id')
         ->field('do.*,dg.goods_name,dg.unit,dg.current_send_number,dg.add_number')
-        ->paginate(config('page_size'),FALSE,['query' => $this->request->param()]);
+        ->order('do.create_time desc')->paginate(config('page_size'),FALSE,['query' => $this->request->param()]);
         
         $this->assign('page',$result->render());
         $this->assign('list',$result);

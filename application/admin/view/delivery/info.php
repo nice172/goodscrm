@@ -135,6 +135,11 @@
         <div class="col-md-offset-5 col-md-12 left">
             {if condition="$delivery['is_confirm']"}
             <button type="button" class="btn btn-default" disabled="disabled">已确认</button>
+            {if condition="!$delivery['is_print']"}
+            <a class="btn btn-primary" href="{:url('prints',['id' => $delivery['id']])}" target="_blank">打印送货单</a>
+            {else}
+            <a class="btn btn-primary" href="{:url('prints',['id' => $delivery['id']])}" target="_blank">查看文件</a>
+            {/if}
             {else}
             <button type="submit" send="confirm" class="btn btn-primary">确 认</button>
             {/if}

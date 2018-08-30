@@ -111,7 +111,7 @@
                            <tr>
                                     <td width="15%" class="right-color"><span class="text-danger"></span><span>送货公司:</span></td>
                                     <td width="35%">
-                                        <input type="text" class="form-control w300" value="" name="delivery_company" id="delivery_company">
+                                        <input type="text" class="form-control w300" value="{$client.cus_name}" name="delivery_company" id="delivery_company">
                                     </td>
                                     <td width="15%" class="right-color"><span class="text-danger">*</span><span>税率:</span></td>
                                     <td width="35%">
@@ -130,7 +130,7 @@
                                     	 <select class="form-control" name="delivery_address" id="">
                                 	<option value="">请选择送货地址</option>
                                   		{foreach name="$contacts" item="v"}
-                                		<option value="{$v.con_address}">{$v.con_address}</option>
+                                		<option value="{$v.con_address}" {if condition="$v['con_id'] eq $client['cus_con_id']"}selected="selected"{/if}>{$v.con_address}</option>
                                 		{/foreach}
                                         </select>
                                     </td>

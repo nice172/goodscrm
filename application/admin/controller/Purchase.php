@@ -258,6 +258,8 @@ class Purchase extends Base {
 		$this->assign('data',$purchase);
 		$this->send_email = $purchase['email'];
 		
+		$supplier = db('supplier')->where(['id' => $purchase['supplier_id']])->find();
+		
 		$order = db('order')->where(['id' => $purchase['order_id']])->find();
 		
 		$mpdf = new mPDF('zh-CN/utf-8','A4', 0, '宋体', 0, 0);
@@ -279,11 +281,11 @@ class Purchase extends Base {
     <td>采购日期：'.date('Y.m.d',$purchase['create_time']).'</td>
     </tr>
     <tr>
-    <td style="width:50%;">销货方：'.config('syc_webname').'</td>
-    <td>购货方：'.$cus['cus_name'].'</td>
+    <td style="width:50%;">销货方：'.$supplier['supplier_name'].'</td>
+    <td>购货方：'.config('syc_webname').'</td>
     </tr>
     <tr>
-    <td style="width:50%;">地址：'.config('syc_address').'</td>
+    <td style="width:50%;">地址：'.$supplier['supplier_province'].$supplier['supplier_city'].$supplier['supplier_area'].$supplier['supplier_address'].'</td>
     <td>电话号码：'.$purchase['cus_phome'].'</td>
     </tr>
     <tr>
@@ -297,6 +299,10 @@ class Purchase extends Base {
     <tr>
     <td style="width:50%;">传真：'.config('syc_webfax').'</td>
     <td>付款条件：'.$purchase['payment'].'</td>
+    </tr>
+    <tr>
+    <td style="width:50%;">送货公司：'.$purchase['delivery_company'].'</td>
+    <td>送货地址：'.$purchase['delivery_address'].'</td>
     </tr>
 </tbody>
 </table>';
