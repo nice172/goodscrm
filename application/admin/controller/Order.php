@@ -355,11 +355,18 @@ class Order extends Base {
 
     public function confirm(){
     	$id = $this->request->param('id',0,'intval');
+    	$route = $this->request->param('r');
     	if ($id <= 0) $this->error('参数错误');
     	$order = db('order')->where(['id' => $id,'status' => ['neq','-1']])->find();
     	if (empty($order)) $this->error('订单不存在');
     	if (!db('order')->where(['id' => $id])->setField('status',1)){
     		$this->error('确认失败');
+    	}
+    	if($route == 'i'){
+    	    if (!empty($_SERVER['HTTP_REFERER'])){
+    	        $this->redirect($_SERVER['HTTP_REFERER']);
+    	        return;
+    	    }
     	}
     	$this->redirect(url('info',['id' => $id]));
     }
@@ -446,10 +453,10 @@ class Order extends Base {
     			if ($goods_price < $value['shop_price']){
     				$this->error('“'.$value['goods_name'].'”采购单价不能高于关联订单价');
     			}
-    			if ($value['purchase_number'] <= 0){
-    				$this->error('采购数量不能小于1');
-    			}
     			*/
+    		    if ($value['purchase_number'] <= 0){
+    		        $this->error('“'.$value['goods_name'].'”采购数量不能小于1');
+    		    }
     			$countMoney = _formatMoney($value['purchase_number']*$value['shop_price']);
     			$purchseGoods[] = [
     				'goods_id' => $value['goods_id'],

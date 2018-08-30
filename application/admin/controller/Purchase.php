@@ -194,10 +194,12 @@ class Purchase extends Base {
 	    $id = $this->request->param('id',0,'intval');
 	    $sid = $this->request->param('sid',0,'intval');
 	    if ($id <= 0 || $sid <= 0) $this->error('参数错误');
-	    
+	    $supplier = db('supplier')->where(['id' => $sid])->find();
+	    if (empty($supplier)) $this->error('供应商不存在');
 	    $list = db('purchase p')->join('__SUPPLIER__ s','p.supplier_id=s.id')
 	    ->join('__USERS__ u','p.admin_uid=u.id')
-	    ->field('p.*,s.supplier_name,u.user_nick')->order('p.id desc')->paginate(config('PAGE_SIZE'));
+	    ->where(['p.supplier_id' => $sid,'s.id' => $sid])->field('p.*,s.supplier_name,u.user_nick')
+	    ->order('p.id desc')->paginate(config('PAGE_SIZE'));
 	    
 	    $this->assign('id',$id);
 	    $this->assign('client',[]);
@@ -213,6 +215,7 @@ class Purchase extends Base {
 	    if ($id <= 0) $this->error('参数错误');
 	    $purchase = db('purchase')->where(['id' => $id,'status' => ['neq','-1']])->find();
 	    if (empty($purchase)) $this->error('采购单不存在');
+	    if ($purchase['status'] > 0) $this->error('采购单已确认不能修改');
 	    $goodsInfo = db('purchase_goods')->where(['purchase_id' => $purchase['id']])->select();
 	    if (!empty($goodsInfo)){
 	        foreach ($goodsInfo as $key => $value){
@@ -341,7 +344,7 @@ class Purchase extends Base {
 		
 		$strContent .= '</tbody></table>';
 		$strContent .= '<p style="width:90%;margin:30px auto 0 auto;">备注：</p>';
-		$strContent .= 	'<p style="width:87%;margin:10px auto 0 auto;">'.$purchase['remark'].'</p>';
+		$strContent .= 	'<p style="width:87%;margin:10px auto 0 auto;">'.str_replace("\n", '<br />', str_replace(chr(32), "&nbsp;&nbsp;", $purchase['remark'])).'</p>';
 		$img = getFileParams(11);
 		//<td width="10%" align="left"><img src="'.$img.'" alt="" width="100px"/></td>
 		$strContentFooter = '<table class="noborder" style="height:100px;">
@@ -422,16 +425,20 @@ h1,h2,h3,p,div,span{padding:0;margin:0;}
 			$goodsInfo = db('purchase_goods')->where(['purchase_id' => $purchase['id']])->select();
 			
 			foreach ($goodsInfo as $key => $value){
-    			$store_number = db('goods')->where(['goods_id' => $value['goods_id']])->value('store_number');
+    			/*
+			    $store_number = db('goods')->where(['goods_id' => $value['goods_id']])->value('store_number');
     			if ($store_number < $value['goods_number']){
     			    $this->error('“'.$value['goods_name'].'”采购数量不能大于库存量');
     			}
-    			$goods_price = db('order_goods')->where(['order_id' => $purchase['order_id'],'goods_id' => $value['goods_id']])->value('goods_price');
-    			if ($goods_price < $value['goods_price']){
-    			    $this->error('“'.$value['goods_name'].'”采购单价不能高于关联订单价');
+    			*/
+    			if (!$purchase['create_type']){
+        			$goods_price = db('order_goods')->where(['order_id' => $purchase['order_id'],'goods_id' => $value['goods_id']])->value('goods_price');
+        			if ($goods_price < $value['goods_price']){
+        			    $this->error('“'.$value['goods_name'].'”采购单价不能高于关联订单价');
+        			}
     			}
     			if ($value['goods_number'] <= 0){
-    			    $this->error('采购数量不能小于1');
+    			    $this->error('“'.$value['goods_name'].'”采购数量不能小于1');
     			}
 			}
 			if (db('purchase')->where(['id' => $purchase['id']])->setField('status',1)){
@@ -478,6 +485,9 @@ h1,h2,h3,p,div,span{padding:0;margin:0;}
 	        $purchseGoods = [];
 	        $totalMoney = 0;
 	        foreach ($goodsInfo as $key => $value){
+	            if ($value['purchase_number'] <= 0){
+	                $this->error('“'.$value['goods_name'].'”采购数量不能小于1');
+	            }
 	            $countMoney = _formatMoney($value['purchase_number']*$value['shop_price']);
 	            $purchseGoods[] = [
 	                'purchase_id' => isset($value['purchase_id']) ? intval($value['purchase_id']) : 0,
@@ -552,6 +562,7 @@ h1,h2,h3,p,div,span{padding:0;margin:0;}
 	    if (!$id) $this->error('参数错误');
 	    $purchase = db('purchase')->where(['id' => $id])->find();
 	    if (empty($purchase)) $this->error('采购单不存在');
+	    if ($purchase['status'] > 0) $this->error('采购单已确认不能修改');
 	    if ($this->request->isAjax()){
 	        $data = [
 	            'supplier_id' => $this->request->post('supplier_id'),
@@ -580,6 +591,9 @@ h1,h2,h3,p,div,span{padding:0;margin:0;}
 	        $purchseGoods = [];
 	        $totalMoney = 0;
 	        foreach ($goodsInfo as $key => $value){
+	            if ($value['purchase_number'] <= 0){
+	                $this->error('“'.$value['goods_name'].'”采购数量不能小于1');
+	            }
 	            $countMoney = _formatMoney($value['purchase_number']*$value['shop_price']);
 	            $purchseGoods[] = [
 	                'id' => isset($value['id']) ? intval($value['id']) : 0,
@@ -635,7 +649,17 @@ h1,h2,h3,p,div,span{padding:0;margin:0;}
 	}
 	
 	public function getsupplier(){
-		
+		$supplier_id = $this->request->param('supid',0,'intval');
+		if ($supplier_id > 0){
+		    $data = db('supplier')->where(['id' => $supplier_id])->find();
+		    $this->success('','',['cus_phome' => $data['supplier_mobile'],
+		        'email' => $data['supplier_email'],
+		        'contacts' => $data['supplier_contacts'],
+		        'fax' => $data['supplier_fax'],
+		        'supplier_payment' => $data['supplier_payment']
+		    ]);
+		}
+		$this->error('');
 	}
 	
 	public function get_goods(){
@@ -664,6 +688,7 @@ h1,h2,h3,p,div,span{padding:0;margin:0;}
 	        $brand = db('goods_brand')->where(['brand_id' => $value['brand_id']])->find();
 	        $lists[$key]['brand_name'] = $brand['brand_name'];
 	        $lists[$key]['purchase_number'] = 0;
+	        $lists[$key]['show_input'] = true;
 	    }
 	    
 	    $this->assign('data',$lists);

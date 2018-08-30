@@ -65,8 +65,8 @@
                                     <td width="35%"><input type="text" class="form-control w300" value="{$data.supplier_qq}" name="supplier_qq" id="con_qq" placeholder=""></td>
                                 </tr>
                                 <tr>
-                                    <td width="15%" class="right-color"><span>爱好:</span></td>
-                                    <td width="35%"><input type="text" class="form-control w300" value="{$data.supplier_like}" name="supplier_like" id="con_qq" placeholder=""></td>
+                                <td width="15%" class="right-color"><span class="text-danger"></span><span>传真:</span></td>
+                                <td width="35%"><input type="text" class="form-control w300" value="{$data.supplier_fax}" name="supplier_fax" id="supplier_fax" placeholder=""></td>
                                     <td width="15%" class="right-color"><span class="text-danger">*</span><span>付款方式:</span></td>
                                     <td width="35%">
                                             <select class="syc-select w300" name="supplier_payment">
@@ -79,8 +79,10 @@
                                 </tr>
                              
                                 <tr>
+                                    <td width="15%" class="right-color"><span>爱好:</span></td>
+                                    <td width="35%"><input type="text" class="form-control w300" value="{$data.supplier_like}" name="supplier_like" id="con_qq" placeholder=""></td>
                                     <td width="15%" class="right-color"><span class="text-danger">*</span><span>详细地址:</span></td>
-                                    <td width="35%" colspan="3" id="city_4">
+                                    <td width="35%" id="city_4">
                                         <select class="syc-select w150 prov" name="supplier_province" id="selectProvince">
                                             <option>--请选择省份--</option>
                                         </select>
@@ -88,7 +90,7 @@
                                         </select>
                                         <select class="syc-select w150 dist" name="supplier_area" id="selectCounty">
                                         </select>
-                                        <input type="text" class="form-control" value="{$data.supplier_address}" style="margin-top: 10px;width: 50%;" name="supplier_address" placeholder="街道信息">
+                                        <input type="text" class="form-control" value="{$data.supplier_address}" style="margin-top: 10px;" name="supplier_address" placeholder="街道信息">
                                     </td>
                                 </tr>
 
@@ -130,7 +132,7 @@
         $("#sidebar-storage").addClass("sidebar-nav-active"); // 大分类
         $("#supplier-index").addClass("active"); // 小分类
         $("#city_4").citySelect({prov:"{$data.supplier_province}", city:"{$data.supplier_city}", dist:"{$data.supplier_area}"});
-
+                
     });
 
     //onclick操作

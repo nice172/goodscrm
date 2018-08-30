@@ -43,7 +43,7 @@ class Baojia extends Base {
 	            $db->where("create_time",'<=',$end_time);
 	        }
 	    }
-	    $data = $db->paginate(config('PAGE_SIZE'), false, ['query' => $this->request->param() ]);
+	    $data = $db->order('create_time desc')->paginate(config('PAGE_SIZE'), false, ['query' => $this->request->param() ]);
 	    // 获取分页显示
 	    $page = $data->render();
 	    $this->assign('page',$page);
@@ -304,7 +304,7 @@ class Baojia extends Base {
 	    }
 	    $strContent .= '</tbody></table>';
 	    $strContent .= '<p style="width:90%;margin:30px auto 0 auto;">备注：</p>';
-	    $strContent .= 	'<p style="width:87%;margin:10px auto 0 auto;">'.$order['order_remark'].'</p>';
+	    $strContent .= 	'<p style="width:87%;margin:10px auto 0 auto;">'.str_replace("\n", '<br />', str_replace(chr(32), "&nbsp;&nbsp;", $order['order_remark'])).'</p>';
 	    
 	    $img = getFileParams(11);
 	    

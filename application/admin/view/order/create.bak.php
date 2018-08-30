@@ -21,7 +21,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="portlet margin-top-3">
- <form class="form-horizontal ajaxForm2" method="post" action="<?php echo url('edit_do');?>" id="form1">
+ <form class="form-horizontal ajaxForm2" method="post" action="<?php echo url('create_do');?>" id="form1">
   <ul class="nav nav-tabs" role="tablist">
     <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">基本信息</a></li>
     <li role="presentation"><a href="#goods" aria-controls="goods" role="tab" data-toggle="tab">商品信息</a></li>
@@ -29,7 +29,7 @@
   <!-- Tab panes -->
   <div class="tab-content">
     <div role="tabpanel" class="tab-pane active" id="home">
-    <input type="hidden" name="id" value="{$data.id}"  id="id" />
+    <input type="hidden" name="order_id" value="{$data.id}"  id="id" />
     <input type="hidden" name="cus_id" value="{$data.cus_id}"  id="cus_id" />
 								
                     <table class="table contact-template-form">
@@ -37,7 +37,8 @@
                                 <tr>
                                     <td width="15%" class="right-color"><span class="text-danger">*</span><span>PO号码:</span></td>
                                     <td width="35%">
-                                        <span>{$data.po_sn}</span>
+                                        <input type="hidden" class="form-control w300" readonly="readonly" value="{$po_sn}" name="po_sn" id="po_sn">
+                                        <span>{$po_sn}</span>
                                     </td>
                                     <td width="15%" class="right-color"><span class="text-danger">*</span><span>订购日期:</span></td>
                                     <td width="35%"><input type="text" class="form-control w300" readonly="readonly" value="{$data.create_time|date='Y-m-d',###}" name="create_date" id="create_date"></td>
@@ -48,7 +49,7 @@
                                 	<select class="form-control w300" name="supplier_id" id="supplier_id">
                                 		<option value="">请选择供应商</option>
                                 		{foreach name="$supplier" item="v"}
-                                		<option value="{$v.id}" {if condition="$v['id'] eq $data['supplier_id']"}selected="selected"{/if}>{$v.supplier_name}</option>
+                                		<option value="{$v.id}">{$v.supplier_name}</option>
                                 		{/foreach}
                                 	</select>
                                 </td>
@@ -77,7 +78,7 @@
                                         <select name="transaction_type" class="form-control w300" id="">
                                         	<option value="">请选择交易类别</option>
                                   		{foreach name="$trans_type" item="v"}
-                                		<option value="{$v}" {if condition="$v==$data['transaction_type']"}selected="selected"{/if}>{$v}</option>
+                                		<option value="{$v}">{$v}</option>
                                 		{/foreach}
                                         </select>
                                     </td>
@@ -86,7 +87,7 @@
                                       <select name="payment" class="form-control w300" id="">
                                         	<option value="">请选择付款条件</option>
                                   		{foreach name="$payment" item="v"}
-                                		<option value="{$v}" {if condition="$v==$data['payment']"}selected="selected"{/if}>{$v}</option>
+                                		<option value="{$v}">{$v}</option>
                                 		{/foreach}
                                         </select>
                                     </td>
@@ -102,7 +103,7 @@
                                 	<select class="form-control w300" name="delivery_type" id="">
                                 	<option value="">请选择交货方式</option>
                                   		{foreach name="$delivery_type" item="v"}
-                                		<option value="{$v}" {if condition="$v==$data['delivery_type']"}selected="selected"{/if}>{$v}</option>
+                                		<option value="{$v}">{$v}</option>
                                 		{/foreach}
                                         </select>
                                 </td>
@@ -110,14 +111,14 @@
                            <tr>
                                     <td width="15%" class="right-color"><span class="text-danger"></span><span>送货公司:</span></td>
                                     <td width="35%">
-                                        <input type="text" class="form-control w300" value="{$data.delivery_company}" name="delivery_company" id="delivery_company">
+                                        <input type="text" class="form-control w300" value="" name="delivery_company" id="delivery_company">
                                     </td>
                                     <td width="15%" class="right-color"><span class="text-danger">*</span><span>税率:</span></td>
                                     <td width="35%">
                                     <select class="form-control w300" name="tax" id="">
                                 	<option value="">请选择税率</option>
                                   		{foreach name="$tax" item="v"}
-                                		<option value="{$v}" {if condition="$v==$data['tax']"}selected="selected"{/if}>{$v}</option>
+                                		<option value="{$v}">{$v}</option>
                                 		{/foreach}
                                         </select>
                                     </td>
@@ -129,14 +130,14 @@
                                     	 <select class="form-control" name="delivery_address" id="">
                                 	<option value="">请选择送货地址</option>
                                   		{foreach name="$contacts" item="v"}
-                                		<option value="{$v.con_address}" {if condition="$v['con_address']==$data['delivery_address']"}selected="selected"{/if}>{$v.con_address}</option>
+                                		<option value="{$v.con_address}">{$v.con_address}</option>
                                 		{/foreach}
                                         </select>
                                     </td>
                                 </tr>
                                  <tr>
                                     <td width="15%" class="right-color"><span>备注:</span></td>
-                                    <td colspan="3"><textarea class="form-control" name="remark" id="remark" rows="6">{$data.remark}</textarea> </td>
+                                    <td colspan="3"><textarea class="form-control" name="remark" id="remark" rows="6">{$remark}</textarea> </td>
                                 </tr>
                                 
                     </tbody>
@@ -153,9 +154,9 @@
                                     <th>序号</th>
                                     <th>商品名称</th>
                                     <th>单位</th>
-                                    <th style="width:100px;">单价</th>
+                                    <th>单价</th>
                                     <th>订单数量</th>
-                                    <th style="width:100px;">采购数量</th>
+                                    <th>采购数量</th>
                                     <th>库存数量</th>
                                     <th>总金额</th>
                                     <th>操作</th>
@@ -240,8 +241,8 @@ function _formatMoney(num){
         });
         
         // 当前页面分类高亮
-        $("#sidebar-purchase").addClass("sidebar-nav-active"); // 大分类
-        $("#purchase-index").addClass("active"); // 小分类
+        $("#sidebar-schedule").addClass("sidebar-nav-active"); // 大分类
+        $("#order-index").addClass("active"); // 小分类
 
 		$('.attrChange').change(function(){
 			var goods_type_id = $(this).val();
@@ -258,23 +259,7 @@ function _formatMoney(num){
 			});
 		});
         
-        $('#supplier_id').change(function(){
-			var supplier_id = $(this).val();
-			if(supplier_id){
-				$.get('{:url(\'getsupplier\')}?supid='+supplier_id,{},function(data){
-					if(data.code == 1){
-						var data = data.data;
-						$('#cus_phome').val(data.cus_phome);
-						$('#fax').val(data.fax);
-						$('#contacts').val(data.contacts);
-						$('#email').val(data.email);
-					}
-				});
-			}else{
-				$('#cus_phome,#fax,#contacts,#email').val('');
-			}
-        });
-		
+
         $(".search_company").click(function () {
             var title = '查找客户';
             bDialog.open({

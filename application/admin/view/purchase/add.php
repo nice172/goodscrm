@@ -136,25 +136,26 @@
 
 		<div class="row">
                     <div class="col-lg-12">
-                        <table class="table table-hover">
+                        <table class="table table-hover syc-table border">
                             <thead>
                                 <tr>
-                                    <th>序号</th>
-                                    <th>商品名称</th>
-                                    <th>单位</th>
-                                    <th>单价</th>
+                                    <th width="5%">序号</th>
+                                    <th width="35%">商品名称</th>
+                                    <th width="10%">单位</th>
+                                    <th width="10%">单价</th>
                                     <!-- <th>订单数量</th> -->
-                                    <th>采购数量</th>
-                                    <th>库存数量</th>
-                                    <th>总金额</th>
-                                    <th>操作</th>
+                                    <th width="10%">采购数量</th>
+                                    <th width="10%">库存数量</th>
+                                    <th width="10%">总金额</th>
+                                    <th width="10%">操作</th>
                                 </tr>
                             </thead>
                             <tbody class="goodsList"></tbody>
                             <tfoot>
                             	<tr>
-                            	<td><a href="javascript:;" class="get_goods">请选择商品</a></td>
-                            	<td colspan="10"></td>
+                            	<td colspan="20"><a href="javascript:;" class="get_goods">请选择商品</a>
+                            	<div class="pull-right page-box" style="display: none;"><button type="button" class="btn btn-primary saveAll">全部保存</button></div>
+                            	</td>
                             	</tr>
                             </tfoot>
                         </table>
@@ -219,11 +220,6 @@ function _formatMoney(num){
 	num = Math.floor(num/100).toString();
 	if(cents<10)
 	cents = "0" + cents;
-//  每隔3位添加,
-// 	for (var i = 0; i < Math.floor((num.length-(1+i))/3); i++)
-// 	num = num.substring(0,num.length-(4*i+3))+','+
-// 	num.substring(num.length-(4*i+3));
-
 	return (((sign)?'':'-') + num + '.' + cents);
 }
     $(document).ready(function() {
@@ -257,10 +253,12 @@ function _formatMoney(num){
 			var supplier_id = $(this).val();
 			if(supplier_id){
 				$.get('{:url(\'getsupplier\')}?supid='+supplier_id,{},function(data){
-
+					if(data.code == 1){
+						client_info(data.data);
+					}
 				});
 			}else{
-
+				$('#cus_phome,#fax,#contacts,#email').val('');
 			}
         });
 
@@ -297,11 +295,9 @@ function _formatMoney(num){
     });
 
 function client_info(data){
-	$('#cus_id').val(data.id);
-	$('#company_name').val(data.company_name);
-	$('#company_short').val(data.company_short);
+	$('#cus_phome').val(data.cus_phome);
 	$('#fax').val(data.fax);
-	$('#contacts').val(data.user);
+	$('#contacts').val(data.contacts);
 	$('#email').val(data.email);
 }
 
@@ -334,25 +330,33 @@ function goodsList(goods_info){
 	var html = '';
 	for(var j in goods_info){
 		var num = parseInt(j)+1;
+		var show_input = goods_info[j]['show_input']==true?'block':'none';
+		var show_span = goods_info[j]['show_input']==true?'none':'block';
+		var text_update = goods_info[j]['show_input']==true?'保存':'修改';
 		goods_info[j]['totalMoney'] = _formatMoney(goods_info[j]['purchase_number']*goods_info[j]['shop_price']);
 		html += '<tr data-index="'+j+'" data-goods_id="'+goods_info[j]['goods_id']+'" class="goods_'+j+'">';
 		html += '<td>'+num+'</td>';
 		html += '<td>'+goods_info[j]['goods_name']+'</td>';
 		html += '<td>'+goods_info[j]['unit']+'</td>';
-		html += '<td class="shop_price"><input type="text" data-shop_price="'+goods_info[j]['shop_price']+'" oninput="checkNum(this)" name="shop_price" style="width:80px;display:none;" value="'+goods_info[j]['shop_price']+'" /><span class="inputspan">'+goods_info[j]['shop_price']+'</span></td>';
+		html += '<td class="shop_price" style="text-align:center;"><input type="text" data-shop_price="'+goods_info[j]['shop_price']+'" oninput="checkNum(this)" name="shop_price" style="width:80%;display:'+show_input+';" value="'+goods_info[j]['shop_price']+'" /><span class="inputspan" style="display:'+show_span+';">'+goods_info[j]['shop_price']+'</span></td>';
 		//html += '<td class="goods_number"><span class="span">'+goods_info[j]['goods_number']+'</span></td>';
-		html += '<td class="purchase_number"><input type="text" data-purchase_number="'+goods_info[j]['purchase_number']+'" oninput="checkNum2(this)" name="purchase_number" style="width:80px;display:none;" value="'+goods_info[j]['purchase_number']+'" /><span class="inputspan">'+goods_info[j]['purchase_number']+'</span></td>';
+		html += '<td class="purchase_number" style="text-align:center;"><input type="text" data-purchase_number="'+goods_info[j]['purchase_number']+'" oninput="checkNum2(this)" name="purchase_number" style="width:80%;display:'+show_input+';" value="'+goods_info[j]['purchase_number']+'" /><span class="inputspan" style="display:'+show_span+';">'+goods_info[j]['purchase_number']+'</span></td>';
 		html += '<td class="store_number"><span class="span">'+goods_info[j]['store_number']+'</span></td>';
 		html += '<td class="totalMoney"><span class="span">'+goods_info[j]['totalMoney']+'</span></td>';
-		html += '<td><a href="javascript:;" onclick="update('+j+')" class="update">修改</a><span class="text-explode">|</span><a href="javascript:;" onclick="_delete('+j+')" class="delete">删除</a></td>';
+		html += '<td><a href="javascript:;" onclick="update('+j+')" class="update">'+text_update+'</a><span class="text-explode">|</span><a href="javascript:;" onclick="_delete('+j+')" class="delete">删除</a></td>';
 		html += '</tr>';
 	}
 	$('.goodsList').html(html);
 }
 
 function update(index){
-	if(status == 2){
-		status = 1;
+	if(!goods_info[index]['show_input']){
+		goods_info[index]['show_input'] = true;
+		$('.goods_'+index+' .update').text('保存');
+		$('.goods_'+index+' span.inputspan').hide();
+		$('.goods_'+index+' input').show();
+		return;
+	}
 		var shop_price = $('.goods_'+index+' input[name=shop_price]').val();
 		if(shop_price == ''){
 			shop_price = $('.goods_'+index+' input[name=shop_price]').attr('data-shop_price');
@@ -362,29 +366,28 @@ function update(index){
 			status = 2;
 			return;
 		}
-		var goods_number = $('.goods_'+index+' input[name=goods_number]').val();
-		if(goods_number == ''){
-			goods_number = $('.goods_'+index+' input[name=goods_number]').attr('data-goods_number');
-		}
+		//var goods_number = $('.goods_'+index+' input[name=goods_number]').val();
+		//if(goods_number == ''){
+		//	goods_number = $('.goods_'+index+' input[name=goods_number]').attr('data-goods_number');
+		//}
 		var purchase_number = $('.goods_'+index+' input[name=purchase_number]').val();
 		if(purchase_number == ''){
 			purchase_number = $('.goods_'+index+' input[name=purchase_number]').attr('data-purchase_number');
 		}
-		if(parseInt(purchase_number) > goods_info[index]['store_number']){
-			alert('采购数量不能大于库存量');
-			status = 2;
-			return;
-		}
+		//if(parseInt(purchase_number) > goods_info[index]['store_number']){
+		//	alert('采购数量不能大于库存量');
+		//	status = 2;
+		//	return;
+		//}
 		//goods_info[index]['goods_number'] = goods_number;
 		goods_info[index]['purchase_number'] = parseInt(purchase_number);
-		goods_info[index]['shop_price'] = parseFloat(shop_price);
+		goods_info[index]['shop_price'] = _formatMoney(parseFloat(shop_price));
+		goods_info[index]['show_input'] = false;
 		goodsList(goods_info);
-		return;
-	}
-	status = 2;
-	$('.goods_'+index+' .update').text('保存');
-	$('.goods_'+index+' span.inputspan').hide();
-	$('.goods_'+index+' input').show();
+		
+	$('.goods_'+index+' .update').text('修改');
+	$('.goods_'+index+' span.inputspan').show();
+	$('.goods_'+index+' input').hide();
 }
 
 function checkNum(obj){

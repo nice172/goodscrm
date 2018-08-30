@@ -80,7 +80,7 @@
 
                 <div class="row">
                     <div class="col-lg-12">
-                        <table class="table table-hover syc-table">
+                        <table class="table syc-table border table-hover">
                             <thead>
                             <tr>
                                 <th>ID编号</th>
@@ -135,7 +135,13 @@
                                 	<a href="{:url('info',['id' => $vo['oid']])}">详情</a>
                                 	{if condition="$vo['status'] eq 0"}
                                 	<span class="text-explode">|</span>
+                                	<a href="{:url('confirm',['id' => $vo['oid'],'r'=>'i'])}">确认</a>
+                                	<span class="text-explode">|</span>
                                 	<a href="{:url('edit',['id' => $vo['oid']])}">编辑</a>
+                                	{/if}
+                                	{if condition="$vo['status'] eq 1"}
+                                	<span class="text-explode">|</span>
+                                	<a href="{:url('create',['id' => $vo['oid']])}">创建采购单</a>
                                 	{/if}
                                 	{if condition="$vo['status'] eq 0 || $vo['status'] eq 1 || $vo['status'] eq 5"}
                                 	<span class="text-explode">|</span>

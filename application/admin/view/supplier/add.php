@@ -64,8 +64,9 @@
                                     <td width="35%"><input type="text" class="form-control w300" name="supplier_qq" id="con_qq" placeholder=""></td>
                                 </tr>
                                 <tr>
-                                    <td width="15%" class="right-color"><span>爱好:</span></td>
-                                    <td width="35%"><input type="text" class="form-control w300" name="supplier_like" id="con_qq" placeholder=""></td>
+                                <td width="15%" class="right-color"><span class="text-danger"></span><span>传真:</span></td>
+                                <td width="35%"><input type="text" class="form-control w300" name="supplier_fax" id="supplier_fax" placeholder=""></td>
+
                                     <td width="15%" class="right-color"><span class="text-danger">*</span><span>付款方式:</span></td>
                                     <td width="35%">
                                             <select class="syc-select w300" name="supplier_payment">
@@ -78,8 +79,10 @@
                                 </tr>
                              
                                 <tr>
+                                    <td width="15%" class="right-color"><span>爱好:</span></td>
+                                    <td width="35%"><input type="text" class="form-control w300" name="supplier_like" id="con_qq" placeholder=""></td>
                                     <td width="15%" class="right-color"><span class="text-danger">*</span><span>详细地址:</span></td>
-                                    <td width="35%" colspan="3" id="city_4">
+                                    <td width="35%" id="city_4">
                                         <select class="syc-select w150 prov" name="supplier_province" id="selectProvince">
                                             <option>--请选择省份--</option>
                                         </select>
@@ -87,7 +90,7 @@
                                         </select>
                                         <select class="syc-select w150 dist" name="supplier_area" id="selectCounty">
                                         </select>
-                                        <input type="text" class="form-control" style="margin-top: 10px;width: 50%;" name="supplier_address" placeholder="街道信息">
+                                        <input type="text" class="form-control" style="margin-top: 10px;" name="supplier_address" placeholder="街道信息">
                                     </td>
                                 </tr>
 

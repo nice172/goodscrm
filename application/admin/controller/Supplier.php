@@ -94,6 +94,12 @@ class Supplier extends Base {
     }
     
     public function add(){
+        $this->_getParams();
+        $this->assign('title','新增供应商');
+        return $this->fetch();
+    }
+    
+    private function _getParams(){
         $section = getParams(7); //获取部门
         if (!empty($section)){
             $section = $section['params_value'];
@@ -109,8 +115,6 @@ class Supplier extends Base {
         $this->assign('business',$business);
         $this->assign('payment',$payment);
         $this->assign('section',$section);
-        $this->assign('title','新增供应商');
-        return $this->fetch();
     }
     
     public function edit(){
@@ -120,21 +124,7 @@ class Supplier extends Base {
         if (empty($supplier)) $this->error('供应商信息不存在');
         
         $this->assign('data',$supplier);
-        $section = getParams(7); //获取部门
-        if (!empty($section)){
-            $section = $section['params_value'];
-        }
-        $business = getParams(8); //获取业务经理
-        if (!empty($business)){
-            $business = $business['params_value'];
-        }
-        $payment = getParams(1); //获取付款方式
-        if (!empty($payment)){
-            $payment = $payment['params_value'];
-        }
-        $this->assign('business',$business);
-        $this->assign('payment',$payment);
-        $this->assign('section',$section);
+        $this->_getParams();
         $this->assign('title','修改供应商');
         return $this->fetch();
     }

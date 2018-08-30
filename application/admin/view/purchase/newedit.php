@@ -47,7 +47,7 @@
                                 <tr>
                                 <td width="15%" class="right-color"><span class="text-danger">*</span><span>供应商:</span></td>
                                 <td width="35%" colspan="3">
-                                	<select class="form-control w300" name="supplier_id" id="">
+                                	<select class="form-control w300" name="supplier_id" id="supplier_id">
                                 		<option value="">请选择供应商</option>
                                 		{foreach name="$supplier" item="v"}
                                 		<option value="{$v.id}" {if condition="$v['id'] eq $data['supplier_id']"}selected="selected"{/if}>{$v.supplier_name}</option>
@@ -285,14 +285,25 @@ function _formatMoney(num){
             });
         });
 
+        $('#supplier_id').change(function(){
+			var supplier_id = $(this).val();
+			if(supplier_id){
+				$.get('{:url(\'getsupplier\')}?supid='+supplier_id,{},function(data){
+					if(data.code == 1){
+						client_info(data.data);
+					}
+				});
+			}else{
+				$('#cus_phome,#fax,#contacts,#email').val('');
+			}
+        });
+        
     });
 
 function client_info(data){
-	$('#cus_id').val(data.id);
-	$('#company_name').val(data.company_name);
-	$('#company_short').val(data.company_short);
+	$('#cus_phome').val(data.cus_phome);
 	$('#fax').val(data.fax);
-	$('#contacts').val(data.user);
+	$('#contacts').val(data.contacts);
 	$('#email').val(data.email);
 }
 

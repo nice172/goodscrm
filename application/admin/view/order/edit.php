@@ -271,8 +271,8 @@ function goodsList(goods_info){
 	var html = '';
 	for(var j in goods_info){
 		var num = parseInt(j)+1;
-		var show_input = goods_info[j]['show_input']==true?'block':'none';
-		var show_span = goods_info[j]['show_input']==true?'none':'block';
+		var show_input = goods_info[j]['show_input']==true?'inline':'none';
+		var show_span = goods_info[j]['show_input']==true?'none':'inline';
 		var text_update = goods_info[j]['show_input']==true?'保存':'修改';
 		html += '<tr data-index="'+j+'" data-goods_id="'+goods_info[j]['goods_id']+'" class="goods_'+j+'">';
 		html += '<td>'+num+'</td>';
@@ -294,7 +294,7 @@ function update(index){
 		goods_info[index]['show_input'] = true;
 		$('.goods_'+index+' .update').text('保存');
 		$('.goods_'+index+' span.inputspan').hide();
-		$('.goods_'+index+' input').show();
+		$('.goods_'+index+' input').show().css('display','inline');
 		return;
 	}
 	var shop_price = $('.goods_'+index+' input[name=shop_price]').val();
@@ -312,7 +312,7 @@ function update(index){
 	goods_info[index]['show_input'] = false;
 	goodsList(goods_info);
     $('.goods_'+index+' .update').text('修改');
-    $('.goods_'+index+' span.inputspan').show();
+    $('.goods_'+index+' span.inputspan').show().css('display','inline');
     $('.goods_'+index+' input').hide();
 }
 

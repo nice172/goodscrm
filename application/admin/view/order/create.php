@@ -46,7 +46,7 @@
                                 <tr>
                                 <td width="15%" class="right-color"><span class="text-danger">*</span><span>供应商:</span></td>
                                 <td width="35%" colspan="3">
-                                	<select class="form-control w300" name="supplier_id" id="">
+                                	<select class="form-control w300" name="supplier_id" id="supplier_id">
                                 		<option value="">请选择供应商</option>
                                 		{foreach name="$supplier" item="v"}
                                 		<option value="{$v.id}">{$v.supplier_name}</option>
@@ -57,20 +57,20 @@
                                 
                                 <tr>
                                     <td width="15%" class="right-color"><span class="text-danger">*</span><span>联系人:</span></td>
-                                    <td width="35%"><input type="text" class="form-control w300" name="contacts" value="{$data.contacts}" id="contacts"></td>
+                                    <td width="35%"><input type="text" class="form-control w300" name="contacts" id="contacts"></td>
                                     <td width="15%" class="right-color"><span class="text-danger">*</span><span>电话号码:</span></td>
                                     <td width="35%">
-                                        <input type="text" class="form-control w300" name="cus_phome" value="{$client.cus_phome}" id="cus_phome">
+                                        <input type="text" class="form-control w300" name="cus_phome" id="cus_phome">
                                     </td>
                                 </tr>
                                 
                                 <tr>
                                     <td width="15%" class="right-color">传真号码:</span></td>
                                     <td width="35%">
-                                        <input type="text" class="form-control w300" value="{$data.fax}" name="fax" id="fax">
+                                        <input type="text" class="form-control w300" name="fax" id="fax">
                                     </td>
                                     <td width="15%" class="right-color"><span class="text-danger">*</span><span>E-Mail:</span></td>
-                                    <td width="35%"><input type="text" class="form-control w300" name="email" value="{$data.email}" id="email"></td>
+                                    <td width="35%"><input type="text" class="form-control w300" name="email" id="email"></td>
                                 </tr> 
                                <tr>
                                     <td width="15%" class="right-color"><span class="text-danger">*</span><span>交易类别:</span></td>
@@ -148,18 +148,18 @@
 
 		<div class="row">
                     <div class="col-lg-12">
-                        <table class="table table-hover">
+                        <table class="table syc-table border table-hover">
                             <thead>
                                 <tr>
-                                    <th>序号</th>
-                                    <th>商品名称</th>
-                                    <th>单位</th>
-                                    <th>单价</th>
-                                    <th>订单数量</th>
-                                    <th>采购数量</th>
-                                    <th>库存数量</th>
-                                    <th>总金额</th>
-                                    <th>操作</th>
+                                    <th width="5%">序号</th>
+                                    <th width="35%">商品名称</th>
+                                    <th width="5%">单位</th>
+                                    <th width="10%">单价</th>
+                                    <th width="5%">订单数量</th>
+                                    <th width="10%">采购数量</th>
+                                    <th width="10%">库存数量</th>
+                                    <th width="10%">总金额</th>
+                                    <th width="10%">操作</th>
                                 </tr>
                             </thead>
                             <tbody class="goodsList"></tbody>
@@ -258,7 +258,23 @@ function _formatMoney(num){
 				backdrop:'static'
 			});
 		});
-        
+
+        $('#supplier_id').change(function(){
+			var supplier_id = $(this).val();
+			if(supplier_id){
+				$.get('{:url(\'purchase/getsupplier\')}?supid='+supplier_id,{},function(data){
+					if(data.code == 1){
+						var data = data.data;
+						$('#cus_phome').val(data.cus_phome);
+						$('#fax').val(data.fax);
+						$('#contacts').val(data.contacts);
+						$('#email').val(data.email);
+					}
+				});
+			}else{
+				$('#cus_phome,#fax,#contacts,#email').val('');
+			}
+        });
 
         $(".search_company").click(function () {
             var title = '查找客户';
@@ -334,9 +350,9 @@ function goodsList(goods_info){
 		html += '<td>'+num+'</td>';
 		html += '<td>'+goods_info[j]['goods_name']+'</td>';
 		html += '<td>'+goods_info[j]['unit']+'</td>';
-		html += '<td class="shop_price"><input type="text" data-shop_price="'+goods_info[j]['shop_price']+'" oninput="checkNum(this)" name="shop_price" style="width:80px;display:none;" value="'+goods_info[j]['shop_price']+'" /><span class="inputspan">'+goods_info[j]['shop_price']+'</span></td>';
+		html += '<td class="shop_price"><input type="text" data-shop_price="'+goods_info[j]['shop_price']+'" oninput="checkNum(this)" name="shop_price" style="width:80%;display:none;" value="'+goods_info[j]['shop_price']+'" /><span class="inputspan">'+goods_info[j]['shop_price']+'</span></td>';
 		html += '<td class="goods_number"><span class="span">'+goods_info[j]['goods_number']+'</span></td>';
-		html += '<td class="purchase_number"><input type="text" data-purchase_number="'+goods_info[j]['purchase_number']+'" oninput="checkNum2(this)" name="purchase_number" style="width:80px;display:none;" value="'+goods_info[j]['purchase_number']+'" /><span class="inputspan">'+goods_info[j]['purchase_number']+'</span></td>';
+		html += '<td class="purchase_number"><input type="text" data-purchase_number="'+goods_info[j]['purchase_number']+'" oninput="checkNum2(this)" name="purchase_number" style="width:80%;display:none;" value="'+goods_info[j]['purchase_number']+'" /><span class="inputspan">'+goods_info[j]['purchase_number']+'</span></td>';
 		html += '<td class="store_number"><span class="span">'+goods_info[j]['store_number']+'</span></td>';
 		html += '<td class="totalMoney"><span class="span">'+goods_info[j]['totalMoney']+'</span></td>';
 		html += '<td><a href="javascript:;" onclick="update('+j+')" class="update">修改</a><span class="text-explode">|</span><a href="javascript:;" onclick="_delete('+j+')" class="delete">删除</a></td>';
@@ -366,14 +382,14 @@ function update(index){
 			purchase_number = $('.goods_'+index+' input[name=purchase_number]').attr('data-purchase_number');
 		}
 		
-		if(parseInt(purchase_number) > goods_info[index]['store_number']){
-			alert('采购数量不能大于库存量');
-			status = 2;
-			return;
-		}
+		//if(parseInt(purchase_number) > goods_info[index]['store_number']){
+			//alert('采购数量不能大于库存量');
+			//status = 2;
+			//return;
+		//}
 		//goods_info[index]['goods_number'] = goods_number;
 		goods_info[index]['purchase_number'] = parseInt(purchase_number);
-		goods_info[index]['shop_price'] = parseFloat(shop_price);
+		goods_info[index]['shop_price'] = _formatMoney(parseFloat(shop_price));
 		goodsList(goods_info);
 		return;
 	}

@@ -259,19 +259,19 @@ function goodsList(goods_info){
 	var html = '';
 	for(var j in goods_info){
 		var num = parseInt(j)+1;
-		var show_input = goods_info[j]['show_input']==true?'block':'none';
-		var show_span = goods_info[j]['show_input']==true?'none':'block';
+		var show_input = goods_info[j]['show_input']==true?'inline':'none';
+		var show_span = goods_info[j]['show_input']==true?'none':'inline';
 		var text_update = goods_info[j]['show_input']==true?'保存':'修改';
 		html += '<tr data-index="'+j+'" data-goods_id="'+goods_info[j]['goods_id']+'" class="goods_'+j+'">';
-		html += '<td>'+num+'</td>';
-		html += '<td>'+goods_info[j]['goods_name']+'</td>';
-		html += '<td>'+goods_info[j]['unit']+'</td>';
-		html += '<td class="market_price">'+goods_info[j]['market_price']+'</td>';
-		html += '<td class="shop_price"><input type="text" data-shop_price="'+goods_info[j]['shop_price']+'" oninput="checkNum(this)" name="shop_price" style="width:80%;display:'+show_input+';" value="'+goods_info[j]['shop_price']+'" /><span class="inputspan" style="display:'+show_span+';">'+goods_info[j]['shop_price']+'</span></td>';
-		html += '<td class="goods_number"><input type="text" data-goods_number="'+goods_info[j]['goods_number']+'" oninput="checkNum2(this)" name="goods_number" style="width:80%;display:'+show_input+';" value="'+goods_info[j]['goods_number']+'" /><span class="inputspan" style="display:'+show_span+';">'+goods_info[j]['goods_number']+'</span></td>';
-		html += '<td class="send_num">'+goods_info[j]['send_num']+'</td>';
-		html += '<td class="remark"><input type="text" name="remark" style="width:80%;display:'+show_input+';" value="'+goods_info[j]['remark']+'" /><span class="inputspan" style="display:'+show_span+';">'+goods_info[j]['remark']+'</span></td>';
-		html += '<td><a href="javascript:;" onclick="update('+j+')" class="update">'+text_update+'</a><span class="text-explode">|</span><a href="javascript:;" onclick="_delete('+j+')" class="delete">删除</a></td>';
+		html += '<td width="5%">'+num+'</td>';
+		html += '<td width="22%">'+goods_info[j]['goods_name']+'</td>';
+		html += '<td width="5%">'+goods_info[j]['unit']+'</td>';
+		html += '<td width="10%" class="market_price">'+goods_info[j]['market_price']+'</td>';
+		html += '<td width="10%" class="shop_price"><input type="text" data-shop_price="'+goods_info[j]['shop_price']+'" oninput="checkNum(this)" name="shop_price" style="width:80%;display:'+show_input+';" value="'+goods_info[j]['shop_price']+'" /><span class="inputspan" style="display:'+show_span+';">'+goods_info[j]['shop_price']+'</span></td>';
+		html += '<td width="5%" class="goods_number"><input type="text" data-goods_number="'+goods_info[j]['goods_number']+'" oninput="checkNum2(this)" name="goods_number" style="width:80%;display:'+show_input+';" value="'+goods_info[j]['goods_number']+'" /><span class="inputspan" style="display:'+show_span+';">'+goods_info[j]['goods_number']+'</span></td>';
+		html += '<td width="5%" class="send_num">'+goods_info[j]['send_num']+'</td>';
+		html += '<td width="28%" class="remark"><input type="text" name="remark" style="width:80%;display:'+show_input+';" value="'+goods_info[j]['remark']+'" /><span class="inputspan" style="display:'+show_span+';">'+goods_info[j]['remark']+'</span></td>';
+		html += '<td width="15%"><a href="javascript:;" onclick="update('+j+')" class="update">'+text_update+'</a><span class="text-explode">|</span><a href="javascript:;" onclick="_delete('+j+')" class="delete">删除</a></td>';
 		html += '</tr>';
 	}
 	$('.goodsList').html(html);
@@ -286,7 +286,7 @@ function update(index){
 			goods_info[index]['show_input'] = true;
 			$('.goods_'+index+' .update').text('保存');
 			$('.goods_'+index+' span.inputspan').hide();
-			$('.goods_'+index+' input').show();
+			$('.goods_'+index+' input').show().css('display','inline');
 			return;
 		}
 		var shop_price = $('.goods_'+index+' input[name=shop_price]').val();
@@ -311,29 +311,45 @@ function update(index){
 		//goods_info[index]['market_price'] = parseFloat(market_price);
 		goods_info[index]['shop_price'] = _formatMoney(parseFloat(shop_price));
 		goods_info[index]['remark'] = $('.goods_'+index+' input[name=remark]').val();
-		goods_info[index]['show_input'] = false;
+
+		$('tbody.goodsList tr').each(function(idx){
+			var eIndex = $('tbody.goodsList tr').eq(idx).attr('data-index');
+			if(eIndex == index){
+				goods_info[index]['show_input'] = false;
+		    	$('.goods_'+index+' .update').text('修改');
+		    	$('.goods_'+index+' span.inputspan').show().css('display','inline');
+		    	$('.goods_'+index+' input').hide();
+			}else{
+				saveOther(eIndex,true);
+			}
+		});
 		goodsList(goods_info);
-	$('.goods_'+index+' .update').text('修改');
-	$('.goods_'+index+' span.inputspan').show();
-	$('.goods_'+index+' input').hide();
+}
+
+function saveOther(eIndex,is_show){
+	var shop_price = $('.goods_'+eIndex+' input[name=shop_price]').val();
+	if(shop_price == ''){
+		shop_price = $('.goods_'+eIndex+' input[name=shop_price]').attr('data-shop_price');
+	}
+	var goods_number = $('.goods_'+eIndex+' input[name=goods_number]').val();
+	if(goods_number == ''){
+		goods_number = $('.goods_'+eIndex+' input[name=goods_number]').attr('data-goods_number');
+	}
+	goods_info[eIndex]['goods_number'] = parseInt(goods_number);
+	goods_info[eIndex]['shop_price'] = _formatMoney(parseFloat(shop_price));
+	goods_info[eIndex]['remark'] = $('.goods_'+eIndex+' input[name=remark]').val();
+	if(!goods_info[eIndex]['show_input']){
+		goods_info[eIndex]['show_input'] = false;
+	}else{
+		goods_info[eIndex]['show_input'] = is_show;
+	}
 }
 
 $('.saveAll').click(function(){
 	$('tbody.goodsList tr').each(function(index){
 		var eIndex = $('tbody.goodsList tr').eq(index).attr('data-index');
 		if(goods_info[eIndex]['show_input']){
-    		var shop_price = $('.goods_'+eIndex+' input[name=shop_price]').val();
-    		if(shop_price == ''){
-    			shop_price = $('.goods_'+eIndex+' input[name=shop_price]').attr('data-shop_price');
-    		}
-    		var goods_number = $('.goods_'+eIndex+' input[name=goods_number]').val();
-    		if(goods_number == ''){
-    			goods_number = $('.goods_'+eIndex+' input[name=goods_number]').attr('data-goods_number');
-    		}
-    		goods_info[eIndex]['goods_number'] = parseInt(goods_number);
-    		goods_info[eIndex]['shop_price'] = _formatMoney(parseFloat(shop_price));
-    		goods_info[eIndex]['remark'] = $('.goods_'+eIndex+' input[name=remark]').val();
-    		goods_info[eIndex]['show_input'] = false;
+			saveOther(eIndex,false);
 		}
 	});
 	goodsList(goods_info);

@@ -285,7 +285,7 @@ function update(index){
 	status = 2;
 	$('.goods_'+index+' .update').text('保存');
 	$('.goods_'+index+' span.inputspan').hide();
-	$('.goods_'+index+' input').show();
+	$('.goods_'+index+' input').show().css('display','inline');
 }
 
 function checkNum(obj){
