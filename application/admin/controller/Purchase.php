@@ -83,6 +83,7 @@ class Purchase extends Base {
 		if (empty($purchase['order_sn'])){
 		    $purchase['order_sn'] = '新建采购单';
 		}
+		$purchase['remark'] = str_replace("\n", '<br />', str_replace(chr(32), "&nbsp;&nbsp;", $purchase['remark']));
 		$this->assign('data',$purchase);
 		$this->assign('page_l','');
 		$this->assign('list',[]);

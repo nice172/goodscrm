@@ -68,7 +68,7 @@
 
                 <div class="row">
                     <div class="col-lg-12">
-                        <table class="table table-hover syc-table">
+                        <table class="table table-hover syc-table border">
                             <thead>
                             <tr>
                                 <th>发票状态</th>

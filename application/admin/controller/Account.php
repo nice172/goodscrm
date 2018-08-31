@@ -23,7 +23,7 @@ class Account extends Base {
     	if ($invoice_status != ''){
     		$db->where(['status' => $invoice_status]);
     	}
-        $result = $db->paginate(config('page_size'),false,['query' => $this->request->param()]);
+        $result = $db->order('create_time desc')->paginate(config('page_size'),false,['query' => $this->request->param()]);
         $this->assign('page',$result->render());
         $this->assign('list',$result->all());
         $this->assign('title','应收账款');

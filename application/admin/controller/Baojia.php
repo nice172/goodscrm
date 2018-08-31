@@ -223,6 +223,7 @@ class Baojia extends Base {
 	    $goodsInfo = db('baojia_goods')->where(['baojia_id' => $order['id']])->order('goods_id asc')->select();
 	    $cus = db('customers')->where(['cus_id' => $order['cus_id']])->find();
 	    $this->assign('client',$cus);
+	    $order['order_remark'] = str_replace("\n", '<br />', str_replace(chr(32), "&nbsp;&nbsp;", $order['order_remark']));
 	    $this->assign('data',$order);
 	    $this->assign('goodsList',$goodsInfo);
 	    $list = db('baojia')->where(['cus_id' => $order['cus_id']])

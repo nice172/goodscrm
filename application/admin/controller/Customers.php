@@ -35,7 +35,7 @@ class Customers extends Base{
         if ($cus_short != ''){
             $where .= " and cus_short like '%{$cus_short}%'";
         }
-        $data = $Customers->where($where)->paginate('', false, ['query' => $query ]);
+        $data = $Customers->where($where)->order('create_time desc')->paginate('', false, ['query' => $query ]);
 //         foreach ($data as $key => $value){
 //             $user = db('users')->where(['id' => $value['cus_order_ren']])->find();
 //             $data[$key]['cus_order_ren'] = $user['user_nick'];
