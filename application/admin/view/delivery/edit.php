@@ -380,9 +380,10 @@ function update(index){
 		if(add_number == ''){
 			add_number = $('.goods_'+index+' input[name=add_number]').attr('data-add_number');
 		}
-		
-		if(current_send_number > goods_info[index]['store_number']){
-			alert('本次送货数量不能大于库存量');
+		current_send_number = parseInt(current_send_number);
+		add_number = parseInt(add_number);
+		if(current_send_number+add_number > goods_info[index]['goods_number']){
+			alert('“'+goods_info[index]['goods_name']+'”本次送货数量+入库数量不能大于采购单的未交数量');
 			status = 2;
 			return;
 		}

@@ -14,16 +14,15 @@
 
 <div class="row">
                     <div class="col-lg-12">
-                        <table class="table table-hover">
+                        <table class="table table-hover syc-table border">
                             <thead>
                                 <tr>
-                                    
-                                    <th>序号</th>
-                                    <th>创建时间</th>
-                                    <th>变动类别</th>
-                                    <th>商品分类</th>
-                                    <th>商品名称</th>
-                                    <th>数量</th>
+                                    <th width="10%">序号</th>
+                                    <th width="10%">创建时间</th>
+                                    <th width="10%">变动类别</th>
+                                    <th width="20%">商品分类</th>
+                                    <th width="40%">商品名称</th>
+                                    <th width="10%">数量</th>
                                 </tr>
                             </thead>
                             <tbody>

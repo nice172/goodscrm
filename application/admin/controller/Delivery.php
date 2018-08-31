@@ -226,6 +226,11 @@ class Delivery extends Base {
             }
             $goods_info = $this->request->param('goods_info/a');
             if (empty($goods_info)) $this->error('商品信息不能为空');
+            foreach ($goods_info as $key => $value){
+                if ($value['current_send_number']+$value['add_number'] > $value['goods_number']){
+                    $this->error('“'.$value['goods_name'].'”本次送货数量+入库数量不能大于采购单的未交数量');
+                }
+            }
             if (db('delivery_order')->update($update)){
                 $delivery_id = $data['id'];
                 $in = db('delivery_goods')->where(['delivery_id' => $delivery_id])->field('id')->select();
@@ -314,13 +319,13 @@ class Delivery extends Base {
             }
             $order = db('order')->where(['id' => $delivery['order_id']])->find();
             
-            $mpdf = new mPDF('zh-CN/utf-8','A4', 0, '宋体', 0, 0);
+            $mpdf = new mPDF('zh-CN/utf-8','A5', 0, '宋体', 0, 0);
             $mpdf->SetWatermarkText(getTextParams(14),0.1);
             $logo = getFileParams(12);
             if (empty($logo)) {
                 $logo = './assets/img/crm_logo.png';
             }
-            $strContent = '<div style="width:90%;margin:0 auto;height:90px;background:#fff url('.$logo.') no-repeat top 20px;">';
+            $strContent = '<div style="width:90%;margin:0 auto;height:90px;">';
             $strContent .= '<h1 style="padding-top:10px;text-align:center;font-size:32px;">'.getTextParams(14).'</h1>';
             $strContent .= '<p class="entitle" style="font-size:22px;">'.getTextParams(15).'</p>';
             $strContent .= '</div>';
@@ -354,10 +359,10 @@ class Delivery extends Base {
         <tbody>
             <tr>
             <td width="5%">序号</td>
-            <td width="30%">产品名称</td>
+            <td width="20%">产品名称</td>
 			<td width="30%">产品规格</td>
-            <td width="5%">单位</td>
-			<td width="5%">数量</td>
+            <td width="10%">单位</td>
+			<td width="10%">数量</td>
             <td width="25%">备注</td>
             </tr>';
             $count_goods = 0;
@@ -448,11 +453,19 @@ h1,h2,h3,p,div,span{padding:0;margin:0;}
             }
             $goods_info = $this->request->param('goods_info/a');
             if (empty($goods_info)) $this->error('商品信息不能为空');
+            foreach ($goods_info as $key => $value){
+                if ($value['current_send_number']+$value['add_number'] > $value['goods_number']){
+                    $this->error('“'.$value['goods_name'].'”本次送货数量+入库数量不能大于采购单的未交数量');
+                }
+            }
             unset($data['goods_info'],$data['type'],$data['current_send_number'],$data['remark'],$data['add_number']);
             $data['admin_uid'] = $this->userinfo['id'];
             $data['create_time'] = time();
             $data['update_time'] = time();
             if (db('delivery_order')->where(['delivery_sn' => $data['delivery_sn']])->find()){
+                $this->error('物流单号已存在');
+            }
+            if (db('delivery_order')->where(['order_dn' => $data['order_dn']])->find()){
                 $this->error('送货单号已存在');
             }
             $delivery_id = db('delivery_order')->insertGetId($data);
@@ -602,15 +615,17 @@ h1,h2,h3,p,div,span{padding:0;margin:0;}
         if ($this->request->isAjax()){
             $purchase_id = $this->request->param('purchase_id',0,'intval');
             $purchase = db('purchase')->where(['id' => $purchase_id,'is_cancel' => 0])->find();
-            if (empty($purchase)) $this->error('该采购单已取消关联订单');
+            if (empty($purchase)) $this->error('该采购单已取消关联订单，请选择关联订单');
+            if ($purchase['create_type'] == 1) $this->error('请选择关联订单');
             $purchase_goods = db('purchase_goods pg')->join('__GOODS__ g','g.goods_id=pg.goods_id')
             ->join('__ORDER_GOODS__ og','og.goods_id=pg.goods_id')->field('pg.*,g.store_number,og.send_num,gc.category_name,og.remark')
             ->join('__GOODS_CATEGORY__ gc','g.category_id=gc.category_id')
             ->where(['pg.purchase_id' => $purchase_id,'og.order_id' => $purchase['order_id']])->select();
             
             foreach ($purchase_goods as $key => $value){
-                $purchase_goods[$key]['diff_number'] = $value['goods_number'] - $value['send_num']; //未交数量
-                $purchase_goods[$key]['current_send_number'] = 0; //本次送货数量
+                $diff_number = $value['goods_number'] - $value['send_num']; //未交数量
+                $purchase_goods[$key]['diff_number'] = $diff_number;
+                $purchase_goods[$key]['current_send_number'] = $diff_number; //本次送货数量
                 $purchase_goods[$key]['add_number'] = 0; //入库数量
                 $purchase_goods[$key]['show_input'] = true;
             }

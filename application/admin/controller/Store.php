@@ -8,7 +8,7 @@ class Store extends Base {
         $supplier_name = $this->request->param('supplier_name');
         $category_id = $this->request->param('category_id',0,'intval');
         $goods_name = $this->request->param('goods_name');
-        $db = db('goods g');
+        $db = db('purchase p');
         $where = ['g.status' => ['neq','-1']];
         if ($supplier_name != ''){
             $db->where('s.supplier_name|s.supplier_short','like',"%{$supplier_name}%");
@@ -22,6 +22,8 @@ class Store extends Base {
         
         $db->where($where);
         $db->field('g.*,gc.category_name,s.supplier_name');
+        $db->join('__PURCHASE_GOODS__ pg','p.id=pg.purchase_id');
+        $db->join('__GOODS__ g ','pg.goods_id=g.goods_id');
         $db->join('__GOODS_CATEGORY__ gc','g.category_id=gc.category_id');
         $db->join('__SUPPLIER__ s','s.id=g.supplier_id');
         $result = $db->paginate(config('PAGE_SIZE'),false, ['query' => $this->request->param()]);
@@ -67,7 +69,6 @@ class Store extends Base {
         
         $db->where($where);
         $db->field('p.*,p.id as purchase_id,g.store_number,pg.goods_id,pg.goods_name,pg.unit,pg.goods_number,pg.goods_price,gc.category_name,s.supplier_name');
-        
         $db->join('__PURCHASE_GOODS__ pg','p.id=pg.purchase_id');
         $db->join('__GOODS__ g ','pg.goods_id=g.goods_id');
         $db->join('__GOODS_CATEGORY__ gc','g.category_id=gc.category_id');
@@ -95,7 +96,25 @@ class Store extends Base {
         if ($this->request->isAjax()){
             $goods_id = $this->request->param('goods_id',0,'intval');
             $store_number = $this->request->param('store_number',0,'intval');
+            $goods = db('goods')->where(['goods_id' => $goods_id])->find();
             if (db('goods')->where(['goods_id' => $goods_id])->update(['store_number' => $store_number,'update_time' => time()])){
+                //1入库，2出库，3报溢，4报损
+                $type = 0;
+                if ($goods['store_number'] > $store_number){
+                    $diff_number = $goods['store_number'] - $store_number;
+                    $type = 4;
+                }
+                if ($goods['store_number'] < $store_number){
+                    $diff_number = $store_number - $goods['store_number'];
+                    $type = 3;
+                }
+                db('store_log')->insert([
+                    'goods_id' => $goods['goods_id'],
+                    'goods_name' => $goods['goods_name'],
+                    'type' => $type,
+                    'number' => $diff_number,
+                    'create_time' => time()
+                ]);
                 $this->success('更新成功');
             }
             $this->error('更新失败');

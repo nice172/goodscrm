@@ -61,16 +61,16 @@
 
                 <div class="row">
                     <div class="col-lg-12">
-                        <table class="table table-hover syc-table">
+                        <table class="table table-hover syc-table border">
                             <thead>
                             <tr>
-                                <th>序号</th>
-                                <th>商品分类</th>
-                                <th>供应商</th>
-                                <th>商品名称</th>
-                                <th style="width:100px;">单位</th>
-                                <th style="width:110px;">库存数量</th>
-                                <th>操作</th>
+                                <th width="10%">序号</th>
+                                <th width="10%">商品分类</th>
+                                <th width="20%">供应商</th>
+                                <th width="30%">商品名称</th>
+                                <th width="10%">单位</th>
+                                <th width="10%">库存数量</th>
+                                <th width="10%">操作</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -81,7 +81,7 @@
                                 <td>{$vo.supplier_name}</td>
                                 <td>{$vo.goods_name}</td>
                                 <td>{$vo.unit}</td>
-                                <td style="width:110px;"><input type="text" style="display: none;width:90px;" class="goods_id{$vo.goods_id}" value="{$vo.store_number}"/><span class="goods_id{$vo.goods_id}">{$vo.store_number}</span></td>
+                                <td><input type="text" style="display: none;width:90%;" class="goods_id{$vo.goods_id}" value="{$vo.store_number}"/><span class="goods_id{$vo.goods_id}">{$vo.store_number}</span></td>
                                 <td>
                                 	<a href="javascript:;" data-id="{$vo.goods_id}" class="update">修改</a>
                                 </td>

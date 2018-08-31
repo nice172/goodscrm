@@ -113,7 +113,7 @@ class Order extends Base {
             }
         }
 
-        $db->order('o.id desc');
+        $db->order('o.create_time desc');
         $data = $db->paginate(config('PAGE_SIZE'), false, ['query' => $this->request->param() ]);
 //         echo $db->getLastSql();exit;
         //获取分页显示

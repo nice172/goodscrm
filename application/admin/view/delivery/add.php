@@ -254,7 +254,7 @@ function client_info(data){
 	$('#po_sn').val(data.po_sn);
 	$('#purchase_date').val(data.purchase_date);
 	$('#purchase_money').val(data.total_money);
-	if(data.is_cancel == 0){
+	if(data.is_cancel == 0 || data.create_type == 1){
     	$('#order_sn').val(data.order_sn);
     	$('#order_id').val(data.order_id);
     	$('#purchase_id').val(data.purchase_id);
@@ -379,13 +379,13 @@ function update(index){
 		if(add_number == ''){
 			add_number = $('.goods_'+index+' input[name=add_number]').attr('data-add_number');
 		}
-		/*
-		if(current_send_number > goods_info[index]['store_number']){
-			alert('本次送货数量不能大于库存量');
-			status = 2;
+		current_send_number = parseInt(current_send_number);
+		add_number = parseInt(add_number);
+		if(current_send_number+add_number > goods_info[index]['goods_number']){
+			alert('“'+goods_info[index]['goods_name']+'”本次送货数量+入库数量不能大于采购单的未交数量');
 			return;
 		}
-		*/
+		
 		goods_info[index]['current_send_number'] = current_send_number;
 		goods_info[index]['add_number'] = add_number;
 		goods_info[index]['remark'] = $('.goods_'+index+' input[name=remark]').val();
@@ -401,8 +401,8 @@ function update(index){
 				if(_add_number == ''){
 					_add_number = $('.goods_'+eIndex+' input[name=add_number]').attr('data-add_number');
 				}
-				goods_info[eIndex]['current_send_number'] = _current_send_number;
-				goods_info[eIndex]['add_number'] = _add_number;
+				goods_info[eIndex]['current_send_number'] = parseInt(_current_send_number);
+				goods_info[eIndex]['add_number'] = parseInt(_add_number);
 				goods_info[eIndex]['remark'] = $('.goods_'+eIndex+' input[name=remark]').val();
 			}
 		});
