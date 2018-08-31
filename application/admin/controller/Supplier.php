@@ -55,7 +55,7 @@ class Supplier extends Base {
         if ($cus_short != ''){
             $where .= " and supplier_short like '%{$cus_short}%'";
         }
-        $result = db('supplier')->where($where)->paginate(config('PAGE_SIZE'), false, ['query' => $query ]);
+        $result = db('supplier')->where($where)->order('create_time desc')->paginate(config('PAGE_SIZE'), false, ['query' => $query ]);
         $data = $result->all();
         foreach ($data as $key => $value){
             $user = db('users')->where(['id' => $value['add_uid']])->find();

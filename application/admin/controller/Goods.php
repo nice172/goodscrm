@@ -33,7 +33,7 @@ class Goods extends Base {
 				$where['goods_name'] = ['like',"%$goods_name%"];
 			}
 			$result = db('goods g')->join('__SUPPLIER__ s','g.supplier_id=s.id')
-			->where($where)->paginate(config('PAGE_SIZE'),false,['query' => $this->request->param()]);
+			->where($where)->order('g.create_time desc')->paginate(config('PAGE_SIZE'),false,['query' => $this->request->param()]);
 		}
 		
 		$lists = $result->all();
