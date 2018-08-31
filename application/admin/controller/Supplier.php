@@ -87,7 +87,7 @@ class Supplier extends Base {
         ->join('__USERS__ u','p.admin_uid=u.id')->order('p.create_time desc')->paginate(config('page_size'),false,['query' => $this->request->param()]);
         
         $this->assign('lsdd',$result->all());
-        $this->assign('page_l',$result->render());
+        $this->assign('page_l','');
         $this->assign('empty', '<tr><td colspan="19" align="center">当前条件没有查到数据</td></tr>');
         return $this->fetch();
     }
