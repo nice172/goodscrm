@@ -622,15 +622,19 @@ h1,h2,h3,p,div,span{padding:0;margin:0;}
             ->join('__GOODS_CATEGORY__ gc','g.category_id=gc.category_id')
             ->where(['pg.purchase_id' => $purchase_id,'og.order_id' => $purchase['order_id']])->select();
             
+            $goodsList = [];
             foreach ($purchase_goods as $key => $value){
                 $diff_number = $value['goods_number'] - $value['send_num']; //未交数量
-                $purchase_goods[$key]['diff_number'] = $diff_number;
-                $purchase_goods[$key]['current_send_number'] = $diff_number; //本次送货数量
-                $purchase_goods[$key]['add_number'] = 0; //入库数量
-                $purchase_goods[$key]['show_input'] = true;
+                if ($diff_number > 0){
+                    $value['diff_number'] = $diff_number;
+                    $value['current_send_number'] = $diff_number; //本次送货数量
+                    $value['add_number'] = 0; //入库数量
+                    $value['show_input'] = true;
+                    $goodsList[] = $value;
+                }
             }
             
-            $data['goodslist'] = $purchase_goods;
+            $data['goodslist'] = $goodsList;
             $data['cus_name'] = db('customers')->where(['cus_id' => $purchase['cus_id']])->value('cus_name');
             $data['cus_id'] = $purchase['cus_id'];
             
