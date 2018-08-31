@@ -371,6 +371,24 @@ class Order extends Base {
     	$this->redirect(url('info',['id' => $id]));
     }
     
+    public function setfinish(){
+        $id = $this->request->param('id',0,'intval');
+        $route = $this->request->param('r');
+        if ($id <= 0) $this->error('参数错误');
+        $order = db('order')->where(['id' => $id,'status' => ['neq','-1']])->find();
+        if (empty($order)) $this->error('订单不存在');
+        if (!db('order')->where(['id' => $id])->setField('status',3)){
+            $this->error('操作失败');
+        }
+        if($route == 'i'){
+            if (!empty($_SERVER['HTTP_REFERER'])){
+                $this->redirect($_SERVER['HTTP_REFERER']);
+                return;
+            }
+        }
+        $this->success('操作成功');
+    }
+    
     protected $create_rule = [
     	'order_id' => 'require',
     	'order_sn' => 'require',

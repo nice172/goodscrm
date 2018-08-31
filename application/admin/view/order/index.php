@@ -133,6 +133,10 @@
 								</td>
                                 <td>
                                 	<a href="{:url('info',['id' => $vo['oid']])}">详情</a>
+                                	{if condition="$vo['status'] eq 2"}
+                                	<span class="text-explode">|</span>
+                                	<a href="javascript:;" onclick="setfinish({$vo['oid']})">完成送货</a>
+                                	{/if}
                                 	{if condition="$vo['status'] eq 0"}
                                 	<span class="text-explode">|</span>
                                 	<a href="{:url('confirm',['id' => $vo['oid'],'r'=>'i'])}">确认</a>
@@ -284,6 +288,16 @@
             if (!isNaN(e) && e !== null && e !== '') {
                 var data={name:'scrap',pid:e};
                 $.sycToAjax("{:Url('orders/huifu')}", data);
+            }
+        };
+        return false;
+    }
+
+    function setfinish(e){
+        if(confirm("确定操作订单？")){
+            if (!isNaN(e) && e !== null && e !== '') {
+                var data={name:'scrap',id:e};
+                $.sycToAjax("{:url('setfinish')}", data);
             }
         };
         return false;

@@ -70,6 +70,7 @@
         								<button style="margin-left:20px;" onclick="window.location.href='<?php echo url('create',['id' => $data['id']]);?>'" type="button" class="btn btn-primary">创建采购单</button>
         								{elseif condition="$data['status'] eq 2"}
         								已送货
+        								<button style="margin-left:20px;" onclick="window.location.href='<?php echo url('setfinish',['id' => $data['id'],'r' => 'i']);?>'" type="button" class="btn btn-primary">完成送货</button>
         								{elseif condition="$data['status'] eq 3"}
         								已完成
         								{elseif condition="$data['status'] eq 4"}

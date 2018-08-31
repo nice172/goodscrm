@@ -85,7 +85,7 @@
                                 <td>{$vo.goods_name}</td>
                                 <td>{$vo.unit}</td>
                                 <td>{$vo.store_number}</td>
-                                <td>{$vo.order_sn}</td>
+                                <td>{if condition="$vo['order_sn']"}{$vo.order_sn}{else}--{/if}</td>
                                 <td>{$vo.po_sn}</td>
                                 <td><a href="javascript:;" onclick="viewLog({$vo['goods_id']},{$vo.order_id})">查看</a></td>
                                 <td>
