@@ -22,15 +22,15 @@ class Goods extends Base {
 			if ($goods_name != ''){
 				$where['goods_name'] = ['like',"%$goods_name%"];
 			}
-			$result = db('goods')->where($where)->paginate(config('PAGE_SIZE'),false,['query' => $this->request->param()]);
+			$result = db('goods')->where($where)->order('create_time desc')->paginate(config('PAGE_SIZE'),false,['query' => $this->request->param()]);
 		}
 		
 		if (!empty($supplier_name)){
 			$where = [
-				'supplier_name' => ['like',"%{$supplier_name}%"],
+				's.supplier_name' => ['like',"%{$supplier_name}%"],
 			];
 			if (!empty($goods_name)){
-				$where['goods_name'] = ['like',"%$goods_name%"];
+				$where['g.goods_name'] = ['like',"%$goods_name%"];
 			}
 			$result = db('goods g')->join('__SUPPLIER__ s','g.supplier_id=s.id')
 			->where($where)->order('g.create_time desc')->paginate(config('PAGE_SIZE'),false,['query' => $this->request->param()]);
