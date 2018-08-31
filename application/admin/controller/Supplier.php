@@ -82,10 +82,9 @@ class Supplier extends Base {
         $contact = Db::name('supplier_contacts')->where('supplier_id', $supplier_id)->where('status','>=','1')->select();
         $this->assign('contact',$contact);
         
-        $result = Db::name('purchase p')->where(['p.supplier_id' => $supplier_id,'p.status' => ['neq',-1],'o.status' => ['neq',-1]])
-        ->field('p.*,c.con_name,c.con_mobile,u.user_nick')
-        ->join('__ORDER__ o','p.order_id=o.id')->join('__CUSTOMERS_CONTACT__ c','c.con_id=o.con_id')
-        ->join('__USERS__ u','o.create_uid=u.id')->order('p.create_time desc')->paginate(config('page_size'),false,['query' => $this->request->param()]);
+        $result = Db::name('purchase p')->where(['p.supplier_id' => $supplier_id,'p.status' => ['neq',-1]])
+        ->field('p.*,u.user_nick')
+        ->join('__USERS__ u','p.admin_uid=u.id')->order('p.create_time desc')->paginate(config('page_size'),false,['query' => $this->request->param()]);
         
         $this->assign('lsdd',$result->all());
         $this->assign('page_l',$result->render());
