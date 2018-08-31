@@ -102,6 +102,7 @@ class Delivery extends Base {
             }
             $totalMoney += $value['goods_number']*$value['goods_price'];
         }
+        
         $this->assign('goodslist',json_encode($goodslist));
         $this->assign('delivery',$delivery_order);
         $this->assign('title','送货单详情');
@@ -127,9 +128,19 @@ class Delivery extends Base {
             $delivery_order = db('delivery_order')->where(['id' => $id])->find();
             if (empty($delivery_order)) $this->error('送货单不存在');
             $order = db('order')->where(['id' => $delivery_order['order_id']])->find();
+            $delivery_goods = db('delivery_goods')->where(['delivery_id' => $id])->select();
+            $purchase_goods = db('purchase_goods')->where(['purchase_id' => $delivery_order['purchase_id']])->select();
+            foreach ($delivery_goods as $key => $value){
+                foreach ($purchase_goods as $k => $val){
+                    if ($value['current_send_number'] + $value['add_number'] > $val['goods_number'] - $val['send_num']){
+                        $this->error('“'.$value['goods_name'].'”大于采购单的未交数量');
+                    }
+                }
+            }
+            db()->startTrans();
             if (db('delivery_order')->where(['id' => $id])->setField('is_confirm',1)){
-                $delivery_goods = db('delivery_goods')->where(['delivery_id' => $id])->select();
                 //1入库，2出库，3报溢，4报损
+                $failed_row = 0;
                 foreach ($delivery_goods as $key => $value){
                     db('store_log')->insert([
                         'goods_id' => $value['goods_id'],
@@ -152,7 +163,11 @@ class Delivery extends Base {
                     if ($value['add_number'] > 0){
                     	db('goods')->where(['goods_id' => $value['goods_id']])->setInc('store_number',$value['add_number']);
                     }
-                    db('order_goods')->where(['order_id' => $delivery_order['order_id'],'goods_id' => $value['goods_id']])->setInc('send_num',$value['current_send_number']);
+                    $a = db('order_goods')->where(['order_id' => $delivery_order['order_id'],'goods_id' => $value['goods_id']])->setInc('send_num',$value['current_send_number']);
+                    $b = db('purchase_goods')->where(['purchase_id' => $delivery_order['purchase_id'],'goods_id' => $value['goods_id']])->setInc('send_num',$value['current_send_number']);
+                    if (!$a || !$b){
+                        $failed_row++;
+                    }
                 }
                 $order_goods = db('order_goods')->where(['order_id' => $delivery_order['order_id']])->select();
                 $count = 0;
@@ -162,16 +177,24 @@ class Delivery extends Base {
                     }
                 }
                 if ($count == count($order_goods)){
-                    db('order')->where(['id' => $delivery_order['order_id']])->setField('status',2); //已送货
+                    $c = db('order')->where(['id' => $delivery_order['order_id']])->setField('status',2); //已送货
                 }else{
-                    db('order')->where(['id' => $delivery_order['order_id']])->setField('status',6); //部分送货
+                    $c = db('order')->where(['id' => $delivery_order['order_id']])->setField('status',6); //部分送货
                 }
+                
+                $d = true;
                 if (empty($order['deliver_time'])){
                     //strtotime($delivery_order['delivery_date'])
-                    db('order')->where(['id' => $delivery_order['order_id']])->setField('deliver_time',time());
+                    $d = db('order')->where(['id' => $delivery_order['order_id']])->setField('deliver_time',time());
+                }
+                if ($failed_row == 0 && $c && $d){
+                    db()->commit();
+                }else{
+                    db()->rollback();
                 }
                 $this->success('确认成功');
             }
+            db()->rollback();
             $this->error('确认失败');
         }
     }
