@@ -74,7 +74,7 @@
                                 <td>{$vo.po_sn}</td>
                                 <td>{$vo.create_time|date='Y-m-d',###}</td>
                                 <td>{$vo.supplier_name}</td>
-                                <td>{$vo.order_sn}</td>
+                                <td>{if condition="$vo['is_cancel']"}已取消关联{else}{$vo.order_sn}{/if}</td>
                                 <td>{$vo.total_money}</td>
                                 <td>{$vo.require_time|date='Y-m-d',###}</td>
                                 <td>{$vo.payment}</td>

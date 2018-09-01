@@ -84,7 +84,7 @@
                                     </td>
                                     <td width="15%" class="right-color"><span class="text-danger">*</span><span>付款条件:</span></td>
                                     <td width="35%">
-                                      <select name="payment" class="form-control w300" id="">
+                                      <select name="payment" class="form-control w300" id="payment_type">
                                         	<option value="">请选择付款条件</option>
                                   		{foreach name="$payment" item="v"}
                                 		<option value="{$v}">{$v}</option>
@@ -244,13 +244,6 @@ function _formatMoney(num){
         $("#sidebar-schedule").addClass("sidebar-nav-active"); // 大分类
         $("#order-index").addClass("active"); // 小分类
 
-		$('.attrChange').change(function(){
-			var goods_type_id = $(this).val();
-			$.get('<?php echo url('change_type');?>',{goods_type_id:goods_type_id},function(res){
-				$('.appendAttr').html(res);
-			});
-		});
-
 		$('.search_companyx').click(function(){
 			$('#search_company_modal').modal({
 				show : true,
@@ -269,10 +262,11 @@ function _formatMoney(num){
 						$('#fax').val(data.fax);
 						$('#contacts').val(data.contacts);
 						$('#email').val(data.email);
+						$('#payment_type').val(data.supplier_payment);
 					}
 				});
 			}else{
-				$('#cus_phome,#fax,#contacts,#email').val('');
+				$('#cus_phome,#fax,#contacts,#email,#payment_type').val('');
 			}
         });
 

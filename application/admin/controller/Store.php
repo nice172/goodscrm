@@ -26,7 +26,11 @@ class Store extends Base {
         $db->join('__GOODS__ g ','pg.goods_id=g.goods_id');
         $db->join('__GOODS_CATEGORY__ gc','g.category_id=gc.category_id');
         $db->join('__SUPPLIER__ s','s.id=g.supplier_id');
-        $result = $db->paginate(config('PAGE_SIZE'),false, ['query' => $this->request->param()]);
+        
+        //$db->join('__DELIVERY_ORDER__ do','p.order_id=do.order_id');
+        //$db->where(['do.is_confirm' => 1]);
+        
+        $result = $db->order('p.create_time desc')->paginate(config('PAGE_SIZE'),false, ['query' => $this->request->param()]);
         
         $this->assign('page',$result->render());
         $this->assign('list',$result);
@@ -42,7 +46,7 @@ class Store extends Base {
         $result = db('store_log l')->where(['l.order_id' => $order_id,'l.goods_id' => $goods_id])
         ->join('__GOODS__ g','l.goods_id=g.goods_id')
         ->join('__GOODS_CATEGORY__ gc','g.category_id=gc.category_id')
-        ->field('l.*,gc.category_name')->paginate(config('page_size'));
+        ->field('l.*,gc.category_name')->order('l.create_time desc')->paginate(config('page_size'));
         $this->assign('page',$result->render());
         $this->assign('data',$result->all());
         return $this->fetch();
@@ -73,10 +77,19 @@ class Store extends Base {
         $db->join('__GOODS__ g ','pg.goods_id=g.goods_id');
         $db->join('__GOODS_CATEGORY__ gc','g.category_id=gc.category_id');
         $db->join('__SUPPLIER__ s','s.id=p.supplier_id');
-        $result = $db->paginate(config('PAGE_SIZE'),false, ['query' => $this->request->param()]);
         
+        //$db->join('__DELIVERY_ORDER__ do','p.order_id=do.order_id');
+        //$db->where(['do.is_confirm' => 1]);
+        
+        $result = $db->order('p.create_time desc')->paginate(config('PAGE_SIZE'),false, ['query' => $this->request->param()]);
+        $list = $result->all();
+        foreach ($list as $key => $value){
+        	if ($value['create_type'] == 1){
+        		$list[$key]['order_id'] = db('delivery_order')->where(['purchase_id' => $value['id']])->value('order_id');
+        	}
+        }
         $this->assign('page',$result->render());
-        $this->assign('list',$result);
+        $this->assign('list',$list);
         $this->assign('title','关联库存');
         return $this->fetch();
     }

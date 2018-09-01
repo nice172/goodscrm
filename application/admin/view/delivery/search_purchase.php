@@ -48,6 +48,7 @@
                                     <th>单位</th>
                                     <th>采购数量</th>
                                     <th>已送数量</th>
+                                    <th>未交数量</th>
                                     <th>要求送货日期</th>
                                     <th>状态</th>
                                     <th>创建时间</th>
@@ -65,6 +66,7 @@
                                     <td>{$vo.unit}</td>
                                     <td>{$vo.goods_number}</td>
                                     <td>{$vo.send_num}</td>
+                                    <td>{$vo.goods_number-$vo.send_num}</td>
                                     <td>{$vo.require_time}</td>
                                     <td>{if condition="$vo['send_num']"}部分送货{else}未送货{/if}</td>
                                     <td>{$vo.create_time|date='Y-m-d H:i:s',###}</td>
@@ -90,9 +92,6 @@
             </div>
         </div>
                         
-
-        </div>
-        <div class="modal-footer">
 
         </div>
 

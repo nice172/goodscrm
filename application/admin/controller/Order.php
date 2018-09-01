@@ -282,7 +282,7 @@ class Order extends Base {
                 'fax' => $this->request->post('fax'),
                 'email' => $this->request->post('email'),
                 'contacts' => $this->request->post('contacts'),
-                'order_remark' => $this->request->post('remark'),
+                'order_remark' => $this->request->post('order_remark'),
                 'require_time' => strtotime($this->request->post('require_time')),
                 'status' => $type == 'confirm' ? 1 : 0,
                 'create_time' => time(),
@@ -334,12 +334,12 @@ class Order extends Base {
                 db('order')->where(['id' => $order_id])->setField('total_money',_formatMoney($total_money));
                 
                 if ($type == 'create'){
-                    $this->success('新增成功',url('create',['id' => $order_id]));
+                    $this->success('保存成功',url('create',['id' => $order_id]));
                 }else{
-                    $this->success('新增成功',url('index'));
+                    $this->success('保存成功',url('index'));
                 }
             }else{
-                $this->error('新增失败请重试');
+                $this->error('保存失败请重试');
             }
             return;
         }
@@ -491,7 +491,7 @@ class Order extends Base {
     		$data['total_money'] = _formatMoney($totalMoney);
     		$purchase_id = db('purchase')->insertGetId($data);
     		if ($purchase_id){
-    			db('order')->where(['id' => $data['order_id']])->setField('status',5);
+    			db('order')->where(['id' => $data['order_id']])->update(['status' => 5,'is_create' => 1]);
     			foreach ($purchseGoods as $value){
     				$value['purchase_id'] = $purchase_id;
     				db('purchase_goods')->insert($value);
@@ -572,7 +572,7 @@ class Order extends Base {
                 'fax' => $this->request->post('fax'),
                 'email' => $this->request->post('email'),
                 'contacts' => $this->request->post('contacts'),
-                'order_remark' => $this->request->post('remark'),
+                'order_remark' => $this->request->post('order_remark'),
                 'require_time' => strtotime($this->request->post('require_time')),
                 'status' => $type == 'confirm' ? 1 : 0,
                 'update_time' => time()

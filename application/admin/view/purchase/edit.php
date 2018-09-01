@@ -83,7 +83,7 @@
                                     </td>
                                     <td width="15%" class="right-color"><span class="text-danger">*</span><span>付款条件:</span></td>
                                     <td width="35%">
-                                      <select name="payment" class="form-control w300" id="">
+                                      <select name="payment" class="form-control w300" id="payment_type">
                                         	<option value="">请选择付款条件</option>
                                   		{foreach name="$payment" item="v"}
                                 		<option value="{$v}" {if condition="$v==$data['payment']"}selected="selected"{/if}>{$v}</option>
@@ -271,7 +271,7 @@ function _formatMoney(num){
 					}
 				});
 			}else{
-				$('#cus_phome,#fax,#contacts,#email').val('');
+				$('#cus_phome,#fax,#contacts,#email,#payment_type').val('');
 			}
         });
 		
@@ -314,6 +314,7 @@ function client_info(data){
 	$('#fax').val(data.fax);
 	$('#contacts').val(data.user);
 	$('#email').val(data.email);
+	$('#payment_type').val(data.supplier_payment);
 }
 
 var goods_info = new Array();

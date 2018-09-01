@@ -18,10 +18,10 @@
                             <thead>
                                 <tr>
                                     <th width="10%">序号</th>
-                                    <th width="10%">创建时间</th>
-                                    <th width="10%">变动类别</th>
+                                    <th width="15%">创建时间</th>
+                                    <th width="15%">变动类别</th>
                                     <th width="20%">商品分类</th>
-                                    <th width="40%">商品名称</th>
+                                    <th width="30%">商品名称</th>
                                     <th width="10%">数量</th>
                                 </tr>
                             </thead>

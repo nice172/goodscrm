@@ -36,7 +36,7 @@
                 </div>
                 <div class="row">
                     <div class="col-lg-12 marginTop15">
-                        <table class="table table-hover syc-table">
+                        <table class="table table-hover syc-table border">
                             <thead>
                             <tr>
                                 <th>序号</th>

@@ -80,7 +80,7 @@
                                 <?php if ($data['create_type']==0){?>
                                 <td width="15%" class="right-color"><span class="text-danger"></span><span>关联订单:</span></td>
                                     <td width="35%">
-                                        <span>{$data.order_sn}</span>
+                                        <span>{if condition="$data['is_cancel']"}已取消关联{else}{$data.order_sn}{/if}</span>
                                     </td>
                                 <?php }?>
                                 <td width="15%" class="right-color"><span>交货方式:</span></td>
@@ -116,7 +116,7 @@
 
 		<div class="row">
                     <div class="col-lg-12">
-                        <table class="table table-hover" style="margin-top:0px;">
+                        <table class="table table-hover syc-table border" style="margin-top:0px;">
                             <thead>
                             <tr>
                                         <th colspan="20">
@@ -132,10 +132,11 @@
                                     <th>商品名称</th>
                                     <th>单位</th>
                                     <th>单价</th>
-                                    <?php if ($data['create_type']==0){?>
+                                    <?php if ($data['create_type']==0 && !$data['is_cancel']){?>
                                     <th>订单数量</th>
                                     <?php }?>
                                     <th>采购数量</th>
+                                    <th>已送数量</th>
                                     <th>库存数量</th>
                                     <th>总金额</th>
                                     <!-- <th>操作</th> -->
@@ -345,10 +346,11 @@ function goodsList(goods_info){
 		html += '<td>'+goods_info[j]['goods_name']+'</td>';
 		html += '<td>'+goods_info[j]['unit']+'</td>';
 		html += '<td class="shop_price"><input type="text" data-shop_price="'+goods_info[j]['shop_price']+'" oninput="checkNum(this)" name="shop_price" style="width:80px;display:none;" value="'+goods_info[j]['shop_price']+'" /><span class="inputspan">'+goods_info[j]['shop_price']+'</span></td>';
-		<?php if ($data['create_type']==0){?>
+		<?php if ($data['create_type']==0 && !$data['is_cancel']){?>
 		html += '<td class="goods_number"><span class="span">'+goods_info[j]['goods_number']+'</span></td>';
 		<?php }?>
 		html += '<td class="purchase_number"><input type="text" data-purchase_number="'+goods_info[j]['purchase_number']+'" oninput="checkNum2(this)" name="purchase_number" style="width:80px;display:none;" value="'+goods_info[j]['purchase_number']+'" /><span class="inputspan">'+goods_info[j]['purchase_number']+'</span></td>';
+		html += '<td class="send_number"><span class="span">'+goods_info[j]['send_num']+'</span></td>';
 		html += '<td class="store_number"><span class="span">'+goods_info[j]['store_number']+'</span></td>';
 		html += '<td class="totalMoney"><span class="span">'+goods_info[j]['totalMoney']+'</span></td>';
 		//html += '<td><a href="javascript:;" onclick="update('+j+')" class="update">修改</a><span class="text-explode">|</span><a href="javascript:;" onclick="_delete('+j+')" class="delete">删除</a></td>';

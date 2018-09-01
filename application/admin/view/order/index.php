@@ -128,7 +128,11 @@
 								{elseif condition="$vo['status'] eq 5"}
 								已创建
 								{elseif condition="$vo['status'] eq 6"}
-								部分已送货
+									{if condition="$vo['send_num']"}
+									部分已送货
+									{else}
+									已确认
+									{/if}
 								{/if}
 								</td>
                                 <td>

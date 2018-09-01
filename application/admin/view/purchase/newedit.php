@@ -85,7 +85,7 @@
                                     </td>
                                     <td width="15%" class="right-color"><span class="text-danger">*</span><span>付款条件:</span></td>
                                     <td width="35%">
-                                      <select name="payment" class="form-control w300" id="">
+                                      <select name="payment" class="form-control w300" id="payment_type">
                                         	<option value="">请选择付款条件</option>
                                   		{foreach name="$payment" item="v"}
                                 		<option value="{$v}" {if condition="$v==$data['payment']"}selected="selected"{/if}>{$v}</option>
@@ -137,25 +137,24 @@
 
 		<div class="row">
                     <div class="col-lg-12">
-                        <table class="table table-hover">
+                        <table class="table table-hover syc-table border">
                             <thead>
                                 <tr>
-                                    <th>序号</th>
-                                    <th>商品名称</th>
-                                    <th>单位</th>
-                                    <th>单价</th>
+                                    <th width="10%">序号</th>
+                                    <th width="30%">商品名称</th>
+                                    <th width="10%">单位</th>
+                                    <th width="10%">单价</th>
                                     <!-- <th>订单数量</th> -->
-                                    <th>采购数量</th>
-                                    <th>库存数量</th>
-                                    <th>总金额</th>
-                                    <th>操作</th>
+                                    <th width="10%">采购数量</th>
+                                    <th width="10%">库存数量</th>
+                                    <th width="10%">总金额</th>
+                                    <th width="10%">操作</th>
                                 </tr>
                             </thead>
                             <tbody class="goodsList"></tbody>
                             <tfoot>
                             	<tr>
-                            	<td><a href="javascript:;" class="get_goods">请选择商品</a></td>
-                            	<td colspan="10"></td>
+                            	<td colspan="20"><a href="javascript:;" class="get_goods">请选择商品</a></td>
                             	</tr>
                             </tfoot>
                         </table>
@@ -294,7 +293,7 @@ function _formatMoney(num){
 					}
 				});
 			}else{
-				$('#cus_phome,#fax,#contacts,#email').val('');
+				$('#cus_phome,#fax,#contacts,#email,#payment_type').val('');
 			}
         });
         
@@ -305,6 +304,7 @@ function client_info(data){
 	$('#fax').val(data.fax);
 	$('#contacts').val(data.contacts);
 	$('#email').val(data.email);
+	$('#payment_type').val(data.supplier_payment);
 }
 
 var goods_info = new Array();
@@ -341,9 +341,9 @@ function goodsList(goods_info){
 		html += '<td>'+num+'</td>';
 		html += '<td>'+goods_info[j]['goods_name']+'</td>';
 		html += '<td>'+goods_info[j]['unit']+'</td>';
-		html += '<td class="shop_price"><input type="text" data-shop_price="'+goods_info[j]['shop_price']+'" oninput="checkNum(this)" name="shop_price" style="width:80px;display:none;" value="'+goods_info[j]['shop_price']+'" /><span class="inputspan">'+goods_info[j]['shop_price']+'</span></td>';
+		html += '<td class="shop_price"><input type="text" data-shop_price="'+goods_info[j]['shop_price']+'" oninput="checkNum(this)" name="shop_price" style="width:80%;display:none;" value="'+goods_info[j]['shop_price']+'" /><span class="inputspan">'+goods_info[j]['shop_price']+'</span></td>';
 		//html += '<td class="goods_number"><span class="span">'+goods_info[j]['goods_number']+'</span></td>';
-		html += '<td class="purchase_number"><input type="text" data-purchase_number="'+goods_info[j]['purchase_number']+'" oninput="checkNum2(this)" name="purchase_number" style="width:80px;display:none;" value="'+goods_info[j]['purchase_number']+'" /><span class="inputspan">'+goods_info[j]['purchase_number']+'</span></td>';
+		html += '<td class="purchase_number"><input type="text" data-purchase_number="'+goods_info[j]['purchase_number']+'" oninput="checkNum2(this)" name="purchase_number" style="width:80%;display:none;" value="'+goods_info[j]['purchase_number']+'" /><span class="inputspan">'+goods_info[j]['purchase_number']+'</span></td>';
 		html += '<td class="store_number"><span class="span">'+goods_info[j]['store_number']+'</span></td>';
 		html += '<td class="totalMoney"><span class="span">'+goods_info[j]['totalMoney']+'</span></td>';
 		html += '<td><a href="javascript:;" onclick="update('+j+')" class="update">修改</a><span class="text-explode">|</span><a href="javascript:;" onclick="_delete('+j+')" class="delete">删除</a></td>';

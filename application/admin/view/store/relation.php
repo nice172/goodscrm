@@ -85,14 +85,20 @@
                                 <td>{$vo.goods_name}</td>
                                 <td>{$vo.unit}</td>
                                 <td>{$vo.store_number}</td>
-                                <td>{if condition="$vo['order_sn']"}{$vo.order_sn}{else}--{/if}</td>
+                                <td>
+                                {if condition="$vo['order_sn']"}{$vo.order_sn}{else}--{/if}
+                                </td>
                                 <td>{$vo.po_sn}</td>
                                 <td><a href="javascript:;" onclick="viewLog({$vo['goods_id']},{$vo.order_id})">查看</a></td>
                                 <td>
+                                	{if condition="$vo['create_type']==1"}
+                                	--
+                                	{else}
                                 	{if condition="$vo['is_cancel']==1"}
                                 	<span>已取消关联</span>
                                 	{else}
                                 	<a href="javascript:cancel({$vo.purchase_id});" data-id="{$vo.purchase_id}">取消关联</a>
+                                	{/if}
                                 	{/if}
                                 </td>
                                 </tr>

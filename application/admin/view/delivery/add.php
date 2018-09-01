@@ -106,6 +106,15 @@
                     <div class="col-lg-12">
                         <table class="table table-hover syc-table border">
                             <thead>
+                            <tr>
+                                        <th colspan="20">
+                                            <div class="pull-left">
+                                                <div class="bs-callout bs-callout-warning">
+                                                    <span>订单商品</span>
+                                                </div>
+                                            </div>
+                                        </th>
+                                    </tr>
                                 <tr>
                                     <th width="5%">序号</th>
                                     <th width="10%">商品分类</th>
@@ -214,11 +223,12 @@
 
         $(".relation_order").click(function () {
             var title = '查找订单';
+            var purchase_id = $('#purchase_id').val();
             bDialog.open({
                 title : title,
                 height: 560,
                 width:"90%",
-                url : '{:url(\'relation_order\')}',
+                url : '{:url(\'relation_order\')}?purchase_id='+purchase_id,
                 callback:function(data){
                     if(data && data.results && data.results.length > 0 ) {
                         window.location.reload();
@@ -254,17 +264,17 @@ function client_info(data){
 	$('#po_sn').val(data.po_sn);
 	$('#purchase_date').val(data.purchase_date);
 	$('#purchase_money').val(data.total_money);
+	$('#purchase_id').val(data.purchase_id);
 	if(data.is_cancel == 0 || data.create_type == 1){
     	$('#order_sn').val(data.order_sn);
     	$('#order_id').val(data.order_id);
-    	$('#purchase_id').val(data.purchase_id);
     	$('#delivery_address').val(data.delivery_address);
     	$('#contacts').val(data.contacts);
     	$('#contacts_tel').val(data.cus_phome);
 	}else{
 		$('#cus_name').val('');
 		$('#order_id').val('');
-		$('#purchase_id').val('');
+		//$('#purchase_id').val('');
     	$('#order_sn').val('');
     	$('#delivery_address').val('');
     	$('#contacts').val('');
@@ -274,6 +284,7 @@ function client_info(data){
 	}
 	$.get('<?php echo url('order');?>?purchase_id='+data.purchase_id,{},function(res){
 		if(res.code == 1){
+			$('.relation_order').hide();
 			$('#cus_name').val(res.data.cus_name);
 			$('#cus_id').val(res.data.cus_id);
 			goods_info = res.data.goodslist;
@@ -281,12 +292,14 @@ function client_info(data){
 		}else{
 			$('#cus_name').val('');
 			$('#order_id').val('');
-			$('#purchase_id').val('');
+			//$('#purchase_id').val('');
 	    	$('#order_sn').val('');
 	    	$('#delivery_address').val('');
 	    	$('#contacts').val('');
 	    	$('#contacts_tel').val('');
 	    	$('#cus_id').val('');
+	    	$('.relation_order').show();
+	    	goods_info = [];
 	    	goodsList(goods_info);
 			toastr.error(res.msg);
 		}
@@ -299,7 +312,8 @@ function relation_order(data){
 	$('#purchase_date').val(data.purchase_date);
 	$('#order_sn').val(data.order_sn);
 	$('#order_id').val(data.orderid);
-	$.get('<?php echo url('rel_order');?>?order_id='+data.orderid,{},function(res){
+	var purchase_id = $('#purchase_id').val();
+	$.get('<?php echo url('rel_order');?>?purchase_id='+purchase_id+'&order_id='+data.orderid,{},function(res){
 		if(res.code == 1){
 			$('#cus_name').val(res.data.cus_name);
 			$('#cus_id').val(res.data.cus_id);
@@ -313,7 +327,6 @@ function relation_order(data){
 		}else{
 			$('#cus_name').val('');
 			$('#order_id').val('');
-			$('#purchase_id').val('');
 	    	$('#order_sn').val('');
 	    	$('#delivery_address').val('');
 	    	$('#contacts').val('');
@@ -381,7 +394,7 @@ function update(index){
 		}
 		current_send_number = parseInt(current_send_number);
 		add_number = parseInt(add_number);
-		if(current_send_number+add_number > goods_info[index]['goods_number']){
+		if(current_send_number+add_number > goods_info[index]['purchase_number']){
 			alert('“'+goods_info[index]['goods_name']+'”本次送货数量+入库数量不能大于采购单的未交数量');
 			return;
 		}

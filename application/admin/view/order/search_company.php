@@ -38,7 +38,7 @@
                        
 <div class="row">
                     <div class="col-lg-12">
-                        <table class="table table-hover">
+                        <table class="table table-hover syc-table border">
                             <thead>
                                 <tr>
                                     
@@ -87,9 +87,6 @@
             </div>
         </div>
                         
-
-        </div>
-        <div class="modal-footer">
 
         </div>
 
