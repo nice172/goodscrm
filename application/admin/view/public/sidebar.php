@@ -6,6 +6,7 @@
                 <!--sidebar-nav-active-->
                 <ul id="accordion">
                     {foreach name="left_menu" item="v"}
+                    {if condition="!empty($v['subNode'])"}
                     <li class="sidebar-nav {if condition="$v['id']==$left_active"}sidebar-nav-active{/if}" id="{$v.nodeid}">
                         <div class="sidebar-title sidebar-trans">
                             <div class="sidebar-title-inner">
@@ -24,6 +25,7 @@
                         {/foreach}
                         </ul>
                     </li>
+                    {/if}
                     {/foreach}
                 </ul>
             </div>
