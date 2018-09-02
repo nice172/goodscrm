@@ -3,7 +3,7 @@ namespace app\admin\controller;
 class Auth extends Base{
 	
 	public function index(){
-		$lists = db('auth_rule')->select();
+		$lists = db('auth_rule')->order('sort asc')->select();
 		$select = getChild($lists,0);
 		$this->assign('select', $select);
 		$this->assign('lists',$lists);

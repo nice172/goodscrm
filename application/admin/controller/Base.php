@@ -44,7 +44,22 @@
 
      private function menu(){
      	$URL = strtolower(MODULE_NAME.'/'.CONTROLLER_NAME.'/'.ACTION_NAME);
-     	$lists = db('auth_rule')->where(array('status' => 1))->order('sort asc')->select();
+     	$notAuth = config('AUTH_CONFIG')['NO_AUTH_USER'];
+     	$where = array('status' => 1);
+     	if (!in_array($this->userinfo['id'], $notAuth)){
+     		if (empty($this->userinfo['group_id'])){
+     			Session::clear(); // 清除session值
+     			$this->error('您没有权限访问！',url('Login/index'));
+     		}
+     		$auth_group = db('auth_group')->where(['id' => $this->userinfo['group_id']])->find();
+     		if (empty($auth_group) || empty($auth_group['rule_pids']) || empty($auth_group['rules'])){
+     			Session::clear(); // 清除session值
+     			$this->error('您没有权限访问！',url('Login/index'));
+     		}
+     		$rulesID = $auth_group['rule_pids'].','.$auth_group['rules'];
+     		$where['id'] = ['in',$rulesID];
+     	}
+     	$lists = db('auth_rule')->where($where)->order('sort asc')->select();
      	$parentid = 0;
      	foreach ($lists as $key => $value){
      		if ($value['name'] == $URL && $value['parentid']){
