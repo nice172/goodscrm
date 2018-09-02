@@ -6,7 +6,7 @@
 {/block}
 {block name="main"}
 <div class="container-fluid">
-<?php $current_title = '新增账号';?>
+<?php $current_title = '新增用户';?>
 {include file="public/current"}
 <div class="col-md-12">
     <form class="form-horizontal" method="post" id="addUserForm">

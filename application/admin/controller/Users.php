@@ -35,7 +35,7 @@ class Users extends Base {
         
         // 获取分页显示
         $page = $data->render();
-        $this->assign('title','账户管理');
+        $this->assign('title','用户管理');
         $this->assign('page',$page);
         $this->assign('data', $data);
         $this->assign('empty', '<tr><td colspan="20" align="center">当前条件没有查到数据</td></tr>');
@@ -45,7 +45,7 @@ class Users extends Base {
     // 新增账户
     public function add() {
         $group = Db::name('auth_group')->select();
-        $this->assign('title','添加账户');
+        $this->assign('title','新增用户');
         $this->assign('group',$group);
         return $this->fetch();
     }

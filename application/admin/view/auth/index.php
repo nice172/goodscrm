@@ -10,38 +10,43 @@
 			<div class="col-xs-12 col-sm-12">
 				<small>左侧菜单：</small>
 				<small>
-					<select name="ismenu">
+					<select name="ismenu" class="form-control w50 inline">
 						<option value="1">是</option>
-						<option value="1">否</option>
+						<option value="0">否</option>
 					</select>
 				</small>
 				<small>状态：</small>
 				<small>
-					<select name="status">
+					<select name="status" class="form-control w50 inline">
 						<option value="1">开启</option>
 						<option value="0">禁用</option>
 					</select>
 				</small>
 				<small class="sl-left10">父级：</small>
 				<small>
-					<select name="parentid" required>
+					<select name="parentid" required="required" class="form-control w150 inline">
 						<option value="0">--默认顶级--</option>
 						{foreach name="select" item="v"}
 							<option value="{$v.id}">├{$v.title}</option>
 							{foreach name="v['child']" item="vv"}
 								<option value="{$vv.id}">&nbsp;&nbsp;├{$vv.title}</option>
+								{foreach name="vv['child']" item="vvv"}
+									{if condition="$vvv['ismenu']"}
+									<option value="{$vv.id}">&nbsp;&nbsp;&nbsp;&nbsp;├{$vvv.title}</option>
+									{/if}
+								{/foreach}
 							{/foreach}
 						{/foreach}
 					</select>
 				</small>
 				<small class="sl-left10">名称：</small>
-				<small><input name="title" id="title" class="input-text"  placeholder=" 输入名称" required/></small>
+				<small><input name="title" id="title" class="input-text form-control w100 inline"  placeholder=" 输入名称" required/></small>
 				<small class="sl-left10">模块/控制器/方法：</small>
-				<small><input name="name" id="name" class="input-text"  placeholder=" 输入模块/控制器/方法" required/></small>
+				<small><input name="name" id="name" class="input-text form-control w150 inline"  placeholder=" 输入模块/控制器/方法" required/></small>
 				<small class="sl-left10">css：</small>
-				<small><input name="css" id="css" class="input-text"  placeholder=" css样式" /></small>
+				<small><input name="css" id="css" class="input-text form-control w100 inline" value="icon-ecs" placeholder=" css样式" /></small>
 				<small class="sl-left10">排序：</small>
-				<small><input name="sort" id="sort" class="input-text" value="50"/></small>
+				<small><input name="sort" id="sort" class="input-text form-control w50 inline" value="50"/></small>
 				<small>
 					<button type="submit" class="btn btn-default ruleadd">添加节点</button>
 				</small>
@@ -58,7 +63,7 @@
 	3、css为控制左侧导航顶级栏目前图标样式(仅一级菜单有效)，具体可查看FontAwesome图标CSS样式
 </div>
 
-<table id="sample-table-1" class="table table-striped table-bordered table-hover">
+<table id="sample-table-1" class="table table-striped table-bordered table-hover border">
 	<thead>
 		<tr>
 <!-- 			<th class="center"> -->

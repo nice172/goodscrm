@@ -14,7 +14,7 @@
                                 <h5><span>{$title}</span></h5>
                             </div>
                             <div class="pull-right">
-                                <a class="btn btn-primary" href="{:url('add')}">新增账户</a>
+                                <a class="btn btn-primary" href="{:url('add')}">新增用户</a>
                                 <a href="javascript:window.location.reload();" class="btn btn-default">
                                     <span class="glyphicon glyphicon-refresh"></span>
                                     <span>刷新</span></a>

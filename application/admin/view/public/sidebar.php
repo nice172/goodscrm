@@ -44,12 +44,6 @@
                                     <span class="nav-title">商品类型管理</span>
                                 </a>
                             </li>
-<!--                             <li class="nav-item" id="config-goods_attr">
-                                <a href="{:url('Goods/goods_attr')}" class="sidebar-trans">
-                                    <div class="nav-icon sidebar-trans"><span class="icon-topbar-certify"></span></div>
-                                    <span class="nav-title">商品属性管理</span>
-                                </a>
-                            </li> -->
                             <li class="nav-item" id="config-params">
                                 <a href="{:url('Params/index')}" class="sidebar-trans">
                                     <div class="nav-icon sidebar-trans"><span class="icon-topbar-certify"></span></div>

@@ -13,7 +13,7 @@ class Auth extends Base{
 	public function rule_add_runadd(){
 		if (!request()->isAjax()) $this->error('操作失败');
 		$data = $this->rule_post_check();
-		if (db('auth_rule')->where(array('name' => $data['name']))->find()) $this->error('节点名称已存在');
+		//if (db('auth_rule')->where(array('name' => $data['name']))->find()) $this->error('节点名称已存在');
 		if (db('auth_rule')->insert($data)){
 			$this->success('添加成功');
 		}else{
@@ -78,12 +78,12 @@ class Auth extends Base{
 		if (!request()->isAjax()) $this->error('操作失败');
 		$data = $this->rule_post_check();
 		$data['id'] = intval(input('id'));
-		if (!$data['id']) $this->error('编辑失败');
-		if (db('auth_rule')->where(array('name' => $data['name'],'id' => array("NEQ",$data['id'])))->find()) $this->error('节点名称已存在');
+		if (!$data['id']) $this->error('保存失败');
+		//if (db('auth_rule')->where(array('name' => $data['name'],'id' => array("NEQ",$data['id'])))->find()) $this->error('节点名称已存在');
 		if (db('auth_rule')->update($data)){
-			$this->success('编辑成功');
+			$this->success('保存成功',url('index'));
 		}
-		$this->error('编辑失败');
+		$this->error('保存失败');
 	}
 	
 	public function nodesort(){
@@ -92,7 +92,7 @@ class Auth extends Base{
 		$data['sort'] = intval(input('sort'));
 		if ($data['sort'] < 0) $data['sort'] = 0;
 		if (db('auth_rule')->update($data)){
-			$this->success('编辑成功');
+			$this->success('保存成功');
 		}
 		$this->error('操作失败');
 	}

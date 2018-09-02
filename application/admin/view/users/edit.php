@@ -8,7 +8,7 @@
 <div class="container-fluid">
             <div class="console-container">
                 <!--内容开始-->
-<?php $current_title = '修改账号';?>
+<?php $current_title = '修改用户';?>
 {include file="public/current"}
                 <div class="row">
                     <div class="col-lg-12">
@@ -106,9 +106,6 @@
 {/block}
 {block name="footer"}
 <script type="text/javascript" src="/assets/plugins/jquery-validation/js/jquery.validate.js"></script>
-<!-- layui -->
-<link rel="stylesheet" type="text/css" href="/assets/plugins/layui/css/layui.css">
-<script type="text/javascript" src="/assets/plugins/layui/layui.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
         // 当前页面分类高亮
