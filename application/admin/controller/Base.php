@@ -38,7 +38,91 @@
                  }
              }
          }
+         $this->menu();
          $this->assign('empty',$this->empty);
+     }
+
+     private function menu(){
+     	$URL = strtolower(MODULE_NAME.'/'.CONTROLLER_NAME.'/'.ACTION_NAME);
+     	$lists = db('auth_rule')->where(array('status' => 1))->order('sort asc')->select();
+     	$parentid = 0;
+     	foreach ($lists as $key => $value){
+     		if ($value['name'] == $URL && $value['parentid']){
+     			$parent = getParent($lists,$value['id']);
+     			$parentid = $parent['id'];
+     			break;
+     		}
+     	}
+     	$top_menu = array();
+     	$current_name = '';
+     	$current_pid = 0;
+     	if ($parentid){
+     		foreach ($lists as $key => $value){
+     			if ($value['name'] == $URL){
+     				$current_name = $value['title'];
+     				$current_pid = $value['parentid'];
+     			}
+     			if ($value['parentid'] == $parentid){
+     				$top_menu[] = array(
+     						'node' => $value['name'],
+     						'nodeid' => str_replace('/', '-', $value['name']),
+     						'title' => $value['title'],
+     						'level' => $value['level'],
+     						'icon' => $value['css'],
+     						'id' => $value['id']
+     				);
+     			}
+     		}
+     	}
+     	$node = getChild($lists);
+     	$menu = array();
+     	foreach ($node as $key => $value){
+     		if (empty($value['child'])){
+     			$menu[$value['name']] = array(
+     					'node' => $value['name'],
+     					'nodeid' => str_replace('/', '-', $value['name']),
+     					'title' => $value['title'],
+     					'level' => $value['level'],
+     					'icon' => $value['css'],
+     					'id' => $value['id'],
+     					'subNode' => array(),
+     			);
+     		}else{
+     			$menu[$value['name']] = array(
+     					'node' => $value['name'],
+     					'nodeid' => str_replace('/', '-', $value['name']),
+     					'title' => $value['title'],
+     					'level' => $value['level'],
+     					'icon' => $value['css'],
+     					'id' => $value['id'],
+     					'subNode' => array(),
+     			);
+     			$subNode = array();
+     			foreach ($value['child'] as $childKey => $childValue){
+     				$subNode[] = array(
+     						'node' => $childValue['name'],
+     						'url' => url($childValue['name']),
+     						'nodeid' => str_replace('/', '-', $childValue['name']),
+     						'icon' => !empty($childValue['css']) ? $childValue['css'] : 'icon-ecs',
+     						'title' => $childValue['title'],
+     						'level' => $childValue['level'],
+     						'id' => $childValue['id'],
+     						'parentid' => $childValue['parentid']
+     				);
+     			}
+     			$menu[$value['name']]['subNode'] = $subNode;
+     		}
+     	}
+     	$this->assign('top_menu',$top_menu);
+     	$this->assign('left_URL',$URL);
+     	$this->assign('left_menu',$menu);
+//      	echo 'current_pid='.$current_pid.'<br />';
+//      	echo 'parentid_pid='.$parentid.'<br />';
+//      	p($menu);
+//      	exit;
+     	$this->assign('current_title', $current_name);
+     	$this->assign('current_pid', $current_pid);
+     	$this->assign('left_active',$parentid);
      }
      
      protected function ajaxReturn($data){
