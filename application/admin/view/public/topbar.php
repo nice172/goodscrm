@@ -54,7 +54,7 @@
                         </a>
                         <div class="topbar-info-dropdown-memu topbar-align-right">
                             <div class="topbar-user-entrance-list">
-                                <a href="{:Url('users/edit/',['uid'=>$Think.session.user_id])}" class="topbar-user-entrance">
+                                <a href="{:url('users/edit',['uid'=>$Think.session.user_id])}" class="topbar-user-entrance">
                                     <span class="topbar-user-entrance-logo icon-topbar-user-info"></span>
                                     <span class="ng-binding">个人资料</span>
                                 </a>
