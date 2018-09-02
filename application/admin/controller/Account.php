@@ -27,6 +27,7 @@ class Account extends Base {
         $this->assign('page',$result->render());
         $this->assign('list',$result->all());
         $this->assign('title','应收账款');
+        cookie('soset',null);
         return $this->fetch();
     }
     
@@ -88,7 +89,7 @@ class Account extends Base {
         $result = $db->join('__DELIVERY_GOODS__ gd','gd.delivery_id=do.id')
         ->join('__ORDER__ o','o.id=do.order_id')
         ->field('do.*,o.total_money,o.create_time as order_create_time,gd.goods_price,gd.goods_id,gd.unit,gd.goods_name,gd.add_number,gd.current_send_number')
-        ->where(['do.cus_id' => $receivables['cus_id'],'do.id' => ['in',$ids]])->select();
+        ->where(['do.cus_id' => $receivables['cus_id'],'do.id' => ['in',$ids]])->order('do.create_time desc')->select();
         foreach ($result as $key => $value){
             $category_name = db('goods g')->join('__GOODS_CATEGORY__ gc','gc.category_id=g.category_id')
             ->where(['g.goods_id' => $value['goods_id']])->value('gc.category_name');
@@ -165,7 +166,7 @@ class Account extends Base {
     	$result = $db->join('__DELIVERY_GOODS__ gd','gd.delivery_id=do.id')
     	->join('__ORDER__ o','o.id=do.order_id')->join('__PURCHASE__ p','p.id=do.purchase_id')
     	->field('do.*,p.tax,o.create_time as order_create_time,gd.goods_price,gd.goods_id,gd.unit,gd.goods_name,gd.add_number,gd.current_send_number')
-    	->paginate(config('page_size'),false,['query' => $this->request->param()]);
+    	->order('do.create_time desc')->paginate(config('page_size'),false,['query' => $this->request->param()]);
     	$list = $result->all();
     	foreach ($list as $key => $value){
     		$category_name = db('goods g')->join('__GOODS_CATEGORY__ gc','gc.category_id=g.category_id')
@@ -244,7 +245,7 @@ class Account extends Base {
     		$result = $db->join('__DELIVERY_GOODS__ gd','gd.delivery_id=do.id')
     		->join('__ORDER__ o','o.id=do.order_id')
     		->field('do.*,o.company_name,o.company_short,o.total_money,o.create_time as order_create_time,gd.goods_price,gd.goods_id,gd.unit,gd.goods_name,gd.add_number,gd.current_send_number')
-    		->where(['do.cus_id' => $cus_id,'do.order_id' => ['in',$order_ids]])->select();
+    		->where(['do.cus_id' => $cus_id,'do.order_id' => ['in',$order_ids]])->order('do.create_time desc')->select();
     		foreach ($result as $key => $value){
     			$category_name = db('goods g')->join('__GOODS_CATEGORY__ gc','gc.category_id=g.category_id')
     			->where(['g.goods_id' => $value['goods_id']])->value('gc.category_name');
@@ -335,6 +336,7 @@ class Account extends Base {
         $this->assign('page',$result->render());
         $this->assign('list',$result->all());
         $this->assign('title','应付账款');
+        cookie('setsupplier',null);
         $this->assign('sub_class','viewFramework-product-col-1');
         return $this->fetch();
     }
@@ -423,7 +425,7 @@ class Account extends Base {
         $result = $db->join('__PURCHASE__ p','do.purchase_id=p.id')
         ->join('__SUPPLIER__ s','p.supplier_id=s.id')
         ->field(['do.order_dn,do.id,do.delivery_date,p.supplier_id,p.po_sn,s.supplier_name,s.supplier_short'])
-        ->paginate(config('page_size'),false,['query' => $this->request->param()]);
+        ->order('do.create_time desc')->paginate(config('page_size'),false,['query' => $this->request->param()]);
         $this->assign('page',$result->render());
         $this->assign('list',$result->all());
         $this->assign('title','采购发票待处理');
@@ -469,7 +471,8 @@ class Account extends Base {
         $this->assign('supplier',$supplier);
         $result = db('delivery_order do')->join('__DELIVERY_GOODS__ gd','gd.delivery_id=do.id')
         ->join('__GOODS__ g','gd.goods_id=g.goods_id')->join('__GOODS_CATEGORY__ gc','gc.category_id=g.category_id')
-        ->where(['do.id' => ['in',array_unique($delivery_id)]])->field('do.*,gd.goods_id,gd.goods_name,gd.goods_price,gd.unit,gd.current_send_number,gd.add_number,gc.category_name')->select();
+        ->where(['do.id' => ['in',array_unique($delivery_id)]])->field('do.*,gd.goods_id,gd.goods_name,gd.goods_price,gd.unit,gd.current_send_number,gd.add_number,gc.category_name')
+        ->order('do.create_time desc')->select();
         $totalMoney = 0;
         foreach ($result as $key => $value){
             $result[$key]['count_money'] = _formatMoney($value['goods_price']*($value['current_send_number']+$value['add_number']));   
