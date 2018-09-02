@@ -1,28 +1,80 @@
 {extend name="public/base"}
 {block name="header"}
 <link href="/assets/admin/css/home.console.css" rel="stylesheet" type="text/css" />
-<style>.home-section-security{height:auto !important;}</style>
 {/block}
 {block name="main"}
             <div class="home-v2">
                 <div class="home-section-main clearfix">
                     <!--内容开始-->
                     <!--顶栏-->
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="home-head">
+                                <div class="home-head-open-title">
+                                    <div class="title-noticeTitle">
+                                        <span class="webname">{:Config('syc_webname')}</span>
+                                        <em style="font-size: 16px;margin-left: 15px;">进销存管理系统</em>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <!--/顶栏-->
                     <!-- 左侧 home-section-left-->
                     <div class="home-section">
                         <!--上-->
                         <div class="home-section-wrap clearfix">
-                            <div class="pull-left" style="width:50%;">
+                            <div class="pull-left" style="width: 54%">
                                 <div class="section-container home-section-security">
                                     <div class="security-left">
-                                        <div class="container-title"><span class="layui-badge layui-bg-blue layuiadmin-badge">今日成交</span></div>
+                                        <div class="container-title">个人信息</div>
+                                        <div class="sas-open-bg">
+                                            <p>欢迎：{$user.user_nick}</p>
+                                            <p>角色：{$user.title}</p>
+                                        </div>
+                                    </div>
+                                    <div class="security-right">
+                                        <div class="section-container home-section-undo" style="padding: 0;">
+                                            <div class="container-title">订单信息</div>
+                                            <div class="container-body">
+                                                <a class="undo-item home-block-hover">
+                                                    <span class="item-text">共计订单</span>
+                                                    <span class="item-number item-number-grey text-danger" style="color: #FF0000;">{$pcount}</span>
+                                                    <span class="item-unit">件</span>
+                                                </a>
+                                                <a class="undo-item home-block-hover">
+                                                    <span class="item-text">未交货订单</span>
+                                                    <span class="item-number item-number-grey">{$pshenc}</span>
+                                                    <span class="item-unit">件</span>
+                                                </a>
+                                                <a class="undo-item home-block-hover">
+                                                    <span class="item-text">完成订单</span>
+                                                    <span class="item-number item-number-grey">{$pchuhuo}</span>
+                                                    <span class="item-unit">件</span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!---->
+                            <div class="pull-left" style="width: 46%;padding-left: 16px;">
+                                <div class="section-container home-section-security">
+                                    <div class="security-left">
+                                        <div class="container-title">待处理订单</div>
                                         <div class="container-body">
                                             <div class="item-horizontal" style="margin-bottom: 10px">
                                                 <div class="item-content home-block-hover">
-                                                    <span class="item-text">下单客户</span>
-                                                    <span class="item-unit"></span>
-                                                    <span class="item-number item-number-grey">{$pqrchuku}</span>
+                                                    <span class="item-text">确认订单</span>
+                                                    <span class="item-unit">件</span>
+                                                    <span class="item-number item-number-grey">{$pqueren}</span>
+                                                </div>
+                                            </div>
+                                            <div class="item-horizontal">
+                                                <div class="item-content home-block-hover">
+                                                    <span class="item-text">部分已送货</span>
+                                                    <span class="item-unit">件</span>
+                                                    <span class="item-number item-number-grey">{$pqrdjin}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -33,100 +85,16 @@
                                         <div class="container-body">
                                             <div class="item-horizontal" style="margin-bottom: 10px">
                                                 <div class="item-content home-block-hover">
-                                                    <span class="item-text">下单金额</span>
-                                                    <span class="item-unit">元</span>
+                                                    <span class="item-text">今日下单</span>
+                                                    <span class="item-unit">件</span>
                                                     <span class="item-number item-number-grey">{$pqrweikuan}</span>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!---->
-                            <div class="pull-left" style="width:50%;padding-left: 16px;">
-                                <div class="section-container home-section-security">
-                                    <div class="security-left">
-                                        <div class="container-title"><span class="layui-badge layui-bg-cyan layuiadmin-badge">昨日成交</span></div>
-                                        <div class="container-body">
-                                            <div class="item-horizontal" style="margin-bottom: 10px">
+                                            <div class="item-horizontal">
                                                 <div class="item-content home-block-hover">
-                                                    <span class="item-text">下单客户</span>
-                                                    <span class="item-unit"></span>
-                                                    <span class="item-number item-number-grey">{$yesterday}</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!---->
-                                    <div class="security-right">
-                                        <div class="container-title">&nbsp;</div>
-                                        <div class="container-body">
-                                            <div class="item-horizontal" style="margin-bottom: 10px">
-                                                <div class="item-content home-block-hover">
-                                                    <span class="item-text">下单金额</span>
-                                                    <span class="item-unit">元</span>
-                                                    <span class="item-number item-number-grey">{$yesterday_money}</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-						<div class="home-section-wrap clearfix">
-                            <div class="pull-left" style="width:50%;">
-                                <div class="section-container home-section-security">
-                                    <div class="security-left">
-                                        <div class="container-title"><span class="layui-badge layui-bg-green layuiadmin-badge">近7日成交</span></div>
-                                        <div class="container-body">
-                                            <div class="item-horizontal" style="margin-bottom: 10px">
-                                                <div class="item-content home-block-hover">
-                                                    <span class="item-text">下单客户</span>
-                                                    <span class="item-unit"></span>
-                                                    <span class="item-number item-number-grey">{$yesterday_7_cus}</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!---->
-                                    <div class="security-right">
-                                        <div class="container-title">&nbsp;</div>
-                                        <div class="container-body">
-                                            <div class="item-horizontal" style="margin-bottom: 10px">
-                                                <div class="item-content home-block-hover">
-                                                    <span class="item-text">下单金额</span>
-                                                    <span class="item-unit">元</span>
-                                                    <span class="item-number item-number-grey">{$yesterday_7_money}</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!---->
-                            <div class="pull-left" style="width:50%;padding-left: 16px;">
-                                <div class="section-container home-section-security">
-                                    <div class="security-left">
-                                        <div class="container-title"><span class="layui-badge layui-bg-orange layuiadmin-badge">近1个月成交</span></div>
-                                        <div class="container-body">
-                                            <div class="item-horizontal" style="margin-bottom: 10px">
-                                                <div class="item-content home-block-hover">
-                                                    <span class="item-text">下单客户</span>
-                                                    <span class="item-unit"></span>
-                                                    <span class="item-number item-number-grey">{$yesterday_30_cus}</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!---->
-                                    <div class="security-right">
-                                        <div class="container-title">&nbsp;</div>
-                                        <div class="container-body">
-                                            <div class="item-horizontal" style="margin-bottom: 10px">
-                                                <div class="item-content home-block-hover">
-                                                    <span class="item-text">下单金额</span>
-                                                    <span class="item-unit">元</span>
-                                                    <span class="item-number item-number-grey">{$yesterday_30_money}</span>
+                                                    <span class="item-text">今日下单客户</span>
+                                                    <span class="item-unit">件</span>
+                                                    <span class="item-number item-number-grey">{$pqrchuku}</span>
                                                 </div>
                                             </div>
                                         </div>

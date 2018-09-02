@@ -23,14 +23,44 @@ class Index extends Base {
 
         $pqrdjin = Db::name('order')->where('status', '=',6)->count();//部分已送货
 
-        $pqrweikuan = Db::name('order')->where('status', '>',-1)
-        ->where(['create_time' => ['>=',strtotime(date('Y-m-d'))]])
-        ->where(['create_time' => ['<=',strtotime(date('Y-m-d 23:59:59'))]])->count();//今日下单
-
-        $pqrchuku = Db::name('order')->where('status', '>',-1)
+        $pqrchuku = Db::name('order')->where('status', '>=',1)
         ->where(['create_time' => ['>=',strtotime(date('Y-m-d'))]])
         ->where(['create_time' => ['<=',strtotime(date('Y-m-d 23:59:59'))]])
         ->count('distinct cus_id');//今日下单客户
+        //今日下单金额
+        $pqrweikuan = _formatMoney(Db::name('order')->where('status', '>=',1)
+        ->where(['create_time' => ['>=',strtotime(date('Y-m-d'))]])
+        ->where(['create_time' => ['<=',strtotime(date('Y-m-d 23:59:59'))]])->sum('total_money'));
+
+        $yesterday = date('Y-m-d',strtotime('-1 day'));
+        $yesterday_cus = Db::name('order')->where('status', '>=',1)
+        ->where(['create_time' => ['>=',strtotime($yesterday)]])
+        ->where(['create_time' => ['<=',strtotime($yesterday.' 23:59:59')]])
+        ->count('distinct cus_id');//昨天下单客户
+        //昨天下单金额
+        $yesterday_money = _formatMoney(Db::name('order')->where('status', '>=',1)
+        		->where(['create_time' => ['>=',strtotime($yesterday)]])
+        		->where(['create_time' => ['<=',strtotime($yesterday.' 23:59:59')]])->sum('total_money'));
+
+        $day_7 = date('Y-m-d',strtotime('-7 day'));
+        $yesterday_7_cus = Db::name('order')->where('status', '>=',1)
+        ->where(['create_time' => ['>=',strtotime($day_7)]])
+        ->where(['create_time' => ['<=',strtotime(date('Y-m-d 23:59:59'))]])
+        ->count('distinct cus_id');//近7天下单客户
+        //近7天下单金额
+        $yesterday_7_money = _formatMoney(Db::name('order')->where('status', '>=',1)
+        		->where(['create_time' => ['>=',strtotime($day_7)]])
+        		->where(['create_time' => ['<=',strtotime(date('Y-m-d 23:59:59'))]])->sum('total_money'));
+        
+        $day_30 = date('Y-m-d',strtotime('-30 day'));
+        $yesterday_30_cus = Db::name('order')->where('status', '>=',1)
+        ->where(['create_time' => ['>=',strtotime($day_30)]])
+        ->where(['create_time' => ['<=',strtotime(date('Y-m-d 23:59:59'))]])
+        ->count('distinct cus_id');//近30天下单客户
+        //近30天下单金额
+        $yesterday_30_money = _formatMoney(Db::name('order')->where('status', '>=',1)
+        		->where(['create_time' => ['>=',strtotime($day_30)]])
+        		->where(['create_time' => ['<=',strtotime(date('Y-m-d 23:59:59'))]])->sum('total_money'));
         
         //获取当前年份
         $dateD = date('Y');
@@ -41,8 +71,8 @@ class Index extends Base {
             $dqy = $dateD.'-'.$i;  //月份
             $dqy1 = $dqy.'-01 0:0:0'; //月份第一天
             $dqy2 = $dqy.'-'. date('t',strtotime($dqy)) .' 23:59:59'; //月份最后一天
-            $dateArr[] = Db::name('purchase')
-                ->where('status',1)
+            $dateArr[] = Db::name('order')
+                ->where('status','>=',1)
                 ->where('create_time', '>=',strtotime($dqy1))
                 ->where('create_time', '<=', strtotime($dqy2))
                 ->count();
@@ -58,6 +88,12 @@ class Index extends Base {
             'pqrdjin' => $pqrdjin,
             'pqrweikuan' => $pqrweikuan,
             'pqrchuku' => $pqrchuku,
+        	'yesterday' => $yesterday_cus,
+        	'yesterday_money' => $yesterday_money,
+        	'yesterday_7_cus' => $yesterday_7_cus,
+        	'yesterday_7_money' => $yesterday_7_money,
+        	'yesterday_30_cus' => $yesterday_30_cus,
+        	'yesterday_30_money' => $yesterday_30_money,
             'dateD' => $dateD,
             'dateArr' => json_encode($dateArr),
         ];
