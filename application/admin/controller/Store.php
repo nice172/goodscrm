@@ -99,6 +99,10 @@ class Store extends Base {
             $id = $this->request->param('id',0,'intval');
             if ($id <= 0) $this->error('参数错误');
             if (db('purchase')->where(['id' => $id])->setField('is_cancel',1)){
+            	$info = db('purchase')->where(['id' => $id])->find();
+            	if ($info['order_id']){
+            		db('order')->where(['id' => $info['order_id']])->setField('is_create',0);
+            	}
                 $this->success('取消成功');
             }
             $this->error('取消失败');
