@@ -219,23 +219,31 @@ class Account extends Base {
     public function create(){
     	$checked = cookie('soset');
     	if (empty($checked) || empty($checked['checked'])) $this->error('请选择销售单');
-    	list($cus_id,$order_id) = explode('_', array_unique($checked['checked'])[0]);
     	/**
-    	 * 1086_10
-    	 * 1086_12
+    	 * 1086_1_10
+    	 * 1086_2_12
     	 */
+    	$cus_ids = [];
+    	$delivery_ids = [];
     	$order_ids = [];
     	foreach ($checked['checked'] as $value){
     		$arr = explode('_', $value);
-    		$order_ids[] = isset($arr[1]) ? $arr[1] : 0;
+    		$cus_ids[] = isset($arr[0]) ? $arr[0] : 0;
+    		$delivery_ids[] = isset($arr[1]) ? $arr[1] : 0;
+    		$order_ids[] = isset($arr[2]) ? $arr[2] : 0;
+    	}
+    	if (count($cus_ids) > 2){
+    		$this->error('客户名称不相同的不能创建对账单');
     	}
     	$order_ids = array_unique($order_ids);
-    	if (isset($cus_id) && isset($order_ids)) {
+    	if (!empty($cus_ids) && !empty($order_ids)) {
+    		$cus_id = $cus_ids[0];
     		$db = db('delivery_order do');
     		$db->where(['do.is_invoice' => 0]);
+    		$db->where(['do.id' => ['in',$delivery_ids]]);
     		$result = $db->join('__DELIVERY_GOODS__ gd','gd.delivery_id=do.id')
     		->join('__ORDER__ o','o.id=do.order_id')
-    		->field('do.*,o.total_money,o.create_time as order_create_time,gd.goods_price,gd.goods_id,gd.unit,gd.goods_name,gd.add_number,gd.current_send_number')
+    		->field('do.*,o.company_name,o.company_short,o.total_money,o.create_time as order_create_time,gd.goods_price,gd.goods_id,gd.unit,gd.goods_name,gd.add_number,gd.current_send_number')
     		->where(['do.cus_id' => $cus_id,'do.order_id' => ['in',$order_ids]])->select();
     		foreach ($result as $key => $value){
     			$category_name = db('goods g')->join('__GOODS_CATEGORY__ gc','gc.category_id=g.category_id')
@@ -243,11 +251,17 @@ class Account extends Base {
     			$result[$key]['category_name'] = $category_name;
     		}
     		if (empty($result)) $this->error('数据错误');
-    		$order = db('order')->where(['id' => ['in',$order_ids]])->field('total_money,company_name,company_short')->select();
+    		//$order = db('order')->where(['id' => ['in',$order_ids]])->field('total_money,company_name,company_short')->select();
     		$total_money = 0;
     		$company_name = '';
+    		/*
     		foreach ($order as $key => $value){
     			$total_money += $value['total_money'];
+    			$company_name = $value['company_name'];
+    		}
+    		*/
+    		foreach ($result as $key => $value){
+    			$total_money += $value['goods_price']*$value['current_send_number'];
     			$company_name = $value['company_name'];
     		}
     		$this->assign('total_money',_formatMoney($total_money));
@@ -423,9 +437,10 @@ class Account extends Base {
         $id = $this->request->param('id',0,'intval');
         if (!$id) $this->error('参数错误');
         $delivery_order = db('delivery_order')->where(['id' => $id])->find();
+        if (empty($delivery_order)) $this->error('送货单不存在');
         $data = db('delivery_goods gd')->join('__GOODS__ g','g.goods_id=gd.goods_id')
         ->join('__GOODS_CATEGORY__ gc','g.category_id=gc.category_id')
-        ->field('gd.*,gc.category_name')->select();
+        ->where(['gd.delivery_id' => $id])->field('gd.*,gc.category_name')->select();
         $this->assign('data',$data);
         $this->assign('page','');
         return $this->fetch();
@@ -434,15 +449,27 @@ class Account extends Base {
     public function create_payment(){
         $checked = cookie('setsupplier');
         if (empty($checked) || empty($checked['checked'])) $this->error('请选择供应商');
-        list($supplier_id,$delivery_id) = explode('_', array_unique($checked['checked'])[0]);
-        
+        $supplier_ids = [];
+        $delivery_id = [];
+        foreach ($checked['checked'] as $key => $value){
+        	$tempArr = explode('_', $value);
+        	if (isset($tempArr[0])) {
+        		$supplier_ids[] = $tempArr[0];
+        	}
+        	if (isset($tempArr[1])) {
+        		$delivery_id[] = $tempArr[1];
+        	}
+        }
+        if (count(array_unique($supplier_ids)) > 2){
+        	$this->error('不相同的供应商不能创建对账单');
+        }
+        $supplier_id = $supplier_ids[0]?:0;
         $supplier = db('supplier')->where(['id' => $supplier_id])->find();
         if (empty($supplier)) $this->error('供应商不存在');
         $this->assign('supplier',$supplier);
-        
         $result = db('delivery_order do')->join('__DELIVERY_GOODS__ gd','gd.delivery_id=do.id')
         ->join('__GOODS__ g','gd.goods_id=g.goods_id')->join('__GOODS_CATEGORY__ gc','gc.category_id=g.category_id')
-        ->field('do.*,gd.goods_id,gd.goods_name,gd.goods_price,gd.unit,gd.current_send_number,gd.add_number,gc.category_name')->select();
+        ->where(['do.id' => ['in',array_unique($delivery_id)]])->field('do.*,gd.goods_id,gd.goods_name,gd.goods_price,gd.unit,gd.current_send_number,gd.add_number,gc.category_name')->select();
         $totalMoney = 0;
         foreach ($result as $key => $value){
             $result[$key]['count_money'] = _formatMoney($value['goods_price']*($value['current_send_number']+$value['add_number']));   

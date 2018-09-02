@@ -76,7 +76,7 @@
                             <tbody>
                             {volist name="list" id="vo" empty="$empty"}
                                 <tr>
-                                <td><input type="checkbox" {if condition="isset($soset['checked']) && in_array($vo['cus_id'].'_'.$vo['order_id'],$soset['checked'])"}checked="checked"{/if} name="cus_delivery[]" data-cus_id="{$vo.cus_id}" value="{$vo.cus_id}_{$vo.order_id}"/></td>
+                                <td><input type="checkbox" {if condition="isset($soset['checked']) && in_array($vo['cus_id'].'_'.$vo['id'].'_'.$vo['order_id'],$soset['checked'])"}checked="checked"{/if} name="cus_delivery[]" data-cus_id="{$vo.cus_id}" value="{$vo.cus_id}_{$vo.id}_{$vo.order_id}"/></td>
                                 <td>{$vo.cus_name}</td>
                                 <td>{$vo.category_name}</td>
                                 <td>{$vo.goods_name}</td>
