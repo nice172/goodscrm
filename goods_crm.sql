@@ -1,16 +1,16 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : localhost3306
+Source Server         : localhost
 Source Server Version : 50714
-Source Host           : localhost:3306
+Source Host           : 127.0.0.1:3306
 Source Database       : goods_crm
 
 Target Server Type    : MYSQL
 Target Server Version : 50714
 File Encoding         : 65001
 
-Date: 2018-09-02 17:20:39
+Date: 2018-09-03 16:05:31
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -76,7 +76,7 @@ CREATE TABLE `syc_auth_rule` (
   `ismenu` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否显示左侧菜单',
   `condition` char(100) DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=242 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=244 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of syc_auth_rule
@@ -145,6 +145,7 @@ INSERT INTO `syc_auth_rule` VALUES ('238', '235', 'admin/account/payment', '应�
 INSERT INTO `syc_auth_rule` VALUES ('239', '238', 'admin/account/payment', '应付账款列表', '3', '1', '1', 'icon-ecs', '50', '1', null);
 INSERT INTO `syc_auth_rule` VALUES ('240', '238', 'admin/account/wait', '采购发票待处理', '3', '1', '1', 'icon-ecs', '50', '1', null);
 INSERT INTO `syc_auth_rule` VALUES ('241', '238', 'admin/account/create_payment', '创建对账单', '3', '1', '1', 'icon-ecs', '50', '0', null);
+INSERT INTO `syc_auth_rule` VALUES ('242', '213', 'admin/goods/add', '新增商品', '4', '1', '1', 'icon-ecs', '50', '0', null);
 
 -- ----------------------------
 -- Table structure for syc_bancai
@@ -1542,5 +1543,5 @@ CREATE TABLE `syc_users` (
 -- Records of syc_users
 -- ----------------------------
 INSERT INTO `syc_users` VALUES ('1', 'asdasd', 'sha256:1000:X2vbzkCcKSScvZZ5ZUDs7DvTmergIc5u:fQt8UQynrp5psap5MoOq4scNMLNhcjIl', '开发者', '1', '354575573@qq.com', '/uploads/avatar/582d3a26a3369.jpg', '2017-01-01', '163', '1451577600', '1535506989', '127.0.0.1', '127.0.0.1', '16', '1');
-INSERT INTO `syc_users` VALUES ('2', 'admin', 'sha256:1000:bb+qr8kui4m4JriYM/aLnznOODBwZfbi:30utxhFU7cxebnazg8Xh5TEkAmzR6ymJ', '管理员', '1', 'nice172@126.com', '', '2018-08-05', '26', '1533480247', '1535612192', '192.168.1.225', '', '16', '1');
+INSERT INTO `syc_users` VALUES ('2', 'admin', 'sha256:1000:bb+qr8kui4m4JriYM/aLnznOODBwZfbi:30utxhFU7cxebnazg8Xh5TEkAmzR6ymJ', '管理员', '1', 'nice172@126.com', '', '2018-08-05', '27', '1533480247', '1535939678', '192.168.1.225', '', '16', '1');
 INSERT INTO `syc_users` VALUES ('3', 'nice172', 'sha256:1000:GM0kcPbE+QNRSpmsG58qckJUkekhvpwi:XwmDtVMPAfE8DDYUdVW5DF5AOLljRm8q', '测试号', '1', 'nice172@163.com', '', '2018-08-06', '2', '1533526543', '1535612177', '10.10.0.99', '', '14', '1');
