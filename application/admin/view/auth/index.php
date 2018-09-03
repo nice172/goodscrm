@@ -81,7 +81,13 @@
 				{$v.id}
 			</td>
 			<td>
-				{$v.title}
+								<?php echo str_repeat('&nbsp;&nbsp;&nbsp;', $v['level']);?>
+			              		└<?php echo str_repeat('─',  $v['level']);?>
+			              		{if condition="$v['parentid']"}
+			              		{$v.title}
+			              		{else}
+			              		<strong>{$v.title}</strong>
+			              		{/if}
 			</td><td>
 				{$v.name}
 			</td>
@@ -159,7 +165,7 @@ $(function(){
 	$('.inputSort').blur(function(){
 		$.ajax({type:'post',url:'<?php echo url('nodesort');?>',data:{sort:$(this).val(),id:$(this).attr('item')},success:function(){}});
 	});	
-	　$("#treeTable").treetable({ 
+	　$("#treeTablex").treetable({ 
 		expandable: true,
 		stringCollapse: '收起',
 		stringExpand:'展开',
