@@ -145,6 +145,17 @@
          exit(json($data)->getContent());
      }
      
+     public function _empty(){
+         if ($this->request->isAjax()){
+             $this->error('方法不存在');
+         }
+         if(isset($_SERVER['HTTP_REFERER']) && !empty($_SERVER['HTTP_REFERER'])) {
+             $this->redirect($_SERVER['HTTP_REFERER']);
+             exit;
+         }
+         $this->error('方法不存在');
+     }
+     
      protected function upload_file($subDir=''){
      	// 获取表单上传文件 例如上传了001.jpg
      	$file = request()->file('file');
