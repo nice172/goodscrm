@@ -78,7 +78,7 @@
 										<option value="{$vv.id}" {if condition="$data['parentid'] eq $vv['id']"}selected="selected"{/if}>&nbsp;&nbsp;├{$vv.title}</option>
         								{foreach name="vv['child']" item="vvv"}
         									{if condition="$vvv['ismenu']"}
-        									<option value="{$vv.id}" {if condition="$data['parentid'] eq $vvv['id']"}selected="selected"{/if}>&nbsp;&nbsp;&nbsp;&nbsp;├{$vvv.title}</option>
+        									<option value="{$vvv.id}" {if condition="$data['parentid'] eq $vvv['id']"}selected="selected"{/if}>&nbsp;&nbsp;&nbsp;&nbsp;├{$vvv.title}</option>
         									{/if}
         								{/foreach}
 									{/foreach}
