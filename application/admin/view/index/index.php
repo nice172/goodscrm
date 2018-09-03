@@ -136,6 +136,13 @@
                         </div>
                         <!--上 END-->
                         
+						<div class="home-section-wrap">
+<!--                         <span>客户下单金额前五名</span> -->
+                        <div class="money_list">
+                        	<div id="container_money" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+                        </div>
+                        </div>
+                        
                         <div class="home-section-wrap">
                         <span>最后5次报价记录 <a href="javascript:;" class="click_list">收起</a></span>
                         <div class="record_list">
@@ -271,6 +278,7 @@
 <script src="/assets/plugins/highcharts/code/highcharts.js"></script>
 <script src="/assets/plugins/highcharts/code/highcharts-more.js"></script>
 <script src="/assets/plugins/highcharts/code/modules/exporting.js"></script>
+<script src="/assets/plugins/highcharts/code/modules/drilldown.js"></script>
 <script type="text/javascript">
 
 	$('.click_list').click(function(){
@@ -286,6 +294,52 @@
 		}
 	});
 
+	Highcharts.chart('container_money', {
+	    chart: {
+	        type: 'column'
+	    },
+	    title: {
+	        text: '客户下单金额前五名'
+	    },
+	    subtitle: {
+	        //text: '具体的数据'
+	    },
+	    xAxis: {
+	        type: 'category'
+	    },
+	    yAxis: {
+	        title: {
+	            text: '总金额'
+	        }
+	    },
+	    legend: {
+	        enabled: false
+	    },
+	    plotOptions: {
+	        series: {
+	            borderWidth: 0,
+	            dataLabels: {
+	                enabled: false,
+	                format: '{point.y}'
+	            }
+	        }
+	    },
+	    tooltip: {
+	        headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+	        pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b> of total<br/>'
+	    },
+	    series: [{
+	        name: '订单金额',
+	        colorByPoint: true,
+	        data: [
+				<?php foreach ($top5 as $val){?>
+		        {"name":<?php echo json_encode($val['name']);?>,"y":<?php echo $val['y'];?>},
+		        <?php }?>
+		        ]
+	    }],
+	    drilldown: {}
+	});
+	
     var chart = Highcharts.chart('container', {
         //顶部的标题
         title: {

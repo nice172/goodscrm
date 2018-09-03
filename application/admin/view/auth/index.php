@@ -1,6 +1,6 @@
 {extend name="public/base"}
 {block name="header"}
-
+<link rel="stylesheet" href="/assets/plugins/treetable/css/jquery.treetable.css" />
 {/block}
 {block name="main"}
 
@@ -63,15 +63,9 @@
 	3、css为控制左侧导航顶级栏目前图标样式(仅一级菜单有效)，具体可查看FontAwesome图标CSS样式
 </div>
 
-<table id="sample-table-1" class="table table-striped table-bordered table-hover border">
+<table id="treeTable" class="table table-striped table-bordered table-hover border">
 	<thead>
 		<tr>
-<!-- 			<th class="center"> -->
-<!-- 				<label class="position-relative"> -->
-<!-- 					<input class="ace" type="checkbox"> -->
-<!-- 					<span class="lbl"></span> -->
-<!-- 				</label> -->
-<!-- 			</th> -->
 			<th>ID</th>
 			<th>节点名称</th>
 			<th>权限URL</th>
@@ -82,13 +76,7 @@
 		</tr>
 	</thead>
 		{foreach name="lists" item="v"}
-		<tr id="tr<?php echo $v['id'];?>">
-<!-- 			<td class="center"> -->
-<!-- 				<label class="position-relative"> -->
-<!-- 					<input class="ace" value="{$v.id}" name="checkbox[]" type="checkbox"> -->
-<!-- 					<span class="lbl"></span> -->
-<!-- 				</label> -->
-<!-- 			</td> -->
+		<tr id="tr<?php echo $v['id'];?>" data-tt-id="node-{$v['id']}" {if condition="$v['parentid']"}data-tt-parent-id="node-{$v['parentid']}"{/if}>
 			<td>
 				{$v.id}
 			</td>
@@ -163,6 +151,7 @@
 </div>
 {/block}
 {block name="footer"}
+<script src="/assets/plugins/treetable/jquery.treetable.js"></script>
 <script type="text/javascript">
 $(function(){
     $("#sidebar-config").addClass("sidebar-nav-active"); // 大分类
@@ -170,6 +159,23 @@ $(function(){
 	$('.inputSort').blur(function(){
 		$.ajax({type:'post',url:'<?php echo url('nodesort');?>',data:{sort:$(this).val(),id:$(this).attr('item')},success:function(){}});
 	});	
+	　$("#treeTable").treetable({ 
+		expandable: true,
+		stringCollapse: '收起',
+		stringExpand:'展开',
+		clickableNodeNames: false,
+		expandable: true,
+		expanderTemplate:'<i class="layui-icon layui-icon-triangle-r" style="cursor:pointer;"></i>' });
+	 $('body').on('click','#treeTable .indenter i',function(){
+		 
+		 if($(this).hasClass('layui-icon-triangle-r')){
+			 $(this).removeClass('layui-icon-triangle-r');
+			 $(this).addClass('layui-icon-triangle-d');
+			 }else{
+			 $(this).removeClass('layui-icon-triangle-d');
+			 $(this).addClass('layui-icon-triangle-r');
+		}
+	 });
 });
 </script>
 {/block}

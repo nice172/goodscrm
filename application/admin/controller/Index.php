@@ -61,7 +61,18 @@ class Index extends Base {
         $yesterday_30_money = _formatMoney(Db::name('order')->where('status', '>=',1)
         		->where(['create_time' => ['>=',strtotime($day_30)]])
         		->where(['create_time' => ['<=',strtotime(date('Y-m-d 23:59:59'))]])->sum('total_money'));
-        
+        $top5Result = Db::query('SELECT MAX(total_money) as total_money,cus_id FROM syc_order GROUP BY cus_id order by total_money limit 5');
+        $top5 = [];
+        if (!empty($top5Result)){
+            foreach ($top5Result as $key => $value){
+                $cus = db('customers')->where(['cus_id' => $value['cus_id']])->field('cus_name,cus_short')->find();
+                $top5[] = [
+                    'name' => isset($cus['cus_name']) ? $cus['cus_name'] : '',
+                    'y' => $value['total_money']
+                ];
+            }
+        }
+        $this->assign('top5',$top5);
         //获取当前年份
         $dateD = date('Y');
         //获取当前月份 $dateM = date('m');
