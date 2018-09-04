@@ -23,7 +23,7 @@
 	<!-- 导航end -->
 
 
-<table id="sample-table-1" class="table table-striped table-bordered table-hover">
+<table id="sample-table-1" class="table table-striped table-bordered table-hover border">
 	<thead>
 		<tr>
 		<th>序号</th>
@@ -61,46 +61,14 @@
 			</td>
 			<td>
 			
-				<div class="hidden-sm hidden-xs btn-group">
 				
-					<button class="btn btn-xs btn-info" onclick="window.location.href='<?php echo url('edit',array('id' => $v['id']));?>'">
-						<i class="ace-icon fa fa-pencil bigger-120"></i>
-					</button>
+				
+					<a onclick="window.location.href='<?php echo url('edit',array('id' => $v['id']));?>'">修改</a>
 					
 			<!-- 		<button class="btn btn-xs btn-danger ajaxDelete" data-id="<?php echo $v['id'];?>" action="<?php echo url('delete',array('id' => $v['id']));?>">
 						<i class="ace-icon fa fa-trash-o bigger-120"></i>
 					</button> -->
-					
-				</div>
 
-				<div class="hidden-md hidden-lg">
-					<div class="inline position-relative">
-						<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
-							<i class="ace-icon fa fa-cog icon-only bigger-110"></i>
-						</button>
-
-						<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-							
-							<li>
-								<a href="#" class="tooltip-success" data-rel="tooltip" title="" data-original-title="Edit">
-									<span class="green">
-										<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
-									</span>
-								</a>
-							</li>
-							
-							<li>
-								<a href="#" class="tooltip-error" data-rel="tooltip" title="" data-original-title="Delete">
-									<span class="red">
-										<i class="ace-icon fa fa-trash-o bigger-120"></i>
-									</span>
-								</a>
-							</li>
-							
-						</ul>
-					</div>
-				</div>
-				
 			</td>
 		</tr>
 {/foreach}

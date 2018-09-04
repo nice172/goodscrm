@@ -1,6 +1,5 @@
 {extend name="public/base"}
 {block name="header"}
-
 {/block}
 {block name="main"}
 <div class="container-fluid">
@@ -23,7 +22,7 @@
 	<!-- 导航end -->
 
 
-<table id="sample-table-1" class="table table-striped table-bordered table-hover">
+<table id="sample-table-1" class="table table-striped table-bordered table-hover border">
 	<thead>
 		<tr>
 			<th>ID</th>
@@ -40,44 +39,16 @@
 				{$v.goods_type_id}
 			</td>
 			<td>
-				<input type="text" class="width50" name="type_name" data-id="<?php echo $v['goods_type_id'];?>" value="<?php echo $v['type_name'];?>"  />
+				<input type="text" class="input-text form-control w150" name="type_name" data-id="<?php echo $v['goods_type_id'];?>" value="<?php echo $v['type_name'];?>"  />
 			</td>
 			<td>
-			
-				<div class="hidden-sm hidden-xs btn-group">
-					<a href="<?php echo url('typeParams',array('goods_type_id' => $v['goods_type_id'],'attr_type' => 1));?>" class="btn btn-xs btn-danger" data-id="<?php echo $v['goods_type_id'];?>">属性列表</a>
-					<a href="<?php echo url('add_attr',array('goods_type_id' => $v['goods_type_id'],'attr_type' => 1));?>" class="btn btn-xs btn-danger" data-id="<?php echo $v['goods_type_id'];?>">新增属性</a>
-					<button class="btn btn-xs btn-danger ajaxDelete" data-id="<?php echo $v['goods_type_id'];?>" action="<?php echo url('deleteType',array('goods_type_id' => $v['goods_type_id']));?>">
-						<i class="ace-icon fa fa-trash-o bigger-120"></i>
-					</button>
-				</div>
 
-				<div class="hidden-md hidden-lg">
-					<div class="inline position-relative">
-						<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
-							<i class="ace-icon fa fa-cog icon-only bigger-110"></i>
-						</button>
+			<a href="<?php echo url('typeParams',array('goods_type_id' => $v['goods_type_id'],'attr_type' => 1));?>" class="" data-id="<?php echo $v['goods_type_id'];?>">属性列表</a>
+			<span class="text-explode">|</span>
+			<a href="<?php echo url('add_attr',array('goods_type_id' => $v['goods_type_id'],'attr_type' => 1));?>" class="" data-id="<?php echo $v['goods_type_id'];?>">新增属性</a>
+			<span class="text-explode">|</span>
+			<a class="ajaxDelete" data-id="<?php echo $v['goods_type_id'];?>" action="<?php echo url('deleteType',array('goods_type_id' => $v['goods_type_id']));?>">删除</a>
 
-						<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-							
-							<li>
-								<a href="#" class="tooltip-success" data-rel="tooltip" title="" data-original-title="Edit">
-									<span class="green">
-										<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
-									</span>
-								</a>
-							</li>
-							<li>
-								<a href="#" class="tooltip-error" data-rel="tooltip" title="" data-original-title="Delete">
-									<span class="red">
-										<i class="ace-icon fa fa-trash-o bigger-120"></i>
-									</span>
-								</a>
-							</li>
-						</ul>
-					</div>
-				</div>
-				
 			</td>
 		</tr>
 {/foreach}

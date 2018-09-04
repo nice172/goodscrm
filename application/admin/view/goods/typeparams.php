@@ -21,7 +21,7 @@
         </div>
     </div>
 	<!-- 导航end -->
-<table id="sample-table-1" class="table table-striped table-bordered table-hover">
+<table id="sample-table-1" class="table table-striped table-bordered table-hover border">
 	<thead>
 		<tr>
 			<th>ID</th>
@@ -47,42 +47,11 @@
 					参数
 				<?php }?>
 			</td>
-			<td><input type="text" data-id="<?php echo $v['goods_attr_id'];?>" class="width100" value="{$v.sort}" name="sort"/></td>
+			<td><input type="text" data-id="<?php echo $v['goods_attr_id'];?>" style="text-align: center;width:50px;" value="{$v.sort}" name="sort"/></td>
 			<td>
-			
-				<div class="hidden-sm hidden-xs btn-group">
-					<a href="<?php echo url('edit_attr',array('goods_attr_id' => $v['goods_attr_id']));?>" class="btn btn-xs btn-danger" data-id="<?php echo $v['goods_attr_id'];?>">修改</a>
-					<button class="btn btn-xs btn-danger ajaxDelete" data-id="<?php echo $v['goods_attr_id'];?>" action="<?php echo url('deleteAttr',array('goods_attr_id' => $v['goods_attr_id']));?>">
-						<i class="ace-icon fa fa-trash-o bigger-120"></i>
-					</button>
-				</div>
-
-				<div class="hidden-md hidden-lg">
-					<div class="inline position-relative">
-						<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
-							<i class="ace-icon fa fa-cog icon-only bigger-110"></i>
-						</button>
-
-						<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-							
-							<li>
-								<a href="#" class="tooltip-success" data-rel="tooltip" title="" data-original-title="Edit">
-									<span class="green">
-										<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
-									</span>
-								</a>
-							</li>
-							<li>
-								<a href="#" class="tooltip-error" data-rel="tooltip" title="" data-original-title="Delete">
-									<span class="red">
-										<i class="ace-icon fa fa-trash-o bigger-120"></i>
-									</span>
-								</a>
-							</li>
-						</ul>
-					</div>
-				</div>
-				
+					<a href="<?php echo url('edit_attr',array('goods_attr_id' => $v['goods_attr_id']));?>" class="" data-id="<?php echo $v['goods_attr_id'];?>">修改</a>
+					<span class="text-explode">|</span>
+					<a class="ajaxDelete" data-id="<?php echo $v['goods_attr_id'];?>" action="<?php echo url('deleteAttr',array('goods_attr_id' => $v['goods_attr_id']));?>">删除</a>
 			</td>
 		</tr>
 {/foreach}

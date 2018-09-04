@@ -1,6 +1,7 @@
 {extend name="public/base"}
 {block name="header"}
 <link rel="stylesheet" href="/assets/plugins/treetable/css/jquery.treetable.css" />
+<style>.border tbody tr td {padding:2px 8px;}</style>
 {/block}
 {block name="main"}
 
@@ -17,7 +18,7 @@
 				</small>
 				<small>状态：</small>
 				<small>
-					<select name="status" class="form-control w50 inline">
+					<select name="status" class="form-control w80 inline">
 						<option value="1">开启</option>
 						<option value="0">禁用</option>
 					</select>
@@ -40,7 +41,7 @@
 					</select>
 				</small>
 				<small class="sl-left10">名称：</small>
-				<small><input name="title" id="title" class="input-text form-control w100 inline"  placeholder=" 输入名称" required/></small>
+				<small><input name="title" id="title" class="input-text form-control w130 inline"  placeholder=" 输入名称" required/></small>
 				<small class="sl-left10">模块/控制器/方法：</small>
 				<small><input name="name" id="name" class="input-text form-control w150 inline"  placeholder=" 输入模块/控制器/方法" required/></small>
 				<small class="sl-left10">css：</small>
@@ -48,7 +49,7 @@
 				<small class="sl-left10">排序：</small>
 				<small><input name="sort" id="sort" class="input-text form-control w50 inline" value="50"/></small>
 				<small>
-					<button type="submit" class="btn btn-default ruleadd">添加节点</button>
+					<button type="submit" class="btn btn-primary ruleadd">添加节点</button>
 				</small>
 			</div>
 		</form>
@@ -63,12 +64,12 @@
 	3、css为控制左侧导航顶级栏目前图标样式(仅一级菜单有效)，具体可查看FontAwesome图标CSS样式
 </div>
 
-<table id="treeTable" class="table table-striped table-bordered table-hover border">
+<table id="treeTable" class="table table-striped table-bordered syc-table border table-hover">
 	<thead>
 		<tr>
 			<th>ID</th>
-			<th>节点名称</th>
-			<th>权限URL</th>
+			<th style="text-align: left;">节点名称</th>
+			<th style="text-align: left;">权限URL</th>
 			<th>左侧菜单</th>
 			<th>排序</th>
 			<th>状态</th>
@@ -80,7 +81,7 @@
 			<td>
 				{$v.id}
 			</td>
-			<td>
+			<td style="text-align: left;">
 								<?php echo str_repeat('&nbsp;&nbsp;&nbsp;', $v['level']);?>
 			              		└<?php echo str_repeat('─',  $v['level']);?>
 			              		{if condition="$v['parentid']"}
@@ -88,7 +89,7 @@
 			              		{else}
 			              		<strong>{$v.title}</strong>
 			              		{/if}
-			</td><td>
+			</td><td style="text-align: left;">
 				{$v.name}
 			</td>
 						<td>
@@ -102,53 +103,20 @@
 			<td>
 				
 				<?php if ($v['status']){?>
-				<button class="btn btn-xs btn-success ajaxRequest" action="<?php echo url('node_status');?>" data-id="<?php echo $v['id'];?>">开启</button>
+				<a href="javascript:;" class="ajaxRequest" action="<?php echo url('node_status');?>" data-id="<?php echo $v['id'];?>">开启</a>
 				<?php }else{ ?>
-				<button class="btn btn-xs btn-warning ajaxRequest" action="<?php echo url('node_status');?>" data-id="<?php echo $v['id'];?>">禁用</button>
+				<a href="javascript:;" class="ajaxRequest" action="<?php echo url('node_status');?>" data-id="<?php echo $v['id'];?>">禁用</a>
 				<?php }?>
 		
 			</td>
 
 			<td>
 			
-				<div class="hidden-sm hidden-xs btn-group">
-					<button class="btn btn-xs btn-info" onclick="window.location.href='<?php echo url('edit_node',array('id' => $v['id']));?>'">
-						<i class="ace-icon fa fa-pencil bigger-120"></i>
-					</button>
+					<a onclick="window.location.href='<?php echo url('edit_node',array('id' => $v['id']));?>'">修改</a>
 					{if condition="$v['id'] neq 2"}
-					<button class="btn btn-xs btn-danger ajaxDelete" data-id="<?php echo $v['id'];?>" action="<?php echo url('deletenode',array('id' => $v['id']));?>">
-						<i class="ace-icon fa fa-trash-o bigger-120"></i>
-					</button>
+					<span class="text-explode">|</span>
+					<a class="ajaxDelete" data-id="<?php echo $v['id'];?>" action="<?php echo url('deletenode',array('id' => $v['id']));?>">删除</a>
 					{/if}
-				</div>
-
-				<div class="hidden-md hidden-lg">
-					<div class="inline position-relative">
-						<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
-							<i class="ace-icon fa fa-cog icon-only bigger-110"></i>
-						</button>
-
-						<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-							
-							<li>
-								<a href="#" class="tooltip-success" data-rel="tooltip" title="" data-original-title="Edit">
-									<span class="green">
-										<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
-									</span>
-								</a>
-							</li>
-							{if condition="$v['id'] neq 2"}
-							<li>
-								<a href="#" class="tooltip-error" data-rel="tooltip" title="" data-original-title="Delete">
-									<span class="red">
-										<i class="ace-icon fa fa-trash-o bigger-120"></i>
-									</span>
-								</a>
-							</li>
-							{/if}
-						</ul>
-					</div>
-				</div>
 				
 			</td>
 		</tr>

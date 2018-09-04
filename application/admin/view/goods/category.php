@@ -56,40 +56,9 @@
 			<td><?php if (isset($goods_type[$v['goods_type_id']])) echo $goods_type[$v['goods_type_id']]['type_name'];?></td>
 			<td>{if condition="$v['status']"}显示{else/}禁用{/if}</td>
 			<td>
-			
-				<div class="hidden-sm hidden-xs btn-group">
-					<a href="javascript:;" class="btn btn-xs btn-danger updatecategory" data-id="<?php echo $v['category_id'];?>">修改</a>
-					<button class="btn btn-xs btn-danger ajaxDelete" data-id="<?php echo $v['category_id'];?>" action="<?php echo url('deleteCategory',array('category_id' => $v['category_id']));?>">
-						<i class="ace-icon fa fa-trash-o bigger-120"></i>
-					</button>
-				</div>
-
-				<div class="hidden-md hidden-lg">
-					<div class="inline position-relative">
-						<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
-							<i class="ace-icon fa fa-cog icon-only bigger-110"></i>
-						</button>
-
-						<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-							
-							<li>
-								<a href="#" class="tooltip-success" data-rel="tooltip" title="" data-original-title="Edit">
-									<span class="green">
-										<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
-									</span>
-								</a>
-							</li>
-							<li>
-								<a href="#" class="tooltip-error" data-rel="tooltip" title="" data-original-title="Delete">
-									<span class="red">
-										<i class="ace-icon fa fa-trash-o bigger-120"></i>
-									</span>
-								</a>
-							</li>
-						</ul>
-					</div>
-				</div>
-				
+					<a href="javascript:;" class="updatecategory" data-id="<?php echo $v['category_id'];?>">修改</a>
+					<span class="text-explode">|</span>
+					<a href="javascript:;" class="ajaxDelete" data-id="<?php echo $v['category_id'];?>" action="<?php echo url('deleteCategory',array('category_id' => $v['category_id']));?>">删除</a>
 			</td>
 		</tr>
 {/foreach}
