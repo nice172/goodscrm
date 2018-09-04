@@ -225,6 +225,9 @@ class Users extends Base {
                 return $this->error('传入参数错误');
             }
             if ($name == 'delone') {
+                if ($uid == 1){
+                    return $this->error('不能删除超级管理员');
+                }
                 // 单条删除操作
                 Db::name('users')->where('id', $uid)->update(['status'=>'-1']);
                 return $this->success('删除成功', Url::build('users/index'));
@@ -234,8 +237,10 @@ class Users extends Base {
                 if (!empty($arrUid)) {
                     $i=0;
                     foreach ($arrUid as $key=>$val) {
-                        Db::name('users')->where('id', $val)->update(['status'=>'-1']);
-                        $i++;
+                        if ($val != 1){
+                            Db::name('users')->where('id', $val)->update(['status'=>'-1']);
+                            $i++;
+                        }
                     }
                     return $this->success($i.' 条记录删除成功', Url::build('users/index'));
                 }
