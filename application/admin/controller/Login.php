@@ -17,6 +17,13 @@ use app\admin\model\Users As UserModel;
          parent::_initialize();
      }
      
+     public function _empty(){
+         if ($this->request->isAjax()){
+             $this->error('方法不存在');
+         }
+         $this->redirect(url('index'));
+     }
+     
      public function index() {
          if (Session::has("user_name") && Session::has("user_id")) {
              $this->redirect("index/index");
