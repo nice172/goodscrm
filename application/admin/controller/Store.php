@@ -21,7 +21,7 @@ class Store extends Base {
         }
         
         $db->where($where);
-        $db->field('g.*,gc.category_name,s.supplier_name');
+        $db->field('g.goods_id,g.goods_name,g.unit,g.store_number,gc.category_name,s.supplier_name');
         $db->join('__PURCHASE_GOODS__ pg','p.id=pg.purchase_id');
         $db->join('__GOODS__ g ','pg.goods_id=g.goods_id');
         $db->join('__GOODS_CATEGORY__ gc','g.category_id=gc.category_id');
@@ -30,7 +30,7 @@ class Store extends Base {
         //$db->join('__DELIVERY_ORDER__ do','p.order_id=do.order_id');
         //$db->where(['do.is_confirm' => 1]);
         
-        $result = $db->order('p.create_time desc')->paginate(config('PAGE_SIZE'),false, ['query' => $this->request->param()]);
+        $result = $db->group('g.goods_id')->paginate(config('PAGE_SIZE'),false, ['query' => $this->request->param()]);
         
         $this->assign('page',$result->render());
         $this->assign('list',$result);

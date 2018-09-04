@@ -155,6 +155,10 @@
                                 	<span class="text-explode">|</span>
                                 	<a href="javascript:cancel({$vo['oid']});">取消</a>
                                 	{/if}
+                                	{if condition="$vo['status'] eq 0 || $vo['status'] eq 1 || $vo['status'] eq 4"}
+                                	<span class="text-explode">|</span>
+                                	<a href="javascript:_delete({$vo['oid']});">删除</a>
+                                	{/if}
                                 </td>
                                 </tr>
                             {/volist}
@@ -286,6 +290,15 @@
         return false;
     }
     
+    function _delete(e) {
+        if(confirm("是否删除此订单？")){
+            if (!isNaN(e) && e !== null && e !== '') {
+                var data={name:'scrap',id:e};
+                $.sycToAjax("{:url('delete')}", data);
+            }
+        };
+        return false;
+    }
     //单条恢复订单操作
     function huifuLogisticsOne(e) {
         if(confirm("确定恢复此订单？")){

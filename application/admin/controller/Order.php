@@ -45,7 +45,7 @@ class Order extends Base {
         $categroy_id = $this->request->param('categroy_id');
         $db = db('order o');        
         $db->field('o.*,g.*,o.id as oid,g.id as gid');
-        if (empty($status)){
+        if ($status == ''){
             $where = ['o.status' => ['neq','-1']];
         }else{
             $where = ['o.status' => intval($status)];
@@ -182,7 +182,7 @@ class Order extends Base {
         $page = $result->render();
         $this->assign('page',$page);
         $this->assign('list',$data);
-        $this->assign('title','订单列表');
+        $this->assign('title','未交货订单');
 //      $this->assign('category',$category);
         return $this->fetch();
     }
@@ -250,6 +250,17 @@ class Order extends Base {
                 $this->success('取消成功');   
             }
             $this->error('取消失败');
+        }
+    }
+    
+    public function delete(){
+        if ($this->request->isAjax()){
+            $id = $this->request->param('id',0,'intval');
+            if ($id <= 0) $this->error('参数错误');
+            if (db('order')->where(['id' => $id])->setField('status',-1)){
+                $this->success('删除成功');
+            }
+            $this->error('删除失败');
         }
     }
     

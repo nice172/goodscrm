@@ -97,7 +97,7 @@ class Account extends Base {
         }
         $this->assign('page','');
         $this->assign('list',$result);
-        $this->assign('title','应收账款');
+        $this->assign('title','应收账款详情');
         return $this->fetch();
     }
     

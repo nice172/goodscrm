@@ -5,12 +5,12 @@
                     <div class="product-nav-title">{$title}</div>
                     <div class="product-nav-list">
                         <ul>
-                            <li {if condition="ACTION_NAME=='payment' || ACTION_NAME=='payment_info'"}class="active"{/if}>
+                            <li {if condition="ACTION_NAME=='payment' || ACTION_NAME=='payment_info' || ACTION_NAME=='payment_edit'"}class="active"{/if}>
                                 <a href="{:url('payment')}">
                                     <div class="nav-icon"></div><div class="nav-title">应付账款</div>
                                 </a>
                             </li>
-                            <li {if condition="ACTION_NAME=='wait' || ACTION_NAME=='create_payment' || ACTION_NAME=='payment_edit'"}class="active"{/if}>
+                            <li {if condition="ACTION_NAME=='wait' || ACTION_NAME=='create_payment'"}class="active"{/if}>
                                 <a href="{:url('wait')}">
                                     <div class="nav-icon"></div><div class="nav-title">采购发票待处理</div>
                                 </a>

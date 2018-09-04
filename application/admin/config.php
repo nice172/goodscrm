@@ -14,7 +14,12 @@ return [
             'admin/contacts/edit_do','admin/contacts/check_name',
             'admin/purchase/edit_do','admin/supplier/add_do',
             'admin/supplier/edit_do','admin/supplier/contacts_do',
-            'admin/supplier/edit_e_do'
+            'admin/supplier/edit_e_do','admin/order/search_company',
+            'admin/order/get_goods','admin/purchase/getsupplier',
+            'admin/purchase/get_goods','admin/delivery/search_purchase',
+            'admin/delivery/relation_order','admin/delivery/rel_order',
+            'admin/delivery/order','admin/delivery/get_goods',
+            'admin/account/view','admin/goods/change_cate','admin/goods/change_type'
         ),
     ),
     'PAGE_SIZE' => 10,
