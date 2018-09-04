@@ -8,6 +8,7 @@ return [
         'AUTH_USER' => config('database.prefix').'users',
         'NO_AUTH_URL' => array(
             'admin/users/check_nick','admin/users/check_name',
+            'admin/users/user_do','admin/users/update',
             'admin/order/create_do','admin/customers/add_do',
             'admin/customers/edit_do','admin/contacts/add_do',
             'admin/contacts/edit_do','admin/contacts/check_name',
