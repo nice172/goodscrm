@@ -81,7 +81,7 @@
                                 <td>{$vo.supplier_name}</td>
                                 <td>{$vo.goods_name}</td>
                                 <td>{$vo.unit}</td>
-                                <td><input type="text" style="display: none;width:90%;" class="goods_id{$vo.goods_id}" value="{$vo.store_number}"/><span class="goods_id{$vo.goods_id}">{$vo.store_number}</span></td>
+                                <td><input type="text" style="display: none;width:90%;" class="goods_id{$vo.goods_id}" oninput="checkNum2(this)" value="{$vo.store_number}"/><span class="goods_id{$vo.goods_id}">{$vo.store_number}</span></td>
                                 <td>
                                 	<a href="javascript:;" data-id="{$vo.goods_id}" class="update">修改</a>
                                 </td>
@@ -105,6 +105,11 @@
 {/block}
 {block name="footer"}
 <script type="text/javascript">
+function checkNum2(obj){
+	obj.value = obj.value.replace(/[^\d]/g,"");//清除"数字"和"."以外的字符
+	obj.value = obj.value.replace(/^\./g,"");//验证第一个字符是数字而不是
+	obj.value = obj.value.replace(/\.{1}/g,"");//如果有一个. 就清除
+}
     $(document).ready(function() {
         // 当前页面分类高亮
         $("#sidebar-store").addClass("sidebar-nav-active"); // 大分类
