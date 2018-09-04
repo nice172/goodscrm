@@ -19,7 +19,9 @@ return [
             'admin/purchase/get_goods','admin/delivery/search_purchase',
             'admin/delivery/relation_order','admin/delivery/rel_order',
             'admin/delivery/order','admin/delivery/get_goods',
-            'admin/account/view','admin/goods/change_cate','admin/goods/change_type'
+	    'admin/baojia/search_company','admin/baojia/get_goods',
+            'admin/account/view','admin/goods/change_cate',
+	    'admin/goods/change_type','admin/config/edit'
         ),
     ),
     'PAGE_SIZE' => 10,

@@ -114,6 +114,9 @@ class Store extends Base {
             $goods_id = $this->request->param('goods_id',0,'intval');
             $store_number = $this->request->param('store_number',0,'intval');
             $goods = db('goods')->where(['goods_id' => $goods_id])->find();
+            if ($goods['store_number'] == $store_number){
+            	$this->success('更新成功');
+            }
             if (db('goods')->where(['goods_id' => $goods_id])->update(['store_number' => $store_number,'update_time' => time()])){
                 //1入库，2出库，3报溢，4报损
                 $type = 0;
