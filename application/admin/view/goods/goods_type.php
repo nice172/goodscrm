@@ -39,7 +39,7 @@
 				{$v.goods_type_id}
 			</td>
 			<td>
-				<input type="text" class="input-text form-control w150" name="type_name" data-id="<?php echo $v['goods_type_id'];?>" value="<?php echo $v['type_name'];?>"  />
+				<input type="text" class="input-text form-control w150 type_name" name="type_name" data-id="<?php echo $v['goods_type_id'];?>" value="<?php echo $v['type_name'];?>"  />
 			</td>
 			<td>
 
@@ -84,7 +84,7 @@ $(function(){
 	});
 
 	
-	$('.width50').blur(function(){
+	$('.type_name').blur(function(){
 		$.ajax({type:'post',url:'<?php echo url('updateTypeName');?>',data:{type_name:$(this).val(),goods_type_id:$(this).attr('data-id')},success:function(data){
 			if(data.code==0) {
 				toastr.error(data.msg);

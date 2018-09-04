@@ -187,7 +187,7 @@ class Goods extends Base {
 		if (isset($param['attr_type'])){
 			$map['attr_type'] = intval($param['attr_type']);
 		}
-		$lists = db('goods_attr')->where($map)->paginate(config('PAGE_SIZE'));
+		$lists = db('goods_attr')->order('sort asc')->where($map)->paginate(config('PAGE_SIZE'));
 		$this->assign('lists',$lists);
 		$this->assign('page',$lists->render());
 		unset($map['attr_type']);
@@ -412,7 +412,7 @@ class Goods extends Base {
 	}
 	
 	private function getHtml($goods_type_id,$goods_attr=[]){
-		$attr = db('goods_attr')->where(['goods_type_id' => $goods_type_id,'attr_type' => 1])->select();
+	    $attr = db('goods_attr')->where(['goods_type_id' => $goods_type_id,'attr_type' => 1])->order('sort asc')->select();
 		$html = '';
 		foreach ($attr as $key => $value){
 			$attr_value = explode("\n", $value['attr_value']);
