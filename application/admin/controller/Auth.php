@@ -6,8 +6,19 @@ class Auth extends Base{
 		$lists = db('auth_rule')->order('sort asc')->select();
 		$select = getChild($lists,0);
 		$this->assign('select', $select);
-		$this->assign('lists',$lists);
+		$this->assign('lists',self::arrMarge($lists));
 		return $this->fetch();
+	}
+	
+	private function arrMarge($lists,$pid=0){
+	    $arr = [];
+	    foreach($lists as $key => $value){
+	        if ($value['parentid'] == $pid){
+	            $arr[] = $value;
+	            $arr = array_merge($arr,self::arrMarge($lists,$value['id']));
+	        }
+	    }
+	    return $arr;
 	}
 	
 	public function rule_add_runadd(){
