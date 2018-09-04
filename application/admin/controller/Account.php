@@ -233,7 +233,7 @@ class Account extends Base {
     		$delivery_ids[] = isset($arr[1]) ? $arr[1] : 0;
     		$order_ids[] = isset($arr[2]) ? $arr[2] : 0;
     	}
-    	if (count($cus_ids) > 2){
+    	if (count(array_unique($cus_ids)) > 2){
     		$this->error('客户名称不相同的不能创建对账单');
     	}
     	$order_ids = array_unique($order_ids);
