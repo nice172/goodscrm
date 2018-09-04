@@ -67,6 +67,9 @@
 						<label for="rule_{$vv['id']}"><input type="checkbox" class="icheck" id="rule_{$vv['id']}" {if condition="in_array($vv['id'],$data['rules'])"}checked="checked"{/if} name="rule[{$vv['id']}]" value="{$vv['id']}"/>{$vv['title']}</label>
 						{foreach name="vv['child']" item="v3"}
 							<label for="rule_{$v3['id']}"><input type="checkbox" class="icheck" id="rule_{$v3['id']}" {if condition="in_array($v3['id'],$data['rules'])"}checked="checked"{/if} name="rule[{$v3['id']}]" value="{$v3['id']}"/>{$v3['title']}</label>
+    						{foreach name="v3['child']" item="v4"}
+    							<label for="rule_{$v4['id']}"><input type="checkbox" id="rule_{$v4['id']}" {if condition="in_array($v4['id'],$data['rules'])"}checked="checked"{/if} name="rule[{$v4['id']}]" value="{$v4['id']}"/>{$v4['title']}</label>
+    						{/foreach}
 						{/foreach}
 					{/foreach}
 				</dd>
