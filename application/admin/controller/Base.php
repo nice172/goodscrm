@@ -56,6 +56,10 @@
      			Session::clear(); // 清除session值
      			$this->error('您没有权限访问！',url('Login/index'));
      		}
+     		if (!$auth_group['status']){
+     		    Session::clear(); // 清除session值
+     		    $this->error('角色状态已禁用',url('Login/index'));
+     		}
      		$rulesID = $auth_group['rule_pids'].','.$auth_group['rules'];
      		$where['id'] = ['in',$rulesID];
      	}
