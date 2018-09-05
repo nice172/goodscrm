@@ -277,6 +277,7 @@ function send_email($user,$Subject='',$file='',$Body='',$AltBody=''){
         //Server settings
         $ssl_port = [993,465,994,995];
         $tls_port = [143,25,110];
+        $SMTPSecure = 'tls';
         if (in_array(config('syc_port'), $ssl_port)){
             $SMTPSecure = 'ssl';
         }
