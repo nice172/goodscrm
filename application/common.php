@@ -275,13 +275,22 @@ function send_email($user,$Subject='',$file='',$Body='',$AltBody=''){
     $mail = new PHPMailer\PHPMailer();
     try {
         //Server settings
+        $ssl_port = [993,465,994,995];
+        $tls_port = [143,25,110];
+        if (in_array(config('syc_port'), $ssl_port)){
+            $SMTPSecure = 'ssl';
+        }
+        if (in_array(config('syc_port'), $tls_port)){
+            $SMTPSecure = 'tls';
+        }
         $mail->SMTPDebug = false;                                 // Enable verbose debug output
+        $mail->CharSet = 'UTF-8';
         $mail->isSMTP();                                      // Set mailer to use SMTP
         $mail->Host = config('syc_email_smtp');  // Specify main and backup SMTP servers
         $mail->SMTPAuth = true;                               // Enable SMTP authentication
         $mail->Username = config('syc_webemail');                 // SMTP username
         $mail->Password = config('syc_email_pwd');                           // SMTP password
-        $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
+        $mail->SMTPSecure = $SMTPSecure;                            // Enable TLS encryption, `ssl` also accepted
         $mail->Port = config('syc_port');                                    // TCP port to connect to
         
         //Recipients
