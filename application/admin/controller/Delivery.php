@@ -341,7 +341,7 @@ class Delivery extends Base {
             }
             $order = db('order')->where(['id' => $delivery['order_id']])->find();
             
-            $mpdf = new mPDF('zh-CN/utf-8','A5', 0, '宋体', 0, 0);
+            $mpdf = new mPDF('zh-CN/utf-8','A4', 0, '宋体', 0, 0);
             $mpdf->SetWatermarkText(getTextParams(14),0.1);
             $logo = getFileParams(12);
             if (empty($logo)) {
@@ -356,11 +356,12 @@ class Delivery extends Base {
             $strContent .= '<table class="noborder">
 <tbody>
     <tr>
-    <td colspan="2">订单号：'.$delivery['order_dn'].'</td>
+    <td style="width:50%;">送货单号：'.$delivery['order_dn'].'</td>
+	<td>客户订单号：'.$order['cus_order_sn'].'</td>
     </tr>
     <tr>
-    <td style="width:50%;">下单时间：'.date('Y-m-d',$order['create_time']).'</td>
-    <td>送货时间：'.$delivery['delivery_date'].'</td>
+    <td style="width:50%;">送货时间：'.$delivery['delivery_date'].'</td>
+    <td>下单时间：'.date('Y-m-d',$order['create_time']).'</td>
     </tr>
     <tr>
     <td style="width:50%">收货单位：'.$delivery['cus_name'].'</td>
@@ -380,8 +381,8 @@ class Delivery extends Base {
             $strContent .= '<table class="table">
         <tbody>
             <tr>
-            <td width="5%">序号</td>
-            <td width="20%">产品名称</td>
+            <td width="10%">序号</td>
+            <td width="15%">产品名称</td>
 			<td width="30%">产品规格</td>
             <td width="10%">单位</td>
 			<td width="10%">数量</td>
@@ -411,14 +412,14 @@ class Delivery extends Base {
             }
             
             $strContent .= '</tbody></table>';
-            $img = getFileParams(11);
-            //<td width="10%" align="left"><img src="'.$img.'" alt="" width="100px"/></td>
+            $img = getFileParams(20);
             $strContentFooter = '<table class="noborder" style="height:100px;">
 <tbody>
     <tr>
-    <td width="33%" align="left">发货人签章：</td>
-    <td width="33%" align="left">承运人：</td>
-    <td width="33%" align="left">客户签章：</td>
+    <td width="10%" align="left">发货人签章：</td>
+	<td width="30%" align="left"><img src="'.$img.'" alt="" width="100px"/></td>
+    <td width="30%" align="left">承运人：</td>
+    <td width="30%" align="left">客户签章：</td>
     </tr>
 </tbody>
 </table>';
@@ -441,7 +442,7 @@ h1,h2,h3,p,div,span{padding:0;margin:0;}
 }
 .table{
     background: #FFF;
-    font-size: 13px;
+    font-size: 12px;
     border-top: 1px solid #000;
     margin-top: 8px;
     border: 1px solid #000;

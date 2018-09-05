@@ -364,9 +364,10 @@ function update(index){
 			shop_price = $('.goods_'+index+' input[name=shop_price]').attr('data-shop_price');
 		}
 		if(parseFloat(shop_price) > goods_info[index]['shop_price']){
-			alert('采购单价不能高于关联订单商品单价');
-			status = 2;
-			return;
+			if(!confirm('采购单价高于关联订单商品单价')){
+				status = 2;
+				return;
+			}
 		}
 		var goods_number = $('.goods_'+index+' input[name=goods_number]').val();
 		if(goods_number == ''){
@@ -377,13 +378,13 @@ function update(index){
 			purchase_number = $('.goods_'+index+' input[name=purchase_number]').attr('data-purchase_number');
 		}
 		if(parseInt(purchase_number) > goods_info[index]['store_number']){
-			alert('采购数量不能大于库存量');
-			status = 2;
-			return;
+			//alert('采购数量不能大于库存量');
+			//status = 2;
+			//return;
 		}
 		//goods_info[index]['goods_number'] = goods_number;
 		goods_info[index]['purchase_number'] = parseInt(purchase_number);
-		goods_info[index]['shop_price'] = parseFloat(shop_price);
+		goods_info[index]['shop_price'] = _formatMoney(parseFloat(shop_price));
 		goodsList(goods_info);
 		return;
 	}

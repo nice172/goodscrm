@@ -151,18 +151,18 @@
 
 		<div class="row">
                     <div class="col-lg-12">
-                        <table class="table table-hover">
+                        <table class="table table-hover syc-table border">
                             <thead>
                                 <tr>
-                                    <th>序号</th>
-                                    <th>商品名称</th>
-                                    <th>单位</th>
-                                    <th style="width:100px;">单价</th>
-                                    <th>订单数量</th>
-                                    <th style="width:100px;">采购数量</th>
-                                    <th>库存数量</th>
-                                    <th>总金额</th>
-                                    <th>操作</th>
+                                    <th width="10%">序号</th>
+                                    <th width="20%">商品名称</th>
+                                    <th width="10%">单位</th>
+                                    <th width="10%">单价</th>
+                                    <th width="10%">订单数量</th>
+                                    <th width="10%">采购数量</th>
+                                    <th width="10%">库存数量</th>
+                                    <th width="10%">总金额</th>
+                                    <th width="10%">操作</th>
                                 </tr>
                             </thead>
                             <tbody class="goodsList"></tbody>
@@ -354,9 +354,9 @@ function goodsList(goods_info){
 		html += '<td>'+num+'</td>';
 		html += '<td>'+goods_info[j]['goods_name']+'</td>';
 		html += '<td>'+goods_info[j]['unit']+'</td>';
-		html += '<td class="shop_price"><input type="text" data-shop_price="'+goods_info[j]['shop_price']+'" oninput="checkNum(this)" name="shop_price" style="width:80px;display:none;" value="'+goods_info[j]['shop_price']+'" /><span class="inputspan">'+goods_info[j]['shop_price']+'</span></td>';
+		html += '<td class="shop_price"><input type="text" data-shop_price="'+goods_info[j]['shop_price']+'" oninput="checkNum(this)" name="shop_price" style="width:80%;display:none;" value="'+goods_info[j]['shop_price']+'" /><span class="inputspan">'+goods_info[j]['shop_price']+'</span></td>';
 		html += '<td class="goods_number"><span class="span">'+goods_info[j]['goods_number']+'</span></td>';
-		html += '<td class="purchase_number"><input type="text" data-purchase_number="'+goods_info[j]['purchase_number']+'" oninput="checkNum2(this)" name="purchase_number" style="width:80px;display:none;" value="'+goods_info[j]['purchase_number']+'" /><span class="inputspan">'+goods_info[j]['purchase_number']+'</span></td>';
+		html += '<td class="purchase_number"><input type="text" data-purchase_number="'+goods_info[j]['purchase_number']+'" oninput="checkNum2(this)" name="purchase_number" style="width:80%;display:none;" value="'+goods_info[j]['purchase_number']+'" /><span class="inputspan">'+goods_info[j]['purchase_number']+'</span></td>';
 		html += '<td class="store_number"><span class="span">'+goods_info[j]['store_number']+'</span></td>';
 		html += '<td class="totalMoney"><span class="span">'+goods_info[j]['totalMoney']+'</span></td>';
 		html += '<td><a href="javascript:;" onclick="update('+j+')" class="update">修改</a><span class="text-explode">|</span><a href="javascript:;" onclick="_delete('+j+')" class="delete">删除</a></td>';
@@ -373,9 +373,10 @@ function update(index){
 			shop_price = $('.goods_'+index+' input[name=shop_price]').attr('data-shop_price');
 		}
 		if(parseFloat(shop_price) > goods_info[index]['shop_price']){
-			alert('采购单价不能高于关联订单商品单价');
-			status = 2;
-			return;
+			if(!confirm('采购单价高于关联订单商品单价')){
+				status = 2;
+				return;
+			}
 		}
 		var goods_number = $('.goods_'+index+' input[name=goods_number]').val();
 		if(goods_number == ''){
@@ -393,7 +394,7 @@ function update(index){
 		}
 		//goods_info[index]['goods_number'] = goods_number;
 		goods_info[index]['purchase_number'] = parseInt(purchase_number);
-		goods_info[index]['shop_price'] = parseFloat(shop_price);
+		goods_info[index]['shop_price'] = _formatMoney(parseFloat(shop_price));
 		goodsList(goods_info);
 		return;
 	}

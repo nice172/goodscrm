@@ -449,10 +449,12 @@ h1,h2,h3,p,div,span{padding:0;margin:0;}
     			}
     			*/
     			if (!$purchase['create_type']){
+    				/*
         			$goods_price = db('order_goods')->where(['order_id' => $purchase['order_id'],'goods_id' => $value['goods_id']])->value('goods_price');
         			if ($goods_price < $value['goods_price']){
         			    $this->error('“'.$value['goods_name'].'”采购单价不能高于关联订单价');
         			}
+        			*/
     			}
     			if ($value['goods_number'] <= 0){
     			    $this->error('“'.$value['goods_name'].'”采购数量不能小于1');

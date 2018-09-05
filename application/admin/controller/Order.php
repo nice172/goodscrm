@@ -609,12 +609,14 @@ class Order extends Base {
                 if ($val['goods_number'] <= 0){
                     $this->error('下单数量不能小于1');
                 }
+                /*
                 $store_number = db('goods')->where(['goods_id' => $val['goods_id']])->value('store_number');
                 if ($store_number < $val['goods_number']){
                 	$this->error('“'.$val['goods_name'].'”下单数量不能大于库存量');
                 }
+                */
                 if ($val['send_num'] < 0){
-                    $this->error('已送数量不能小于0');
+                    //$this->error('已送数量不能小于0');
                 }
             }
             $in = db('order_goods')->where(['order_id' => $data['id']])->field('id')->select();

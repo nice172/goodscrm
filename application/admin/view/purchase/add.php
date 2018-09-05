@@ -367,9 +367,10 @@ function update(index){
 			shop_price = $('.goods_'+index+' input[name=shop_price]').attr('data-shop_price');
 		}
 		if(parseFloat(shop_price) > goods_info[index]['shop_price']){
-			alert('采购单价不能高于关联订单商品单价');
-			status = 2;
-			return;
+			if(!confirm('采购单价高于关联订单商品单价')){
+				status = 2;
+				return;
+			}
 		}
 		//var goods_number = $('.goods_'+index+' input[name=goods_number]').val();
 		//if(goods_number == ''){
