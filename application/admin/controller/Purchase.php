@@ -414,8 +414,14 @@ h1,h2,h3,p,div,span{padding:0;margin:0;}
 			if ($this->request->post('type') == 'send'){
 				if ($purchase['status'] == 1){
 					$email_list = $this->request->post('send_email_list');
-					$email_list = explode(',', $email_list);
-					if (empty($email_list)) $this->error('请至少选择一个联系人');
+					if (!empty($email_list)){
+					   $email_list = explode(',', $email_list);
+					}
+					if (empty($email_list)) {
+					    //$this->error('请至少选择一个联系人');
+					    $email_list[] = $purchase['email'];
+					}
+					$email_list = array_unique($email_list);
 					if (send_email($email_list,'采购单',$this->create_pdf($purchase['id'],1))){
 						if(!db('purchase')->where(['id' => $purchase['id']])->setField('status',2)){
 							$this->error('PDF发送成功,处理状态失败');

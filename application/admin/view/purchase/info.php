@@ -192,7 +192,7 @@
       <div class="modal-body">
       		                <div class="row">
                     <div class="col-lg-12">
-                        <table class="table table-hover syc-table">
+                        <table class="table table-hover syc-table border">
                             <thead>
                             <tr>
                                 <th>选择</th>
@@ -432,8 +432,8 @@ $('.confirmSend').click(function(){
 		}
 	});
 	if(send_email_list == '' || send_email_list.split(',').length == 0){
-		alert('请至少选择一个联系人');
-		return false;
+		//alert('请至少选择一个联系人');
+		//return false;
 	}
 	_ajaxSubmit('send',send_email_list);
 });
