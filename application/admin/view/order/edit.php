@@ -21,7 +21,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="portlet margin-top-3">
- <form class="form-horizontal ajaxForm2" method="post" action="<?php echo url('edit');?>" id="form1">
+ <form enctype="multipart/form-data" class="form-horizontal ajaxForm2" method="post" action="<?php echo url('edit');?>" id="form1">
   <ul class="nav nav-tabs" role="tablist">
     <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">基本信息</a></li>
     <li role="presentation"><a href="#goods" aria-controls="goods" role="tab" data-toggle="tab">商品</a></li>
@@ -44,10 +44,14 @@
                                 </tr>
                                 <tr>
                                 <td width="15%" class="right-color"><span class="text-danger">*</span><span>公司名称:</span></td>
-                                <td width="35%" colspan="3">
-                                	<input type="text" class="form-control w500" style="display:inline-block;" value="{$data.company_name}" name="company_name" id="company_name">
+                                <td width="35%">
+                                	<input type="text" class="form-control w350" style="display:inline-block;" value="{$data.company_name}" name="company_name" id="company_name">
                                 	<button type="button" class="btn btn-primary search_company" style="margin-top:-4px;">查找</button>
                                 </td>
+                                 <td width="15%" class="right-color"><span class="text-danger">*</span><span>客户订单号:</span></td>
+                                <td width="35%">
+                                        <input type="text" class="form-control w300" readonly="readonly" value="{$data.cus_order_sn}" name="cus_order_sn" id="cus_order_sn">
+                                    </td>
                                 </tr>
                                 
                                 <tr>
@@ -69,10 +73,28 @@
                                 </tr> 
                                  <tr>
                                 <td width="15%" class="right-color"><span class="text-danger">*</span><span>交货日期:</span></td>
-                                <td width="35%" colspan="3">
+                                <td width="35%">
                                 	<input type="text" class="form-control w300" name="require_time" value="{$data.require_time|date='Y-m-d',###}" id="LAY-component-form-group-date">
                                 </td>
+                                <td width="15%" class="right-color"><span class="text-danger">*</span><span>上传附件:</span></td>
+                                <td width="35%">
+                                        <input type="file" name="Filedata[]" multiple="multiple"/>
+                                    </td>
                                 </tr>
+                                <?php if (!empty($data['attachment'])){?>
+                                <tr>
+                                	<td width="15%" class="right-color"><span>已上传的附件:</span></td>
+                                	<td colspan="3">
+                                		{foreach name="data['attachment']" item="v"}
+                                			{if condition="in_array($v['ext'],['jpg','jpeg','png','gif'])"}
+                                				<div class="fileList"><input type="hidden" name="oldfile[]" value="{$v['path']}"/><a href="{$v['path']}" target="_blank"><img src="{$v['path']}" alt="" width="50" height="50" style="margin-bottom:5px;"/></a><a href="javascript:;" style="margin-left:15px;" class="deleteOldFile">删除</a></div>
+                                			{else}
+                                				<div class="fileList" style="margin-bottom:5px;"><input type="hidden" name="oldfile[]" value="{$v['path']}"/><a href="{$v['path']}" target="_blank">{$v.filename}查看文件</a><a href="javascript:;" style="margin-left:15px;" class="deleteOldFile">删除</a></div>
+                                			{/if}
+                                		{/foreach}
+                                	</td>
+                                </tr>
+                                <?php }?>
                                    <tr>
                                     <td width="15%" class="right"><span>备注:</span></td>
                                     <td colspan="3"><textarea class="form-control" name="order_remark" id="order_remark" rows="6">{$data.order_remark}</textarea> </td>
@@ -180,6 +202,10 @@ function _formatMoney(num){
     		    elem: '#LAY-component-form-group-date'
     		  });
         });
+
+		$('.deleteOldFile').click(function(){
+			$(this).parents('.fileList').remove();
+		});
     	
         // 当前页面分类高亮
         $("#sidebar-schedule").addClass("sidebar-nav-active"); // 大分类
@@ -217,12 +243,16 @@ function _formatMoney(num){
         });
 
         $('.get_goods').click(function(){
+            if($('#cus_id').val() == ''){
+				alert('请先选择客户');
+				return;
+            }
         	var title = '选择商品';
             bDialog.open({
                 title : title,
                 height: 560,
                 width:960,
-                url : '{:url(\'get_goods\')}',
+                url : '{:url(\'get_goods\')}?cus_id='+$('#cus_id').val(),
                 callback:function(data){
                     if(data && data.results && data.results.length > 0 ) {
                         window.location.reload();

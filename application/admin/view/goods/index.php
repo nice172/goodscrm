@@ -42,7 +42,19 @@
                                     <label class="control-label" for="supplier_name">供应商 :</label>
                                     <input name="supplier_name" id="supplier_name" class="ipt form-control" <?php if (isset($_GET['supplier_name'])):?>value="<?php echo $_GET['supplier_name'];?>"<?php endif;?> />
                                 </div>
-                                
+                         		<div class="form-group">
+                                	<label class="control-label" for="">商品分类 :</label>
+                                	<select name="categroy_id" id="categroy_id" class="ipt form-control">
+                                		<option value="">全部</option>
+                                        <?php foreach ($category as $key => $value):?>
+                                        <option {if condition="isset($_GET['categroy_id']) && $_GET['categroy_id']==$value['category_id']"}selected="selected"{/if} value="<?php echo $value['category_id'];?>" path="<?php echo $value['path'].'_'.$value['category_id'];?>">
+			              		<?php echo str_repeat('&nbsp;&nbsp;&nbsp;&nbsp;', substr_count($value['path'], '_'));?>
+			              		└<?php echo str_repeat('─', substr_count($value['path'], '_'));?>
+			              		<?php echo $value['category_name'];?>
+			              		</option>
+                                        <?php endforeach;?>
+                                	</select>
+                                </div>
                                 <div class="form-group">
                                     <button type="submit" class="btn btn-primary" id="searchprojectName">查找</button>
                                 </div>

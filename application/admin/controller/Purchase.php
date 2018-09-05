@@ -278,7 +278,7 @@ class Purchase extends Base {
 		$strContent .= '<table class="noborder">
 <tbody>
     <tr>
-    <td style="width:50%;">PO号码：'.$purchase['po_sn'].'</td>
+    <td style="width:50%;">客户订单号：'.$purchase['cus_order_sn'].'</td>
     <td>采购日期：'.date('Y.m.d',$purchase['create_time']).'</td>
     </tr>
     <tr>
@@ -287,22 +287,26 @@ class Purchase extends Base {
     </tr>
     <tr>
     <td style="width:50%;">地址：'.$supplier['supplier_province'].$supplier['supplier_city'].$supplier['supplier_area'].$supplier['supplier_address'].'</td>
-    <td>电话号码：'.$purchase['cus_phome'].'</td>
+    <td>联系人：'.config('syc_contacts').'</td>
     </tr>
     <tr>
-    <td style="width:50%;">联系人：'.config('syc_contacts').'</td>
-    <td>传真：'.$purchase['fax'].'</td>
+    <td style="width:50%;">电话号码：'.$purchase['cus_phome'].'</td>
+    <td>电话号码：'.config('syc_webtel').'</td>
     </tr>
     <tr>
-    <td style="width:50%;">电话号码：'.config('syc_webtel').'</td>
-    <td>交易类别：'.$purchase['transaction_type'].'</td>
-    </tr>
-    <tr>
-    <td style="width:50%;">传真：'.config('syc_webfax').'</td>
-    <td>付款条件：'.$purchase['payment'].'</td>
+    <td style="width:50%;">传真：'.$purchase['fax'].'</td>
+    <td>传真：'.config('syc_webfax').'</td>
     </tr>
     <tr>
     <td style="width:50%;">送货公司：'.$purchase['delivery_company'].'</td>
+    <td>交易类别：'.$purchase['transaction_type'].'</td>
+    </tr>
+    <tr>
+    <td style="width:50%;"></td>
+    <td>付款条件：'.$purchase['payment'].'</td>
+    </tr>
+    <tr>
+    <td style="width:50%;"></td>
     <td>送货地址：'.$purchase['delivery_address'].'</td>
     </tr>
 </tbody>
@@ -354,12 +358,12 @@ class Purchase extends Base {
 		$strContent .= 	'<p style="width:87%;margin:10px auto 0 auto;">'.str_replace("\n", '<br />', str_replace(chr(32), "&nbsp;&nbsp;", $purchase['remark'])).'</p>';
 		$img = getFileParams(11);
 		//<td width="10%" align="left"><img src="'.$img.'" alt="" width="100px"/></td>
-		$strContentFooter = '<table class="noborder" style="height:100px;">
+		$strContentFooter = '<table class="noborder" style="height:130px;">
 <tbody>
     <tr>
     <td width="10%" align="right">供货方签署：</td>
     <td width="40%" align="left"></td>
-    <td width="50%"align="center">购货方签署：'.$purchase['contacts'].'（'.$purchase['cus_phome'].'）</td>
+    <td width="50%" align="center" style="height:150px;background:url('.$img.') no-repeat right center;">购货方签署：'.config('syc_contacts').'（'.config('syc_webtel').'）</td>
     </tr>
 </tbody>
 </table>';
@@ -466,6 +470,7 @@ h1,h2,h3,p,div,span{padding:0;margin:0;}
 	        $data = [
 	            'admin_uid' => $this->userinfo['id'],
 	            'po_sn' => $this->request->post('po_sn'),
+	            'cus_order_sn' => $this->request->post('cus_order_sn'),
 	            'supplier_id' => $this->request->post('supplier_id'),
 	            'cus_phome' => $this->request->post('cus_phome'),
 	            'transaction_type' => $this->request->post('transaction_type'),

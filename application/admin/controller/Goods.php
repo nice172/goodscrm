@@ -16,11 +16,15 @@ class Goods extends Base {
 		
 		$goods_name = $this->request->param('goods_name');
 		$supplier_name = $this->request->param('supplier_name');
-		
+		$categroy_id = $this->request->param('categroy_id',0,'intval');
+				
 		if (empty($supplier_name)){
 			$where = ['status' => ['neq','-1']];
 			if ($goods_name != ''){
 				$where['goods_name'] = ['like',"%$goods_name%"];
+			}
+			if (!empty($categroy_id)){
+			    $where['category_id'] = $categroy_id;
 			}
 			$result = db('goods')->where($where)->order('create_time desc')->paginate(config('PAGE_SIZE'),false,['query' => $this->request->param()]);
 		}
@@ -31,6 +35,9 @@ class Goods extends Base {
 			];
 			if (!empty($goods_name)){
 				$where['g.goods_name'] = ['like',"%$goods_name%"];
+			}
+			if (!empty($categroy_id)){
+			    $where['g.category_id'] = $categroy_id;
 			}
 			$result = db('goods g')->join('__SUPPLIER__ s','g.supplier_id=s.id')
 			->where($where)->order('g.create_time desc')->paginate(config('PAGE_SIZE'),false,['query' => $this->request->param()]);
@@ -49,6 +56,8 @@ class Goods extends Base {
 		
 		$this->assign('list',$lists);
 		$this->assign('page',$result->render());
+		$category = db('goods_category')->where(array('status' => 1))->select();
+		$this->assign('category',$category);
 	    $this->assign('title','商品维护');
 	    $this->assign('sub_class','viewFramework-product-col-1');
 	    return $this->fetch();
@@ -390,11 +399,13 @@ class Goods extends Base {
 		}
 	}
 	
+	private $goods_name = '';
+	
 	public function change_type(){
 	    if ($this->request->isAjax()){
 	    	$goods_type_id = $this->request->param('goods_type_id',0,'intval');
 	    	$html = self::getHtml($goods_type_id);
-	        echo $html;
+	    	$this->success('','',['goods_name' => rtrim($this->goods_name,' '),'attr_id' => $goods_type_id,'html' => $html]);
 	    }
 	}
 	
@@ -404,7 +415,7 @@ class Goods extends Base {
 	        $goods_type_id = db('goods_category')->where(['category_id' => $category_id])->value('goods_type_id');
 	        if($goods_type_id){
 	           $html = self::getHtml($goods_type_id);
-	           $this->success('','',['attr_id' => $goods_type_id,'html' => $html]);
+	           $this->success('','',['goods_name' => rtrim($this->goods_name,' '),'attr_id' => $goods_type_id,'html' => $html]);
 	        }else{
 	            $this->error('');
 	        }
@@ -418,9 +429,12 @@ class Goods extends Base {
 			$attr_value = explode("\n", $value['attr_value']);
 			$html .= '<div class="form-group">';
 			$html .= '<label for="goods_weight" class="col-sm-2 control-label">'.$value['attr_name'].'</label>';
-			$html .= '<div class="col-sm-10"><select class="form-control w300" name="attr['.$value['goods_attr_id'].']">';
-			foreach ($attr_value as $val){
+			$html .= '<div class="col-sm-10"><select class="form-control w300 attr_item" onchange="changeItem(this)" name="attr['.$value['goods_attr_id'].']">';
+			foreach ($attr_value as $v_key => $val){
 				if (empty($goods_attr)){
+				    if ($v_key == 0){
+				        $this->goods_name .= $attr_value[$v_key].' ';
+				    }
 					$html .= '<option value="'.$val.'">'.$val.'</option>';
 				}else{
 					$selected = '';

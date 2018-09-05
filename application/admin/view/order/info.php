@@ -85,6 +85,20 @@
                                         <td width="35%"><span>{if condition="$data['deliver_time']"}{$data.deliver_time|date='Y-m-d H:i:s',###}{/if}</span></td>
                                     </tr>
                                     <tr>
+                                        <td width="15%" class="right-color"><span>已上传的附件:</span></td>
+                                        <td width="35%">
+                                        {foreach name="data['attachment']" item="v"}
+                                			{if condition="in_array($v['ext'],['jpg','jpeg','png','gif'])"}
+                                				<div class="fileList"><input type="hidden" name="oldfile[]" value="{$v['path']}"/><a href="{$v['path']}" target="_blank"><img src="{$v['path']}" alt="" width="50" height="50" style="margin-bottom:5px;"/></a></div>
+                                			{else}
+                                				<div class="fileList" style="margin-bottom:5px;"><input type="hidden" name="oldfile[]" value="{$v['path']}"/><a href="{$v['path']}" target="_blank">{$v.filename}查看文件</a></div>
+                                			{/if}
+                                		{/foreach}
+                                        </td>
+                                        <td width="15%" class="right-color"><span>客户订单号:</span></td>
+                                        <td width="35%"><span>{$data.cus_order_sn}</span></td>
+                                    </tr>
+                                    <tr>
                                         <td width="15%" class="right-color"><span>创建时间:</span></td>
                                         <td width="35%"><span>{$data.create_time|date='Y-m-d H:i:s',###}</span></td>
                                         <td width="15%" class="right-color"><span>更新时间:</span></td>

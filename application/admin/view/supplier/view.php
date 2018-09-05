@@ -54,7 +54,7 @@
                                     <tr>
                                         <td width="15%" class="right-color"><span>QQ:</span></td>
                                         <td width="35%"><span>{$data.supplier_qq}</span></td>
-                                        <td width="15%" class="right-color"><span>爱好:</span></td>
+                                        <td width="15%" class="right-color"><span>电话号码:</span></td>
                                         <td width="35%"><span>{$data.supplier_like}</span></td>
                                     </tr>
                                     <tr>

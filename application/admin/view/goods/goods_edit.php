@@ -28,8 +28,8 @@
  <form class="form-horizontal ajaxForm" method="post" action="<?php echo url('goods_edit');?>" id="form1">
   <!-- Nav tabs -->
   <ul class="nav nav-tabs" role="tablist">
-    <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">商品信息</a></li>
-    <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">商品属性</a></li>
+    <li role="presentation" class="active"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">商品属性</a></li>
+    <li role="presentation"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">商品信息</a></li>
     <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">其他信息</a></li>
   </ul>
 <!--<div class="alert alert-warning alert-dismissible" role="alert">
@@ -38,7 +38,7 @@
   <!-- Tab panes -->
   <input type="hidden" name="goods_id" value="{$goods.goods_id}" />
   <div class="tab-content">
-    <div role="tabpanel" class="tab-pane active" id="home">
+    <div role="tabpanel" class="tab-pane" id="home">
 						<div class="form-group">
                                     <label for="goods_name" class="col-sm-2 control-label"><span class="text-danger">*</span>商品名称</label>
                                     <div class="col-sm-10">
@@ -122,7 +122,7 @@
                                 </div>
  -->
     </div>
-    <div role="tabpanel" class="tab-pane" id="profile">
+    <div role="tabpanel" class="tab-pane active" id="profile">
     
     <div class="form-group">
         <label for="goods_type_id" class="col-sm-2 control-label"><span class="text-danger"></span>商品类型</label>
@@ -194,7 +194,17 @@
 <link href="/assets/plugins/icheck/skins/all.css" rel="stylesheet" type="text/css" />
 <script src="/assets/plugins/icheck/icheck.min.js" type="text/javascript"></script>
 <script type="text/javascript">
-    $(document).ready(function() {
+function changeItem(_this){
+	var goods_name = '';
+	$('.attr_item').each(function(index){
+		goods_name += $('.attr_item').eq(index).val()+' ';
+	});
+	if(goods_name != ''){
+		goods_name = goods_name.substring(0,goods_name.length-1);
+	}
+	$('#goods_name').val(goods_name);
+}
+$(document).ready(function() {
     	
         // 当前页面分类高亮
         $("#sidebar-storage").addClass("sidebar-nav-active"); // 大分类
@@ -202,12 +212,18 @@
 
 		$('.attrChange').change(function(){
 			var goods_type_id = $(this).val();
+			if(goods_type_id){
 			$.get('<?php echo url('change_type');?>',{goods_type_id:goods_type_id},function(res){
-				$('.appendAttr').html(res);
+				$('.appendAttr').html(res.data.html);
+				$('#goods_name').val(res.data.goods_name);
 			});
+			}else{
+				$('.appendAttr').html('');
+			}
 		});
 		
 		$('#category_id').change(function(){
+			return;
 			var category_id = $(this).val();
 			if(!category_id){
 				$('.attrChange').val(0);

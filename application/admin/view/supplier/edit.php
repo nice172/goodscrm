@@ -79,7 +79,7 @@
                                 </tr>
                              
                                 <tr>
-                                    <td width="15%" class="right-color"><span>爱好:</span></td>
+                                    <td width="15%" class="right-color"><span>电话号码:</span></td>
                                     <td width="35%"><input type="text" class="form-control w300" value="{$data.supplier_like}" name="supplier_like" id="con_qq" placeholder=""></td>
                                     <td width="15%" class="right-color"><span class="text-danger">*</span><span>详细地址:</span></td>
                                     <td width="35%" id="city_4">

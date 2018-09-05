@@ -44,8 +44,12 @@
                                 </tr>
                                 <tr>
                                 <td width="15%" class="right-color"><span>供应商:</span></td>
-                                <td width="35%" colspan="3">
+                                <td width="35%">
                                 	<span>{$data.supplier_name}</span>
+                                </td>
+                                <td width="15%" class="right-color"><span>客户订单号:</span></td>
+                                <td width="35%">
+                                	<span>{$data.cus_order_sn}</span>
                                 </td>
                                 </tr>
                                 

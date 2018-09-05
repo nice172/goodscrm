@@ -54,17 +54,19 @@
 <!--                                     <th>品牌</th> -->
                                     <th>单位</th>
                                     <th>标准单价</th>
+                                    <th>最新成交价</th>
                                 </tr>
                             </thead>
                             <tbody>
                             {volist name="data" id="vo" empty="$empty"}
-                                <tr style="cursor: pointer;" class="selected_goods" data-store_number="{$vo['store_number']}" data-shop_price="{$vo['shop_price']}" data-market_price="{$vo['market_price']}" data-unit="{$vo['unit']}" data-remark="<?php echo htmlspecialchars($vo['remark']);?>" data-goods_name="<?php echo htmlspecialchars($vo['goods_name']);?>" data-goods_id="{$vo['goods_id']}">
+                                <tr style="cursor: pointer;" class="selected_goods" data-store_number="{$vo['store_number']}" data-last_price="{$vo['last_price']}" data-shop_price="{$vo['shop_price']}" data-market_price="{$vo['market_price']}" data-unit="{$vo['unit']}" data-remark="<?php echo htmlspecialchars($vo['remark']);?>" data-goods_name="<?php echo htmlspecialchars($vo['goods_name']);?>" data-goods_id="{$vo['goods_id']}">
                                     <td>{$vo.category_name}</td>
                                     <td>{$vo.supplier_name}</td>
                                     <td>{$vo.goods_name}</td>
 <!--                                     <td>{$vo.brand_name}</td> -->
                                     <td>{$vo.unit}</td>
                                     <td>{$vo.market_price}</td>
+                                    <td>{$vo.last_price}</td>
                                 </tr>
                             {/volist}
                             </tbody>
@@ -101,8 +103,8 @@ $(document).ready(function () {
 	$('.selected_goods').click(function(){
 		var goods = {
 			'goods_name': $(this).attr('data-goods_name'),
-			//'shop_price': $(this).attr('data-shop_price'),
-			'shop_price': $(this).attr('data-market_price'),
+			//'shop_price': $(this).attr('data-shop_price'), //实际价格
+			'shop_price': $(this).attr('data-last_price'), //实际价格
 			'market_price': $(this).attr('data-market_price'),
 			'unit': $(this).attr('data-unit'),
 			'remark': $(this).attr('data-remark'),

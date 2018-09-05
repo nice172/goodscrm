@@ -80,6 +80,28 @@
                                             <?php }?>
                                             </select>
                                     </td>
+                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>详细地址:</span></td>
+                                    <td width="35%" id="city_4">
+                                        <select class="syc-select w150 prov" name="con_prov" id="selectProvince">
+                                            <option>--请选择省份--</option>
+                                        </select>
+                                        <select class="syc-select w150 city" name="con_city" id="selectCitp">
+                                        </select>
+                                        <select class="syc-select w150 dist" name="con_dist" id="selectCounty">
+                                        </select>
+                                        <input type="text" class="form-control" style="margin-top: 10px;" name="con_street" placeholder="街道信息">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>跟单员:</span></td>
+                                    <td width="35%">
+                                             <select class="syc-select w300" name="con_order_ren">
+                                            <option value="">--请选择跟单员--</option>
+                                            <?php foreach ($order_ren as $val){?>
+                                            <option value="<?php echo $val;?>"><?php echo $val;?></option>
+                                            <?php }?>
+                                            </select>
+                                    </td>
                                     <td width="15%" class="right-color"><span class="text-danger">*</span><span>业务经理:</span></td>
                                     <td width="35%">
                                             <select class="syc-select w300" name="con_business">
@@ -88,30 +110,6 @@
                                             <option value="<?php echo $val;?>"><?php echo $val;?></option>
                                             <?php }?>
                                             </select>
-                                    </td>
-                                </tr>
-                                                             <tr>
-                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>跟单员:</span></td>
-                                    <td width="35%" colspan="3">
-                                             <select class="syc-select w300" name="con_order_ren">
-                                            <option value="">--请选择跟单员--</option>
-                                            <?php foreach ($order_ren as $val){?>
-                                            <option value="<?php echo $val;?>"><?php echo $val;?></option>
-                                            <?php }?>
-                                            </select>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>详细地址:</span></td>
-                                    <td width="35%" colspan="3" id="city_4">
-                                        <select class="syc-select w150 prov" name="con_prov" id="selectProvince">
-                                            <option>--请选择省份--</option>
-                                        </select>
-                                        <select class="syc-select w150 city" name="con_city" id="selectCitp">
-                                        </select>
-                                        <select class="syc-select w150 dist" name="con_dist" id="selectCounty">
-                                        </select>
-                                        <input type="text" class="form-control" style="margin-top: 10px;width: 50%;" name="con_street" placeholder="街道信息">
                                     </td>
                                 </tr>
 

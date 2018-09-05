@@ -45,14 +45,18 @@
                                 </tr>
                                 <tr>
                                 <td width="15%" class="right-color"><span class="text-danger">*</span><span>供应商:</span></td>
-                                <td width="35%" colspan="3">
-                                	<select class="form-control w300" name="supplier_id" id="supplier_id">
+                                <td width="35%">
+                                	<select class="form-control w350" name="supplier_id" id="supplier_id">
                                 		<option value="">请选择供应商</option>
                                 		{foreach name="$supplier" item="v"}
                                 		<option value="{$v.id}">{$v.supplier_name}</option>
                                 		{/foreach}
                                 	</select>
                                 </td>
+                                <td width="15%" class="right-color"><span class="text-danger">*</span><span>客户订单号:</span></td>
+                                <td width="35%">
+                                        <input type="text" class="form-control w300" readonly="readonly" value="{$data.cus_order_sn}" name="cus_order_sn" id="cus_order_sn">
+                                    </td>
                                 </tr>
                                 
                                 <tr>

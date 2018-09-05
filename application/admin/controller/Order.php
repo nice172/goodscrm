@@ -272,6 +272,7 @@ class Order extends Base {
         $goodsInfo = db('order_goods')->where(['order_id' => $order['id']])->order('goods_id asc')->select();
         $cus = db('customers')->where(['cus_id' => $order['cus_id']])->find();
         $this->assign('client',$cus);
+        $order['attachment'] = json_decode($order['attachment'],true);
         $this->assign('data',$order);
         $this->assign('goodsList',$goodsInfo);
         $this->assign('page_l','');
@@ -288,6 +289,7 @@ class Order extends Base {
             	'con_id' => $this->request->post('con_id'),
                 'cus_id' => $this->request->post('cus_id'),
                 'order_sn' => $this->request->post('order_sn'),
+                'cus_order_sn' => $this->request->post('cus_order_sn'),
                 'company_name' => $this->request->post('company_name'),
                 'company_short' => $this->request->post('company_short'),
                 'fax' => $this->request->post('fax'),
@@ -320,6 +322,10 @@ class Order extends Base {
                 //    $this->error('已送数量不能小于0');
                 //}
             }
+            
+            $attachment = $this->upload_file();
+            $data['attachment'] = json_encode($attachment);
+            
             $order_id = db('order')->insertGetId($data);
             if ($order_id){
             	$total_money = 0;
@@ -403,6 +409,7 @@ class Order extends Base {
     protected $create_rule = [
     	'order_id' => 'require',
     	'order_sn' => 'require',
+        'cus_order_sn' => 'require',
     	'po_sn' => 'require|checkPosn:1',
     	'supplier_id' => 'require',
     	'cus_phome' => 'require',
@@ -418,6 +425,7 @@ class Order extends Base {
     protected $create_message = [
     	'order_id.require' => '订单ID参数错误',
     	'order_sn.require' => '关联订单号错误',
+        'cus_order_sn.require' => '客户订单号错误',
     	'po_sn.require' => 'PO号码不能为空',
     	'supplier_id.require' => '请选择供应商',
     	'contacts.require' => '联系人不能为空',
@@ -450,6 +458,7 @@ class Order extends Base {
     				'tax' => $this->request->post('tax'),
     				'delivery_address' => $this->request->post('delivery_address'),
     				'order_sn' => $this->request->post('order_sn'),
+    		        'cus_order_sn' => $this->request->post('cus_order_sn'),
     				'fax' => $this->request->post('fax'),
     				'email' => $this->request->post('email'),
     				'contacts' => $this->request->post('contacts'),
@@ -577,7 +586,7 @@ class Order extends Base {
                 'id' => $this->request->post('id'),
             	'con_id' => $this->request->post('con_id'),
                 'cus_id' => $this->request->post('cus_id'),
-                'order_sn' => $this->request->post('order_sn'),
+                //'order_sn' => $this->request->post('order_sn'),
                 'company_name' => $this->request->post('company_name'),
                 'company_short' => $this->request->post('company_short'),
                 'fax' => $this->request->post('fax'),
@@ -619,6 +628,23 @@ class Order extends Base {
                     $postIds[] = $value['id'];
                 }
             }
+            
+            $oldfile = $this->request->param('oldfile/a');
+            $attachment = $this->upload_file();
+            $fileArr = [];
+            if (!empty($oldfile)){
+                $order_attachment = db('order')->where(['id' => $data['id'],'status' => ['neq','-1']])->value('attachment');
+                $order_attachment = json_decode($order_attachment,true);
+                foreach ($order_attachment as $v){
+                    foreach ($oldfile as $f){
+                        if ($v['path'] == $f){
+                            $fileArr[] = $v;
+                        }
+                    }
+                }
+            }
+            $data['attachment'] = json_encode(array_merge($fileArr,$attachment));
+            
             $affected = db('order')->update($data);
             if ($affected){
                 $tempArr = array_count_values(array_merge($ids,$postIds));
@@ -682,6 +708,7 @@ class Order extends Base {
             }
         }
         $order['goodsInfo'] = $goodsInfo;
+        $order['attachment'] = json_decode($order['attachment'],true);
         $this->assign('data',$order);
         $this->assign('title','编辑订单');
         return $this->fetch();
@@ -721,7 +748,11 @@ class Order extends Base {
     public function get_goods(){
         $cate_lists = db('goods_category')->select();
         $this->assign('lists',$cate_lists);
-        
+        $before_time = strtotime(date('Y-m-d',strtotime("-0 year -3 month -0 day")));
+        $cus_id = $this->request->param('cus_id',0,'intval');
+        if (!$cus_id){
+            $this->error('请选择客户');
+        }
         $goods_name = $this->request->param('goods_name');
         $category_id = $this->request->param('category_id',0,'intval');
         
@@ -737,13 +768,17 @@ class Order extends Base {
         $lists = $result->all();
         
         foreach ($lists as $key => $value){
-            $supplier = db('supplier')->where(['id' => $value['supplier_id']])->find();
+            $supplier = db('supplier')->where(['id' => $value['supplier_id']])->field('supplier_name,supplier_short')->find();
             $lists[$key]['supplier_name'] = $supplier['supplier_name'];
-            $category = db('goods_category')->where(['category_id' => $value['category_id']])->find();
+            $category = db('goods_category')->where(['category_id' => $value['category_id']])->field('category_name')->find();
             $lists[$key]['category_name'] = $category['category_name'];
-            $brand = db('goods_brand')->where(['brand_id' => $value['brand_id']])->find();
-            $lists[$key]['brand_name'] = $brand['brand_name'];
+            //$brand = db('goods_brand')->where(['brand_id' => $value['brand_id']])->find();
+            //$lists[$key]['brand_name'] = $brand['brand_name'];
+            $lists[$key]['brand_name'] = '';
             $lists[$key]['purchase_number'] = 0;
+            $last_price = db('order o')->join('__ORDER_GOODS__ og','o.id=og.order_id')->where(['o.cus_id' => $cus_id,'og.goods_id' => $value['goods_id']])
+            ->where("o.status=2 OR o.status=3")->order('o.create_time desc')->value('goods_price');
+            $lists[$key]['last_price'] = $last_price;
         }
         
         $this->assign('data',$lists);
