@@ -66,7 +66,8 @@
                         <input id="fm-login-submit" value="登录" class="fm-button fm-button1 fm-submit" type="submit">
                         <input id="fm-login-submit" value="重置" class="fm-button fm-button2" type="reset">
                     </div>
-                    <p style="margin-top:10px;">Power by 众山系统  服务热线：{:Config('syc_webtel')}</p>
+                    <p style="margin-top:10px;">Power by CSUN(SICHUAN) CHEMICAL CO., LTD</p>
+					<p style="margin-top:10px;">服务热线：{:config('syc_tousu')}</p>
                     <input type="hidden" name="token" value="{$Request.token}" />
                 </form>
             </div>
