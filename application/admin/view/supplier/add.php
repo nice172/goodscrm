@@ -83,7 +83,7 @@
                                     <td width="35%"><input type="text" class="form-control w300" name="supplier_like" id="con_qq" placeholder=""></td>
                                     <td width="15%" class="right-color"><span class="text-danger">*</span><span>详细地址:</span></td>
                                     <td width="35%" id="city_4">
-                                        <select class="syc-select w150 prov" name="supplier_province" id="selectProvince">
+                                        <select class="syc-select w130 prov" name="supplier_province" id="selectProvince">
                                             <option>--请选择省份--</option>
                                         </select>
                                         <select class="syc-select w150 city" name="supplier_city" id="selectCitp">
