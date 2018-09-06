@@ -406,6 +406,7 @@ class Supplier extends Base {
         $list = $result->all();
         foreach ($list as $key=>$value){
             $list[$key]['goods_attr'] = json_decode($value['goods_attr'],true);
+            $list[$key]['type_name'] = db('goods_type')->where(['goods_type_id' => $value['goods_type_id']])->value('type_name');
         }
         $this->assign('lsdd',$list);
         $this->assign('page_l',$page);

@@ -22,7 +22,10 @@ return [
 	        'admin/baojia/search_company','admin/baojia/get_goods',
             'admin/account/view','admin/goods/change_cate',
 	        'admin/goods/change_type','admin/config/edit',
-            'admin/account/soset','admin/account/setsupplier'
+            'admin/account/soset','admin/account/setsupplier',
+            'admin/auth/rule_add_runadd','admin/auth/rule_edit_runedit',
+            'admin/role/editrole','admin/supplier/add_contacts','admin/supplier/adduser',
+            'admin/supplier/edit_contacts','admin/supplier/deluser'
         ),
     ),
     'PAGE_SIZE' => 10,

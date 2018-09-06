@@ -38,12 +38,19 @@
                                     <td width="15%" class="right-color"><span class="text-danger">*</span><span>送货日期:</span></td>
                                     <td width="35%"><input type="text" class="form-control w300" name="delivery_date" id="delivery_date"></td>
                                 </tr>
+								
                                 <tr>
-                                <td width="15%" class="right-color"><span class="text-danger">*</span><span>采购单:</span></td>
-                                <td width="35%" colspan="3">
-                                	<input type="text" class="form-control w300" readonly="readonly" style="display:inline-block;" name="po_sn" id="po_sn">
-                                	<button type="button" class="btn btn-primary search_purchase" style="margin-top:-4px;">查找</button>
-                                </td>
+									<td width="15%" class="right-color"><span class="text-danger">*</span><span>采购单:</span></td>
+									<td width="35%">
+										<input type="text" class="form-control w300" readonly="readonly" style="display:inline-block;" name="po_sn" id="po_sn">
+										<button type="button" class="btn btn-primary search_purchase" style="margin-top:-4px;">查找</button>
+									</td>
+									
+									<td width="15%" class="right-color"><span class="text-danger">*</span><span>客户订单号:</span></td>
+									<td width="35%">
+										<input type="text" class="form-control w300" readonly="readonly" id="cus_order_sn">
+									</td>
+	
                                 </tr>
                                 <tr>
                                     <td width="15%" class="right-color"><span class="text-danger">*</span><span>采购日期:</span></td>
@@ -64,9 +71,16 @@
                                 
                                 <tr>
                                 <td width="15%" class="right-color"><span class="text-danger">*</span><span>客户名称:</span></td>
-                                <td width="35%" colspan="3">
+                                <td width="35%">
                                 	<input type="text" class="form-control w300" style="display:inline-block;" name="cus_name" id="cus_name">
                                 </td>
+								
+								
+                                <td width="15%" class="right-color"><span class="text-danger">*</span><span>送货地址:</span></td>
+                                <td width="35%">
+                                	<input type="text" class="form-control w300" name="delivery_address" id="delivery_address">
+                                </td>
+					
                                 </tr>
                                 
                                 <tr>
@@ -77,12 +91,7 @@
                                         <input type="text" class="form-control w300" name="contacts_tel" id="contacts_tel">
                                     </td>
                                 </tr>
-                                 <tr>
-                                <td width="15%" class="right-color"><span class="text-danger">*</span><span>送货地址:</span></td>
-                                <td width="35%" colspan="3">
-                                	<input type="text" class="form-control w300" name="delivery_address" id="delivery_address">
-                                </td>
-                                </tr>
+
                                 <tr>
                                     <td width="15%" class="right-color"><span class="text-danger">*</span><span>物流单号:</span></td>
                                     <td width="35%">
@@ -268,14 +277,17 @@ function client_info(data){
 	if(data.is_cancel == 0 || data.create_type == 1){
     	$('#order_sn').val(data.order_sn);
     	$('#order_id').val(data.order_id);
+		$('#cus_order_sn').val(data.cus_order_sn);
     	$('#delivery_address').val(data.delivery_address);
-    	$('#contacts').val(data.contacts);
-    	$('#contacts_tel').val(data.cus_phome);
+    	//$('#contacts').val(data.contacts);
+    	//$('#contacts_tel').val(data.cus_phome);
 	}else{
 		$('#cus_name').val('');
 		$('#order_id').val('');
 		//$('#purchase_id').val('');
     	$('#order_sn').val('');
+		
+		$('#cus_order_sn').val('');
     	$('#delivery_address').val('');
     	$('#contacts').val('');
     	$('#contacts_tel').val('');
@@ -287,6 +299,8 @@ function client_info(data){
 			$('.relation_order').hide();
 			$('#cus_name').val(res.data.cus_name);
 			$('#cus_id').val(res.data.cus_id);
+			$('#contacts').val(res.data.contacts);
+			$('#contacts_tel').val(res.data.cus_phome);
 			goods_info = res.data.goodslist;
 			goodsList(goods_info);
 		}else{

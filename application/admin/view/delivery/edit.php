@@ -268,8 +268,8 @@ function client_info(data){
     	$('#order_id').val(data.order_id);
     	$('#purchase_id').val(data.purchase_id);
     	$('#delivery_address').val(data.delivery_address);
-    	$('#contacts').val(data.contacts);
-    	$('#contacts_tel').val(data.cus_phome);
+    	//$('#contacts').val(data.contacts);
+    	//$('#contacts_tel').val(data.cus_phome);
 	}else{
 		$('#cus_name').val('');
 		$('#order_id').val('');
@@ -285,6 +285,8 @@ function client_info(data){
 		if(res.code == 1){
 			$('#cus_name').val(res.data.cus_name);
 			$('#cus_id').val(res.data.cus_id);
+			$('#contacts').val(res.data.contacts);
+			$('#contacts_tel').val(res.data.cus_phome);
 			goods_info = res.data.goodslist;
 			goodsList(goods_info);
 		}else{

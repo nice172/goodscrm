@@ -82,7 +82,9 @@ class Delivery extends Base {
 //         ->join('__GOODS__ g','dg.goods_id=g.goods_id')
 //         ->join('__GOODS_CATEGORY__ gc','g.category_id=gc.category_id')
 //         ->field($field)->paginate(config('page_size'));
-
+        //管理订单表获取客户订单号
+        $cus_order_sn = db('order')->where(['id' => $delivery_order['order_id']])->value('cus_order_sn');
+        
         $goods_info = db('delivery_goods')->where(['delivery_id' => $id])->select();
         
         $db = db('purchase_goods og');
@@ -109,6 +111,8 @@ class Delivery extends Base {
             }
             $totalMoney += $value['goods_number']*$value['goods_price'];
         }
+        //增加客户订单号变量
+        $this->assign('cus_order_sn',$cus_order_sn);
         
         $this->assign('goodslist',json_encode($templist));
         $this->assign('delivery',$delivery_order);
@@ -680,7 +684,8 @@ h1,h2,h3,p,div,span{padding:0;margin:0;}
             
             $cus = db('customers')->where(['cus_id' => $order['cus_id']])->find();
             $data['delivery_address'] = $cus['cus_prov'].$cus['cus_city'].$cus['cus_dist'].$cus['cus_street'];
-            $data['cus_phome'] = $cus['cus_phome'];
+            $data['cus_phome'] = $cus['cus_mobile'];
+            $data['contacts_tel'] = $cus['cus_phome'];
             $data['contacts'] = $order['contacts'];
             $data['order_sn'] = $order['order_sn'];
             
@@ -717,8 +722,13 @@ h1,h2,h3,p,div,span{padding:0;margin:0;}
             }
             if (empty($goodsList)) $this->error('采购单关联的订单数量已送完，请取消关联库存');
             $data['goodslist'] = $goodsList;
-            $data['cus_name'] = db('customers')->where(['cus_id' => $purchase['cus_id']])->value('cus_name');
             $data['cus_id'] = $purchase['cus_id'];
+            
+            $cus = db('customers')->where(['cus_id' => $purchase['cus_id']])->find();
+            $data['cus_name'] = $cus['cus_name'];
+            $data['contacts'] = $cus['cus_duty'];
+            $data['contacts_tel'] = $cus['cus_phome'];
+            $data['cus_phome'] = $cus['cus_mobile'];
             
             $this->success('','',$data);
         }

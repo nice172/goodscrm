@@ -70,7 +70,7 @@
                                     </tr>
                                     </tbody>
                                 </table>
-                                <table class="table table-hover" style="margin-top:0;">
+                                <table class="table table-hover syc-table border" style="margin-top:0;">
                                     <thead>
                                     <tr>
                                         <th colspan="10">
@@ -92,7 +92,7 @@
                                         <th>性别</th>
                                         <th>QQ</th>
                                         <th>Email</th>
-                                        <th class="text-right">操作</th>
+                                        <th>操作</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -107,7 +107,7 @@
                                         </td>
                                         <td>{$vo.con_qq}</td>
                                         <td>{$vo.con_email}</td>
-                                        <td class="text-right">
+                                        <td>
                                             <a href="javascript:void(0);" onclick="setHandle.edituser('{$vo.con_id}')">查看</a>
                                             {neq name="$data.default_con_id" value="$vo.con_id"}
                                             <span class="text-explode">|</span>
@@ -120,7 +120,7 @@
                             </div>
                             <!--历史订单-->
                             <div class="tab-pane <?php echo isset($_GET['show'])?'active':'';?>" id="lishidingdan">
-                                <table class="table table-condensed" style="margin-top:0;">
+                                <table class="table table-condensed table-hover syc-table border" style="margin-top:0;">
                                     <thead>
                                     <tr>
                                         <th colspan="20">

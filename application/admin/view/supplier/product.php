@@ -26,7 +26,7 @@
                     <div class="section-left">
                         <div class="tab-content section-wrap">
                             <div class="tab-pane active">
-                                <table class="table table-condensed" style="margin-top:0;">
+                                <table class="table table-hover syc-table border table-condensed" style="margin-top:0;">
                                     <thead>
                                     <tr>
                                         <th colspan="9">
@@ -38,14 +38,14 @@
                                         </th>
                                     </tr>
                                     <tr>
-                                        <th>ID编号</th>
-                                        <th>产品名称</th>
-                                        <th>产品规格</th>
-                                        <th>单位</th>
-                                        <th>单价</th>
-                                        <th>创建时间</th>
-                                        <th>更新时间</th>
-                                        <th>操作</th>
+                                        <th width="10%">ID编号</th>
+                                        <th width="10%">产品名称</th>
+                                        <th width="30%">产品规格</th>
+                                        <th width="5%">单位</th>
+                                        <th width="10%">单价</th>
+                                        <th width="15%">创建时间</th>
+                                        <th width="15%">更新时间</th>
+                                        <th width="5%">操作</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -54,7 +54,7 @@
                                         <td>
                                             {$vo.goods_id}
                                         </td>
-                                        <td>{$vo.goods_name}</td>
+                                        <td>{$vo.type_name}</td>
                                         <td>
 										{foreach name="vo.goods_attr" item="v"}
 											{$v.attr_value}&nbsp;
