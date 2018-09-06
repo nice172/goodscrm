@@ -113,6 +113,12 @@
                                         <textarea name="remark" id="remark" class="form-control w300" style="height: 150px;resize:none;">{$goods.remark}</textarea>
                                     </div>
                                 </div>
+        <div class="modal-footer">
+        <div class="col-md-offset-2 col-md-8 left">
+            <button type="button" class="btn btn-primary btn-one">上一步</button>
+            <button type="button" class="btn btn-primary btn-last">下一步</button>
+        </div>
+    </div>
 <!-- 
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">图片</label>
@@ -137,7 +143,11 @@
     </div>
     
     <div class="appendAttr">{$goods.attr_html}</div>
-    
+        <div class="modal-footer">
+        <div class="col-md-offset-2 col-md-8 left">
+            <button type="button" class="btn btn-primary btn-two">下一步</button>
+        </div>
+    </div>
     </div>
     <div role="tabpanel" class="tab-pane" id="messages">
            <div class="form-group">
@@ -170,15 +180,18 @@
                 <input type="text" class="form-control w300" value="{$goods.address}" name="address" id="address" placeholder="输入具体位置">
             </div>
         </div>
-    </div>
-  </div>
-                
+        
     <div class="modal-footer">
         <div class="col-md-offset-2 col-md-8 left">
+        	<button type="button" class="btn btn-primary btn-two">上一步</button>
             <button type="submit" class="btn btn-primary">保 存</button>
-            <button type="reset" onclick="history.go(-1);" class="btn btn-default">取 消</button>
+            <button type="button" onclick="history.go(-1);" class="btn btn-default">取 消</button>
         </div>
     </div>
+        
+    </div>
+  </div>
+
 </form>
                         </div>
                     </div>
@@ -205,7 +218,26 @@ function changeItem(_this){
 	$('#goods_name').val(goods_name);
 }
 $(document).ready(function() {
-    	
+
+	$('.btn-two').click(function(){
+		$('.nav-tabs li').removeClass('active');
+		$('.nav-tabs li').eq(1).addClass('active');
+		$('.tab-content .tab-pane').removeClass('active');
+		$('.tab-content .tab-pane').eq(0).addClass('active');
+	});
+	$('.btn-one').click(function(){
+		$('.nav-tabs li').removeClass('active');
+		$('.nav-tabs li').eq(0).addClass('active');
+		$('.tab-content .tab-pane').removeClass('active');
+		$('.tab-content .tab-pane').eq(1).addClass('active');
+	});
+	$('.btn-last').click(function(){
+		$('.nav-tabs li').removeClass('active');
+		$('.nav-tabs li').eq(2).addClass('active');
+		$('.tab-content .tab-pane').removeClass('active');
+		$('.tab-content .tab-pane').eq(2).addClass('active');
+	});
+	
         // 当前页面分类高亮
         $("#sidebar-storage").addClass("sidebar-nav-active"); // 大分类
         $("#storage-xingcai").addClass("active"); // 小分类
