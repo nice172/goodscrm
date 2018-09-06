@@ -177,6 +177,15 @@
         </div>
     </div>
     {/if}
+    
+    {if condition="$data['status']==2"}
+        <div class="modal-footer" style="border-top: none;">
+        <div class="col-md-offset-5 col-md-12 left">
+    <button type="button" class="btn btn-primary btn-resend">重新发送PDF</button>
+          </div>
+    </div>
+    {/if}
+    
 </form>
                         </div>
                     </div>
@@ -460,6 +469,16 @@ function _ajaxSubmit(send,send_email_list){
 		}
 	});
 }
+
+$('.btn-resend').click(function(){
+
+	$('#contacts_modal').modal({
+		show : true,
+		keyboard : false,
+		backdrop:'static'
+	});
+	
+});
 
 $('button[type=submit]').click(function(){
 	var send = $(this).attr('send');

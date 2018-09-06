@@ -52,10 +52,10 @@
                                         <td width="35%"><span>{$data.goods_type}</span></td>
                                     </tr>
                                     <tr>
-                                        <td width="15%" class="right-color"><span>商品品牌:</span></td>
-                                        <td width="35%"><span>{$data.brand_name}</span></td>
+                                        <!--<td width="15%" class="right-color"><span>商品品牌:</span></td>
+                                        <td width="35%"><span>{$data.brand_name}</span></td> -->
                                         <td width="15%" class="right-color"><span>供应商:</span></td>
-                                        <td width="35%"><span>{$data.supplier_name}</span></td>
+                                        <td width="35%" colspan="3"><span>{$data.supplier_name}</span></td>
                                     </tr>
                                     <tr>
                                         <td width="15%" class="right-color"><span>属性规格:</span></td>

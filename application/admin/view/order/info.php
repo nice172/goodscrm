@@ -15,7 +15,9 @@
                                 </a>
                             </div>
                             <div class="pull-right">
+                                {if condition="$data['status'] eq 0"}
                                 <a class="btn btn-primary" href="{:url('edit',['id'=>$data.id])}">修改</a>
+                                {/if}
                                 <a href="javascript:window.location.reload();" class="btn btn-default">
                                     <span class="glyphicon glyphicon-refresh"></span>
                                     <span>刷新</span></a>

@@ -36,7 +36,7 @@
                                     <td><div style="width: 80%;">
                                         {switch $vo.type}
                                         {case string}
-                                        <input type="text" class="form-control" name="{$vo.name}" value="{$vo.value|htmlspecialchars}" />{/case}
+                                        <input {if condition="$vo['name']=='syc_email_pwd'"}type="password"{else}type="text"{/if} class="form-control" name="{$vo.name}" value="{$vo.value|htmlspecialchars}" />{/case}
                                         {case bstring}
                                         <textarea class="form-control" name="{$vo.name}" rows="4">{$vo.value|htmlspecialchars}</textarea>
                                         {/case}
