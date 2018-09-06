@@ -64,7 +64,7 @@
 <!--                             </div> -->
                         </div>
                     	<div style="clear:both;"></div>
-                        <table class="table syc-table border marginTop10">
+                        <table class="table table-hover syc-table border marginTop10">
                             <thead>
                             <tr>
                                 <th>ID编号</th>
