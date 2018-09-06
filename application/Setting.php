@@ -9,7 +9,7 @@ return array(
   'syc_email_pwd' => 'nice172',
   'syc_port' => '25',
   'syc_email_smtp' => 'smtp.126.com',
-  'syc_powerby' => 'Copyright © 2010-2017 <a href="http://www.sycit.cn">广东省广州市天河区</a> 版权所有',
+  'syc_powerby' => 'Copyright © 2010-2017 <a href="http://www.testgoodscrm.com">广东省广州市天河区</a> 版权所有',
   'syc_beian' => '',
   'syc_tousu' => '0757-88888888',
   'syc_address' => '广东省广州市天河区',
