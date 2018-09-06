@@ -690,7 +690,7 @@ class Order extends Base {
                     }
                 }
                 db('order')->where(['id' => $data['id']])->setField('total_money',_formatMoney($total_money));
-                $this->success('保存成功',url('index'));
+                $this->success('保存成功');
             }else{
                 $this->error('保存失败请重试');
             }

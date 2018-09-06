@@ -93,7 +93,7 @@
                                 			{if condition="in_array($v['ext'],['jpg','jpeg','png','gif'])"}
                                 				<div class="fileList"><input type="hidden" name="oldfile[]" value="{$v['path']}"/><a href="{$v['path']}" target="_blank"><img src="{$v['path']}" alt="" width="50" height="50" style="margin-bottom:5px;"/></a></div>
                                 			{else}
-                                				<div class="fileList" style="margin-bottom:5px;"><input type="hidden" name="oldfile[]" value="{$v['path']}"/><a href="{$v['path']}" target="_blank">{$v.filename}查看文件</a></div>
+                                				<div class="fileList" style="margin-bottom:5px;"><input type="hidden" name="oldfile[]" value="{$v['path']}"/><a href="{$v['path']}" target="_blank">{$v.oldfilename}查看文件</a></div>
                                 			{/if}
                                 		{/foreach}
                                         </td>
