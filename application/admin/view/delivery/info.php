@@ -41,10 +41,12 @@
                                 </tr>
                                 <tr>
                                 <td width="15%" class="right-color"><span class="text-danger">*</span><span>采购单:</span></td>
-                                <td width="35%" colspan="3">
+                                <td width="35%">
                                 	<input type="text" class="form-control w300" readonly="readonly" style="display:inline-block;" value="{$delivery.po_sn}" name="po_sn" id="po_sn">
                                 	<!-- <button type="button" class="btn btn-primary search_purchase" style="margin-top:-4px;">查找</button> -->
                                 </td>
+                                    <td width="15%" class="right-color"><span class="text-danger">*</span><span>客户订单号:</span></td>
+                                    <td width="35%"><input type="text" class="form-control w300" name="cus_order_sn" value="{$cus_order_sn}" id="cus_order_sn"></td>
                                 </tr>
                                 <tr>
                                     <td width="15%" class="right-color"><span class="text-danger">*</span><span>采购日期:</span></td>
@@ -65,8 +67,12 @@
                                 
                                 <tr>
                                 <td width="15%" class="right-color"><span class="text-danger">*</span><span>客户名称:</span></td>
-                                <td width="35%" colspan="3">
+                                <td width="35%">
                                 	<input type="text" class="form-control w300" style="display:inline-block;" value="{$delivery.cus_name}" name="cus_name" id="cus_name">
+                                </td>
+                                <td width="15%" class="right-color"><span class="text-danger">*</span><span>送货地址:</span></td>
+                                <td width="35%" colspan="3">
+                                	<input type="text" class="form-control w300" name="delivery_address" value="{$delivery.delivery_address}" id="delivery_address">
                                 </td>
                                 </tr>
                                 
@@ -78,12 +84,7 @@
                                         <input type="text" class="form-control w300" name="contacts_tel" value="{$delivery.contacts_tel}" id="contacts_tel">
                                     </td>
                                 </tr>
-                                 <tr>
-                                <td width="15%" class="right-color"><span class="text-danger">*</span><span>送货地址:</span></td>
-                                <td width="35%" colspan="3">
-                                	<input type="text" class="form-control w300" name="delivery_address" value="{$delivery.delivery_address}" id="delivery_address">
-                                </td>
-                                </tr>
+                                 
                                 <tr>
                                     <td width="15%" class="right-color"><span class="text-danger">*</span><span>送货单号:</span></td>
                                     <td width="35%">
