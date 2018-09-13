@@ -112,7 +112,7 @@
     <div class="modal-footer" style="border-top:none;">
         <div class="col-md-offset-5 col-md-12 left">
             <button type="submit" class="btn btn-primary confirm">保存</button>
-            <button type="button" class="btn btn-default">取消</button>
+            <button type="button" onclick="window.history.go(-1);" class="btn btn-default">取消</button>
         </div>
     </div>
     {/if}
