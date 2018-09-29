@@ -14,6 +14,7 @@
         
 							<div class="sub-button-line form-inline">
                             <form class="pull-left" method="get" action="?">
+                            		<input type="hidden" name="cus_id" value="<?php echo isset($_GET['cus_id']) ? $_GET['cus_id'] : '';?>" />
                                    <div class="form-group">
                                     <label class="control-label" for="">商品分类 :</label>
                                     <select name="category_id" class="form-control" id="category_id">
